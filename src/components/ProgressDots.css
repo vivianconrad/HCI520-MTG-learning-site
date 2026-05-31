@@ -1,0 +1,21 @@
+.progress-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.progress-dots__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-gold-muted);
+  flex-shrink: 0;
+}
+
+.progress-dots__dot--active {
+  width: 8px;
+  height: 8px;
+  background: var(--color-gold);
+}

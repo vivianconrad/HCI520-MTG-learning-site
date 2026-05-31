@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './PreTest.css'
 
 export default function PreTest({ session }) {
@@ -74,6 +75,7 @@ export default function PreTest({ session }) {
             {isLast ? 'Begin Lessons →' : 'Next'}
           </button>
         </div>
+        <ProgressDots activeIndex={PROGRESS.PRETEST} />
       </div>
     </div>
   )

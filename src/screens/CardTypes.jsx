@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './CardTypes.css'
 
 const CARD_TYPES = [
@@ -79,14 +80,15 @@ function CardThumbnail({ imagePath, className }) {
   )
 }
 
-function CardTypeItem({ type, onHover }) {
+function CardTypeItem({ type, onThumbnailEnter, onThumbnailLeave }) {
   return (
-    <article
-      className={`card-types__item${type.wide ? ' card-types__item--wide' : ''}`}
-      onMouseEnter={() => onHover(type.id)}
-    >
+    <article className={`card-types__item${type.wide ? ' card-types__item--wide' : ''}`}>
       <h3 className="card-types__type-name">{type.name}</h3>
-      <div className="card-types__thumbnail">
+      <div
+        className="card-types__thumbnail"
+        onMouseEnter={() => onThumbnailEnter(type.id)}
+        onMouseLeave={onThumbnailLeave}
+      >
         <CardThumbnail imagePath={type.image} className="card-types__thumbnail-image" />
       </div>
       <p className="card-types__description">{type.description}</p>
@@ -95,15 +97,34 @@ function CardTypeItem({ type, onHover }) {
   )
 }
 
-export default function CardTypes({ session: _session }) {
+export default function CardTypes({ session }) {
+  void session
   const navigate = useNavigate()
   const [overlayId, setOverlayId] = useState(null)
+  const [isClosing, setIsClosing] = useState(false)
 
   const activeType = CARD_TYPES.find((t) => t.id === overlayId)
 
-  const closeOverlay = useCallback(() => {
-    setOverlayId(null)
+  const openOverlay = useCallback((id) => {
+    setIsClosing(false)
+    setOverlayId(id)
   }, [])
+
+  const closeOverlay = useCallback(() => {
+    if (!overlayId || isClosing) return
+    setIsClosing(true)
+  }, [overlayId, isClosing])
+
+  useEffect(() => {
+    if (!isClosing) return undefined
+
+    const timer = window.setTimeout(() => {
+      setOverlayId(null)
+      setIsClosing(false)
+    }, 200)
+
+    return () => window.clearTimeout(timer)
+  }, [isClosing])
 
   useEffect(() => {
     if (!overlayId) return undefined
@@ -132,7 +153,12 @@ export default function CardTypes({ session: _session }) {
 
         <div className="card-types__grid">
           {CARD_TYPES.map((type) => (
-            <CardTypeItem key={type.id} type={type} onHover={setOverlayId} />
+            <CardTypeItem
+              key={type.id}
+              type={type}
+              onThumbnailEnter={openOverlay}
+              onThumbnailLeave={closeOverlay}
+            />
           ))}
         </div>
 
@@ -159,11 +185,12 @@ export default function CardTypes({ session: _session }) {
             Next
           </button>
         </div>
+        <ProgressDots activeIndex={PROGRESS.LESSON_2} />
       </div>
 
       {activeType && (
         <div
-          className="card-types__overlay"
+          className={`card-types__overlay${isClosing ? ' card-types__overlay--closing' : ''}`}
           role="dialog"
           aria-modal="true"
           aria-label={`${activeType.name} card type`}
@@ -173,6 +200,14 @@ export default function CardTypes({ session: _session }) {
             className="card-types__overlay-card"
             onClick={(event) => event.stopPropagation()}
           >
+            <button
+              type="button"
+              className="card-types__overlay-close"
+              aria-label="Close"
+              onClick={closeOverlay}
+            >
+              ×
+            </button>
             <div className="card-types__overlay-image">
               <CardThumbnail
                 imagePath={activeType.image}

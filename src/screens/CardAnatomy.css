@@ -44,41 +44,21 @@
 }
 
 .card-anatomy__diagram {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  column-gap: 80px;
-  row-gap: 12px;
-  align-items: center;
+  display: flex;
+  justify-content: center;
   margin-bottom: 16px;
 }
 
-.card-anatomy__callouts-left {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 56px;
-  align-items: flex-end;
-}
-
-.card-anatomy__callouts-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 56px;
-  align-items: flex-start;
-}
-
-.card-anatomy__card-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+.card-anatomy__card-wrap {
+  position: relative;
+  width: 220px;
+  height: 308px;
 }
 
 .card-anatomy__card-image {
   display: block;
-  width: 220px;
-  height: 308px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 4px;
 }
@@ -87,8 +67,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 220px;
-  height: 308px;
+  width: 100%;
+  height: 100%;
   border: 1px solid var(--color-gold-muted);
   border-radius: 4px;
   background: var(--color-parchment-dark);
@@ -97,96 +77,111 @@
   color: var(--color-gold-muted);
 }
 
-.card-anatomy__bottom-callouts {
-  display: flex;
-  gap: 48px;
-  justify-content: center;
+.card-anatomy__marker {
+  position: absolute;
+  z-index: 1;
 }
 
-.card-anatomy__callout {
-  display: flex;
-  align-items: center;
-  transition: color var(--transition-fast);
+.card-anatomy__marker--anchor-tl {
+  transform: translate(-50%, -50%);
 }
 
-.card-anatomy__callout--left {
-  flex-direction: row;
+.card-anatomy__marker--anchor-tr {
+  transform: translate(50%, -50%);
 }
 
-.card-anatomy__callout--right {
-  flex-direction: row;
+.card-anatomy__marker--anchor-bl {
+  transform: translate(-50%, 50%);
 }
 
-.card-anatomy__callout--bottom {
-  flex-direction: column;
-  align-items: center;
-}
-
-.card-anatomy__callout-label {
-  font-family: var(--font-display);
-  font-size: 15px;
-  color: var(--color-text-dark);
-  background: none;
-  border: none;
-  padding: 4px 0;
-  cursor: pointer;
-  transition: color var(--transition-fast);
-  white-space: nowrap;
-}
-
-.card-anatomy__callout-line {
-  display: block;
-  background: var(--color-gold-muted);
-  transition: background var(--transition-fast);
-}
-
-.card-anatomy__callout--left .card-anatomy__callout-line,
-.card-anatomy__callout--right .card-anatomy__callout-line {
-  width: 36px;
-  height: 1px;
-}
-
-.card-anatomy__callout--bottom .card-anatomy__callout-line {
-  width: 1px;
-  height: 28px;
+.card-anatomy__marker--anchor-br {
+  transform: translate(50%, 50%);
 }
 
 .card-anatomy__callout-marker {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   padding: 0;
-  border: 1px solid var(--color-gold);
+  border: 1.5px solid var(--color-gold);
   border-radius: 50%;
   background: var(--color-navy);
   color: var(--color-text-light);
   font-family: var(--font-body);
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 700;
   line-height: 1;
   cursor: pointer;
-  flex-shrink: 0;
   transition:
     background var(--transition-fast),
     color var(--transition-fast),
     border-color var(--transition-fast);
 }
 
-.card-anatomy__callout:hover .card-anatomy__callout-label,
-.card-anatomy__callout--active .card-anatomy__callout-label {
+.card-anatomy__marker-tooltip {
+  position: absolute;
+  padding: 3px 8px;
+  background: var(--color-navy);
+  border: 1px solid var(--color-gold);
+  border-radius: 3px;
+  font-family: var(--font-display);
+  font-size: 12px;
   color: var(--color-gold);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+  z-index: 10;
+  /* default: above */
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.card-anatomy__callout:hover .card-anatomy__callout-line,
-.card-anatomy__callout--active .card-anatomy__callout-line {
-  background: var(--color-gold);
+/* Tooltip directions */
+.card-anatomy__marker--tip-above .card-anatomy__marker-tooltip {
+  bottom: calc(100% + 6px);
+  top: auto;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
 }
 
-.card-anatomy__callout:hover .card-anatomy__callout-marker,
-.card-anatomy__callout--active .card-anatomy__callout-marker {
+.card-anatomy__marker--tip-below .card-anatomy__marker-tooltip {
+  top: calc(100% + 6px);
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+.card-anatomy__marker--tip-right .card-anatomy__marker-tooltip {
+  top: 50%;
+  left: calc(100% + 8px);
+  bottom: auto;
+  right: auto;
+  transform: translateY(-50%);
+}
+
+.card-anatomy__marker--tip-left .card-anatomy__marker-tooltip {
+  top: 50%;
+  right: calc(100% + 8px);
+  bottom: auto;
+  left: auto;
+  transform: translateY(-50%);
+}
+
+.card-anatomy__marker:hover .card-anatomy__callout-marker,
+.card-anatomy__marker--active .card-anatomy__callout-marker {
   background: var(--color-gold);
   color: var(--color-navy);
+}
+
+.card-anatomy__marker:hover .card-anatomy__marker-tooltip,
+.card-anatomy__marker--active .card-anatomy__marker-tooltip {
+  opacity: 1;
 }
 
 .card-anatomy__info-panel {
@@ -291,31 +286,4 @@
 .card-anatomy__button--next:hover {
   background: var(--color-gold);
   color: var(--color-navy);
-}
-
-@media (max-width: 720px) {
-  .card-anatomy__diagram {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-
-  .card-anatomy__callouts-left,
-  .card-anatomy__callouts-right {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    align-items: center;
-  }
-
-  .card-anatomy__callout--left,
-  .card-anatomy__callout--right {
-    flex-direction: column;
-  }
-
-  .card-anatomy__callout--left .card-anatomy__callout-line,
-  .card-anatomy__callout--right .card-anatomy__callout-line {
-    width: 1px;
-    height: 20px;
-  }
 }

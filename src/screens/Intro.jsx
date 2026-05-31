@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './Intro.css'
 
 export default function Intro({ session }) {
@@ -33,6 +34,7 @@ export default function Intro({ session }) {
             I&apos;m Ready →
           </button>
         </div>
+        <ProgressDots activeIndex={PROGRESS.INTRO} />
       </div>
     </div>
   )

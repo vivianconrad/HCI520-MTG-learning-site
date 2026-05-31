@@ -195,6 +195,10 @@
   animation: card-types-overlay-fade-in 200ms ease forwards;
 }
 
+.card-types__overlay--closing {
+  animation: card-types-overlay-fade-out 200ms ease forwards;
+}
+
 @keyframes card-types-overlay-fade-in {
   from {
     opacity: 0;
@@ -204,7 +208,17 @@
   }
 }
 
+@keyframes card-types-overlay-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .card-types__overlay-card {
+  position: relative;
   max-width: 320px;
   width: 100%;
   background: var(--color-parchment);
@@ -216,6 +230,25 @@
   align-items: center;
   gap: 12px;
   text-align: center;
+}
+
+.card-types__overlay-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.card-types__overlay-close:hover {
+  color: var(--color-gold);
 }
 
 .card-types__overlay-image {

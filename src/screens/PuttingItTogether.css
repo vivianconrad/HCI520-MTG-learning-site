@@ -1,0 +1,213 @@
+.putting-together {
+  min-height: 100vh;
+  background: var(--color-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.putting-together__frame {
+  max-width: 860px;
+  width: 100%;
+  background: var(--color-parchment);
+  border: 1.5px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 48px 40px;
+}
+
+.putting-together__breadcrumb {
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--color-gold-muted);
+  letter-spacing: 0.08em;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.putting-together__heading {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--color-text-dark);
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.putting-together__rule {
+  width: 60px;
+  height: 1px;
+  background: var(--color-gold);
+  border: none;
+  margin: 0 auto 32px;
+}
+
+.putting-together__intro {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text-dark);
+  margin: 0 0 24px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.putting-together__scenario {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: var(--color-parchment-dark);
+  border: 1px solid var(--color-gold);
+  border-radius: 4px;
+}
+
+.putting-together__scenario-text {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text-dark);
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.putting-together__answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.putting-together__answer {
+  padding: 12px 16px;
+  background: var(--color-parchment);
+  border: 1px solid var(--color-gold-muted);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.putting-together__answer:hover:not(:disabled) {
+  border-color: var(--color-gold);
+  background: var(--color-parchment-dark);
+}
+
+.putting-together__answer--selected {
+  border: 1.5px solid var(--color-gold);
+  background: var(--color-parchment-dark);
+}
+
+.putting-together__answer:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.putting-together__feedback {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--color-parchment-dark);
+  border: 1px solid var(--color-gold);
+  border-radius: 4px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-dark);
+  line-height: 1.5;
+  text-align: left;
+}
+
+.putting-together__feedback-marker {
+  flex-shrink: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.putting-together__feedback-marker--correct {
+  color: var(--color-gold);
+}
+
+.putting-together__feedback-marker--incorrect {
+  color: var(--color-gold-muted);
+}
+
+.putting-together__prompt {
+  margin-bottom: 0;
+}
+
+.putting-together__prompt-text {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text-dark);
+  margin: 0 0 12px;
+  text-align: left;
+}
+
+.putting-together__prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.putting-together__prompt-button {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-text-dark);
+  background: transparent;
+  border: 1.5px solid var(--color-gold);
+  border-radius: 0;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.putting-together__prompt-button:hover {
+  background: var(--color-gold);
+  color: var(--color-navy);
+}
+
+.putting-together__prompt-button--muted {
+  border-color: var(--color-gold-muted);
+}
+
+.putting-together__prompt-button--muted:hover {
+  border-color: var(--color-gold);
+  background: transparent;
+  color: var(--color-text-dark);
+}
+
+.putting-together__actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.putting-together__button {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-text-dark);
+  background: transparent;
+  border-radius: 0;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.putting-together__button--back {
+  border: 1.5px solid var(--color-gold-muted);
+}
+
+.putting-together__button--back:hover {
+  border-color: var(--color-gold);
+}

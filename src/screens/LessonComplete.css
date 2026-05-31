@@ -1,0 +1,92 @@
+.lesson-complete {
+  min-height: 100vh;
+  background: var(--color-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.lesson-complete__frame {
+  max-width: 680px;
+  width: 100%;
+  background: var(--color-parchment);
+  border: 1.5px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 48px 40px;
+}
+
+.lesson-complete__breadcrumb {
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--color-gold-muted);
+  letter-spacing: 0.08em;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.lesson-complete__heading {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--color-text-dark);
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.lesson-complete__rule {
+  width: 60px;
+  height: 1px;
+  background: var(--color-gold);
+  border: none;
+  margin: 0 auto 32px;
+}
+
+.lesson-complete__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.lesson-complete__paragraph {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text-dark);
+  margin: 0;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.lesson-complete__session {
+  font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+  font-size: 13px;
+  color: var(--color-gold-muted);
+  text-align: center;
+  margin: 0 0 32px;
+}
+
+.lesson-complete__actions {
+  display: flex;
+  justify-content: center;
+}
+
+.lesson-complete__button {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-text-dark);
+  background: transparent;
+  border: 1.5px solid var(--color-gold);
+  border-radius: 0;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.lesson-complete__button:hover {
+  background: var(--color-gold);
+  color: var(--color-navy);
+}

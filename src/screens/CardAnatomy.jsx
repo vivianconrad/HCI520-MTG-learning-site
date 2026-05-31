@@ -1,47 +1,60 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './CardAnatomy.css'
 
 const cardImageUrl = new URL('../assets/creature-shadowmage-infiltrator.webp', import.meta.url).href
 
-const CALLOUTS = {
-  name: {
+const CALLOUTS = [
+  {
+    id: 'name',
     label: 'Name',
     number: 1,
     text: "The card's name. No two cards in your deck can have the same name, except for basic lands.",
-    side: 'left',
+    position: { top: '5%', left: '30%' },
+    tipDir: 'below',
   },
-  typeLine: {
-    label: 'Type Line',
-    number: 3,
-    text: 'This tells you what kind of card it is. Creature, Instant, Sorcery, Land, Enchantment, Artifact, or Planeswalker.',
-    side: 'left',
-  },
-  manaCost: {
+  {
+    id: 'manaCost',
     label: 'Mana Cost',
     number: 2,
     text: 'The coloured symbols in the top right tell you what mana you need to cast this card. Numbers mean any colour.',
-    side: 'right',
+    position: { top: '5%', right: '5%' },
+    tipDir: 'below',
   },
-  textBox: {
+  {
+    id: 'typeLine',
+    label: 'Type Line',
+    number: 3,
+    text: 'This tells you what kind of card it is. Creature, Instant, Sorcery, Land, Enchantment, Artifact, or Planeswalker.',
+    position: { top: '58%', left: '5%' },
+    tipDir: 'right',
+  },
+  {
+    id: 'textBox',
     label: 'Text Box',
     number: 4,
     text: "This is where the card's abilities live. Keywords like Fear are shorthand for longer rules.",
-    side: 'right',
+    position: { top: '70%', right: '5%' },
+    tipDir: 'left',
   },
-  power: {
+  {
+    id: 'power',
     label: 'Power',
     number: 5,
     text: 'The first number in the bottom right. This is how much damage the creature deals in combat.',
-    side: 'bottom',
+    position: { bottom: '3%', left: '30%' },
+    tipDir: 'above',
   },
-  toughness: {
+  {
+    id: 'toughness',
     label: 'Toughness',
     number: 6,
     text: 'The second number in the bottom right. This is how much damage the creature can take before it dies.',
-    side: 'bottom',
+    position: { bottom: '3%', left: '55%' },
+    tipDir: 'above',
   },
-}
+]
 
 const BULLETS = [
   'Every card has a name and a mana cost that tell you what it is and how to cast it.',
@@ -66,62 +79,37 @@ function CardImage() {
   )
 }
 
-function Callout({ id, config, isActive, onToggle }) {
-  const { label, side, number } = config
+function getMarkerModifier(position) {
+  const hasRight = 'right' in position
+  const hasBottom = 'bottom' in position
+  if (hasBottom && hasRight) return 'card-anatomy__marker--anchor-br'
+  if (hasBottom) return 'card-anatomy__marker--anchor-bl'
+  if (hasRight) return 'card-anatomy__marker--anchor-tr'
+  return 'card-anatomy__marker--anchor-tl'
+}
 
-  const content =
-    side === 'left' ? (
-      <>
-        <button type="button" className="card-anatomy__callout-label" onClick={() => onToggle(id)}>
-          {label}
-        </button>
-        <span className="card-anatomy__callout-line" aria-hidden="true" />
-        <button
-          type="button"
-          className="card-anatomy__callout-marker"
-          aria-label={`${label} callout`}
-          onClick={() => onToggle(id)}
-        >
-          {number}
-        </button>
-      </>
-    ) : side === 'right' ? (
-      <>
-        <button
-          type="button"
-          className="card-anatomy__callout-marker"
-          aria-label={`${label} callout`}
-          onClick={() => onToggle(id)}
-        >
-          {number}
-        </button>
-        <span className="card-anatomy__callout-line" aria-hidden="true" />
-        <button type="button" className="card-anatomy__callout-label" onClick={() => onToggle(id)}>
-          {label}
-        </button>
-      </>
-    ) : (
-      <>
-        <button type="button" className="card-anatomy__callout-label" onClick={() => onToggle(id)}>
-          {label}
-        </button>
-        <span className="card-anatomy__callout-line" aria-hidden="true" />
-        <button
-          type="button"
-          className="card-anatomy__callout-marker"
-          aria-label={`${label} callout`}
-          onClick={() => onToggle(id)}
-        >
-          {number}
-        </button>
-      </>
-    )
+function CardMarker({ callout, isActive, onToggle }) {
+  const { id, label, number, position, tipDir } = callout
 
   return (
     <div
-      className={`card-anatomy__callout card-anatomy__callout--${side}${isActive ? ' card-anatomy__callout--active' : ''}`}
+      className={[
+        'card-anatomy__marker',
+        getMarkerModifier(position),
+        tipDir ? `card-anatomy__marker--tip-${tipDir}` : '',
+        isActive ? 'card-anatomy__marker--active' : '',
+      ].filter(Boolean).join(' ')}
+      style={position}
     >
-      {content}
+      <button
+        type="button"
+        className="card-anatomy__callout-marker"
+        aria-label={`${label} callout`}
+        onClick={() => onToggle(id)}
+      >
+        {number}
+      </button>
+      <span className="card-anatomy__marker-tooltip">{label}</span>
     </div>
   )
 }
@@ -134,74 +122,40 @@ export default function CardAnatomy({ session: _session }) {
     setActiveCallout((prev) => (prev === id ? null : id))
   }
 
+  const activeCalloutData = CALLOUTS.find((c) => c.id === activeCallout)
+
   return (
     <div className="card-anatomy">
       <div className="card-anatomy__frame">
         <p className="card-anatomy__breadcrumb">
-          Lesson 01 · Card Anatomy · Lesson 1 of 4
+          Lesson 01 · Card Anatomy
         </p>
         <h1 className="card-anatomy__heading">How to Read a Card</h1>
         <hr className="card-anatomy__rule" aria-hidden="true" />
 
         <div className="card-anatomy__diagram">
-          <div className="card-anatomy__callouts-left">
-            <Callout
-              id="name"
-              config={CALLOUTS.name}
-              isActive={activeCallout === 'name'}
-              onToggle={toggleCallout}
-            />
-            <Callout
-              id="typeLine"
-              config={CALLOUTS.typeLine}
-              isActive={activeCallout === 'typeLine'}
-              onToggle={toggleCallout}
-            />
-          </div>
-
-          <div className="card-anatomy__card-column">
+          <div className="card-anatomy__card-wrap">
             <CardImage />
-            <div className="card-anatomy__bottom-callouts">
-              <Callout
-                id="power"
-                config={CALLOUTS.power}
-                isActive={activeCallout === 'power'}
+            {CALLOUTS.map((callout) => (
+              <CardMarker
+                key={callout.id}
+                callout={callout}
+                isActive={activeCallout === callout.id}
                 onToggle={toggleCallout}
               />
-              <Callout
-                id="toughness"
-                config={CALLOUTS.toughness}
-                isActive={activeCallout === 'toughness'}
-                onToggle={toggleCallout}
-              />
-            </div>
-          </div>
-
-          <div className="card-anatomy__callouts-right">
-            <Callout
-              id="manaCost"
-              config={CALLOUTS.manaCost}
-              isActive={activeCallout === 'manaCost'}
-              onToggle={toggleCallout}
-            />
-            <Callout
-              id="textBox"
-              config={CALLOUTS.textBox}
-              isActive={activeCallout === 'textBox'}
-              onToggle={toggleCallout}
-            />
+            ))}
           </div>
         </div>
 
-        {activeCallout && (
-          <div className="card-anatomy__info-panel">{CALLOUTS[activeCallout].text}</div>
+        {activeCalloutData && (
+          <div className="card-anatomy__info-panel">{activeCalloutData.text}</div>
         )}
 
         <hr className="card-anatomy__divider" aria-hidden="true" />
 
         <p className="card-anatomy__intro">
-          Each Magic: The Gathering card contains key information about what it does in play. Click
-          or hover any label above to learn more about that part of the card.
+          Each Magic: The Gathering card contains key information about what it does in play.
+          Learning to read a card&apos;s anatomy is the first step to building and piloting any deck.
         </p>
 
         <h2 className="card-anatomy__subheading">Card Anatomy at a Glance</h2>
@@ -225,6 +179,8 @@ export default function CardAnatomy({ session: _session }) {
             Next
           </button>
         </div>
+
+        <ProgressDots activeIndex={PROGRESS.LESSON_1} />
       </div>
     </div>
   )
