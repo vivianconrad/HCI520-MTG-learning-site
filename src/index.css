@@ -1,0 +1,15 @@
+@import './styles/tokens.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* No @font-face for Goudy — no local font file in repo; --font-display falls back to Palatino */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-navy);
+  font-family: var(--font-body);
+}
