@@ -220,17 +220,27 @@ function CardTypeDetails({ description, details, variant = 'grid' }) {
 
 function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
   return (
-    <article className={`card-types__item${type.wide ? ' card-types__item--wide' : ''}`}>
+    <article className={[
+      'card-types__item',
+      type.wide ? 'card-types__item--wide' : '',
+      type.tag === 'Any time' ? 'card-types__item--any-time' : '',
+    ].filter(Boolean).join(' ')}>
       <h3 className="card-types__type-name">{type.name}</h3>
       <div className="card-types__examples" aria-label={`${type.name} examples`}>
         {type.examples.map((example) => (
-          <div key={example.label} className="card-types__thumbnail">
+          <button
+            key={example.label}
+            type="button"
+            className="card-types__thumbnail"
+            aria-label={`View ${example.label}`}
+            onClick={() => onSeeCard(type.id)}
+          >
             <CardThumbnail
               src={example.src}
               alt={`${example.label}, ${type.name} card`}
               className="card-types__thumbnail-image"
             />
-          </div>
+          </button>
         ))}
       </div>
       <CardTypeDetails description={type.description} />
