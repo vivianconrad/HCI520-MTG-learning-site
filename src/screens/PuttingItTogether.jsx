@@ -61,12 +61,12 @@ const SCENARIOS = [
   },
   {
     id: 's5',
-    text: "You just played a Woodland Cemetery. The card says 'Woodland Cemetery enters the battlefield tapped.' You need one black mana right now to cast a spell. Can you tap Woodland Cemetery for mana immediately after playing it?",
+    text: "You just played a Woodland Cemetery. The card says 'Woodland Cemetery enters the battlefield tapped unless you control a Swamp or a Forest.' You don't have a Swamp or a Forest. You need one black mana right now to cast a spell. Can you tap Woodland Cemetery for mana immediately after playing it?",
     cardImage: 'woodland-cemetery.jpg',
     cardImageAlt: 'Woodland Cemetery — Land',
     correctAnswer: false,
     explanation:
-      'No. Because it entered the battlefield tapped, you cannot tap it for mana this turn. It will untap during your next untap step, and then you can use it normally.',
+      "No. Because you don't control a Swamp or a Forest, Woodland Cemetery entered the battlefield tapped. You cannot tap it for mana this turn. It will untap during your next untap step, and then you can use it normally.",
   },
   {
     id: 's6',
@@ -138,6 +138,7 @@ export default function PuttingItTogether({ session: _session }) {
 
   const scenario = shuffled[queueIndex]
   const allSeen = seenIds.size >= SCENARIOS.length
+  const hasCompletedRequiredScenario = seenIds.size > 0
   const isCorrect = selectedAnswer === scenario.correctAnswer
 
   function getAnswerClassName(answerValue) {
@@ -190,7 +191,9 @@ export default function PuttingItTogether({ session: _session }) {
         <p className="putting-together__progress" aria-live="polite">
           {allSeen
             ? 'All scenarios completed.'
-            : `Completed ${seenIds.size} of ${SCENARIOS.length} scenarios`}
+            : hasCompletedRequiredScenario
+              ? `Completed ${seenIds.size} of ${SCENARIOS.length} scenarios (first required, rest optional)`
+              : 'Complete the first scenario to continue. Remaining scenarios are optional.'}
         </p>
 
         <div className="putting-together__scenario">
@@ -238,27 +241,15 @@ export default function PuttingItTogether({ session: _session }) {
 
         {phase === 'feedback' && (
           <div className="putting-together__prompt">
-            {allSeen ? (
-              <div className="putting-together__prompt-actions">
-                <button
-                  type="button"
-                  className="putting-together__prompt-button"
-                  onClick={handleComplete}
-                >
-                  Continue
-                </button>
-              </div>
-            ) : (
-              <div className="putting-together__prompt-actions">
-                <button
-                  type="button"
-                  className="putting-together__prompt-button"
-                  onClick={handleAnother}
-                >
-                  Next Scenario
-                </button>
-              </div>
-            )}
+            <div className="putting-together__prompt-actions">
+              <button
+                type="button"
+                className="putting-together__prompt-button"
+                onClick={handleComplete}
+              >
+                Continue
+              </button>
+            </div>
           </div>
         )}
 
@@ -270,6 +261,25 @@ export default function PuttingItTogether({ session: _session }) {
           >
             Back
           </button>
+          {phase === 'feedback' && !allSeen ? (
+            <button
+              type="button"
+              className="putting-together__button putting-together__button--next"
+              onClick={handleAnother}
+            >
+              Next Scenario
+            </button>
+          ) : (
+            hasCompletedRequiredScenario && (
+              <button
+                type="button"
+                className="putting-together__button putting-together__button--next"
+                onClick={handleComplete}
+              >
+                Next
+              </button>
+            )
+          )}
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_4} />
       </div>

@@ -1,95 +1,19 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import {
+  LO_LABELS,
+  LO_LESSON_PATHS,
+  LO_ORDER,
+  buildResultsSummary,
+  calculateScores,
+  getImprovementMessage,
+  getLoTag,
+} from '../lib/scoring.js'
+import { isSupabaseConfigured } from '../lib/supabase.js'
+import { submitLearningSession } from '../lib/submitSession.js'
 import './Results.css'
-
-const LO_LABELS = {
-  LO1: 'How to Read a Card',
-  LO2: 'How a Turn Works',
-  LO3: 'Turn Steps in Detail',
-  LO4: 'Card Timing',
-}
-
-const LO_LESSON_PATHS = {
-  LO1: '/lesson/1',
-  LO2: '/lesson/3',
-  LO3: '/lesson/3',
-  LO4: '/lesson/2',
-}
-
-const LO_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
-
-function calculateScores(selectedQuestions, pretestAnswers, posttestAnswers) {
-  let pretestCorrect = 0
-  let posttestCorrect = 0
-  const loScores = Object.fromEntries(
-    LO_ORDER.map((lo) => [lo, { pre: 0, post: 0 }]),
-  )
-
-  for (const question of selectedQuestions) {
-    const preIndex = pretestAnswers[question.id]
-    const postIndex = posttestAnswers[question.id]
-
-    if (preIndex === question.correctIndex) {
-      pretestCorrect += 1
-      loScores[question.lo].pre += 1
-    }
-
-    if (postIndex === question.correctIndex) {
-      posttestCorrect += 1
-      loScores[question.lo].post += 1
-    }
-  }
-
-  return { pretestCorrect, posttestCorrect, loScores }
-}
-
-function getLoTag(pre, post) {
-  if (post > pre) return { label: 'Improved', className: 'results__lo-tag--improved' }
-  if (post < pre) return { label: 'Review', className: 'results__lo-tag--declined' }
-  return { label: 'Same', className: 'results__lo-tag--same' }
-}
-
-function getImprovementMessage(pretestCorrect, posttestCorrect) {
-  if (posttestCorrect > pretestCorrect) {
-    const diff = posttestCorrect - pretestCorrect
-    const unit = diff === 1 ? 'point' : 'points'
-    return {
-      text: `You improved by ${diff} ${unit}. Great work.`,
-      className: 'results__improvement results__improvement--positive',
-    }
-  }
-
-  if (posttestCorrect === pretestCorrect) {
-    return {
-      text: 'Your score stayed the same. Review the lessons below if you want another pass.',
-      className: 'results__improvement results__improvement--neutral',
-    }
-  }
-
-  return {
-    text: 'Your score dropped on some questions. Use the review links below to revisit those topics.',
-    className: 'results__improvement results__improvement--neutral',
-  }
-}
-
-function buildResultsSummary(sessionId, scores, selectedQuestions) {
-  const lines = [
-    `Session ID: ${sessionId}`,
-    `Pre-Test: ${scores.pretestCorrect} / ${selectedQuestions.length}`,
-    `Post-Test: ${scores.posttestCorrect} / ${selectedQuestions.length}`,
-    '',
-    'By learning objective:',
-  ]
-
-  for (const lo of LO_ORDER) {
-    const { pre, post } = scores.loScores[lo]
-    lines.push(`${LO_LABELS[lo]}: ${pre}/2 → ${post}/2`)
-  }
-
-  return lines.join('\n')
-}
 
 function AnswerCell({ answerIndex, question }) {
   if (answerIndex === undefined || answerIndex === null) {
@@ -113,8 +37,19 @@ function AnswerCell({ answerIndex, question }) {
 
 export default function Results({ session }) {
   const navigate = useNavigate()
-  const { sessionId, selectedQuestions, pretestAnswers, posttestAnswers, resetSession } = session
+  const {
+    sessionId,
+    selectedQuestions,
+    pretestAnswers,
+    posttestAnswers,
+    resetSession,
+    resultsSubmitted,
+    markResultsSubmitted,
+  } = session
   const [copiedSummary, setCopiedSummary] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState(
+    resultsSubmitted ? 'saved' : 'pending',
+  )
 
   const hasTestData =
     selectedQuestions &&
@@ -126,6 +61,51 @@ export default function Results({ session }) {
     if (!hasTestData) return null
     return calculateScores(selectedQuestions, pretestAnswers, posttestAnswers)
   }, [hasTestData, selectedQuestions, pretestAnswers, posttestAnswers])
+
+  useEffect(() => {
+    if (!hasTestData || resultsSubmitted) return
+
+    let cancelled = false
+
+    async function runSubmit() {
+      setSubmitStatus('saving')
+      const result = await submitLearningSession({
+        sessionId,
+        selectedQuestions,
+        pretestAnswers,
+        posttestAnswers,
+      })
+
+      if (cancelled) return
+
+      if (result.skipped) {
+        setSubmitStatus('skipped')
+        return
+      }
+
+      if (result.ok) {
+        markResultsSubmitted()
+        setSubmitStatus('saved')
+        return
+      }
+
+      setSubmitStatus('error')
+    }
+
+    runSubmit()
+
+    return () => {
+      cancelled = true
+    }
+  }, [
+    hasTestData,
+    resultsSubmitted,
+    sessionId,
+    selectedQuestions,
+    pretestAnswers,
+    posttestAnswers,
+    markResultsSubmitted,
+  ])
 
   async function handleCopySummary() {
     if (!scores) return
@@ -145,6 +125,22 @@ export default function Results({ session }) {
     }
     setCopiedSummary(true)
     window.setTimeout(() => setCopiedSummary(false), 2000)
+  }
+
+  async function handleRetrySubmit() {
+    setSubmitStatus('saving')
+    const result = await submitLearningSession({
+      sessionId,
+      selectedQuestions,
+      pretestAnswers,
+      posttestAnswers,
+    })
+    if (result.ok) {
+      markResultsSubmitted()
+      setSubmitStatus('saved')
+    } else {
+      setSubmitStatus('error')
+    }
   }
 
   if (!hasTestData || !scores) {
@@ -171,6 +167,32 @@ export default function Results({ session }) {
         <h1 className="results__heading">Your Results</h1>
         <hr className="results__rule" aria-hidden="true" />
         <CopySessionId sessionId={sessionId} className="results__session-id" />
+
+        {isSupabaseConfigured() && (
+          <div
+            className={`results__submit-banner results__submit-banner--${submitStatus}`}
+            role="status"
+            aria-live="polite"
+          >
+            {submitStatus === 'pending' || submitStatus === 'saving' ? (
+              <span>Saving your results for the instructor…</span>
+            ) : null}
+            {submitStatus === 'saved' ? (
+              <span>Your results were saved. You can still copy your session ID below.</span>
+            ) : null}
+            {submitStatus === 'skipped' ? (
+              <span>Results are stored only in this browser (Supabase not configured).</span>
+            ) : null}
+            {submitStatus === 'error' ? (
+              <span>
+                We could not save your results.{' '}
+                <button type="button" className="results__submit-retry" onClick={handleRetrySubmit}>
+                  Try again
+                </button>
+              </span>
+            ) : null}
+          </div>
+        )}
 
         <section className="results__overall">
           <div className="results__metrics">
@@ -302,8 +324,7 @@ export default function Results({ session }) {
         <hr className="results__divider" aria-hidden="true" />
 
         <p className="results__footer">
-          Thank you for completing this lesson. Copy your session ID and results summary if you
-          haven&apos;t already.
+          Thank you for completing this lesson. Copy your session ID if you need it for reference.
         </p>
 
         <div className="results__actions">

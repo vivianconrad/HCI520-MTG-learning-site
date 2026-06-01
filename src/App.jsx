@@ -12,6 +12,7 @@ import LessonComplete from './screens/LessonComplete.jsx'
 import PostTest from './screens/PostTest.jsx'
 import Calculating from './screens/Calculating.jsx'
 import Results from './screens/Results.jsx'
+import InstructorDashboard from './screens/InstructorDashboard.jsx'
 
 function App() {
   const session = useSessionStore()
@@ -31,6 +32,7 @@ function App() {
         <Route path="/posttest" element={<PostTest session={session} />} />
         <Route path="/calculating" element={<Calculating session={session} />} />
         <Route path="/results" element={<Results session={session} />} />
+        <Route path="/instructor" element={<InstructorDashboard />} />
       </Routes>
     </BrowserRouter>
   )

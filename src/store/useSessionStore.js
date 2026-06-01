@@ -44,6 +44,9 @@ export default function useSessionStore() {
   const [posttestAnswers, setPosttestAnswers] = useState(
     () => saved?.posttestAnswers ?? {},
   )
+  const [resultsSubmitted, setResultsSubmitted] = useState(
+    () => saved?.resultsSubmitted ?? false,
+  )
 
   useEffect(() => {
     persistSession({
@@ -51,8 +54,9 @@ export default function useSessionStore() {
       selectedQuestions,
       pretestAnswers,
       posttestAnswers,
+      resultsSubmitted,
     })
-  }, [sessionId, selectedQuestions, pretestAnswers, posttestAnswers])
+  }, [sessionId, selectedQuestions, pretestAnswers, posttestAnswers, resultsSubmitted])
 
   const selectQuestions = useCallback(() => {
     const selected = pickQuestions()
@@ -68,11 +72,16 @@ export default function useSessionStore() {
     setPosttestAnswers((prev) => ({ ...prev, [id]: index }))
   }, [])
 
+  const markResultsSubmitted = useCallback(() => {
+    setResultsSubmitted(true)
+  }, [])
+
   const resetSession = useCallback(() => {
     clearPersistedSession()
     setSelectedQuestions(null)
     setPretestAnswers({})
     setPosttestAnswers({})
+    setResultsSubmitted(false)
     window.location.href = `${import.meta.env.BASE_URL}`
   }, [])
 
@@ -84,6 +93,8 @@ export default function useSessionStore() {
     posttestAnswers,
     setPretestAnswer,
     setPosttestAnswer,
+    resultsSubmitted,
+    markResultsSubmitted,
     resetSession,
   }
 }

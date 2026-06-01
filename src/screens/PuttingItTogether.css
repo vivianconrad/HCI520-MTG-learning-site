@@ -236,7 +236,7 @@
 
 .putting-together__prompt-actions {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
 }
 
@@ -273,7 +273,7 @@
 
 .putting-together__actions {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   margin-top: 32px;
 }
@@ -298,4 +298,13 @@
 
 .putting-together__button--back:hover {
   border-color: var(--color-gold);
+}
+
+.putting-together__button--next {
+  border: 1.5px solid var(--color-gold);
+}
+
+.putting-together__button--next:hover {
+  background: var(--color-gold);
+  color: var(--color-navy);
 }

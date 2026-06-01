@@ -23,6 +23,14 @@ Install dependencies:
 npm install
 ```
 
+Copy environment variables (not committed):
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` with your Supabase project URL and anon key. Optional: set `VITE_INSTRUCTOR_PASSWORD` for the `/instructor` dashboard gate.
+
 Start the dev server:
 
 ```bash
@@ -75,6 +83,16 @@ This project is configured to publish from the `main` branch using the `/docs` f
    - **Pages → Deploy from a branch**
    - **Branch: `main`**
    - **Folder: `/docs`**
+
+## Participant data (Supabase)
+
+After the post-test, results are sent to Supabase (`learning_sessions`). Instructors use:
+
+- **Dashboard:** `https://<your-username>.github.io/HCI520-MTG-learning-site/instructor`
+- **SQL setup:** run `supabase/schema.sql` once in the Supabase SQL editor
+- **Metrics guide:** `docs/evaluation.md`
+
+Rebuild and redeploy after changing `.env.local` so GitHub Pages includes the Supabase keys.
 
 ## Notes
 
