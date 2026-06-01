@@ -313,6 +313,21 @@
   color: var(--color-navy);
 }
 
+.results__practice-section {
+  margin-bottom: 8px;
+}
+
+.results__practice-note {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-text-muted, #4a4540);
+}
+
+.results__review-link--standalone {
+  display: inline-block;
+}
+
 .results__review-link {
   grid-column: 1 / -1;
   font-family: var(--font-display);

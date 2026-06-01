@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import LessonActions from '../components/LessonActions.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import useScreenTime from '../hooks/useScreenTime.js'
 import './CardTypes.css'
 
 const CARD_TYPES = [
@@ -183,8 +185,8 @@ function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
 }
 
 export default function CardTypes({ session }) {
-  void session
   const navigate = useNavigate()
+  useScreenTime(session, 'CardTypes')
   const [overlayId, setOverlayId] = useState(null)
   const [isClosing, setIsClosing] = useState(false)
   const [seenIds, setSeenIds] = useState(() => new Set())
@@ -260,7 +262,7 @@ export default function CardTypes({ session }) {
         <p className="card-types__intro">
           Magic has a few other card types too, but these seven are the main ones you will see in
           most games. Each type determines what the card does and, more importantly, when you can
-          play it.
+          cast it (lands are played, not cast).
         </p>
 
         <div className="card-types__grid">
@@ -275,33 +277,30 @@ export default function CardTypes({ session }) {
         </div>
 
         <p className="card-types__progress" aria-live="polite">
-          {allViewed ? 'All card types viewed.' : `Seen ${seenIds.size} of 7 card types`}
+          {allViewed ? 'All card types explored.' : `Explored ${seenIds.size} of 7 card types`}
         </p>
 
         <hr className="card-types__divider" aria-hidden="true" />
 
         <p className="card-types__closing">
-          Notice that only instants can be played at any time. Every other type has restrictions.
+          Notice that only instants can be cast at any time. Every other type has restrictions.
           Keep that in mind as you learn the turn structure in the next lesson.
         </p>
 
-        <div className="card-types__actions">
-          <button
-            type="button"
-            className="card-types__button card-types__button--back"
-            onClick={() => navigate('/lesson/1')}
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            className="card-types__button card-types__button--next"
-            disabled={!allViewed}
-            onClick={() => navigate('/lesson/3')}
-          >
-            Next
-          </button>
-        </div>
+        <p className="card-types__note">
+          There are exceptions to every rule in Magic, and many cards use keywords that change how
+          they work. What you saw here is a basic introduction—enough to get started, not every
+          special case you will meet in a real game.
+        </p>
+
+        <LessonActions
+          classPrefix="card-types"
+          backHint="Return to Card Anatomy"
+          onBack={() => navigate('/lesson/1')}
+          onNext={() => navigate('/lesson/3')}
+          canProceed={allViewed}
+          gateMessage="Open each card type and view its examples before continuing."
+        />
         <ProgressDots activeIndex={PROGRESS.LESSON_2} />
       </div>
 
@@ -360,7 +359,7 @@ export default function CardTypes({ session }) {
                   onClick={goToPrevious}
                   aria-label={`Previous ${activeType.name} example`}
                 >
-                  ◂ Prev
+                  Previous
                 </button>
                 <span className="card-types__overlay-count" aria-live="polite">
                   {activeExampleIndex + 1} / {activeType.examples.length}
@@ -371,7 +370,7 @@ export default function CardTypes({ session }) {
                   onClick={goToNext}
                   aria-label={`Next ${activeType.name} example`}
                 >
-                  Next ▸
+                  Next
                 </button>
               </div>
             )}

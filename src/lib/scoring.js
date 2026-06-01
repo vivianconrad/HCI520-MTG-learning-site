@@ -1,24 +1,25 @@
-export const LO_LABELS = {
+/** Internal topic keys (not shown in the learner UI). */
+export const TOPIC_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
+
+export const TOPIC_LABELS = {
   LO1: 'How to Read a Card',
   LO2: 'How a Turn Works',
   LO3: 'Turn Steps in Detail',
   LO4: 'Card Timing',
 }
 
-export const LO_LESSON_PATHS = {
+export const TOPIC_LESSON_PATHS = {
   LO1: '/lesson/1',
   LO2: '/lesson/3',
   LO3: '/lesson/3',
-  LO4: '/lesson/2',
+  LO4: '/lesson/4',
 }
-
-export const LO_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
 
 export function calculateScores(selectedQuestions, pretestAnswers, posttestAnswers) {
   let pretestCorrect = 0
   let posttestCorrect = 0
   const loScores = Object.fromEntries(
-    LO_ORDER.map((lo) => [lo, { pre: 0, post: 0 }]),
+    TOPIC_ORDER.map((lo) => [lo, { pre: 0, post: 0 }]),
   )
 
   for (const question of selectedQuestions) {
@@ -74,12 +75,12 @@ export function buildResultsSummary(sessionId, scores, selectedQuestions) {
     `Pre-Test: ${scores.pretestCorrect} / ${selectedQuestions.length}`,
     `Post-Test: ${scores.posttestCorrect} / ${selectedQuestions.length}`,
     '',
-    'By learning objective:',
+    'By topic:',
   ]
 
-  for (const lo of LO_ORDER) {
+  for (const lo of TOPIC_ORDER) {
     const { pre, post } = scores.loScores[lo]
-    lines.push(`${LO_LABELS[lo]}: ${pre}/2 → ${post}/2`)
+    lines.push(`${TOPIC_LABELS[lo]}: ${pre}/2 → ${post}/2`)
   }
 
   return lines.join('\n')
@@ -92,21 +93,35 @@ export function aggregateCohortStats(sessions) {
       meanPretest: 0,
       meanPosttest: 0,
       meanGain: 0,
-      loMeans: Object.fromEntries(LO_ORDER.map((lo) => [lo, { pre: 0, post: 0, gain: 0 }])),
+      loMeans: Object.fromEntries(TOPIC_ORDER.map((lo) => [lo, { pre: 0, post: 0, gain: 0 }])),
     }
   }
 
   let sumPre = 0
   let sumPost = 0
   const loTotals = Object.fromEntries(
-    LO_ORDER.map((lo) => [lo, { pre: 0, post: 0, gain: 0 }]),
+    TOPIC_ORDER.map((lo) => [lo, { pre: 0, post: 0, gain: 0 }]),
   )
 
   for (const row of sessions) {
-    sumPre += row.pretest_correct
-    sumPost += row.posttest_correct
-    for (const lo of LO_ORDER) {
-      const loRow = row.lo_scores?.[lo]
+    const preScore = row.pretest_score ?? row.pretest_correct ?? 0
+    const postScore = row.posttest_score ?? row.posttest_correct ?? 0
+    sumPre += preScore
+    sumPost += postScore
+
+    let loScores = row.lo_scores
+    if (!loScores && row.selected_questions && row.pretest_answers && row.posttest_answers) {
+      loScores = calculateScores(
+        row.selected_questions,
+        row.pretest_answers,
+        row.posttest_answers,
+      ).loScores
+    }
+
+    if (!loScores) continue
+
+    for (const lo of TOPIC_ORDER) {
+      const loRow = loScores[lo]
       if (!loRow) continue
       loTotals[lo].pre += loRow.pre
       loTotals[lo].post += loRow.post
@@ -121,7 +136,7 @@ export function aggregateCohortStats(sessions) {
     meanPosttest: sumPost / count,
     meanGain: (sumPost - sumPre) / count,
     loMeans: Object.fromEntries(
-      LO_ORDER.map((lo) => [
+      TOPIC_ORDER.map((lo) => [
         lo,
         {
           pre: loTotals[lo].pre / count,
@@ -140,24 +155,43 @@ export function sessionsToCsv(sessions) {
     'pretest_correct',
     'posttest_correct',
     'gain',
-    ...LO_ORDER.flatMap((lo) => [`${lo}_pre`, `${lo}_post`, `${lo}_gain`]),
+    ...TOPIC_ORDER.flatMap((topicKey) => [
+      `${topicKey}_pre`,
+      `${topicKey}_post`,
+      `${topicKey}_gain`,
+    ]),
     'question_ids',
   ]
 
   const rows = sessions.map((row) => {
-    const gain = row.posttest_correct - row.pretest_correct
-    const loParts = LO_ORDER.flatMap((lo) => {
-      const loRow = row.lo_scores?.[lo] ?? { pre: 0, post: 0 }
+    const preScore = row.pretest_score ?? row.pretest_correct ?? 0
+    const postScore = row.posttest_score ?? row.posttest_correct ?? 0
+    const gain = postScore - preScore
+
+    let loScores = row.lo_scores
+    if (!loScores && row.selected_questions && row.pretest_answers && row.posttest_answers) {
+      loScores = calculateScores(
+        row.selected_questions,
+        row.pretest_answers,
+        row.posttest_answers,
+      ).loScores
+    }
+
+    const loParts = TOPIC_ORDER.flatMap((lo) => {
+      const loRow = loScores?.[lo] ?? { pre: 0, post: 0 }
       return [loRow.pre, loRow.post, loRow.post - loRow.pre]
     })
+
+    const questionIds = row.question_ids ?? row.selected_questions?.map((q) => q.id) ?? []
+
     return [
       row.session_id,
-      row.submitted_at ?? row.created_at ?? '',
-      row.pretest_correct,
-      row.posttest_correct,
+      row.completed_at ?? row.submitted_at ?? row.created_at ?? '',
+      preScore,
+      postScore,
       gain,
       ...loParts,
-      (row.question_ids ?? []).join(';'),
+      questionIds.join(';'),
     ]
   })
 

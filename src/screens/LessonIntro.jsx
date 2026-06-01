@@ -45,16 +45,16 @@ export default function LessonIntro({ session: _session }) {
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--back"
-            onClick={() => navigate('/pretest')}
+            onClick={() => navigate('/intro')}
           >
-            Back
+            Back to overview
           </button>
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--next"
             onClick={() => navigate('/lesson/1')}
           >
-            Next
+            Start Lesson 1
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_INTRO} />

@@ -1,13 +1,17 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  LO_LABELS,
-  LO_ORDER,
+  TOPIC_LABELS,
+  TOPIC_ORDER,
   aggregateCohortStats,
   sessionsToCsv,
 } from '../lib/scoring.js'
-import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase.js'
+import { supabase } from '../lib/supabase.js'
 import './InstructorDashboard.css'
+
+function isSupabaseConfigured() {
+  return Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY)
+}
 
 const EXPECTED_PASSWORD = import.meta.env.VITE_INSTRUCTOR_PASSWORD ?? ''
 
@@ -30,14 +34,13 @@ export default function InstructorDashboard() {
       return
     }
 
-    const supabase = getSupabaseClient()
     setLoading(true)
     setError(null)
 
     const { data, error: fetchError } = await supabase
-      .from('learning_sessions')
+      .from('participants')
       .select('*')
-      .order('submitted_at', { ascending: false })
+      .order('created_at', { ascending: false })
 
     setLoading(false)
 
@@ -98,8 +101,9 @@ export default function InstructorDashboard() {
         <div className="instructor__frame">
           <h1 className="instructor__heading">Instructor dashboard</h1>
           <p className="instructor__intro">
-            View cohort pre/post scores and export data for HCI520 evaluation. Enter the
-            instructor password from your deployment environment.
+            View cohort pre/post scores and export data for HCI520 evaluation. Participant rows
+            use RLS that blocks browser reads; use the Supabase Table Editor for full access, or
+            run <code>supabase/instructor-select-policy.sql</code> to enable this dashboard.
           </p>
           <form className="instructor__unlock" onSubmit={handleUnlock}>
             <label className="instructor__label" htmlFor="instructor-password">
@@ -172,24 +176,24 @@ export default function InstructorDashboard() {
           </p>
         </section>
 
-        <section className="instructor__lo" aria-label="Per learning objective">
-          <h2 className="instructor__subheading">Mean score by learning objective (of 2)</h2>
+        <section className="instructor__lo" aria-label="Mean score by topic">
+          <h2 className="instructor__subheading">Mean score by topic (of 2 questions each)</h2>
           <table className="instructor__table">
             <thead>
               <tr>
-                <th scope="col">Objective</th>
+                <th scope="col">Topic</th>
                 <th scope="col">Pre</th>
                 <th scope="col">Post</th>
                 <th scope="col">Gain</th>
               </tr>
             </thead>
             <tbody>
-              {LO_ORDER.map((lo) => (
-                <tr key={lo}>
-                  <td>{LO_LABELS[lo]}</td>
-                  <td>{formatMean(cohort.loMeans[lo]?.pre ?? 0)}</td>
-                  <td>{formatMean(cohort.loMeans[lo]?.post ?? 0)}</td>
-                  <td>{formatMean(cohort.loMeans[lo]?.gain ?? 0, 2)}</td>
+              {TOPIC_ORDER.map((topicKey) => (
+                <tr key={topicKey}>
+                  <td>{TOPIC_LABELS[topicKey]}</td>
+                  <td>{formatMean(cohort.loMeans[topicKey]?.pre ?? 0)}</td>
+                  <td>{formatMean(cohort.loMeans[topicKey]?.post ?? 0)}</td>
+                  <td>{formatMean(cohort.loMeans[topicKey]?.gain ?? 0, 2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -214,25 +218,26 @@ export default function InstructorDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {sessions.map((row) => (
-                    <tr key={row.session_id}>
-                      <td>
-                        <code>{row.session_id}</code>
-                      </td>
-                      <td>
-                        {row.pretest_correct} / 8
-                      </td>
-                      <td>
-                        {row.posttest_correct} / 8
-                      </td>
-                      <td>{row.gain >= 0 ? `+${row.gain}` : row.gain}</td>
-                      <td>
-                        {row.submitted_at
-                          ? new Date(row.submitted_at).toLocaleString()
-                          : '—'}
-                      </td>
-                    </tr>
-                  ))}
+                  {sessions.map((row) => {
+                    const pre = row.pretest_score ?? 0
+                    const post = row.posttest_score ?? 0
+                    const gain = post - pre
+                    return (
+                      <tr key={row.session_id}>
+                        <td>
+                          <code>{row.session_id}</code>
+                        </td>
+                        <td>{pre} / 8</td>
+                        <td>{post} / 8</td>
+                        <td>{gain >= 0 ? `+${gain}` : gain}</td>
+                        <td>
+                          {row.completed_at
+                            ? new Date(row.completed_at).toLocaleString()
+                            : '—'}
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>
@@ -240,7 +245,7 @@ export default function InstructorDashboard() {
         </section>
 
         <p className="instructor__note">
-          Scores use each participant&apos;s randomly drawn 8 questions (2 per LO). See{' '}
+          Scores use each participant&apos;s randomly drawn 8 questions (2 per topic). See{' '}
           <code>docs/evaluation.md</code> for reporting caveats.
         </p>
 

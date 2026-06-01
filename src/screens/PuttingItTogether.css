@@ -220,56 +220,89 @@
   line-height: 1.5;
 }
 
-/* ── Follow-up prompt ─────────────────────────────────────── */
+/* ── Follow-up choices (after answering) ──────────────────── */
 
-.putting-together__prompt {
-  margin-bottom: 0;
+.putting-together__follow-up {
+  margin: 8px 0 24px;
   animation: putting-together-fade-in 200ms ease;
 }
 
-.putting-together__prompt-text {
-  font-family: var(--font-body);
-  font-size: 16px;
+.putting-together__follow-up-heading {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 400;
   color: var(--color-text-dark);
+  text-align: center;
   margin: 0 0 12px;
+  line-height: 1.3;
 }
 
-.putting-together__prompt-actions {
-  display: flex;
-  justify-content: center;
+.putting-together__follow-up-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-.putting-together__prompt-button {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  color: var(--color-text-dark);
-  background: transparent;
-  border: 1.5px solid var(--color-gold);
-  border-radius: 0;
-  padding: 10px 24px;
+.putting-together__follow-up-options--single {
+  grid-template-columns: 1fr;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.putting-together__choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 14px 16px;
+  text-align: left;
+  border-radius: 4px;
   cursor: pointer;
   transition:
     background var(--transition-fast),
-    color var(--transition-fast);
+    color var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
-.putting-together__prompt-button:hover {
+.putting-together__choice-label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-text-dark);
+  line-height: 1.2;
+}
+
+.putting-together__choice-hint {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-gold-on-parchment);
+  line-height: 1.4;
+}
+
+.putting-together__choice--practice {
+  background: var(--color-parchment-dark);
+  border: 1.5px solid var(--color-gold);
+}
+
+.putting-together__choice--practice:hover {
   background: var(--color-gold);
+}
+
+.putting-together__choice--practice:hover .putting-together__choice-label,
+.putting-together__choice--practice:hover .putting-together__choice-hint {
   color: var(--color-navy);
 }
 
-.putting-together__prompt-button--muted {
-  border-color: var(--color-gold-on-parchment);
-}
-
-.putting-together__prompt-button--muted:hover {
-  border-color: var(--color-gold);
+.putting-together__choice--finish {
   background: transparent;
-  color: var(--color-text-dark);
+  border: 1.5px solid var(--color-gold-muted);
 }
 
-/* ── Back button ──────────────────────────────────────────── */
+.putting-together__choice--finish:hover {
+  border-color: var(--color-gold);
+  background: var(--color-parchment-dark);
+}
+
+/* ── Page navigation ──────────────────────────────────────── */
 
 .putting-together__actions {
   display: flex;
@@ -307,4 +340,46 @@
 .putting-together__button--next:hover {
   background: var(--color-gold);
   color: var(--color-navy);
+}
+
+.putting-together__button--stacked {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+}
+
+.putting-together__button-label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.putting-together__button-hint {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-gold-on-parchment);
+  line-height: 1.3;
+}
+
+.putting-together__button--next .putting-together__button-hint {
+  color: var(--color-text-dark);
+  opacity: 0.75;
+}
+
+.putting-together__button--next:hover .putting-together__button-hint {
+  color: var(--color-navy);
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .putting-together__follow-up-options {
+    grid-template-columns: 1fr;
+  }
+
+  .putting-together__follow-up-options--single {
+    max-width: none;
+  }
 }

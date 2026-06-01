@@ -6,8 +6,7 @@ import {
   clearPersistedSession,
 } from './sessionStorage.js'
 
-const LO_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
-// Unambiguous chars — no 0/O, 1/I/L confusion when reading aloud or transcribing
+const TOPIC_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
 const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 
 function generateSessionId() {
@@ -25,8 +24,8 @@ function shuffle(array) {
 }
 
 function pickQuestions() {
-  return LO_ORDER.flatMap((lo) => {
-    const pool = questionBank.filter((q) => q.lo === lo)
+  return TOPIC_ORDER.flatMap((topicKey) => {
+    const pool = questionBank.filter((q) => q.lo === topicKey)
     return shuffle(pool).slice(0, 2)
   })
 }
@@ -35,6 +34,7 @@ export default function useSessionStore() {
   const saved = loadPersistedSession()
 
   const [sessionId] = useState(() => saved?.sessionId ?? generateSessionId())
+  const [participantId, setParticipantIdState] = useState(() => saved?.participantId ?? null)
   const [selectedQuestions, setSelectedQuestions] = useState(
     () => saved?.selectedQuestions ?? null,
   )
@@ -44,19 +44,40 @@ export default function useSessionStore() {
   const [posttestAnswers, setPosttestAnswers] = useState(
     () => saved?.posttestAnswers ?? {},
   )
-  const [resultsSubmitted, setResultsSubmitted] = useState(
-    () => saved?.resultsSubmitted ?? false,
+  const [screenStartTimes, setScreenStartTimes] = useState(
+    () => saved?.screenStartTimes ?? {},
+  )
+  const [screenTimes, setScreenTimes] = useState(() => saved?.screenTimes ?? {})
+  const [scenariosAttempted, setScenariosAttempted] = useState(
+    () => saved?.scenariosAttempted ?? 0,
+  )
+  const [lessonsCompleted, setLessonsCompletedState] = useState(
+    () => saved?.lessonsCompleted ?? false,
   )
 
   useEffect(() => {
     persistSession({
       sessionId,
+      participantId,
       selectedQuestions,
       pretestAnswers,
       posttestAnswers,
-      resultsSubmitted,
+      screenStartTimes,
+      screenTimes,
+      scenariosAttempted,
+      lessonsCompleted,
     })
-  }, [sessionId, selectedQuestions, pretestAnswers, posttestAnswers, resultsSubmitted])
+  }, [
+    sessionId,
+    participantId,
+    selectedQuestions,
+    pretestAnswers,
+    posttestAnswers,
+    screenStartTimes,
+    screenTimes,
+    scenariosAttempted,
+    lessonsCompleted,
+  ])
 
   const selectQuestions = useCallback(() => {
     const selected = pickQuestions()
@@ -72,29 +93,73 @@ export default function useSessionStore() {
     setPosttestAnswers((prev) => ({ ...prev, [id]: index }))
   }, [])
 
-  const markResultsSubmitted = useCallback(() => {
-    setResultsSubmitted(true)
+  const setParticipantId = useCallback((id) => {
+    setParticipantIdState(id)
+  }, [])
+
+  const recordScreenEnter = useCallback((screenName) => {
+    setScreenStartTimes((prev) => ({
+      ...prev,
+      [screenName]: Date.now(),
+    }))
+  }, [])
+
+  const recordScreenExit = useCallback((screenName) => {
+    setScreenStartTimes((prev) => {
+      const startedAt = prev[screenName]
+      if (!startedAt) return prev
+
+      const elapsedMs = Date.now() - startedAt
+      setScreenTimes((times) => ({
+        ...times,
+        [screenName]: (times[screenName] ?? 0) + elapsedMs,
+      }))
+
+      const next = { ...prev }
+      delete next[screenName]
+      return next
+    })
+  }, [])
+
+  const incrementScenarios = useCallback(() => {
+    setScenariosAttempted((count) => count + 1)
+  }, [])
+
+  const setLessonsCompleted = useCallback((value) => {
+    setLessonsCompletedState(value)
   }, [])
 
   const resetSession = useCallback(() => {
     clearPersistedSession()
+    setParticipantIdState(null)
     setSelectedQuestions(null)
     setPretestAnswers({})
     setPosttestAnswers({})
-    setResultsSubmitted(false)
+    setScreenStartTimes({})
+    setScreenTimes({})
+    setScenariosAttempted(0)
+    setLessonsCompleted(false)
     window.location.href = `${import.meta.env.BASE_URL}`
   }, [])
 
   return {
     sessionId,
+    participantId,
     selectedQuestions,
     selectQuestions,
     pretestAnswers,
     posttestAnswers,
     setPretestAnswer,
     setPosttestAnswer,
-    resultsSubmitted,
-    markResultsSubmitted,
+    setParticipantId,
+    screenStartTimes,
+    screenTimes,
+    scenariosAttempted,
+    lessonsCompleted,
+    recordScreenEnter,
+    recordScreenExit,
+    incrementScenarios,
+    setLessonsCompleted,
     resetSession,
   }
 }

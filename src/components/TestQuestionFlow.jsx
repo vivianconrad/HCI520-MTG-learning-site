@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useConfirm } from '../context/ConfirmContext.jsx'
 import ProgressDots from './ProgressDots.jsx'
 import QuestionCardImage from './QuestionCardImage.jsx'
 import { getQuestionImage } from '../data/questionImages.js'
@@ -12,10 +13,12 @@ export default function TestQuestionFlow({
   setAnswer,
   onComplete,
   firstQuestionBackPath,
+  leaveConfirmMessage,
   introNote,
   lastButtonLabel,
 }) {
   const navigate = useNavigate()
+  const confirm = useConfirm()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedIndex, setSelectedIndex] = useState(null)
 
@@ -30,7 +33,7 @@ export default function TestQuestionFlow({
     setAnswer(question.id, selectedIndex)
 
     if (isLast) {
-      onComplete()
+      onComplete({ [question.id]: selectedIndex })
       return
     }
 
@@ -56,8 +59,9 @@ export default function TestQuestionFlow({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [question.options.length, selectedIndex, handleNext])
 
-  function handleBack() {
+  async function handleBack() {
     if (isFirst) {
+      if (leaveConfirmMessage && !(await confirm(leaveConfirmMessage))) return
       navigate(firstQuestionBackPath)
       return
     }
@@ -110,8 +114,13 @@ export default function TestQuestionFlow({
           Press 1–{question.options.length} to select, Enter to continue
         </p>
         <div className="pretest__actions pretest__actions--split">
-          <button type="button" className="pretest__button pretest__button--back" onClick={handleBack}>
-            Back
+          <button
+            type="button"
+            className="pretest__button pretest__button--back"
+            onClick={handleBack}
+            title={isFirst && leaveConfirmMessage ? 'Leave the test' : undefined}
+          >
+            {isFirst && leaveConfirmMessage ? 'Leave test' : 'Back'}
           </button>
           <button
             type="button"

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import LessonActions from '../components/LessonActions.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import useScreenTime from '../hooks/useScreenTime.js'
 import './TurnStructure.css'
 
 const PHASES = [
@@ -36,7 +38,7 @@ const PHASES = [
     id: 'second-main',
     label: 'Second Main Phase',
     title: 'Second Main Phase',
-    body: 'A second chance to play cards after combat. This is a good time to play cards you were holding back, or to cast spells after seeing how combat went.',
+    body: 'A second chance to play lands and cast spells after combat. This is a good time for cards you were holding back, or to cast spells after seeing how combat went.',
   },
   {
     id: 'end',
@@ -46,13 +48,15 @@ const PHASES = [
   },
 ]
 
-export default function TurnStructure({ session: _session }) {
+export default function TurnStructure({ session }) {
   const navigate = useNavigate()
+  useScreenTime(session, 'TurnStructure')
   const [selectedId, setSelectedId] = useState('beginning')
   const [visitedIds, setVisitedIds] = useState(() => new Set(['beginning']))
 
   const selected = PHASES.find((p) => p.id === selectedId) ?? PHASES[0]
   const panelId = `turn-phase-panel-${selectedId}`
+  const allPhasesExplored = visitedIds.size === PHASES.length
 
   function selectPhase(id) {
     setSelectedId(id)
@@ -96,7 +100,7 @@ export default function TurnStructure({ session: _session }) {
         </div>
 
         <p className="turn-structure__progress" aria-live="polite">
-          Viewed {visitedIds.size} of {PHASES.length} phases
+          Explored {visitedIds.size} of {PHASES.length} phases
         </p>
 
         <div
@@ -127,26 +131,18 @@ export default function TurnStructure({ session: _session }) {
 
         <p className="turn-structure__closing">
           The two main phases are what trips most new players up. Remember: you get two chances to
-          play cards each turn, one before combat and one after. Only instants can be played at any
-          time.
+          play lands and cast spells each turn, one before combat and one after. Only instants can
+          be cast at any time.
         </p>
 
-        <div className="turn-structure__actions">
-          <button
-            type="button"
-            className="turn-structure__button turn-structure__button--back"
-            onClick={() => navigate('/lesson/2')}
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            className="turn-structure__button turn-structure__button--next"
-            onClick={() => navigate('/lesson/4')}
-          >
-            Next
-          </button>
-        </div>
+        <LessonActions
+          classPrefix="turn-structure"
+          backHint="Return to Card Types"
+          onBack={() => navigate('/lesson/2')}
+          onNext={() => navigate('/lesson/4')}
+          canProceed={allPhasesExplored}
+          gateMessage="Click each phase in the timeline above to read about it before continuing."
+        />
         <ProgressDots activeIndex={PROGRESS.LESSON_3} />
       </div>
     </div>

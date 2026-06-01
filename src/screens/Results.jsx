@@ -1,18 +1,17 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import {
-  LO_LABELS,
-  LO_LESSON_PATHS,
-  LO_ORDER,
+  TOPIC_LABELS,
+  TOPIC_LESSON_PATHS,
+  TOPIC_ORDER,
   buildResultsSummary,
   calculateScores,
   getImprovementMessage,
   getLoTag,
 } from '../lib/scoring.js'
-import { isSupabaseConfigured } from '../lib/supabase.js'
-import { submitLearningSession } from '../lib/submitSession.js'
+import { LESSON_4_PATH, PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import './Results.css'
 
 function AnswerCell({ answerIndex, question }) {
@@ -42,14 +41,10 @@ export default function Results({ session }) {
     selectedQuestions,
     pretestAnswers,
     posttestAnswers,
+    scenariosAttempted,
     resetSession,
-    resultsSubmitted,
-    markResultsSubmitted,
   } = session
   const [copiedSummary, setCopiedSummary] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState(
-    resultsSubmitted ? 'saved' : 'pending',
-  )
 
   const hasTestData =
     selectedQuestions &&
@@ -61,51 +56,6 @@ export default function Results({ session }) {
     if (!hasTestData) return null
     return calculateScores(selectedQuestions, pretestAnswers, posttestAnswers)
   }, [hasTestData, selectedQuestions, pretestAnswers, posttestAnswers])
-
-  useEffect(() => {
-    if (!hasTestData || resultsSubmitted) return
-
-    let cancelled = false
-
-    async function runSubmit() {
-      setSubmitStatus('saving')
-      const result = await submitLearningSession({
-        sessionId,
-        selectedQuestions,
-        pretestAnswers,
-        posttestAnswers,
-      })
-
-      if (cancelled) return
-
-      if (result.skipped) {
-        setSubmitStatus('skipped')
-        return
-      }
-
-      if (result.ok) {
-        markResultsSubmitted()
-        setSubmitStatus('saved')
-        return
-      }
-
-      setSubmitStatus('error')
-    }
-
-    runSubmit()
-
-    return () => {
-      cancelled = true
-    }
-  }, [
-    hasTestData,
-    resultsSubmitted,
-    sessionId,
-    selectedQuestions,
-    pretestAnswers,
-    posttestAnswers,
-    markResultsSubmitted,
-  ])
 
   async function handleCopySummary() {
     if (!scores) return
@@ -127,22 +77,6 @@ export default function Results({ session }) {
     window.setTimeout(() => setCopiedSummary(false), 2000)
   }
 
-  async function handleRetrySubmit() {
-    setSubmitStatus('saving')
-    const result = await submitLearningSession({
-      sessionId,
-      selectedQuestions,
-      pretestAnswers,
-      posttestAnswers,
-    })
-    if (result.ok) {
-      markResultsSubmitted()
-      setSubmitStatus('saved')
-    } else {
-      setSubmitStatus('error')
-    }
-  }
-
   if (!hasTestData || !scores) {
     return (
       <div className="results">
@@ -159,6 +93,7 @@ export default function Results({ session }) {
   }
 
   const improvement = getImprovementMessage(scores.pretestCorrect, scores.posttestCorrect)
+  const practiceIncomplete = scenariosAttempted < PRACTICE_SCENARIO_COUNT
 
   return (
     <div className="results">
@@ -167,32 +102,6 @@ export default function Results({ session }) {
         <h1 className="results__heading">Your Results</h1>
         <hr className="results__rule" aria-hidden="true" />
         <CopySessionId sessionId={sessionId} className="results__session-id" />
-
-        {isSupabaseConfigured() && (
-          <div
-            className={`results__submit-banner results__submit-banner--${submitStatus}`}
-            role="status"
-            aria-live="polite"
-          >
-            {submitStatus === 'pending' || submitStatus === 'saving' ? (
-              <span>Saving your results for the instructor…</span>
-            ) : null}
-            {submitStatus === 'saved' ? (
-              <span>Your results were saved. You can still copy your session ID below.</span>
-            ) : null}
-            {submitStatus === 'skipped' ? (
-              <span>Results are stored only in this browser (Supabase not configured).</span>
-            ) : null}
-            {submitStatus === 'error' ? (
-              <span>
-                We could not save your results.{' '}
-                <button type="button" className="results__submit-retry" onClick={handleRetrySubmit}>
-                  Try again
-                </button>
-              </span>
-            ) : null}
-          </div>
-        )}
 
         <section className="results__overall">
           <div className="results__metrics">
@@ -210,16 +119,16 @@ export default function Results({ session }) {
 
         <hr className="results__divider" aria-hidden="true" />
 
-        <section className="results__lo-section">
-          <h2 className="results__subheading">Breakdown by Learning Objective</h2>
+        <section className="results__lo-section" aria-label="Score by topic">
+          <h2 className="results__subheading">Breakdown by topic</h2>
           <div className="results__lo-rows">
-            {LO_ORDER.map((lo) => {
-              const { pre, post } = scores.loScores[lo]
+            {TOPIC_ORDER.map((topicKey) => {
+              const { pre, post } = scores.loScores[topicKey]
               const tag = getLoTag(pre, post)
               const needsReview = post < pre || (post < 2 && post <= pre)
               return (
-                <div key={lo} className="results__lo-row">
-                  <span className="results__lo-label">{LO_LABELS[lo]}</span>
+                <div key={topicKey} className="results__lo-row">
+                  <span className="results__lo-label">{TOPIC_LABELS[topicKey]}</span>
                   <span className="results__lo-pre">{pre} / 2</span>
                   <div className="results__lo-bar" aria-hidden="true">
                     <div
@@ -233,9 +142,9 @@ export default function Results({ session }) {
                     <button
                       type="button"
                       className="results__review-link"
-                      onClick={() => navigate(LO_LESSON_PATHS[lo])}
+                      onClick={() => navigate(TOPIC_LESSON_PATHS[topicKey])}
                     >
-                      Review lesson →
+                      {topicKey === 'LO4' ? 'Review scenarios →' : 'Review lesson →'}
                     </button>
                   )}
                 </div>
@@ -243,6 +152,26 @@ export default function Results({ session }) {
             })}
           </div>
         </section>
+
+        {practiceIncomplete && (
+          <>
+            <hr className="results__divider" aria-hidden="true" />
+            <section className="results__practice-section">
+              <h2 className="results__subheading">Lesson 4 practice</h2>
+              <p className="results__practice-note">
+                You completed {scenariosAttempted} of {PRACTICE_SCENARIO_COUNT} optional scenarios
+                in Putting It Together. You can revisit the rest anytime.
+              </p>
+              <button
+                type="button"
+                className="results__review-link results__review-link--standalone"
+                onClick={() => navigate(LESSON_4_PATH)}
+              >
+                Review Putting It Together →
+              </button>
+            </section>
+          </>
+        )}
 
         <hr className="results__divider" aria-hidden="true" />
 

@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import useScreenTime from '../hooks/useScreenTime.js'
+import { useConfirm } from '../context/ConfirmContext.jsx'
+import { LESSON_BACK_CONFIRM_MESSAGE } from '../lib/lessonNav.js'
 import shockImg from '../assets/instant-shock.jpg'
 import giantGrowthImg from '../assets/instant-giant-growth.jpg'
 import llanowarElvesImg from '../assets/creature-llanowar-elves.jpg'
@@ -25,30 +28,30 @@ const CARD_IMAGES = {
 const SCENARIOS = [
   {
     id: 's1',
-    text: "It's your main phase. You have a Shock in your hand. Shock is an instant that deals 2 damage and costs one red mana. You have one mountain on the battlefield. Can you play it right now?",
+    text: "It's your main phase. You have a Shock in your hand. Shock is an instant that deals 2 damage and costs one red mana. You have one mountain on the battlefield. Can you cast it right now?",
     cardImage: 'shock.jpg',
     cardImageAlt: 'Shock — Instant',
     correctAnswer: true,
     explanation:
-      'Yes. Shock is an instant, and instants can be played any time, including your main phase. You also have exactly enough mana to cast it.',
+      'Yes. Shock is an instant, and instants can be cast any time, including your main phase. You also have exactly enough mana to cast it.',
   },
   {
     id: 's2',
-    text: "It's your opponent's turn and they just attacked you with a creature. You have a Giant Growth in your hand. Giant Growth is an instant that gives a creature +3/+3. Can you play it right now to boost your blocker?",
+    text: "It's your opponent's turn and they just attacked you with a creature. You have a Giant Growth in your hand. Giant Growth is an instant that gives a creature +3/+3. Can you cast it right now to boost your blocker?",
     cardImage: 'giant-growth.jpg',
     cardImageAlt: 'Giant Growth — Instant',
     correctAnswer: true,
     explanation:
-      "Yes. Giant Growth is an instant, which means you can play it at any time, including on your opponent's turn during combat. This is exactly what instants are designed for.",
+      "Yes. Giant Growth is an instant, which means you can cast it at any time, including on your opponent's turn during combat. This is exactly what instants are designed for.",
   },
   {
     id: 's3',
-    text: "It's your first main phase. You have a Llanowar Elves in your hand. Llanowar Elves is a creature that costs one green mana. You have one forest land on the battlefield. Can you play Llanowar Elves right now?",
+    text: "It's your first main phase. You have a Llanowar Elves in your hand. Llanowar Elves is a creature that costs one green mana. You have one forest land on the battlefield. Can you cast Llanowar Elves right now?",
     cardImage: 'llanowar-elves.jpg',
     cardImageAlt: 'Llanowar Elves — Creature',
     correctAnswer: true,
     explanation:
-      'Yes. Creatures are played during your main phase, and you have exactly one green mana available from your forest. Llanowar Elves costs one green mana, so you can cast it.',
+      'Yes. Creatures are cast during your main phase, and you have exactly one green mana available from your forest. Llanowar Elves costs one green mana, so you can cast it.',
   },
   {
     id: 's4',
@@ -84,7 +87,7 @@ const SCENARIOS = [
     cardImageAlt: 'Sol Ring — Artifact',
     correctAnswer: true,
     explanation:
-      'Yes. Artifacts are cast during your main phase when the stack is empty, same as creatures and sorceries. Sol Ring is one of the most played artifacts in the game.',
+      'Yes. Artifacts are cast during your main phase when the stack is empty, same as creatures and sorceries. Sol Ring is one of the most commonly cast artifacts in the game.',
   },
   {
     id: 's8',
@@ -127,8 +130,12 @@ function ScenarioCardImage({ src, alt }) {
   )
 }
 
-export default function PuttingItTogether({ session: _session }) {
+export default function PuttingItTogether({ session }) {
   const navigate = useNavigate()
+  const confirm = useConfirm()
+  const { incrementScenarios } = session
+
+  useScreenTime(session, 'PuttingItTogether')
 
   const [shuffled] = useState(() => fisherYates(SCENARIOS))
   const [queueIndex, setQueueIndex] = useState(0)
@@ -163,6 +170,7 @@ export default function PuttingItTogether({ session: _session }) {
     if (phase !== 'question') return
     setSelectedAnswer(answer)
     setSeenIds((prev) => new Set([...prev, scenario.id]))
+    incrementScenarios()
     setPhase('feedback')
   }
 
@@ -193,7 +201,7 @@ export default function PuttingItTogether({ session: _session }) {
             ? 'All scenarios completed.'
             : hasCompletedRequiredScenario
               ? `Completed ${seenIds.size} of ${SCENARIOS.length} scenarios (first required, rest optional)`
-              : 'Complete the first scenario to continue. Remaining scenarios are optional.'}
+              : 'Complete the first scenario to unlock Finish Lesson. Remaining scenarios are optional.'}
         </p>
 
         <div className="putting-together__scenario">
@@ -240,14 +248,36 @@ export default function PuttingItTogether({ session: _session }) {
         )}
 
         {phase === 'feedback' && (
-          <div className="putting-together__prompt">
-            <div className="putting-together__prompt-actions">
+          <div className="putting-together__follow-up">
+            <h2 className="putting-together__follow-up-heading">What would you like to do?</h2>
+            <div
+              className={`putting-together__follow-up-options${
+                allSeen ? ' putting-together__follow-up-options--single' : ''
+              }`}
+            >
+              {!allSeen && (
+                <button
+                  type="button"
+                  className="putting-together__choice putting-together__choice--practice"
+                  onClick={handleAnother}
+                >
+                  <span className="putting-together__choice-label">Next Scenario</span>
+                  <span className="putting-together__choice-hint">
+                    Stay on this page and try another practice question
+                  </span>
+                </button>
+              )}
               <button
                 type="button"
-                className="putting-together__prompt-button"
+                className="putting-together__choice putting-together__choice--finish"
                 onClick={handleComplete}
               >
-                Continue
+                <span className="putting-together__choice-label">Finish Lesson</span>
+                <span className="putting-together__choice-hint">
+                  {allSeen
+                    ? 'You completed all scenarios — go to the lesson wrap-up'
+                    : 'Skip any remaining scenarios and go to the lesson wrap-up'}
+                </span>
               </button>
             </div>
           </div>
@@ -256,29 +286,24 @@ export default function PuttingItTogether({ session: _session }) {
         <div className="putting-together__actions">
           <button
             type="button"
-            className="putting-together__button putting-together__button--back"
-            onClick={() => navigate('/lesson/3')}
+            className="putting-together__button putting-together__button--back putting-together__button--stacked"
+            onClick={async () => {
+              if (!(await confirm(LESSON_BACK_CONFIRM_MESSAGE))) return
+              navigate('/lesson/3')
+            }}
           >
-            Back
+            <span className="putting-together__button-label">Back</span>
+            <span className="putting-together__button-hint">Return to Turn Structure</span>
           </button>
-          {phase === 'feedback' && !allSeen ? (
+          {phase === 'question' && hasCompletedRequiredScenario && (
             <button
               type="button"
-              className="putting-together__button putting-together__button--next"
-              onClick={handleAnother}
+              className="putting-together__button putting-together__button--next putting-together__button--stacked"
+              onClick={handleComplete}
             >
-              Next Scenario
+              <span className="putting-together__button-label">Finish Lesson</span>
+              <span className="putting-together__button-hint">Go to lesson wrap-up</span>
             </button>
-          ) : (
-            hasCompletedRequiredScenario && (
-              <button
-                type="button"
-                className="putting-together__button putting-together__button--next"
-                onClick={handleComplete}
-              >
-                Next
-              </button>
-            )
           )}
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_4} />

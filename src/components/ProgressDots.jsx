@@ -1,20 +1,21 @@
 import './ProgressDots.css'
 
-export const PROGRESS_STEP_COUNT = 12
+export const PROGRESS_STEP_COUNT = 13
 
 export const PROGRESS = {
-  WELCOME: 0,
-  INTRO: 1,
-  PRETEST: 2,
-  LESSON_INTRO: 3,
-  LESSON_1: 4,
-  LESSON_2: 5,
-  LESSON_3: 6,
-  LESSON_4: 7,
-  LESSON_COMPLETE: 8,
-  POSTTEST: 9,
-  CALCULATING: 10,
-  RESULTS: 11,
+  CONSENT: 0,
+  WELCOME: 1,
+  INTRO: 2,
+  PRETEST: 3,
+  LESSON_INTRO: 4,
+  LESSON_1: 5,
+  LESSON_2: 6,
+  LESSON_3: 7,
+  LESSON_4: 8,
+  LESSON_COMPLETE: 9,
+  POSTTEST: 10,
+  CALCULATING: 11,
+  RESULTS: 12,
 }
 
 export default function ProgressDots({ activeIndex }) {

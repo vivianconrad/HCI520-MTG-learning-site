@@ -189,6 +189,16 @@
   text-align: left;
 }
 
+.card-types__note {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text-muted, #4a4540);
+  margin: 16px 0 0;
+  line-height: 1.55;
+  text-align: left;
+  font-style: italic;
+}
+
 .card-types__actions {
   display: flex;
   justify-content: space-between;

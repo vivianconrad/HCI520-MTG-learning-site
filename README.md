@@ -86,13 +86,27 @@ This project is configured to publish from the `main` branch using the `/docs` f
 
 ## Participant data (Supabase)
 
-After the post-test, results are sent to Supabase (`learning_sessions`). Instructors use:
+Research data is saved incrementally to the `participants` table:
 
-- **Dashboard:** `https://<your-username>.github.io/HCI520-MTG-learning-site/instructor`
-- **SQL setup:** run `supabase/schema.sql` once in the Supabase SQL editor
-- **Metrics guide:** `docs/evaluation.md`
+| When | What is saved |
+|------|----------------|
+| Intro screen | New row with session ID, question set, participant ID |
+| Pre-test complete | Answers and score |
+| Lesson complete | Screen times, lessons completed, scenarios attempted |
+| Post-test complete | Answers, score, completion timestamp |
 
-Rebuild and redeploy after changing `.env.local` so GitHub Pages includes the Supabase keys.
+**Setup**
+
+1. Run `supabase/participants.sql` in the [Supabase SQL editor](https://supabase.com/dashboard).
+2. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+3. Rebuild (`npm run build`) before deploying so env vars are embedded for GitHub Pages.
+
+**Instructor analysis**
+
+- Browser dashboard: `/instructor` (optional; run `supabase/instructor-select-policy.sql` because default RLS blocks reads)
+- Or use the Supabase **Table Editor** (recommended with deny-select policy)
+
+See `docs/evaluation.md` for reporting metrics.
 
 ## Notes
 

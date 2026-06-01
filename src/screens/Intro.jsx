@@ -1,11 +1,23 @@
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import { createParticipantRow } from '../lib/db.js'
 import './Intro.css'
 
 export default function Intro({ session }) {
   const navigate = useNavigate()
-  const { sessionId } = session
+  const { sessionId, selectedQuestions, participantId, setParticipantId } = session
+  const creatingRef = useRef(false)
+
+  useEffect(() => {
+    if (participantId || !selectedQuestions?.length || creatingRef.current) return
+
+    creatingRef.current = true
+    createParticipantRow(sessionId, selectedQuestions).then((id) => {
+      if (id) setParticipantId(id)
+    })
+  }, [participantId, selectedQuestions, sessionId, setParticipantId])
 
   return (
     <div className="intro">
@@ -29,7 +41,11 @@ export default function Intro({ session }) {
         </div>
         <CopySessionId sessionId={sessionId} className="intro__session" />
         <div className="intro__actions intro__actions--split">
-          <button type="button" className="intro__button intro__button--back" onClick={() => navigate('/')}>
+          <button
+            type="button"
+            className="intro__button intro__button--back"
+            onClick={() => navigate('/welcome')}
+          >
             Back
           </button>
           <button type="button" className="intro__button" onClick={() => navigate('/pretest')}>

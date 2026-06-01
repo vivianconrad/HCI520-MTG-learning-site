@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { ConfirmProvider } from './context/ConfirmContext.jsx'
 import useSessionStore from './store/useSessionStore.js'
+import Consent from './screens/Consent.jsx'
 import Welcome from './screens/Welcome.jsx'
 import Intro from './screens/Intro.jsx'
 import PreTest from './screens/PreTest.jsx'
@@ -19,8 +21,10 @@ function App() {
 
   return (
     <BrowserRouter basename="/HCI520-MTG-learning-site">
+      <ConfirmProvider>
       <Routes>
-        <Route path="/" element={<Welcome session={session} />} />
+        <Route path="/" element={<Consent />} />
+        <Route path="/welcome" element={<Welcome session={session} />} />
         <Route path="/intro" element={<Intro session={session} />} />
         <Route path="/pretest" element={<PreTest session={session} />} />
         <Route path="/lesson/intro" element={<LessonIntro session={session} />} />
@@ -34,6 +38,7 @@ function App() {
         <Route path="/results" element={<Results session={session} />} />
         <Route path="/instructor" element={<InstructorDashboard />} />
       </Routes>
+      </ConfirmProvider>
     </BrowserRouter>
   )
 }

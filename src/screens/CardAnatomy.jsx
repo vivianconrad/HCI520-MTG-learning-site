@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import LessonActions from '../components/LessonActions.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import useScreenTime from '../hooks/useScreenTime.js'
 import './CardAnatomy.css'
 
 const cardImageUrl = new URL('../assets/creature-shadowmage-infiltrator.webp', import.meta.url).href
@@ -115,8 +117,9 @@ function CardMarker({ callout, isActive, onToggle }) {
   )
 }
 
-export default function CardAnatomy({ session: _session }) {
+export default function CardAnatomy({ session }) {
   const navigate = useNavigate()
+  useScreenTime(session, 'CardAnatomy')
   const [activeCallout, setActiveCallout] = useState(null)
   const [seenIds, setSeenIds] = useState(() => new Set())
 
@@ -178,7 +181,8 @@ export default function CardAnatomy({ session: _session }) {
         <hr className="card-anatomy__divider" aria-hidden="true" />
 
         <p className="card-anatomy__intro">
-          Each Magic: The Gathering card contains key information about what it does in play.
+          Each Magic: The Gathering card contains key information about what it does on the
+          battlefield.
           Learning to read a card&apos;s anatomy is the first step to building and piloting any deck.
         </p>
 
@@ -194,23 +198,14 @@ export default function CardAnatomy({ session: _session }) {
           ))}
         </ul>
 
-        <div className="card-anatomy__actions">
-          <button
-            type="button"
-            className="card-anatomy__button card-anatomy__button--back"
-            onClick={() => navigate('/lesson/intro')}
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            className="card-anatomy__button card-anatomy__button--next"
-            disabled={!allExplored}
-            onClick={() => navigate('/lesson/2')}
-          >
-            Next
-          </button>
-        </div>
+        <LessonActions
+          classPrefix="card-anatomy"
+          backHint="Return to lesson overview"
+          onBack={() => navigate('/lesson/intro')}
+          onNext={() => navigate('/lesson/2')}
+          canProceed={allExplored}
+          gateMessage="Explore all six numbered markers on the card before continuing."
+        />
 
         <ProgressDots activeIndex={PROGRESS.LESSON_1} />
       </div>
