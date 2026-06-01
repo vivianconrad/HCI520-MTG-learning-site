@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
+import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import {
   TOPIC_LABELS,
@@ -16,20 +17,26 @@ import './Results.css'
 
 function AnswerCell({ answerIndex, question }) {
   if (answerIndex === undefined || answerIndex === null) {
-    return <span className="results__answer results__answer--missing">—</span>
+    return (
+      <span className="results__answer results__answer--missing">
+        <span className="results__answer-status">No answer</span>
+      </span>
+    )
   }
 
   const isCorrect = answerIndex === question.correctIndex
   const text = question.options[answerIndex]
+  const status = isCorrect ? 'Correct' : 'Incorrect'
 
   return (
     <span
       className={`results__answer${isCorrect ? ' results__answer--correct' : ' results__answer--wrong'}`}
     >
+      <span className="results__answer-status">{status}:</span>
       <span className="results__answer-marker" aria-hidden="true">
         {isCorrect ? '◆' : '×'}
       </span>
-      {text}
+      <span className="results__answer-text">{text}</span>
     </span>
   )
 }
@@ -79,8 +86,9 @@ export default function Results({ session }) {
 
   if (!hasTestData || !scores) {
     return (
-      <div className="results">
+      <PageLayout title="Results · Learn to Play MTG" className="results">
         <div className="results__frame">
+          <h1 className="results__empty">Results unavailable</h1>
           <p className="results__empty">
             No test data found. Please complete the pre-test and post-test first.
           </p>
@@ -88,7 +96,7 @@ export default function Results({ session }) {
             Return to Welcome
           </button>
         </div>
-      </div>
+      </PageLayout>
     )
   }
 
@@ -96,7 +104,7 @@ export default function Results({ session }) {
   const practiceIncomplete = scenariosAttempted < PRACTICE_SCENARIO_COUNT
 
   return (
-    <div className="results">
+    <PageLayout title="Your Results · Learn to Play MTG" className="results">
       <div className="results__frame">
         <p className="results__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="results__heading">Your Results</h1>
@@ -144,7 +152,7 @@ export default function Results({ session }) {
                       className="results__review-link"
                       onClick={() => navigate(TOPIC_LESSON_PATHS[topicKey])}
                     >
-                      {topicKey === 'LO4' ? 'Review scenarios →' : 'Review lesson →'}
+                      {topicKey === 'LO4' ? 'Review scenarios' : 'Review lesson'}
                     </button>
                   )}
                 </div>
@@ -167,7 +175,7 @@ export default function Results({ session }) {
                 className="results__review-link results__review-link--standalone"
                 onClick={() => navigate(LESSON_4_PATH)}
               >
-                Review Putting It Together →
+                Review Putting It Together
               </button>
             </section>
           </>
@@ -177,46 +185,76 @@ export default function Results({ session }) {
 
         <section className="results__questions-section">
           <h2 className="results__subheading">Question by Question</h2>
-          <div className="results__question-table results__question-table--desktop">
-            <div className="results__question-header">
-              <span className="results__question-header-cell results__question-header-cell--num" />
-              <span className="results__question-header-cell results__question-header-cell--question">
-                Question
-              </span>
-              <span className="results__question-header-cell">Pre-Test</span>
-              <span className="results__question-header-cell">Post-Test</span>
-              <span className="results__question-header-cell results__question-header-cell--answer">
-                Answer
-              </span>
-            </div>
-            {selectedQuestions.map((question, index) => {
-              const preIndex = pretestAnswers[question.id]
-              const postIndex = posttestAnswers[question.id]
-              const eitherWrong =
-                preIndex !== question.correctIndex || postIndex !== question.correctIndex
-
-              return (
-                <div
-                  key={question.id}
-                  className={`results__question-row${index % 2 === 0 ? ' results__question-row--odd' : ' results__question-row--even'}`}
+          <table className="results__question-table results__question-table--desktop">
+            <caption className="visually-hidden">
+              Pre-test and post-test answers for each question
+            </caption>
+            <thead>
+              <tr className="results__question-header">
+                <th
+                  scope="col"
+                  className="results__question-header-cell results__question-header-cell--num"
+                />
+                <th
+                  scope="col"
+                  className="results__question-header-cell results__question-header-cell--question"
                 >
-                  <span className="results__question-num">Q{index + 1}</span>
-                  <span className="results__question-text" title={question.question}>
-                    {question.question}
-                  </span>
-                  <AnswerCell answerIndex={preIndex} question={question} />
-                  <AnswerCell answerIndex={postIndex} question={question} />
-                  {eitherWrong ? (
-                    <span className="results__correct-tag">
-                      Correct: {question.options[question.correctIndex]}
-                    </span>
-                  ) : (
-                    <span className="results__correct-tag results__correct-tag--empty" />
-                  )}
-                </div>
-              )
-            })}
-          </div>
+                  Question
+                </th>
+                <th scope="col" className="results__question-header-cell">
+                  Pre-Test
+                </th>
+                <th scope="col" className="results__question-header-cell">
+                  Post-Test
+                </th>
+                <th
+                  scope="col"
+                  className="results__question-header-cell results__question-header-cell--answer"
+                >
+                  Answer
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedQuestions.map((question, index) => {
+                const preIndex = pretestAnswers[question.id]
+                const postIndex = posttestAnswers[question.id]
+                const eitherWrong =
+                  preIndex !== question.correctIndex || postIndex !== question.correctIndex
+
+                return (
+                  <tr
+                    key={question.id}
+                    className={`results__question-row${index % 2 === 0 ? ' results__question-row--odd' : ' results__question-row--even'}`}
+                  >
+                    <th scope="row" className="results__question-num">
+                      Q{index + 1}
+                    </th>
+                    <td className="results__question-text" title={question.question}>
+                      {question.question}
+                    </td>
+                    <td>
+                      <AnswerCell answerIndex={preIndex} question={question} />
+                    </td>
+                    <td>
+                      <AnswerCell answerIndex={postIndex} question={question} />
+                    </td>
+                    <td>
+                      {eitherWrong ? (
+                        <span className="results__correct-tag">
+                          Correct: {question.options[question.correctIndex]}
+                        </span>
+                      ) : (
+                        <span className="results__correct-tag results__correct-tag--empty">
+                          —
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
 
           <div className="results__question-cards results__question-cards--mobile">
             {selectedQuestions.map((question, index) => {
@@ -267,6 +305,6 @@ export default function Results({ session }) {
 
         <ProgressDots activeIndex={PROGRESS.RESULTS} />
       </div>
-    </div>
+    </PageLayout>
   )
 }
