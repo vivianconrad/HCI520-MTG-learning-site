@@ -39,13 +39,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  width: 160px;
+  height: 224px;
   margin: 0 auto 24px;
   border: 1px solid var(--color-gold-muted);
   border-radius: 4px;
+  overflow: hidden;
+  background: var(--color-parchment-dark);
   font-family: var(--font-body);
   font-size: 14px;
   color: var(--color-gold-muted);
+}
+
+.pretest__card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .pretest__options {

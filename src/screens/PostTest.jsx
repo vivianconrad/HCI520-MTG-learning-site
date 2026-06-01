@@ -1,21 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import QuestionCardImage from '../components/QuestionCardImage.jsx'
 import { getQuestionImage } from '../data/questionImages.js'
 import './PreTest.css'
 
-export default function PreTest({ session }) {
+export default function PostTest({ session }) {
   const navigate = useNavigate()
-  const { selectedQuestions, selectQuestions, setPretestAnswer } = session
+  const { selectedQuestions, setPosttestAnswer } = session
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedIndex, setSelectedIndex] = useState(null)
-
-  useEffect(() => {
-    if (selectedQuestions === null) {
-      selectQuestions()
-    }
-  }, [selectedQuestions, selectQuestions])
 
   if (!selectedQuestions || selectedQuestions.length === 0) {
     return null
@@ -28,10 +22,10 @@ export default function PreTest({ session }) {
   function handleNext() {
     if (selectedIndex === null) return
 
-    setPretestAnswer(question.id, selectedIndex)
+    setPosttestAnswer(question.id, selectedIndex)
 
     if (isLast) {
-      navigate('/lesson/intro')
+      navigate('/calculating')
       return
     }
 
@@ -43,7 +37,7 @@ export default function PreTest({ session }) {
     <div className="pretest">
       <div className="pretest__frame">
         <p className="pretest__breadcrumb">
-          Pre-Test · Question {currentIndex + 1} of {total}
+          Post-Test · Question {currentIndex + 1} of {total}
         </p>
         <p className="pretest__question">{question.question}</p>
         {question.hasImage && (
@@ -79,10 +73,10 @@ export default function PreTest({ session }) {
             disabled={selectedIndex === null}
             onClick={handleNext}
           >
-            {isLast ? 'Begin Lessons →' : 'Next'}
+            {isLast ? 'Submit →' : 'Next'}
           </button>
         </div>
-        <ProgressDots activeIndex={PROGRESS.PRETEST} />
+        <ProgressDots activeIndex={PROGRESS.POSTTEST} />
       </div>
     </div>
   )

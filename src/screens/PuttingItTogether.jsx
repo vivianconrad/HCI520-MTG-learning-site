@@ -1,48 +1,173 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import shockImg from '../assets/instant-shock.jpg'
+import giantGrowthImg from '../assets/instant-giant-growth.jpg'
+import llanowarElvesImg from '../assets/creature-llanowar-elves.jpg'
+import forestImg from '../assets/land-forest.jpg'
+import woodlandCemeteryImg from '../assets/land-swamp.jpg'
+import divinationImg from '../assets/sorcery-duress.jpg'
+import solRingImg from '../assets/artifact-sol-ring.jpg'
+import counterspellImg from '../assets/instant-assassins-trophy.jpg'
 import './PuttingItTogether.css'
+
+const CARD_IMAGES = {
+  'shock.jpg': shockImg,
+  'giant-growth.jpg': giantGrowthImg,
+  'llanowar-elves.jpg': llanowarElvesImg,
+  'forest.jpg': forestImg,
+  'woodland-cemetery.jpg': woodlandCemeteryImg,
+  'divination.jpg': divinationImg,
+  'sol-ring.jpg': solRingImg,
+  'counterspell.jpg': counterspellImg,
+}
 
 const SCENARIOS = [
   {
+    id: 's1',
     text: "It's your main phase. You have a Shock in your hand. Shock is an instant that deals 2 damage and costs one red mana. You have one mountain on the battlefield. Can you play it right now?",
+    cardImage: 'shock.jpg',
+    cardImageAlt: 'Shock — Instant',
     correctAnswer: true,
     explanation:
       'Yes. Shock is an instant, and instants can be played any time, including your main phase. You also have exactly enough mana to cast it.',
   },
   {
+    id: 's2',
     text: "It's your opponent's turn and they just attacked you with a creature. You have a Giant Growth in your hand. Giant Growth is an instant that gives a creature +3/+3. Can you play it right now to boost your blocker?",
+    cardImage: 'giant-growth.jpg',
+    cardImageAlt: 'Giant Growth — Instant',
     correctAnswer: true,
     explanation:
       "Yes. Giant Growth is an instant, which means you can play it at any time, including on your opponent's turn during combat. This is exactly what instants are designed for.",
   },
   {
+    id: 's3',
     text: "It's your first main phase. You have a Llanowar Elves in your hand. Llanowar Elves is a creature that costs one green mana. You have one forest land on the battlefield. Can you play Llanowar Elves right now?",
+    cardImage: 'llanowar-elves.jpg',
+    cardImageAlt: 'Llanowar Elves — Creature',
     correctAnswer: true,
     explanation:
       'Yes. Creatures are played during your main phase, and you have exactly one green mana available from your forest. Llanowar Elves costs one green mana, so you can cast it.',
   },
+  {
+    id: 's4',
+    text: "It's your first main phase. You have two forest lands in your hand and no lands on the battlefield yet. Can you play both of them this turn?",
+    cardImage: 'forest.jpg',
+    cardImageAlt: 'Forest — Land',
+    correctAnswer: false,
+    explanation:
+      "No. You can only play one land per turn. It doesn't matter how many you have in your hand. Pick one, play it, and save the other for next turn.",
+  },
+  {
+    id: 's5',
+    text: "You just played a Woodland Cemetery. The card says 'Woodland Cemetery enters the battlefield tapped.' You need one black mana right now to cast a spell. Can you tap Woodland Cemetery for mana immediately after playing it?",
+    cardImage: 'woodland-cemetery.jpg',
+    cardImageAlt: 'Woodland Cemetery — Land',
+    correctAnswer: false,
+    explanation:
+      "No. When a land enters the battlefield tapped, it cannot be tapped for mana until your next turn. You'll have to wait or find another mana source.",
+  },
+  {
+    id: 's6',
+    text: "It's your opponent's turn and they just finished attacking you. You have a Divination in your hand. Divination is a sorcery that lets you draw two cards. Can you cast it right now?",
+    cardImage: 'divination.jpg',
+    cardImageAlt: 'Divination — Sorcery',
+    correctAnswer: false,
+    explanation:
+      "No. Sorceries can only be cast during your own main phase when the stack is empty. Since it's your opponent's turn, you'll have to wait.",
+  },
+  {
+    id: 's7',
+    text: "It's your first main phase and the stack is empty. You have a Sol Ring in your hand. Sol Ring is an artifact that produces mana. Can you cast it right now?",
+    cardImage: 'sol-ring.jpg',
+    cardImageAlt: 'Sol Ring — Artifact',
+    correctAnswer: true,
+    explanation:
+      'Yes. Artifacts are cast during your main phase when the stack is empty, same as creatures and sorceries. Sol Ring is one of the most played artifacts in the game.',
+  },
+  {
+    id: 's8',
+    text: 'Your opponent just cast a spell and it is currently on the stack. You have a Counterspell in your hand. Counterspell is an instant that cancels another spell. Can you cast it right now to stop their spell?',
+    cardImage: 'counterspell.jpg',
+    cardImageAlt: 'Counterspell — Instant',
+    correctAnswer: true,
+    explanation:
+      "Yes. Counterspell is an instant, so it can be cast at any time, including in response to your opponent's spell while it is on the stack. This is one of the most powerful things instants can do.",
+  },
 ]
+
+function fisherYates(arr) {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+function ScenarioCardImage({ src, alt }) {
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    setError(false)
+  }, [src])
+
+  if (error) {
+    return <div className="putting-together__card-placeholder">{alt}</div>
+  }
+
+  return (
+    <img
+      className="putting-together__card-image"
+      src={src}
+      alt={alt}
+      onError={() => setError(true)}
+    />
+  )
+}
 
 export default function PuttingItTogether({ session }) {
   void session
   const navigate = useNavigate()
-  const [scenarioIndex, setScenarioIndex] = useState(0)
+
+  const [shuffled] = useState(() => fisherYates(SCENARIOS))
+  const [queueIndex, setQueueIndex] = useState(0)
+  const [seenIds, setSeenIds] = useState(new Set())
   const [phase, setPhase] = useState('question')
   const [selectedAnswer, setSelectedAnswer] = useState(null)
 
-  const scenario = SCENARIOS[scenarioIndex]
-  const isLastScenario = scenarioIndex === SCENARIOS.length - 1
+  const scenario = shuffled[queueIndex]
+  const allSeen = seenIds.size >= SCENARIOS.length
   const isCorrect = selectedAnswer === scenario.correctAnswer
+
+  function getAnswerClassName(answerValue) {
+    const classes = ['putting-together__answer']
+    if (phase === 'question' && selectedAnswer === answerValue) {
+      classes.push('putting-together__answer--selected')
+    }
+    if (phase === 'feedback') {
+      const isSelected = selectedAnswer === answerValue
+      const isCorrectAnswer = scenario.correctAnswer === answerValue
+      if (isCorrect && isSelected) {
+        classes.push('putting-together__answer--feedback-correct')
+      } else if (!isCorrect) {
+        if (isSelected) classes.push('putting-together__answer--feedback-incorrect')
+        else if (isCorrectAnswer) classes.push('putting-together__answer--feedback-correct-reveal')
+      }
+    }
+    return classes.join(' ')
+  }
 
   function handleAnswer(answer) {
     if (phase !== 'question') return
     setSelectedAnswer(answer)
-    setPhase('prompt')
+    setSeenIds((prev) => new Set([...prev, scenario.id]))
+    setPhase('feedback')
   }
 
   function handleAnother() {
-    setScenarioIndex((prev) => prev + 1)
+    setQueueIndex((prev) => prev + 1)
     setPhase('question')
     setSelectedAnswer(null)
   }
@@ -64,13 +189,19 @@ export default function PuttingItTogether({ session }) {
         </p>
 
         <div className="putting-together__scenario">
-          <p className="putting-together__scenario-text">{scenario.text}</p>
+          <ScenarioCardImage
+            src={CARD_IMAGES[scenario.cardImage]}
+            alt={scenario.cardImageAlt}
+          />
+          <div className="putting-together__scenario-text-box">
+            <p className="putting-together__scenario-text">{scenario.text}</p>
+          </div>
         </div>
 
         <div className="putting-together__answers">
           <button
             type="button"
-            className={`putting-together__answer${selectedAnswer === true ? ' putting-together__answer--selected' : ''}`}
+            className={getAnswerClassName(true)}
             disabled={phase !== 'question'}
             onClick={() => handleAnswer(true)}
           >
@@ -78,7 +209,7 @@ export default function PuttingItTogether({ session }) {
           </button>
           <button
             type="button"
-            className={`putting-together__answer${selectedAnswer === false ? ' putting-together__answer--selected' : ''}`}
+            className={getAnswerClassName(false)}
             disabled={phase !== 'question'}
             onClick={() => handleAnswer(false)}
           >
@@ -86,21 +217,23 @@ export default function PuttingItTogether({ session }) {
           </button>
         </div>
 
-        {phase !== 'question' && (
-          <div className="putting-together__feedback">
-            <span
-              className={`putting-together__feedback-marker${isCorrect ? ' putting-together__feedback-marker--correct' : ' putting-together__feedback-marker--incorrect'}`}
-              aria-hidden="true"
-            >
-              {isCorrect ? '◆' : '×'}
-            </span>
-            <span>{scenario.explanation}</span>
+        {phase === 'feedback' && (
+          <div
+            className={`putting-together__feedback${isCorrect ? ' putting-together__feedback--correct' : ' putting-together__feedback--incorrect'}`}
+          >
+            <p className="putting-together__feedback-verdict">
+              <span className="putting-together__feedback-icon" aria-hidden="true">
+                {isCorrect ? '◆' : '×'}
+              </span>
+              {isCorrect ? 'Correct!' : 'Not quite.'}
+            </p>
+            <p className="putting-together__feedback-explanation">{scenario.explanation}</p>
           </div>
         )}
 
-        {phase === 'prompt' && (
+        {phase === 'feedback' && (
           <div className="putting-together__prompt">
-            {isLastScenario ? (
+            {allSeen ? (
               <div className="putting-together__prompt-actions">
                 <button
                   type="button"
@@ -108,6 +241,16 @@ export default function PuttingItTogether({ session }) {
                   onClick={handleComplete}
                 >
                   Continue →
+                </button>
+              </div>
+            ) : seenIds.size === 1 ? (
+              <div className="putting-together__prompt-actions">
+                <button
+                  type="button"
+                  className="putting-together__prompt-button"
+                  onClick={handleAnother}
+                >
+                  Next Scenario →
                 </button>
               </div>
             ) : (
@@ -126,7 +269,7 @@ export default function PuttingItTogether({ session }) {
                     className="putting-together__prompt-button putting-together__prompt-button--muted"
                     onClick={handleComplete}
                   >
-                    No, go to results
+                    No, continue to results
                   </button>
                 </div>
               </>
@@ -140,9 +283,10 @@ export default function PuttingItTogether({ session }) {
             className="putting-together__button putting-together__button--back"
             onClick={() => navigate('/lesson/3')}
           >
-            Back
+            ← Back
           </button>
         </div>
+
         <ProgressDots activeIndex={PROGRESS.LESSON_4} />
       </div>
     </div>

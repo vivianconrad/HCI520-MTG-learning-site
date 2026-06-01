@@ -3,11 +3,20 @@ import { useNavigate } from 'react-router-dom'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './CardTypes.css'
 
+const CARD_TYPE_IMAGES = {
+  creature: new URL('../assets/creature-llanowar-elves.jpg', import.meta.url).href,
+  land: new URL('../assets/cards/forest.jpg', import.meta.url).href,
+  instant: new URL('../assets/instant-shock.jpg', import.meta.url).href,
+  sorcery: new URL('../assets/sorcery-cultivate.jpg', import.meta.url).href,
+  artifact: new URL('../assets/artifact-sol-ring.jpg', import.meta.url).href,
+  enchantment: new URL('../assets/enchantment-sylvan-library.webp', import.meta.url).href,
+  planeswalker: new URL('../assets/creature-legendary-grothama.webp', import.meta.url).href,
+}
+
 const CARD_TYPES = [
   {
     id: 'creature',
     name: 'Creature',
-    image: '../assets/cards/creature.jpg',
     description: 'Fights on your behalf. Stays on the battlefield until it dies.',
     tag: 'Main phase only',
     wide: false,
@@ -15,7 +24,6 @@ const CARD_TYPES = [
   {
     id: 'land',
     name: 'Land',
-    image: '../assets/cards/land.jpg',
     description: 'Your mana source. You can play one land per turn for free.',
     tag: 'Main phase only',
     wide: false,
@@ -23,7 +31,6 @@ const CARD_TYPES = [
   {
     id: 'instant',
     name: 'Instant',
-    image: '../assets/cards/instant.jpg',
     description: 'Fast spells that can surprise your opponent at any moment.',
     tag: 'Any time',
     wide: false,
@@ -31,7 +38,6 @@ const CARD_TYPES = [
   {
     id: 'sorcery',
     name: 'Sorcery',
-    image: '../assets/cards/sorcery.jpg',
     description: 'Powerful spells that require your full attention to cast.',
     tag: 'Main phase only, stack empty',
     wide: false,
@@ -39,7 +45,6 @@ const CARD_TYPES = [
   {
     id: 'artifact',
     name: 'Artifact',
-    image: '../assets/cards/artifact.jpg',
     description: 'Objects and tools. Most are colourless and fit in any deck.',
     tag: 'Main phase only',
     wide: false,
@@ -47,7 +52,6 @@ const CARD_TYPES = [
   {
     id: 'enchantment',
     name: 'Enchantment',
-    image: '../assets/cards/enchantment.jpg',
     description: 'Ongoing effects that linger on the battlefield.',
     tag: 'Main phase only',
     wide: false,
@@ -55,16 +59,14 @@ const CARD_TYPES = [
   {
     id: 'planeswalker',
     name: 'Planeswalker',
-    image: '../assets/cards/planeswalker.jpg',
     description: 'Powerful allies with loyalty abilities you activate each turn.',
     tag: 'Main phase only',
     wide: true,
   },
 ]
 
-function CardThumbnail({ imagePath, className }) {
+function CardThumbnail({ src, className }) {
   const [hasImage, setHasImage] = useState(true)
-  const src = new URL(imagePath, import.meta.url).href
 
   if (!hasImage) {
     return <span className="card-types__thumbnail-placeholder">img</span>
@@ -80,19 +82,22 @@ function CardThumbnail({ imagePath, className }) {
   )
 }
 
-function CardTypeItem({ type, onThumbnailEnter, onThumbnailLeave }) {
+function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
   return (
     <article className={`card-types__item${type.wide ? ' card-types__item--wide' : ''}`}>
       <h3 className="card-types__type-name">{type.name}</h3>
-      <div
-        className="card-types__thumbnail"
-        onMouseEnter={() => onThumbnailEnter(type.id)}
-        onMouseLeave={onThumbnailLeave}
-      >
-        <CardThumbnail imagePath={type.image} className="card-types__thumbnail-image" />
+      <div className="card-types__thumbnail">
+        <CardThumbnail src={CARD_TYPE_IMAGES[type.id]} className="card-types__thumbnail-image" />
       </div>
       <p className="card-types__description">{type.description}</p>
       <span className="card-types__tag">{type.tag}</span>
+      <button
+        type="button"
+        className={`card-types__see-card${hasBeenViewed ? ' card-types__see-card--viewed' : ''}`}
+        onClick={() => onSeeCard(type.id)}
+      >
+        {hasBeenViewed ? 'See Again ▸' : 'See Card ▸'}
+      </button>
     </article>
   )
 }
@@ -102,12 +107,20 @@ export default function CardTypes({ session }) {
   const navigate = useNavigate()
   const [overlayId, setOverlayId] = useState(null)
   const [isClosing, setIsClosing] = useState(false)
+  const [seenIds, setSeenIds] = useState(() => new Set())
 
   const activeType = CARD_TYPES.find((t) => t.id === overlayId)
+  const allViewed = seenIds.size === CARD_TYPES.length
 
   const openOverlay = useCallback((id) => {
     setIsClosing(false)
     setOverlayId(id)
+    setSeenIds((prev) => {
+      if (prev.has(id)) return prev
+      const next = new Set(prev)
+      next.add(id)
+      return next
+    })
   }, [])
 
   const closeOverlay = useCallback(() => {
@@ -147,8 +160,9 @@ export default function CardTypes({ session }) {
         <hr className="card-types__rule" aria-hidden="true" />
 
         <p className="card-types__intro">
-          Every card in Magic belongs to one of seven types. The type determines what the card does
-          and, more importantly, when you can play it.
+          Magic has a few other card types too, but these seven are the main ones you will see in
+          most games. Each type determines what the card does and, more importantly, when you can
+          play it.
         </p>
 
         <div className="card-types__grid">
@@ -156,11 +170,15 @@ export default function CardTypes({ session }) {
             <CardTypeItem
               key={type.id}
               type={type}
-              onThumbnailEnter={openOverlay}
-              onThumbnailLeave={closeOverlay}
+              hasBeenViewed={seenIds.has(type.id)}
+              onSeeCard={openOverlay}
             />
           ))}
         </div>
+
+        <p className="card-types__progress" aria-live="polite">
+          {allViewed ? 'All card types viewed.' : `Seen ${seenIds.size} of 7 card types`}
+        </p>
 
         <hr className="card-types__divider" aria-hidden="true" />
 
@@ -180,6 +198,7 @@ export default function CardTypes({ session }) {
           <button
             type="button"
             className="card-types__button card-types__button--next"
+            disabled={!allViewed}
             onClick={() => navigate('/lesson/3')}
           >
             Next
@@ -194,12 +213,9 @@ export default function CardTypes({ session }) {
           role="dialog"
           aria-modal="true"
           aria-label={`${activeType.name} card type`}
-          onClick={closeOverlay}
+          onMouseLeave={closeOverlay}
         >
-          <div
-            className="card-types__overlay-card"
-            onClick={(event) => event.stopPropagation()}
-          >
+          <div className="card-types__overlay-card">
             <button
               type="button"
               className="card-types__overlay-close"
@@ -210,7 +226,8 @@ export default function CardTypes({ session }) {
             </button>
             <div className="card-types__overlay-image">
               <CardThumbnail
-                imagePath={activeType.image}
+                key={activeType.id}
+                src={CARD_TYPE_IMAGES[activeType.id]}
                 className="card-types__thumbnail-image"
               />
             </div>

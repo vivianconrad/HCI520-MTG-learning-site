@@ -1,0 +1,105 @@
+.calculating {
+  min-height: 100vh;
+  height: 100vh;
+  background: var(--color-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.calculating__frame {
+  max-width: 680px;
+  width: 100%;
+  background: var(--color-parchment);
+  border: 1.5px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.calculating__heading {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--color-text-dark);
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.calculating__rule {
+  width: 60px;
+  height: 1px;
+  background: var(--color-gold);
+  border: none;
+  margin: 0 0 32px;
+}
+
+.calculating__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.calculating__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  animation: calculating-dot-pulse 1200ms ease-in-out infinite;
+}
+
+.calculating__dot--1 {
+  animation-delay: 0ms;
+}
+
+.calculating__dot--2 {
+  animation-delay: 400ms;
+}
+
+.calculating__dot--3 {
+  animation-delay: 800ms;
+}
+
+@keyframes calculating-dot-pulse {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.calculating__button {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-text-dark);
+  background: transparent;
+  border: 1.5px solid var(--color-gold);
+  border-radius: 0;
+  padding: 10px 24px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.calculating__button--visible {
+  opacity: 1;
+}
+
+.calculating__button:disabled {
+  cursor: default;
+}
+
+.calculating__button--visible:hover {
+  background: var(--color-gold);
+  color: var(--color-navy);
+}

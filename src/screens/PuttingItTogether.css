@@ -49,15 +49,52 @@
   color: var(--color-text-dark);
   margin: 0 0 24px;
   line-height: 1.5;
-  text-align: left;
 }
 
+/* ── Scenario ─────────────────────────────────────────────── */
+
 .putting-together__scenario {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
   margin-bottom: 16px;
+}
+
+.putting-together__card-image {
+  width: 140px;
+  height: 196px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--color-gold-muted);
+}
+
+.putting-together__card-placeholder {
+  width: 140px;
+  height: 196px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-gold-muted);
+  border-radius: 4px;
+  background: var(--color-parchment-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-gold-muted);
+  text-align: center;
+  padding: 8px;
+}
+
+.putting-together__scenario-text-box {
+  flex: 1;
   padding: 16px;
   background: var(--color-parchment-dark);
   border: 1px solid var(--color-gold);
   border-radius: 4px;
+  min-height: 196px;
+  display: flex;
+  align-items: flex-start;
 }
 
 .putting-together__scenario-text {
@@ -67,8 +104,9 @@
   font-style: italic;
   margin: 0;
   line-height: 1.5;
-  text-align: left;
 }
+
+/* ── Answer buttons ───────────────────────────────────────── */
 
 .putting-together__answers {
   display: grid;
@@ -101,43 +139,84 @@
   background: var(--color-parchment-dark);
 }
 
+.putting-together__answer--feedback-correct,
+.putting-together__answer--feedback-correct-reveal {
+  border: 1.5px solid var(--color-gold);
+  background: var(--color-gold);
+  color: var(--color-navy);
+}
+
+.putting-together__answer--feedback-incorrect {
+  border: 1px solid var(--color-gold-muted);
+  background: var(--color-parchment-dark);
+}
+
+.putting-together__answer--feedback-correct:disabled,
+.putting-together__answer--feedback-incorrect:disabled,
+.putting-together__answer--feedback-correct-reveal:disabled {
+  opacity: 1;
+}
+
 .putting-together__answer:disabled {
   cursor: default;
   opacity: 0.85;
+}
+
+/* ── Feedback (200ms fade-in) ─────────────────────────────── */
+
+@keyframes putting-together-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .putting-together__feedback {
   margin-bottom: 16px;
   padding: 12px;
   background: var(--color-parchment-dark);
-  border: 1px solid var(--color-gold);
   border-radius: 4px;
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--color-text-dark);
-  line-height: 1.5;
-  text-align: left;
+  animation: putting-together-fade-in 200ms ease;
 }
 
-.putting-together__feedback-marker {
-  flex-shrink: 0;
-  font-size: 12px;
-  line-height: 1.5;
+.putting-together__feedback--correct {
+  border: 1.5px solid var(--color-gold);
 }
 
-.putting-together__feedback-marker--correct {
+.putting-together__feedback--incorrect {
+  border: 1.5px solid var(--color-gold-muted);
+}
+
+.putting-together__feedback-verdict {
+  font-family: var(--font-display);
+  font-size: 20px;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.putting-together__feedback--correct .putting-together__feedback-verdict {
   color: var(--color-gold);
 }
 
-.putting-together__feedback-marker--incorrect {
-  color: var(--color-gold-muted);
+.putting-together__feedback--incorrect .putting-together__feedback-verdict {
+  color: var(--color-text-dark);
 }
+
+.putting-together__feedback-icon {
+  margin-right: 6px;
+}
+
+.putting-together__feedback-explanation {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-dark);
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+/* ── Follow-up prompt ─────────────────────────────────────── */
 
 .putting-together__prompt {
   margin-bottom: 0;
+  animation: putting-together-fade-in 200ms ease;
 }
 
 .putting-together__prompt-text {
@@ -145,7 +224,6 @@
   font-size: 16px;
   color: var(--color-text-dark);
   margin: 0 0 12px;
-  text-align: left;
 }
 
 .putting-together__prompt-actions {
@@ -182,6 +260,8 @@
   background: transparent;
   color: var(--color-text-dark);
 }
+
+/* ── Back button ──────────────────────────────────────────── */
 
 .putting-together__actions {
   display: flex;

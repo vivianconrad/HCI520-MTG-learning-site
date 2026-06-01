@@ -6,6 +6,8 @@ const questionBank = [
     lo: 'LO1',
     question: 'What type of card is this?',
     hasImage: true,
+    imageKey: 'shadowmage-infiltrator',
+    imageAlt: 'Shadowmage Infiltrator — Creature',
     options: ['Creature', 'Instant', 'Land', 'Sorcery'],
     correctIndex: 0,
   },
