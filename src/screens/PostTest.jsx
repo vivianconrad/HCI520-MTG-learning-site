@@ -29,7 +29,7 @@ export default function PostTest({ session }) {
       setAnswer={setPosttestAnswer}
       onComplete={() => navigate('/calculating')}
       firstQuestionBackPath="/lesson/complete"
-      lastButtonLabel="Submit →"
+      lastButtonLabel="Submit"
       introNote="These are the same questions as the pre-test. Answer from what you learned in the lessons."
     />
   )

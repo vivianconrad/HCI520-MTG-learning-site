@@ -1,6 +1,5 @@
 .lesson-intro {
   min-height: 100vh;
-  height: 100vh;
   background: var(--color-navy);
   display: flex;
   align-items: center;
@@ -20,7 +19,7 @@
 .lesson-intro__breadcrumb {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   letter-spacing: 0.08em;
   margin: 0 0 16px;
   text-align: center;
@@ -85,7 +84,7 @@
 }
 
 .lesson-intro__lesson-time {
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   font-size: 13px;
 }
 
@@ -93,7 +92,7 @@
   font-family: var(--font-body);
   font-size: 14px;
   font-style: italic;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   margin: 0;
   line-height: 1.5;
   text-align: left;

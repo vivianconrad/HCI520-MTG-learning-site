@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './LessonIntro.css'
 
 const LESSONS = [
@@ -47,10 +46,9 @@ export default function LessonIntro({ session: _session }) {
             className="lesson-intro__button"
             onClick={() => navigate('/lesson/1')}
           >
-            Let&apos;s Go →
+            Let&apos;s Go
           </button>
         </div>
-        <ProgressDots activeIndex={PROGRESS.LESSON_INTRO} />
       </div>
     </div>
   )

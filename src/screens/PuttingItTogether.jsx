@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import shockImg from '../assets/instant-shock.jpg'
 import giantGrowthImg from '../assets/instant-giant-growth.jpg'
 import llanowarElvesImg from '../assets/creature-llanowar-elves.jpg'
@@ -245,7 +244,7 @@ export default function PuttingItTogether({ session: _session }) {
                   className="putting-together__prompt-button"
                   onClick={handleComplete}
                 >
-                  Continue →
+                  Continue
                 </button>
               </div>
             ) : (
@@ -255,7 +254,7 @@ export default function PuttingItTogether({ session: _session }) {
                   className="putting-together__prompt-button"
                   onClick={handleAnother}
                 >
-                  Next Scenario →
+                  Next Scenario
                 </button>
               </div>
             )}
@@ -272,7 +271,6 @@ export default function PuttingItTogether({ session: _session }) {
           </button>
         </div>
 
-        <ProgressDots activeIndex={PROGRESS.LESSON_4} />
       </div>
     </div>
   )

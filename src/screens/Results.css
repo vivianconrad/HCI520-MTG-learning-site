@@ -19,7 +19,7 @@
 .results__breadcrumb {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   letter-spacing: 0.08em;
   margin: 0 0 16px;
   text-align: center;
@@ -74,7 +74,7 @@
 .results__metric-label {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__metric-score {
@@ -92,11 +92,11 @@
 }
 
 .results__improvement--positive {
-  color: var(--color-gold);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__improvement--neutral {
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__divider {
@@ -144,7 +144,7 @@
 }
 
 .results__lo-pre {
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__lo-post {
@@ -172,15 +172,15 @@
 }
 
 .results__lo-tag--improved {
-  color: var(--color-gold);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__lo-tag--same {
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__lo-tag--declined {
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__questions-section {
@@ -204,7 +204,7 @@
   font-size: 12px;
   font-variant: small-caps;
   letter-spacing: 0.08em;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__question-row {
@@ -227,7 +227,7 @@
 .results__question-num {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__question-text {
@@ -254,21 +254,21 @@
 }
 
 .results__answer--correct {
-  color: var(--color-gold);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__answer--wrong {
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__answer--missing {
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__correct-tag {
   font-family: var(--font-body);
   font-size: 11px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   line-height: 1.3;
 }
 
@@ -279,7 +279,7 @@
 .results__footer {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   text-align: center;
   margin: 0;
 }
@@ -328,7 +328,7 @@
 }
 
 .results__review-link:hover {
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .results__actions {
@@ -359,7 +359,7 @@
 }
 
 .results__action-button--muted {
-  border-color: var(--color-gold-muted);
+  border-color: var(--color-gold-on-parchment);
 }
 
 .results__action-button--muted:hover {
@@ -383,7 +383,7 @@
 .results__question-card-num {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   margin: 0 0 8px;
 }
 
@@ -405,14 +405,14 @@
   display: block;
   font-family: var(--font-display);
   font-size: 12px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   margin-bottom: 4px;
 }
 
 .results__question-card-correct {
   font-family: var(--font-body);
   font-size: 12px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   margin: 12px 0 0;
 }
 

@@ -33,7 +33,7 @@ export default function Intro({ session }) {
             Back
           </button>
           <button type="button" className="intro__button" onClick={() => navigate('/pretest')}>
-            I&apos;m Ready →
+            I&apos;m Ready
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.INTRO} />

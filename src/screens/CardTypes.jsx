@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './CardTypes.css'
 
 const CARD_TYPES = [
@@ -284,7 +283,6 @@ export default function CardTypes({ session }) {
             Next
           </button>
         </div>
-        <ProgressDots activeIndex={PROGRESS.LESSON_2} />
       </div>
 
       {activeType && (

@@ -30,7 +30,7 @@ export default function Welcome({ session }) {
         </p>
         <div className="welcome__actions">
           <button type="button" className="welcome__button" onClick={() => navigate('/intro')}>
-            Start →
+            Start
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.WELCOME} />

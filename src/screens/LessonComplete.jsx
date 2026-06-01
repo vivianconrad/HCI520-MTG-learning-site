@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './LessonComplete.css'
 
 const RECAP = [
@@ -45,10 +44,9 @@ export default function LessonComplete({ session }) {
             className="lesson-complete__button"
             onClick={() => navigate('/posttest')}
           >
-            Begin Final Questions →
+            Begin Final Questions
           </button>
         </div>
-        <ProgressDots activeIndex={PROGRESS.LESSON_COMPLETE} />
       </div>
     </div>
   )

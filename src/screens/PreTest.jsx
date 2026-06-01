@@ -36,7 +36,7 @@ export default function PreTest({ session }) {
       setAnswer={setPretestAnswer}
       onComplete={() => navigate('/lesson/intro')}
       firstQuestionBackPath="/intro"
-      lastButtonLabel="Begin Lessons →"
+      lastButtonLabel="Begin Lessons"
     />
   )
 }

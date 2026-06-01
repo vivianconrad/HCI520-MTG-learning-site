@@ -19,7 +19,7 @@
 .card-types__breadcrumb {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   letter-spacing: 0.08em;
   margin: 0 0 16px;
   text-align: center;
@@ -80,19 +80,19 @@
 }
 
 .card-types__see-card--viewed {
-  color: var(--color-gold-muted);
-  border-color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
+  border-color: var(--color-gold-on-parchment);
 }
 
 .card-types__see-card--viewed:hover {
-  color: var(--color-gold-muted);
-  border-color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
+  border-color: var(--color-gold-on-parchment);
 }
 
 .card-types__progress {
   font-family: var(--font-body);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   text-align: center;
   margin: 0 0 24px;
 }
@@ -151,7 +151,7 @@
 .card-types__thumbnail-placeholder {
   font-family: var(--font-body);
   font-size: 11px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .card-types__description {
@@ -170,7 +170,7 @@
   border-radius: 999px;
   font-family: var(--font-body);
   font-size: 11px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .card-types__divider {
@@ -361,7 +361,7 @@
 .card-types__overlay-placeholder {
   font-family: var(--font-body);
   font-size: 11px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .card-types__overlay-name {

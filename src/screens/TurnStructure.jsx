@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './TurnStructure.css'
 
 const PHASES = [
@@ -147,7 +146,6 @@ export default function TurnStructure({ session: _session }) {
             Next
           </button>
         </div>
-        <ProgressDots activeIndex={PROGRESS.LESSON_3} />
       </div>
     </div>
   )

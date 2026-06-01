@@ -1,8 +1,6 @@
 @import './styles/tokens.css';
 @import './styles/responsive.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* No @font-face for Goudy — no local font file in repo; --font-display falls back to Palatino */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;

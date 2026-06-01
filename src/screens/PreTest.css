@@ -1,6 +1,5 @@
 .pretest {
   min-height: 100vh;
-  height: 100vh;
   background: var(--color-navy);
   display: flex;
   align-items: center;
@@ -20,7 +19,7 @@
 .pretest__breadcrumb {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   letter-spacing: 0.08em;
   margin: 0 0 24px;
   text-align: center;
@@ -48,7 +47,7 @@
   background: var(--color-parchment-dark);
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
 }
 
 .pretest__card-image {
@@ -146,7 +145,7 @@
 .pretest__intro-note {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   text-align: center;
   margin: 0 0 16px;
   line-height: 1.4;
@@ -155,7 +154,7 @@
 .pretest__keyboard-hint {
   font-family: var(--font-body);
   font-size: 12px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   text-align: center;
   margin: 12px 0 0;
 }
@@ -163,7 +162,7 @@
 .pretest__option-key {
   flex-shrink: 0;
   font-weight: 600;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   min-width: 1.25rem;
 }
 
