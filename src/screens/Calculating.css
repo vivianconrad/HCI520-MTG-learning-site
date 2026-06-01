@@ -78,28 +78,9 @@
   }
 }
 
-.calculating__button {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  color: var(--color-text-dark);
-  background: transparent;
-  border: 1.5px solid var(--color-gold);
-  border-radius: 0;
-  padding: 10px 24px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 300ms ease;
-}
-
-.calculating__button--visible {
-  opacity: 1;
-}
-
-.calculating__button:disabled {
-  cursor: default;
-}
-
-.calculating__button--visible:hover {
-  background: var(--color-gold);
-  color: var(--color-navy);
+.calculating__subtext {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-gold-muted);
+  margin: 0;
 }

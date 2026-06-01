@@ -1,6 +1,14 @@
 import { useNavigate } from 'react-router-dom'
+import CopySessionId from '../components/CopySessionId.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './LessonComplete.css'
+
+const RECAP = [
+  'How to read a card and what each part means',
+  'The seven card types and when you can play them',
+  'How a turn is structured from start to finish',
+  'How card types and timing work together in real scenarios',
+]
 
 export default function LessonComplete({ session }) {
   const navigate = useNavigate()
@@ -16,16 +24,20 @@ export default function LessonComplete({ session }) {
 
         <div className="lesson-complete__body">
           <p className="lesson-complete__paragraph">
-            You&apos;ve worked through all four lessons. You know how to read a card, what the seven
-            card types do, how a turn is structured, and how it all fits together.
+            You&apos;ve worked through all four lessons. Here&apos;s what you covered:
           </p>
+          <ul className="lesson-complete__recap">
+            {RECAP.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
           <p className="lesson-complete__paragraph">
             Now it&apos;s time to answer the same questions you saw at the start. Don&apos;t
             overthink it. Just go with what you know.
           </p>
         </div>
 
-        <p className="lesson-complete__session">Your session ID: {session.sessionId}</p>
+        <CopySessionId sessionId={session.sessionId} className="lesson-complete__session" />
 
         <div className="lesson-complete__actions">
           <button

@@ -78,11 +78,15 @@
   line-height: 1.4;
 }
 
-.lesson-intro__list li::before {
-  content: '◆';
-  position: absolute;
-  left: 0;
-  color: var(--color-gold);
+.lesson-intro__lesson-num {
+  font-family: var(--font-display);
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+}
+
+.lesson-intro__lesson-time {
+  color: var(--color-gold-muted);
+  font-size: 13px;
 }
 
 .lesson-intro__closing {

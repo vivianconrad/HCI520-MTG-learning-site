@@ -47,8 +47,16 @@
   font-family: var(--font-body);
   font-size: 16px;
   color: var(--color-text-dark);
-  margin: 0 0 24px;
+  margin: 0 0 12px;
   line-height: 1.5;
+}
+
+.putting-together__progress {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-gold-muted);
+  text-align: center;
+  margin: 0 0 16px;
 }
 
 /* ── Scenario ─────────────────────────────────────────────── */

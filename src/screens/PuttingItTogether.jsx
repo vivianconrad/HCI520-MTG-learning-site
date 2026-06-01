@@ -5,10 +5,10 @@ import shockImg from '../assets/instant-shock.jpg'
 import giantGrowthImg from '../assets/instant-giant-growth.jpg'
 import llanowarElvesImg from '../assets/creature-llanowar-elves.jpg'
 import forestImg from '../assets/land-forest.jpg'
-import woodlandCemeteryImg from '../assets/land-swamp.jpg'
-import divinationImg from '../assets/sorcery-duress.jpg'
+import woodlandCemeteryImg from '../assets/land-woodland-cemetery.jpg'
+import cultivateImg from '../assets/sorcery-cultivate.jpg'
 import solRingImg from '../assets/artifact-sol-ring.jpg'
-import counterspellImg from '../assets/instant-assassins-trophy.jpg'
+import counterspellImg from '../assets/instant-counterspell.webp'
 import './PuttingItTogether.css'
 
 const CARD_IMAGES = {
@@ -17,7 +17,7 @@ const CARD_IMAGES = {
   'llanowar-elves.jpg': llanowarElvesImg,
   'forest.jpg': forestImg,
   'woodland-cemetery.jpg': woodlandCemeteryImg,
-  'divination.jpg': divinationImg,
+  'cultivate.jpg': cultivateImg,
   'sol-ring.jpg': solRingImg,
   'counterspell.jpg': counterspellImg,
 }
@@ -66,13 +66,13 @@ const SCENARIOS = [
     cardImageAlt: 'Woodland Cemetery — Land',
     correctAnswer: false,
     explanation:
-      "No. When a land enters the battlefield tapped, it cannot be tapped for mana until your next turn. You'll have to wait or find another mana source.",
+      'No. Because it entered the battlefield tapped, you cannot tap it for mana this turn. It will untap during your next untap step, and then you can use it normally.',
   },
   {
     id: 's6',
-    text: "It's your opponent's turn and they just finished attacking you. You have a Divination in your hand. Divination is a sorcery that lets you draw two cards. Can you cast it right now?",
-    cardImage: 'divination.jpg',
-    cardImageAlt: 'Divination — Sorcery',
+    text: "It's your opponent's turn and they just finished attacking you. You have a Cultivate in your hand. Cultivate is a sorcery that searches for land cards. Can you cast it right now?",
+    cardImage: 'cultivate.jpg',
+    cardImageAlt: 'Cultivate — Sorcery',
     correctAnswer: false,
     explanation:
       "No. Sorceries can only be cast during your own main phase when the stack is empty. Since it's your opponent's turn, you'll have to wait.",
@@ -127,8 +127,7 @@ function ScenarioCardImage({ src, alt }) {
   )
 }
 
-export default function PuttingItTogether({ session }) {
-  void session
+export default function PuttingItTogether({ session: _session }) {
   const navigate = useNavigate()
 
   const [shuffled] = useState(() => fisherYates(SCENARIOS))
@@ -188,6 +187,12 @@ export default function PuttingItTogether({ session }) {
           Read each scenario and decide what you would do.
         </p>
 
+        <p className="putting-together__progress" aria-live="polite">
+          {allSeen
+            ? 'All scenarios completed.'
+            : `Completed ${seenIds.size} of ${SCENARIOS.length} scenarios`}
+        </p>
+
         <div className="putting-together__scenario">
           <ScenarioCardImage
             src={CARD_IMAGES[scenario.cardImage]}
@@ -243,7 +248,7 @@ export default function PuttingItTogether({ session }) {
                   Continue →
                 </button>
               </div>
-            ) : seenIds.size === 1 ? (
+            ) : (
               <div className="putting-together__prompt-actions">
                 <button
                   type="button"
@@ -253,26 +258,6 @@ export default function PuttingItTogether({ session }) {
                   Next Scenario →
                 </button>
               </div>
-            ) : (
-              <>
-                <p className="putting-together__prompt-text">Want to try another scenario?</p>
-                <div className="putting-together__prompt-actions">
-                  <button
-                    type="button"
-                    className="putting-together__prompt-button"
-                    onClick={handleAnother}
-                  >
-                    Yes, give me another
-                  </button>
-                  <button
-                    type="button"
-                    className="putting-together__prompt-button putting-together__prompt-button--muted"
-                    onClick={handleComplete}
-                  >
-                    No, continue to results
-                  </button>
-                </div>
-              </>
             )}
           </div>
         )}
@@ -283,7 +268,7 @@ export default function PuttingItTogether({ session }) {
             className="putting-together__button putting-together__button--back"
             onClick={() => navigate('/lesson/3')}
           >
-            ← Back
+            Back
           </button>
         </div>
 

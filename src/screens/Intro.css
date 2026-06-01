@@ -61,17 +61,27 @@
 }
 
 .intro__session {
-  font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
-  font-size: 12px;
-  color: var(--color-gold-muted);
-  margin: 0;
-  text-align: left;
+  margin: 0 0 8px;
 }
 
 .intro__actions {
   display: flex;
   justify-content: flex-end;
   margin-top: 32px;
+}
+
+.intro__actions--split {
+  justify-content: space-between;
+}
+
+.intro__button--back {
+  border: 1.5px solid var(--color-gold-muted);
+}
+
+.intro__button--back:hover {
+  border-color: var(--color-gold);
+  background: transparent;
+  color: var(--color-text-dark);
 }
 
 .intro__button {

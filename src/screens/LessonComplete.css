@@ -59,11 +59,33 @@
   text-align: center;
 }
 
+.lesson-complete__recap {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.lesson-complete__recap li {
+  position: relative;
+  padding-left: 1.25em;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-dark);
+  line-height: 1.4;
+}
+
+.lesson-complete__recap li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--color-gold);
+}
+
 .lesson-complete__session {
-  font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
-  font-size: 13px;
-  color: var(--color-gold-muted);
-  text-align: center;
   margin: 0 0 32px;
 }
 

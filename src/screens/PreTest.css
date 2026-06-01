@@ -129,7 +129,49 @@
   cursor: not-allowed;
 }
 
-.pretest__button:disabled:hover {
+.pretest__actions--split {
+  justify-content: space-between;
+}
+
+.pretest__button--back {
+  border: 1.5px solid var(--color-gold-muted);
+}
+
+.pretest__button--back:hover:not(:disabled) {
+  border-color: var(--color-gold);
   background: transparent;
   color: var(--color-text-dark);
+}
+
+.pretest__intro-note {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-gold-muted);
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.pretest__keyboard-hint {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-gold-muted);
+  text-align: center;
+  margin: 12px 0 0;
+}
+
+.pretest__option-key {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--color-gold-muted);
+  min-width: 1.25rem;
+}
+
+.pretest__empty {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text-dark);
+  text-align: center;
+  margin: 0 0 24px;
+  line-height: 1.5;
 }

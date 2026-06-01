@@ -184,6 +184,61 @@
   opacity: 1;
 }
 
+.card-anatomy__hint {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-gold-muted);
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.card-anatomy__info-panel-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--color-text-dark);
+  margin: 0 0 8px;
+}
+
+.card-anatomy__info-panel-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-dark);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.card-anatomy__info-placeholder {
+  margin: 0 0 16px;
+  padding: 12px;
+  background: var(--color-parchment-dark);
+  border: 1px dashed var(--color-gold-muted);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-gold-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.card-anatomy__progress {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-gold-muted);
+  text-align: center;
+  margin: 0 0 16px;
+}
+
+.card-anatomy__button--next:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.card-anatomy__button--next:disabled:hover {
+  background: transparent;
+  color: var(--color-text-dark);
+}
+
 .card-anatomy__info-panel {
   margin: 0 0 24px;
   padding: 12px;

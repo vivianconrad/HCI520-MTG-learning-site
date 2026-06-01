@@ -94,6 +94,19 @@
   color: var(--color-gold);
 }
 
+.turn-structure__node--visited:not(.turn-structure__node--active) {
+  border-color: var(--color-gold);
+  opacity: 0.85;
+}
+
+.turn-structure__progress {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-gold-muted);
+  text-align: center;
+  margin: 0 0 12px;
+}
+
 .turn-structure__detail {
   margin-bottom: 24px;
   padding: 16px;

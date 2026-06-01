@@ -1,12 +1,21 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import CopySessionId from '../components/CopySessionId.jsx'
+import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './Results.css'
 
 const LO_LABELS = {
-  LO1: 'Card Components',
-  LO2: 'Turn Order',
-  LO3: 'Phase Actions',
+  LO1: 'How to Read a Card',
+  LO2: 'How a Turn Works',
+  LO3: 'Turn Steps in Detail',
   LO4: 'Card Timing',
+}
+
+const LO_LESSON_PATHS = {
+  LO1: '/lesson/1',
+  LO2: '/lesson/3',
+  LO3: '/lesson/3',
+  LO4: '/lesson/2',
 }
 
 const LO_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
@@ -38,7 +47,7 @@ function calculateScores(selectedQuestions, pretestAnswers, posttestAnswers) {
 
 function getLoTag(pre, post) {
   if (post > pre) return { label: 'Improved', className: 'results__lo-tag--improved' }
-  if (post < pre) return { label: 'Declined', className: 'results__lo-tag--declined' }
+  if (post < pre) return { label: 'Review', className: 'results__lo-tag--declined' }
   return { label: 'Same', className: 'results__lo-tag--same' }
 }
 
@@ -54,15 +63,32 @@ function getImprovementMessage(pretestCorrect, posttestCorrect) {
 
   if (posttestCorrect === pretestCorrect) {
     return {
-      text: 'Your score stayed the same.',
+      text: 'Your score stayed the same. Review the lessons below if you want another pass.',
       className: 'results__improvement results__improvement--neutral',
     }
   }
 
   return {
-    text: 'Your score changed. That happens.',
+    text: 'Your score dropped on some questions. Use the review links below to revisit those topics.',
     className: 'results__improvement results__improvement--neutral',
   }
+}
+
+function buildResultsSummary(sessionId, scores, selectedQuestions) {
+  const lines = [
+    `Session ID: ${sessionId}`,
+    `Pre-Test: ${scores.pretestCorrect} / ${selectedQuestions.length}`,
+    `Post-Test: ${scores.posttestCorrect} / ${selectedQuestions.length}`,
+    '',
+    'By learning objective:',
+  ]
+
+  for (const lo of LO_ORDER) {
+    const { pre, post } = scores.loScores[lo]
+    lines.push(`${LO_LABELS[lo]}: ${pre}/2 → ${post}/2`)
+  }
+
+  return lines.join('\n')
 }
 
 function AnswerCell({ answerIndex, question }) {
@@ -87,7 +113,8 @@ function AnswerCell({ answerIndex, question }) {
 
 export default function Results({ session }) {
   const navigate = useNavigate()
-  const { sessionId, selectedQuestions, pretestAnswers, posttestAnswers } = session
+  const { sessionId, selectedQuestions, pretestAnswers, posttestAnswers, resetSession } = session
+  const [copiedSummary, setCopiedSummary] = useState(false)
 
   const hasTestData =
     selectedQuestions &&
@@ -99,6 +126,26 @@ export default function Results({ session }) {
     if (!hasTestData) return null
     return calculateScores(selectedQuestions, pretestAnswers, posttestAnswers)
   }, [hasTestData, selectedQuestions, pretestAnswers, posttestAnswers])
+
+  async function handleCopySummary() {
+    if (!scores) return
+    const summary = buildResultsSummary(sessionId, scores, selectedQuestions)
+    try {
+      await navigator.clipboard.writeText(summary)
+    } catch {
+      const textarea = document.createElement('textarea')
+      textarea.value = summary
+      textarea.setAttribute('readonly', '')
+      textarea.style.position = 'absolute'
+      textarea.style.left = '-9999px'
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+    }
+    setCopiedSummary(true)
+    window.setTimeout(() => setCopiedSummary(false), 2000)
+  }
 
   if (!hasTestData || !scores) {
     return (
@@ -123,7 +170,7 @@ export default function Results({ session }) {
         <p className="results__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="results__heading">Your Results</h1>
         <hr className="results__rule" aria-hidden="true" />
-        <p className="results__session-id">Session ID: {sessionId}</p>
+        <CopySessionId sessionId={sessionId} className="results__session-id" />
 
         <section className="results__overall">
           <div className="results__metrics">
@@ -147,6 +194,7 @@ export default function Results({ session }) {
             {LO_ORDER.map((lo) => {
               const { pre, post } = scores.loScores[lo]
               const tag = getLoTag(pre, post)
+              const needsReview = post < pre || (post < 2 && post <= pre)
               return (
                 <div key={lo} className="results__lo-row">
                   <span className="results__lo-label">{LO_LABELS[lo]}</span>
@@ -159,6 +207,15 @@ export default function Results({ session }) {
                   </div>
                   <span className="results__lo-post">{post} / 2</span>
                   <span className={`results__lo-tag ${tag.className}`}>{tag.label}</span>
+                  {needsReview && (
+                    <button
+                      type="button"
+                      className="results__review-link"
+                      onClick={() => navigate(LO_LESSON_PATHS[lo])}
+                    >
+                      Review lesson →
+                    </button>
+                  )}
                 </div>
               )
             })}
@@ -169,7 +226,7 @@ export default function Results({ session }) {
 
         <section className="results__questions-section">
           <h2 className="results__subheading">Question by Question</h2>
-          <div className="results__question-table">
+          <div className="results__question-table results__question-table--desktop">
             <div className="results__question-header">
               <span className="results__question-header-cell results__question-header-cell--num" />
               <span className="results__question-header-cell results__question-header-cell--question">
@@ -209,14 +266,56 @@ export default function Results({ session }) {
               )
             })}
           </div>
+
+          <div className="results__question-cards results__question-cards--mobile">
+            {selectedQuestions.map((question, index) => {
+              const preIndex = pretestAnswers[question.id]
+              const postIndex = posttestAnswers[question.id]
+              const eitherWrong =
+                preIndex !== question.correctIndex || postIndex !== question.correctIndex
+
+              return (
+                <article key={question.id} className="results__question-card">
+                  <p className="results__question-card-num">Question {index + 1}</p>
+                  <p className="results__question-card-text">{question.question}</p>
+                  <div className="results__question-card-answers">
+                    <div>
+                      <span className="results__question-card-label">Pre-Test</span>
+                      <AnswerCell answerIndex={preIndex} question={question} />
+                    </div>
+                    <div>
+                      <span className="results__question-card-label">Post-Test</span>
+                      <AnswerCell answerIndex={postIndex} question={question} />
+                    </div>
+                  </div>
+                  {eitherWrong && (
+                    <p className="results__question-card-correct">
+                      Correct: {question.options[question.correctIndex]}
+                    </p>
+                  )}
+                </article>
+              )
+            })}
+          </div>
         </section>
 
         <hr className="results__divider" aria-hidden="true" />
 
         <p className="results__footer">
-          Thank you for completing this lesson. Write down your session ID above if you
+          Thank you for completing this lesson. Copy your session ID and results summary if you
           haven&apos;t already.
         </p>
+
+        <div className="results__actions">
+          <button type="button" className="results__action-button" onClick={handleCopySummary}>
+            {copiedSummary ? 'Summary copied!' : 'Copy results summary'}
+          </button>
+          <button type="button" className="results__action-button results__action-button--muted" onClick={resetSession}>
+            Start over
+          </button>
+        </div>
+
+        <ProgressDots activeIndex={PROGRESS.RESULTS} />
       </div>
     </div>
   )
