@@ -7,6 +7,8 @@
   --color-parchment-dark: #e8d5a3;
   --color-text-dark: #1a1a2e;
   --color-text-light: #ffffff;
+  --color-ink-muted: #4a4540;
+  --color-error: #8b1a1a;
   --font-display: 'Cinzel', 'Palatino Linotype', serif;
   --font-body: 'Inter', sans-serif;
   --transition-fast: 200ms ease;
