@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './LessonIntro.css'
 
@@ -13,7 +14,7 @@ export default function LessonIntro({ session: _session }) {
   const navigate = useNavigate()
 
   return (
-    <div className="lesson-intro">
+    <PageLayout title="Lessons Overview · Learn to Play MTG" className="lesson-intro">
       <div className="lesson-intro__frame">
         <p className="lesson-intro__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="lesson-intro__heading">Here&apos;s What&apos;s Coming</h1>
@@ -45,20 +46,20 @@ export default function LessonIntro({ session: _session }) {
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--back"
-            onClick={() => navigate('/pretest')}
+            onClick={() => navigate('/intro')}
           >
-            Back
+            Back to overview
           </button>
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--next"
             onClick={() => navigate('/lesson/1')}
           >
-            Next
+            Start Lesson 1
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_INTRO} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

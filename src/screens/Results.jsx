@@ -1,119 +1,56 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
+import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import {
+  TOPIC_LABELS,
+  TOPIC_LESSON_PATHS,
+  TOPIC_ORDER,
+  buildResultsSummary,
+  calculateScores,
+  getImprovementMessage,
+  getLoTag,
+} from '../lib/scoring.js'
+import { LESSON_4_PATH, PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import './Results.css'
-
-const LO_LABELS = {
-  LO1: 'How to Read a Card',
-  LO2: 'How a Turn Works',
-  LO3: 'Turn Steps in Detail',
-  LO4: 'Card Timing',
-}
-
-const LO_LESSON_PATHS = {
-  LO1: '/lesson/1',
-  LO2: '/lesson/3',
-  LO3: '/lesson/3',
-  LO4: '/lesson/2',
-}
-
-const LO_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
-
-function calculateScores(selectedQuestions, pretestAnswers, posttestAnswers) {
-  let pretestCorrect = 0
-  let posttestCorrect = 0
-  const loScores = Object.fromEntries(
-    LO_ORDER.map((lo) => [lo, { pre: 0, post: 0 }]),
-  )
-
-  for (const question of selectedQuestions) {
-    const preIndex = pretestAnswers[question.id]
-    const postIndex = posttestAnswers[question.id]
-
-    if (preIndex === question.correctIndex) {
-      pretestCorrect += 1
-      loScores[question.lo].pre += 1
-    }
-
-    if (postIndex === question.correctIndex) {
-      posttestCorrect += 1
-      loScores[question.lo].post += 1
-    }
-  }
-
-  return { pretestCorrect, posttestCorrect, loScores }
-}
-
-function getLoTag(pre, post) {
-  if (post > pre) return { label: 'Improved', className: 'results__lo-tag--improved' }
-  if (post < pre) return { label: 'Review', className: 'results__lo-tag--declined' }
-  return { label: 'Same', className: 'results__lo-tag--same' }
-}
-
-function getImprovementMessage(pretestCorrect, posttestCorrect) {
-  if (posttestCorrect > pretestCorrect) {
-    const diff = posttestCorrect - pretestCorrect
-    const unit = diff === 1 ? 'point' : 'points'
-    return {
-      text: `You improved by ${diff} ${unit}. Great work.`,
-      className: 'results__improvement results__improvement--positive',
-    }
-  }
-
-  if (posttestCorrect === pretestCorrect) {
-    return {
-      text: 'Your score stayed the same. Review the lessons below if you want another pass.',
-      className: 'results__improvement results__improvement--neutral',
-    }
-  }
-
-  return {
-    text: 'Your score dropped on some questions. Use the review links below to revisit those topics.',
-    className: 'results__improvement results__improvement--neutral',
-  }
-}
-
-function buildResultsSummary(sessionId, scores, selectedQuestions) {
-  const lines = [
-    `Session ID: ${sessionId}`,
-    `Pre-Test: ${scores.pretestCorrect} / ${selectedQuestions.length}`,
-    `Post-Test: ${scores.posttestCorrect} / ${selectedQuestions.length}`,
-    '',
-    'By learning objective:',
-  ]
-
-  for (const lo of LO_ORDER) {
-    const { pre, post } = scores.loScores[lo]
-    lines.push(`${LO_LABELS[lo]}: ${pre}/2 → ${post}/2`)
-  }
-
-  return lines.join('\n')
-}
 
 function AnswerCell({ answerIndex, question }) {
   if (answerIndex === undefined || answerIndex === null) {
-    return <span className="results__answer results__answer--missing">—</span>
+    return (
+      <span className="results__answer results__answer--missing">
+        <span className="results__answer-status">No answer</span>
+      </span>
+    )
   }
 
   const isCorrect = answerIndex === question.correctIndex
   const text = question.options[answerIndex]
+  const status = isCorrect ? 'Correct' : 'Incorrect'
 
   return (
     <span
       className={`results__answer${isCorrect ? ' results__answer--correct' : ' results__answer--wrong'}`}
     >
+      <span className="results__answer-status">{status}:</span>
       <span className="results__answer-marker" aria-hidden="true">
         {isCorrect ? '◆' : '×'}
       </span>
-      {text}
+      <span className="results__answer-text">{text}</span>
     </span>
   )
 }
 
 export default function Results({ session }) {
   const navigate = useNavigate()
-  const { sessionId, selectedQuestions, pretestAnswers, posttestAnswers, resetSession } = session
+  const {
+    sessionId,
+    selectedQuestions,
+    pretestAnswers,
+    posttestAnswers,
+    scenariosAttempted,
+    resetSession,
+  } = session
   const [copiedSummary, setCopiedSummary] = useState(false)
 
   const hasTestData =
@@ -149,8 +86,9 @@ export default function Results({ session }) {
 
   if (!hasTestData || !scores) {
     return (
-      <div className="results">
+      <PageLayout title="Results · Learn to Play MTG" className="results">
         <div className="results__frame">
+          <h1 className="results__empty">Results unavailable</h1>
           <p className="results__empty">
             No test data found. Please complete the pre-test and post-test first.
           </p>
@@ -158,14 +96,15 @@ export default function Results({ session }) {
             Return to Welcome
           </button>
         </div>
-      </div>
+      </PageLayout>
     )
   }
 
   const improvement = getImprovementMessage(scores.pretestCorrect, scores.posttestCorrect)
+  const practiceIncomplete = scenariosAttempted < PRACTICE_SCENARIO_COUNT
 
   return (
-    <div className="results">
+    <PageLayout title="Your Results · Learn to Play MTG" className="results">
       <div className="results__frame">
         <p className="results__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="results__heading">Your Results</h1>
@@ -188,16 +127,16 @@ export default function Results({ session }) {
 
         <hr className="results__divider" aria-hidden="true" />
 
-        <section className="results__lo-section">
-          <h2 className="results__subheading">Breakdown by Learning Objective</h2>
+        <section className="results__lo-section" aria-label="Score by topic">
+          <h2 className="results__subheading">Breakdown by topic</h2>
           <div className="results__lo-rows">
-            {LO_ORDER.map((lo) => {
-              const { pre, post } = scores.loScores[lo]
+            {TOPIC_ORDER.map((topicKey) => {
+              const { pre, post } = scores.loScores[topicKey]
               const tag = getLoTag(pre, post)
               const needsReview = post < pre || (post < 2 && post <= pre)
               return (
-                <div key={lo} className="results__lo-row">
-                  <span className="results__lo-label">{LO_LABELS[lo]}</span>
+                <div key={topicKey} className="results__lo-row">
+                  <span className="results__lo-label">{TOPIC_LABELS[topicKey]}</span>
                   <span className="results__lo-pre">{pre} / 2</span>
                   <div className="results__lo-bar" aria-hidden="true">
                     <div
@@ -211,9 +150,9 @@ export default function Results({ session }) {
                     <button
                       type="button"
                       className="results__review-link"
-                      onClick={() => navigate(LO_LESSON_PATHS[lo])}
+                      onClick={() => navigate(TOPIC_LESSON_PATHS[topicKey])}
                     >
-                      Review lesson →
+                      {topicKey === 'LO4' ? 'Review scenarios' : 'Review lesson'}
                     </button>
                   )}
                 </div>
@@ -222,50 +161,100 @@ export default function Results({ session }) {
           </div>
         </section>
 
+        {practiceIncomplete && (
+          <>
+            <hr className="results__divider" aria-hidden="true" />
+            <section className="results__practice-section">
+              <h2 className="results__subheading">Lesson 4 practice</h2>
+              <p className="results__practice-note">
+                You completed {scenariosAttempted} of {PRACTICE_SCENARIO_COUNT} optional scenarios
+                in Putting It Together. You can revisit the rest anytime.
+              </p>
+              <button
+                type="button"
+                className="results__review-link results__review-link--standalone"
+                onClick={() => navigate(LESSON_4_PATH)}
+              >
+                Review Putting It Together
+              </button>
+            </section>
+          </>
+        )}
+
         <hr className="results__divider" aria-hidden="true" />
 
         <section className="results__questions-section">
           <h2 className="results__subheading">Question by Question</h2>
-          <div className="results__question-table results__question-table--desktop">
-            <div className="results__question-header">
-              <span className="results__question-header-cell results__question-header-cell--num" />
-              <span className="results__question-header-cell results__question-header-cell--question">
-                Question
-              </span>
-              <span className="results__question-header-cell">Pre-Test</span>
-              <span className="results__question-header-cell">Post-Test</span>
-              <span className="results__question-header-cell results__question-header-cell--answer">
-                Answer
-              </span>
-            </div>
-            {selectedQuestions.map((question, index) => {
-              const preIndex = pretestAnswers[question.id]
-              const postIndex = posttestAnswers[question.id]
-              const eitherWrong =
-                preIndex !== question.correctIndex || postIndex !== question.correctIndex
-
-              return (
-                <div
-                  key={question.id}
-                  className={`results__question-row${index % 2 === 0 ? ' results__question-row--odd' : ' results__question-row--even'}`}
+          <table className="results__question-table results__question-table--desktop">
+            <caption className="visually-hidden">
+              Pre-test and post-test answers for each question
+            </caption>
+            <thead>
+              <tr className="results__question-header">
+                <th
+                  scope="col"
+                  className="results__question-header-cell results__question-header-cell--num"
+                />
+                <th
+                  scope="col"
+                  className="results__question-header-cell results__question-header-cell--question"
                 >
-                  <span className="results__question-num">Q{index + 1}</span>
-                  <span className="results__question-text" title={question.question}>
-                    {question.question}
-                  </span>
-                  <AnswerCell answerIndex={preIndex} question={question} />
-                  <AnswerCell answerIndex={postIndex} question={question} />
-                  {eitherWrong ? (
-                    <span className="results__correct-tag">
-                      Correct: {question.options[question.correctIndex]}
-                    </span>
-                  ) : (
-                    <span className="results__correct-tag results__correct-tag--empty" />
-                  )}
-                </div>
-              )
-            })}
-          </div>
+                  Question
+                </th>
+                <th scope="col" className="results__question-header-cell">
+                  Pre-Test
+                </th>
+                <th scope="col" className="results__question-header-cell">
+                  Post-Test
+                </th>
+                <th
+                  scope="col"
+                  className="results__question-header-cell results__question-header-cell--answer"
+                >
+                  Answer
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedQuestions.map((question, index) => {
+                const preIndex = pretestAnswers[question.id]
+                const postIndex = posttestAnswers[question.id]
+                const eitherWrong =
+                  preIndex !== question.correctIndex || postIndex !== question.correctIndex
+
+                return (
+                  <tr
+                    key={question.id}
+                    className={`results__question-row${index % 2 === 0 ? ' results__question-row--odd' : ' results__question-row--even'}`}
+                  >
+                    <th scope="row" className="results__question-num">
+                      Q{index + 1}
+                    </th>
+                    <td className="results__question-text" title={question.question}>
+                      {question.question}
+                    </td>
+                    <td>
+                      <AnswerCell answerIndex={preIndex} question={question} />
+                    </td>
+                    <td>
+                      <AnswerCell answerIndex={postIndex} question={question} />
+                    </td>
+                    <td>
+                      {eitherWrong ? (
+                        <span className="results__correct-tag">
+                          Correct: {question.options[question.correctIndex]}
+                        </span>
+                      ) : (
+                        <span className="results__correct-tag results__correct-tag--empty">
+                          —
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
 
           <div className="results__question-cards results__question-cards--mobile">
             {selectedQuestions.map((question, index) => {
@@ -302,8 +291,7 @@ export default function Results({ session }) {
         <hr className="results__divider" aria-hidden="true" />
 
         <p className="results__footer">
-          Thank you for completing this lesson. Copy your session ID and results summary if you
-          haven&apos;t already.
+          Thank you for completing this lesson. Copy your session ID if you need it for reference.
         </p>
 
         <div className="results__actions">
@@ -317,6 +305,6 @@ export default function Results({ session }) {
 
         <ProgressDots activeIndex={PROGRESS.RESULTS} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

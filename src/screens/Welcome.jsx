@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './Welcome.css'
 
@@ -14,7 +15,7 @@ export default function Welcome({ session }) {
   }, [selectedQuestions, selectQuestions])
 
   return (
-    <div className="welcome">
+    <PageLayout title="Welcome · Learn to Play MTG" className="welcome">
       <div className="welcome__frame">
         <p className="welcome__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="welcome__heading">Learn to Play</h1>
@@ -35,6 +36,6 @@ export default function Welcome({ session }) {
         </div>
         <ProgressDots activeIndex={PROGRESS.WELCOME} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 .logs/
+
+# Env: commit .env.example only; ignore secrets and local overrides
+.env
+.env.*
+!.env.example

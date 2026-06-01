@@ -116,7 +116,7 @@ const questionBank = [
   {
     id: 'lo4_q1',
     lo: 'LO4',
-    question: 'When can you play an instant?',
+    question: 'When can you cast an instant?',
     hasImage: true,
     imageKey: 'shock',
     imageAlt: 'Shock — Instant',
@@ -132,7 +132,7 @@ const questionBank = [
   {
     id: 'lo4_q2',
     lo: 'LO4',
-    question: 'When can you play a sorcery?',
+    question: 'When can you cast a sorcery?',
     hasImage: true,
     imageKey: 'cultivate',
     imageAlt: 'Cultivate — Sorcery',
@@ -149,12 +149,12 @@ const questionBank = [
     id: 'lo4_q3',
     lo: 'LO4',
     question:
-      'Your opponent just attacked you with a creature. You have an instant in your hand. Can you play it?',
+      'Your opponent just attacked you with a creature. You have an instant in your hand. Can you cast it?',
     hasImage: true,
     imageKey: 'giant-growth',
     imageAlt: 'Giant Growth — Instant',
     options: [
-      'Yes, instants can be played any time',
+      'Yes, instants can be cast any time',
       "No, it's not your turn",
       'Yes, but only before they declared attackers',
       'No, you need to be in your main phase',
@@ -166,7 +166,7 @@ const questionBank = [
     id: 'lo4_q4',
     lo: 'LO4',
     question:
-      'Which two card types can only be played during your own main phase when the stack is empty?',
+      'Which two card types can only be cast during your own main phase when the stack is empty?',
     options: [
       'Instants and enchantments',
       'Sorceries and instants',

@@ -1,6 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useFocusTrap } from '../hooks/useFocusTrap.js'
 import { useNavigate } from 'react-router-dom'
+import LessonActions from '../components/LessonActions.jsx'
+import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import useScreenTime from '../hooks/useScreenTime.js'
 import './CardTypes.css'
 
 const CARD_TYPES = [
@@ -28,21 +32,41 @@ const CARD_TYPES = [
   {
     id: 'land',
     name: 'Land',
-    description: 'Your mana source. You can play one land per turn for free.',
+    description:
+      'Your mana source. Play one land per turn in your main phase—lands are played, not cast.',
     tag: 'Main phase only',
     wide: false,
+    details: [
+      'Mana from lands pays for your spells and abilities. Most decks need plenty of lands—often about 24 in a 60-card deck, though faster or slower decks adjust that number.',
+      {
+        heading: 'The five basic lands',
+        list: [
+          'Plains — adds white mana (W)',
+          'Island — adds blue mana (U)',
+          'Swamp — adds black mana (B)',
+          'Mountain — adds red mana (R)',
+          'Forest — adds green mana (G)',
+        ],
+        text: 'Each basic land’s name matches its type (a card named Forest is a basic Forest). You may put any number of the same basic land in your deck.',
+      },
+      'Non-basic lands are every other land card. They might produce two colors, enter the battlefield tapped, or have extra rules text. They still count as lands and follow the one-land-per-turn rule—read the card to see what they do. Woodland Cemetery is an example of a non-basic land that can produce black or green mana.',
+      'To use a land’s mana, tap it (turn it sideways). That mana is available until you spend it or the step or phase ends. Lands are permanent; they stay on the battlefield unless something removes them.',
+    ],
     examples: [
       {
         src: new URL('../assets/land-forest.jpg', import.meta.url).href,
         label: 'Forest',
+        role: 'Basic land',
       },
       {
         src: new URL('../assets/land-swamp.jpg', import.meta.url).href,
         label: 'Swamp',
+        role: 'Basic land',
       },
       {
         src: new URL('../assets/land-woodland-cemetery.jpg', import.meta.url).href,
         label: 'Woodland Cemetery',
+        role: 'Non-basic land',
       },
     ],
   },
@@ -154,6 +178,46 @@ function CardThumbnail({ src, alt, className }) {
   )
 }
 
+function CardTypeDetails({ description, details, variant = 'grid' }) {
+  const copyClass =
+    variant === 'overlay' ? 'card-types__overlay-copy' : 'card-types__type-copy'
+
+  return (
+    <div className={copyClass}>
+      <p
+        className={
+          variant === 'overlay' ? 'card-types__overlay-description' : 'card-types__description'
+        }
+      >
+        {description}
+      </p>
+      {details?.map((block, index) => {
+        if (typeof block === 'string') {
+          return (
+            <p key={index} className="card-types__detail">
+              {block}
+            </p>
+          )
+        }
+
+        return (
+          <div key={index} className="card-types__detail-block">
+            {block.heading && <h4 className="card-types__detail-heading">{block.heading}</h4>}
+            {block.list && (
+              <ul className="card-types__detail-list">
+                {block.list.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            )}
+            {block.text && <p className="card-types__detail">{block.text}</p>}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
   return (
     <article className={`card-types__item${type.wide ? ' card-types__item--wide' : ''}`}>
@@ -169,7 +233,7 @@ function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
           </div>
         ))}
       </div>
-      <p className="card-types__description">{type.description}</p>
+      <CardTypeDetails description={type.description} />
       <span className="card-types__tag">{type.tag}</span>
       <button
         type="button"
@@ -183,14 +247,19 @@ function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
 }
 
 export default function CardTypes({ session }) {
-  void session
   const navigate = useNavigate()
+  useScreenTime(session, 'CardTypes')
   const [overlayId, setOverlayId] = useState(null)
   const [isClosing, setIsClosing] = useState(false)
   const [seenIds, setSeenIds] = useState(() => new Set())
   const [activeExampleIndex, setActiveExampleIndex] = useState(0)
+  const overlayPanelRef = useRef(null)
+  const closeButtonRef = useRef(null)
 
   const activeType = CARD_TYPES.find((t) => t.id === overlayId)
+  const overlayOpen = Boolean(activeType && !isClosing)
+
+  useFocusTrap(overlayPanelRef, overlayOpen)
   const allViewed = seenIds.size === CARD_TYPES.length
 
   const openOverlay = useCallback((id) => {
@@ -225,6 +294,12 @@ export default function CardTypes({ session }) {
   }, [overlayId])
 
   useEffect(() => {
+    if (overlayOpen) {
+      closeButtonRef.current?.focus()
+    }
+  }, [overlayOpen])
+
+  useEffect(() => {
     if (!overlayId) return undefined
 
     function handleKeyDown(event) {
@@ -251,7 +326,7 @@ export default function CardTypes({ session }) {
   }, [overlayId, closeOverlay, activeType])
 
   return (
-    <div className="card-types">
+    <PageLayout title="Lesson 2 · Card Types" className="card-types">
       <div className="card-types__frame">
         <p className="card-types__breadcrumb">Lesson 02 · Card Types</p>
         <h1 className="card-types__heading">The Seven Card Types</h1>
@@ -260,7 +335,7 @@ export default function CardTypes({ session }) {
         <p className="card-types__intro">
           Magic has a few other card types too, but these seven are the main ones you will see in
           most games. Each type determines what the card does and, more importantly, when you can
-          play it.
+          cast it (lands are played, not cast).
         </p>
 
         <div className="card-types__grid">
@@ -275,33 +350,30 @@ export default function CardTypes({ session }) {
         </div>
 
         <p className="card-types__progress" aria-live="polite">
-          {allViewed ? 'All card types viewed.' : `Seen ${seenIds.size} of 7 card types`}
+          {allViewed ? 'All card types explored.' : `Explored ${seenIds.size} of 7 card types`}
         </p>
 
         <hr className="card-types__divider" aria-hidden="true" />
 
         <p className="card-types__closing">
-          Notice that only instants can be played at any time. Every other type has restrictions.
+          Notice that only instants can be cast at any time. Every other type has restrictions.
           Keep that in mind as you learn the turn structure in the next lesson.
         </p>
 
-        <div className="card-types__actions">
-          <button
-            type="button"
-            className="card-types__button card-types__button--back"
-            onClick={() => navigate('/lesson/1')}
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            className="card-types__button card-types__button--next"
-            disabled={!allViewed}
-            onClick={() => navigate('/lesson/3')}
-          >
-            Next
-          </button>
-        </div>
+        <p className="card-types__note">
+          There are exceptions to every rule in Magic, and many cards use keywords that change how
+          they work. What you saw here is a basic introduction—enough to get started, not every
+          special case you will meet in a real game.
+        </p>
+
+        <LessonActions
+          classPrefix="card-types"
+          backHint="Return to Card Anatomy"
+          onBack={() => navigate('/lesson/1')}
+          onNext={() => navigate('/lesson/3')}
+          canProceed={allViewed}
+          gateMessage="Open each card type and view its examples before continuing."
+        />
         <ProgressDots activeIndex={PROGRESS.LESSON_2} />
       </div>
 
@@ -316,9 +388,10 @@ export default function CardTypes({ session }) {
           }}
         >
           <div
+            ref={overlayPanelRef}
             className={`card-types__overlay-card${
               activeType.examples.length === 1 ? ' card-types__overlay-card--single' : ''
-            }`}
+            }${activeType.details?.length ? ' card-types__overlay-card--detailed' : ''}`}
           >
             {(() => {
               const activeExample = activeType.examples[activeExampleIndex] ?? activeType.examples[0]
@@ -333,6 +406,7 @@ export default function CardTypes({ session }) {
               return (
                 <>
             <button
+              ref={closeButtonRef}
               type="button"
               className="card-types__overlay-close"
               aria-label="Close"
@@ -349,7 +423,12 @@ export default function CardTypes({ session }) {
                     className="card-types__thumbnail-image"
                   />
                 </div>
-                <figcaption className="card-types__overlay-caption">{activeExample.label}</figcaption>
+                <figcaption className="card-types__overlay-caption">
+                  <span className="card-types__overlay-caption-name">{activeExample.label}</span>
+                  {activeExample.role && (
+                    <span className="card-types__overlay-caption-role">{activeExample.role}</span>
+                  )}
+                </figcaption>
               </figure>
             </div>
             {canCycle && (
@@ -360,7 +439,7 @@ export default function CardTypes({ session }) {
                   onClick={goToPrevious}
                   aria-label={`Previous ${activeType.name} example`}
                 >
-                  ◂ Prev
+                  Previous
                 </button>
                 <span className="card-types__overlay-count" aria-live="polite">
                   {activeExampleIndex + 1} / {activeType.examples.length}
@@ -371,12 +450,16 @@ export default function CardTypes({ session }) {
                   onClick={goToNext}
                   aria-label={`Next ${activeType.name} example`}
                 >
-                  Next ▸
+                  Next
                 </button>
               </div>
             )}
             <h3 className="card-types__overlay-name">{activeType.name}</h3>
-            <p className="card-types__overlay-description">{activeType.description}</p>
+            <CardTypeDetails
+              description={activeType.description}
+              details={activeType.details}
+              variant="overlay"
+            />
             <span className="card-types__tag">{activeType.tag}</span>
                 </>
               )
@@ -384,6 +467,6 @@ export default function CardTypes({ session }) {
           </div>
         </div>
       )}
-    </div>
+    </PageLayout>
   )
 }

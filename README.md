@@ -23,6 +23,14 @@ Install dependencies:
 npm install
 ```
 
+Copy environment variables (not committed):
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` with your Supabase project URL and anon key. Optional: set `VITE_INSTRUCTOR_PASSWORD` for the `/instructor` dashboard gate.
+
 Start the dev server:
 
 ```bash
@@ -75,6 +83,31 @@ This project is configured to publish from the `main` branch using the `/docs` f
    - **Pages → Deploy from a branch**
    - **Branch: `main`**
    - **Folder: `/docs`**
+
+## Participant data (Supabase)
+
+Research data is saved incrementally to the `participants` table:
+
+| When | What is saved |
+|------|----------------|
+| Intro screen | New row with session ID, question set, participant ID |
+| Pre-test complete | Answers and score |
+| Lesson complete | Screen times, lessons completed, scenarios attempted |
+| Post-test complete | Answers, score, completion timestamp |
+
+**Setup**
+
+1. Run `supabase/participants.sql` in the [Supabase SQL editor](https://supabase.com/dashboard). If rows insert but later columns stay null, also run `supabase/fix-participants-rls.sql` (anon `UPDATE` was blocked).
+2. Verify with `node scripts/verify-participants-db.mjs` — it should print `OK: anon INSERT + UPDATE works`.
+3. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+4. Rebuild (`npm run build`) before deploying so env vars are embedded for GitHub Pages.
+
+**Instructor analysis**
+
+- Browser dashboard: `/instructor` (optional; run `supabase/instructor-select-policy.sql` because default RLS blocks reads)
+- Or use the Supabase **Table Editor** (recommended with deny-select policy)
+
+See `docs/evaluation.md` for reporting metrics.
 
 ## Notes
 

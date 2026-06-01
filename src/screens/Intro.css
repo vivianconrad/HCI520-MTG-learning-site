@@ -63,6 +63,22 @@
   margin: 0 0 8px;
 }
 
+.intro__status {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-ink-muted);
+  text-align: center;
+  margin: 0 0 16px;
+}
+
+.intro__error {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-error);
+  text-align: center;
+  margin: 0 0 16px;
+}
+
 .intro__actions {
   display: flex;
   justify-content: flex-end;

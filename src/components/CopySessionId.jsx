@@ -31,6 +31,9 @@ export default function CopySessionId({ sessionId, className = '' }) {
       <button type="button" className="copy-session-id__button" onClick={handleCopy}>
         {copied ? 'Copied!' : 'Copy'}
       </button>
+      <span className="visually-hidden" aria-live="polite">
+        {copied ? 'Session ID copied to clipboard.' : ''}
+      </span>
     </div>
   )
 }

@@ -187,16 +187,14 @@
   margin-bottom: 32px;
 }
 
-.results__question-table {
-  display: flex;
-  flex-direction: column;
+.results__question-table--desktop {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .results__question-header {
-  display: grid;
-  grid-template-columns: 40px 1fr 140px 140px 120px;
-  gap: 12px;
-  padding: 0 8px 8px;
+  border-bottom: 1px solid var(--color-parchment-dark);
 }
 
 .results__question-header-cell {
@@ -207,12 +205,29 @@
   color: var(--color-gold-on-parchment);
 }
 
-.results__question-row {
-  display: grid;
-  grid-template-columns: 40px 1fr 140px 140px 120px;
-  gap: 12px;
-  align-items: center;
+.results__question-row th,
+.results__question-row td,
+.results__question-header th {
   padding: 10px 8px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.results__question-header-cell--num,
+.results__question-num {
+  width: 40px;
+}
+
+.results__question-header-cell--question,
+.results__question-text {
+  width: 28%;
+}
+
+.results__question-header-cell--answer {
+  width: 120px;
+}
+
+.results__question-row {
   border-bottom: 1px solid var(--color-parchment-dark);
 }
 
@@ -253,12 +268,25 @@
   flex-shrink: 0;
 }
 
+.results__answer-status {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.results__answer--correct .results__answer-status {
+  color: #2d5a27;
+}
+
+.results__answer--wrong .results__answer-status {
+  color: #8b2e2e;
+}
+
 .results__answer--correct {
-  color: var(--color-gold-on-parchment);
+  color: var(--color-text-dark);
 }
 
 .results__answer--wrong {
-  color: var(--color-gold-on-parchment);
+  color: var(--color-text-dark);
 }
 
 .results__answer--missing {
@@ -313,6 +341,21 @@
   color: var(--color-navy);
 }
 
+.results__practice-section {
+  margin-bottom: 8px;
+}
+
+.results__practice-note {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-text-muted, #4a4540);
+}
+
+.results__review-link--standalone {
+  display: inline-block;
+}
+
 .results__review-link {
   grid-column: 1 / -1;
   font-family: var(--font-display);
@@ -329,6 +372,45 @@
 
 .results__review-link:hover {
   color: var(--color-gold-on-parchment);
+}
+
+.results__submit-banner {
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.results__submit-banner--pending,
+.results__submit-banner--saving {
+  background: rgba(201, 162, 39, 0.15);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+}
+
+.results__submit-banner--saved {
+  background: rgba(80, 140, 90, 0.15);
+  border: 1px solid rgba(80, 140, 90, 0.35);
+}
+
+.results__submit-banner--skipped {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.results__submit-banner--error {
+  background: rgba(180, 70, 70, 0.12);
+  border: 1px solid rgba(180, 70, 70, 0.35);
+}
+
+.results__submit-retry {
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 
 .results__actions {
