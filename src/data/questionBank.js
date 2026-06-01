@@ -117,6 +117,9 @@ const questionBank = [
     id: 'lo4_q1',
     lo: 'LO4',
     question: 'When can you play an instant?',
+    hasImage: true,
+    imageKey: 'shock',
+    imageAlt: 'Shock — Instant',
     options: [
       'Only during your main phase',
       'Only during combat',
@@ -130,6 +133,9 @@ const questionBank = [
     id: 'lo4_q2',
     lo: 'LO4',
     question: 'When can you play a sorcery?',
+    hasImage: true,
+    imageKey: 'cultivate',
+    imageAlt: 'Cultivate — Sorcery',
     options: [
       'Any time',
       'Only during your main phase when the stack is empty',
@@ -144,6 +150,9 @@ const questionBank = [
     lo: 'LO4',
     question:
       'Your opponent just attacked you with a creature. You have an instant in your hand. Can you play it?',
+    hasImage: true,
+    imageKey: 'giant-growth',
+    imageAlt: 'Giant Growth — Instant',
     options: [
       'Yes, instants can be played any time',
       "No, it's not your turn",

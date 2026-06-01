@@ -1,16 +1,14 @@
 import { useNavigate } from 'react-router-dom'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './LessonIntro.css'
 
 const LESSONS = [
-  'Lesson 1: How to read a card and what each part means',
-  'Lesson 2: The seven card types and when you can play them',
-  'Lesson 3: How a turn is structured from start to finish',
-  'Lesson 4: Putting it all together with real game scenarios',
+  { num: '01', title: 'How to Read a Card', time: '~4 min' },
+  { num: '02', title: 'The Seven Card Types', time: '~4 min' },
+  { num: '03', title: 'How a Turn Works', time: '~4 min' },
+  { num: '04', title: 'Putting It Together', time: '~5 min' },
 ]
 
-export default function LessonIntro({ session }) {
-  void session
+export default function LessonIntro({ session: _session }) {
   const navigate = useNavigate()
 
   return (
@@ -31,7 +29,12 @@ export default function LessonIntro({ session }) {
 
         <ul className="lesson-intro__list">
           {LESSONS.map((lesson) => (
-            <li key={lesson}>{lesson}</li>
+            <li key={lesson.num}>
+              <span className="lesson-intro__lesson-num">Lesson {lesson.num}</span>
+              {': '}
+              {lesson.title}
+              <span className="lesson-intro__lesson-time"> ({lesson.time})</span>
+            </li>
           ))}
         </ul>
 
@@ -43,10 +46,9 @@ export default function LessonIntro({ session }) {
             className="lesson-intro__button"
             onClick={() => navigate('/lesson/1')}
           >
-            Let&apos;s Go →
+            Let&apos;s Go
           </button>
         </div>
-        <ProgressDots activeIndex={PROGRESS.LESSON_INTRO} />
       </div>
     </div>
   )

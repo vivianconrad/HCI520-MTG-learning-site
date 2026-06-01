@@ -1,15 +1,18 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import questionBank from '../data/questionBank.js'
+import {
+  loadPersistedSession,
+  persistSession,
+  clearPersistedSession,
+} from './sessionStorage.js'
 
 const LO_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+// Unambiguous chars — no 0/O, 1/I/L confusion when reading aloud or transcribing
+const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 
 function generateSessionId() {
-  let id = ''
-  for (let i = 0; i < 6; i++) {
-    id += CHARS[Math.floor(Math.random() * CHARS.length)]
-  }
-  return id
+  const bytes = crypto.getRandomValues(new Uint8Array(8))
+  return Array.from(bytes, (b) => CHARS[b % CHARS.length]).join('')
 }
 
 function shuffle(array) {
@@ -21,17 +24,38 @@ function shuffle(array) {
   return copy
 }
 
+function pickQuestions() {
+  return LO_ORDER.flatMap((lo) => {
+    const pool = questionBank.filter((q) => q.lo === lo)
+    return shuffle(pool).slice(0, 2)
+  })
+}
+
 export default function useSessionStore() {
-  const [sessionId] = useState(() => generateSessionId())
-  const [selectedQuestions, setSelectedQuestions] = useState(null)
-  const [pretestAnswers, setPretestAnswers] = useState({})
-  const [posttestAnswers, setPosttestAnswers] = useState({})
+  const saved = loadPersistedSession()
+
+  const [sessionId] = useState(() => saved?.sessionId ?? generateSessionId())
+  const [selectedQuestions, setSelectedQuestions] = useState(
+    () => saved?.selectedQuestions ?? null,
+  )
+  const [pretestAnswers, setPretestAnswers] = useState(
+    () => saved?.pretestAnswers ?? {},
+  )
+  const [posttestAnswers, setPosttestAnswers] = useState(
+    () => saved?.posttestAnswers ?? {},
+  )
+
+  useEffect(() => {
+    persistSession({
+      sessionId,
+      selectedQuestions,
+      pretestAnswers,
+      posttestAnswers,
+    })
+  }, [sessionId, selectedQuestions, pretestAnswers, posttestAnswers])
 
   const selectQuestions = useCallback(() => {
-    const selected = LO_ORDER.flatMap((lo) => {
-      const pool = questionBank.filter((q) => q.lo === lo)
-      return shuffle(pool).slice(0, 2)
-    })
+    const selected = pickQuestions()
     setSelectedQuestions(selected)
     return selected
   }, [])
@@ -44,6 +68,14 @@ export default function useSessionStore() {
     setPosttestAnswers((prev) => ({ ...prev, [id]: index }))
   }, [])
 
+  const resetSession = useCallback(() => {
+    clearPersistedSession()
+    setSelectedQuestions(null)
+    setPretestAnswers({})
+    setPosttestAnswers({})
+    window.location.href = `${import.meta.env.BASE_URL}`
+  }, [])
+
   return {
     sessionId,
     selectedQuestions,
@@ -52,5 +84,6 @@ export default function useSessionStore() {
     posttestAnswers,
     setPretestAnswer,
     setPosttestAnswer,
+    resetSession,
   }
 }

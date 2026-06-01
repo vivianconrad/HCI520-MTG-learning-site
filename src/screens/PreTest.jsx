@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
-import QuestionCardImage from '../components/QuestionCardImage.jsx'
-import { getQuestionImage } from '../data/questionImages.js'
-import './PreTest.css'
+import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 
 export default function PreTest({ session }) {
   const navigate = useNavigate()
   const { selectedQuestions, selectQuestions, setPretestAnswer } = session
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [selectedIndex, setSelectedIndex] = useState(null)
 
   useEffect(() => {
     if (selectedQuestions === null) {
@@ -18,72 +14,29 @@ export default function PreTest({ session }) {
   }, [selectedQuestions, selectQuestions])
 
   if (!selectedQuestions || selectedQuestions.length === 0) {
-    return null
-  }
-
-  const question = selectedQuestions[currentIndex]
-  const total = selectedQuestions.length
-  const isLast = currentIndex === total - 1
-
-  function handleNext() {
-    if (selectedIndex === null) return
-
-    setPretestAnswer(question.id, selectedIndex)
-
-    if (isLast) {
-      navigate('/lesson/intro')
-      return
-    }
-
-    setCurrentIndex((prev) => prev + 1)
-    setSelectedIndex(null)
+    return (
+      <div className="pretest">
+        <div className="pretest__frame">
+          <p className="pretest__empty">No questions loaded. Return to the start and try again.</p>
+          <div className="pretest__actions">
+            <button type="button" className="pretest__button" onClick={() => navigate('/')}>
+              Return to Welcome
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="pretest">
-      <div className="pretest__frame">
-        <p className="pretest__breadcrumb">
-          Pre-Test · Question {currentIndex + 1} of {total}
-        </p>
-        <p className="pretest__question">{question.question}</p>
-        {question.hasImage && (
-          <QuestionCardImage
-            src={getQuestionImage(question.imageKey)}
-            alt={question.imageAlt}
-          />
-        )}
-        <div className="pretest__options">
-          {question.options.map((option, index) => {
-            const isSelected = selectedIndex === index
-            return (
-              <button
-                key={option}
-                type="button"
-                className={`pretest__option${isSelected ? ' pretest__option--selected' : ''}`}
-                onClick={() => setSelectedIndex(index)}
-              >
-                {isSelected && (
-                  <span className="pretest__option-marker" aria-hidden="true">
-                    ◆
-                  </span>
-                )}
-                {option}
-              </button>
-            )
-          })}
-        </div>
-        <div className="pretest__actions">
-          <button
-            type="button"
-            className="pretest__button"
-            disabled={selectedIndex === null}
-            onClick={handleNext}
-          >
-            {isLast ? 'Begin Lessons →' : 'Next'}
-          </button>
-        </div>
-        <ProgressDots activeIndex={PROGRESS.PRETEST} />
-      </div>
-    </div>
+    <TestQuestionFlow
+      testLabel="Pre-Test"
+      progressIndex={PROGRESS.PRETEST}
+      selectedQuestions={selectedQuestions}
+      setAnswer={setPretestAnswer}
+      onComplete={() => navigate('/lesson/intro')}
+      firstQuestionBackPath="/intro"
+      lastButtonLabel="Begin Lessons"
+    />
   )
 }

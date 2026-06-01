@@ -19,7 +19,7 @@
 .turn-structure__breadcrumb {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   letter-spacing: 0.08em;
   margin: 0 0 16px;
   text-align: center;
@@ -91,7 +91,20 @@
 
 .turn-structure__node--active {
   border: 1.5px solid var(--color-gold);
-  color: var(--color-gold);
+  color: var(--color-gold-on-parchment);
+}
+
+.turn-structure__node--visited:not(.turn-structure__node--active) {
+  border-color: var(--color-gold);
+  opacity: 0.85;
+}
+
+.turn-structure__progress {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-gold-on-parchment);
+  text-align: center;
+  margin: 0 0 12px;
 }
 
 .turn-structure__detail {

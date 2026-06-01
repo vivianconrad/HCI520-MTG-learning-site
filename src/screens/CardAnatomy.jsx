@@ -105,6 +105,7 @@ function CardMarker({ callout, isActive, onToggle }) {
         type="button"
         className="card-anatomy__callout-marker"
         aria-label={`${label} callout`}
+        aria-pressed={isActive}
         onClick={() => onToggle(id)}
       >
         {number}
@@ -117,21 +118,31 @@ function CardMarker({ callout, isActive, onToggle }) {
 export default function CardAnatomy({ session: _session }) {
   const navigate = useNavigate()
   const [activeCallout, setActiveCallout] = useState(null)
+  const [seenIds, setSeenIds] = useState(() => new Set())
+
+  const allExplored = seenIds.size === CALLOUTS.length
+  const activeCalloutData = CALLOUTS.find((c) => c.id === activeCallout)
 
   function toggleCallout(id) {
+    setSeenIds((prev) => {
+      if (prev.has(id)) return prev
+      const next = new Set(prev)
+      next.add(id)
+      return next
+    })
     setActiveCallout((prev) => (prev === id ? null : id))
   }
-
-  const activeCalloutData = CALLOUTS.find((c) => c.id === activeCallout)
 
   return (
     <div className="card-anatomy">
       <div className="card-anatomy__frame">
-        <p className="card-anatomy__breadcrumb">
-          Lesson 01 · Card Anatomy
-        </p>
+        <p className="card-anatomy__breadcrumb">Lesson 01 · Card Anatomy</p>
         <h1 className="card-anatomy__heading">How to Read a Card</h1>
         <hr className="card-anatomy__rule" aria-hidden="true" />
+
+        <p className="card-anatomy__hint">
+          Tap each numbered marker on the card to learn what that part means.
+        </p>
 
         <div className="card-anatomy__diagram">
           <div className="card-anatomy__card-wrap">
@@ -147,9 +158,22 @@ export default function CardAnatomy({ session: _session }) {
           </div>
         </div>
 
-        {activeCalloutData && (
-          <div className="card-anatomy__info-panel">{activeCalloutData.text}</div>
+        {activeCalloutData ? (
+          <div className="card-anatomy__info-panel" role="region" aria-labelledby="callout-heading">
+            <h2 id="callout-heading" className="card-anatomy__info-panel-title">
+              {activeCalloutData.label}
+            </h2>
+            <p className="card-anatomy__info-panel-text">{activeCalloutData.text}</p>
+          </div>
+        ) : (
+          <p className="card-anatomy__info-placeholder">Select a marker to read its explanation.</p>
         )}
+
+        <p className="card-anatomy__progress" aria-live="polite">
+          {allExplored
+            ? 'All six parts explored.'
+            : `Explored ${seenIds.size} of ${CALLOUTS.length} parts`}
+        </p>
 
         <hr className="card-anatomy__divider" aria-hidden="true" />
 
@@ -170,10 +194,18 @@ export default function CardAnatomy({ session: _session }) {
           ))}
         </ul>
 
-        <div className="card-anatomy__actions" style={{ justifyContent: 'flex-end' }}>
+        <div className="card-anatomy__actions">
+          <button
+            type="button"
+            className="card-anatomy__button card-anatomy__button--back"
+            onClick={() => navigate('/lesson/intro')}
+          >
+            Back
+          </button>
           <button
             type="button"
             className="card-anatomy__button card-anatomy__button--next"
+            disabled={!allExplored}
             onClick={() => navigate('/lesson/2')}
           >
             Next

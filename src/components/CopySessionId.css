@@ -1,0 +1,48 @@
+.copy-session-id {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0;
+}
+
+.copy-session-id__label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-dark);
+}
+
+.copy-session-id__value {
+  font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+  font-size: 13px;
+  color: var(--color-gold-muted);
+  background: var(--color-parchment-dark);
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+.copy-session-id__button {
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--color-text-dark);
+  background: transparent;
+  border: 1px solid var(--color-gold-muted);
+  border-radius: 0;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.copy-session-id__button:hover {
+  border-color: var(--color-gold);
+  background: var(--color-gold);
+  color: var(--color-navy);
+}
+
+.copy-session-id__button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}

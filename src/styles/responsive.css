@@ -1,0 +1,46 @@
+@media (max-width: 640px) {
+  [class*='__frame'] {
+    padding: 32px 20px !important;
+  }
+
+  [class*='__heading'] {
+    font-size: 2rem !important;
+  }
+
+  [class*='__actions'] {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  [class*='__actions'] [class*='__button'] {
+    width: 100%;
+    text-align: center;
+  }
+
+  .card-anatomy__card-wrap {
+    width: 180px;
+    height: 252px;
+  }
+
+  .card-anatomy__callout-marker {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .card-anatomy__marker--active .card-anatomy__marker-tooltip {
+    opacity: 1;
+  }
+
+  .turn-structure__node {
+    font-size: 11px;
+    padding: 8px 10px;
+  }
+}
+
+button:focus-visible,
+[role='tab']:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}

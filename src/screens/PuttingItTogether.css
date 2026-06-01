@@ -19,7 +19,7 @@
 .putting-together__breadcrumb {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   letter-spacing: 0.08em;
   margin: 0 0 16px;
   text-align: center;
@@ -47,8 +47,16 @@
   font-family: var(--font-body);
   font-size: 16px;
   color: var(--color-text-dark);
-  margin: 0 0 24px;
+  margin: 0 0 12px;
   line-height: 1.5;
+}
+
+.putting-together__progress {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-gold-on-parchment);
+  text-align: center;
+  margin: 0 0 16px;
 }
 
 /* ── Scenario ─────────────────────────────────────────────── */
@@ -81,7 +89,7 @@
   justify-content: center;
   font-family: var(--font-body);
   font-size: 12px;
-  color: var(--color-gold-muted);
+  color: var(--color-gold-on-parchment);
   text-align: center;
   padding: 8px;
 }
@@ -193,7 +201,7 @@
 }
 
 .putting-together__feedback--correct .putting-together__feedback-verdict {
-  color: var(--color-gold);
+  color: var(--color-gold-on-parchment);
 }
 
 .putting-together__feedback--incorrect .putting-together__feedback-verdict {
@@ -252,7 +260,7 @@
 }
 
 .putting-together__prompt-button--muted {
-  border-color: var(--color-gold-muted);
+  border-color: var(--color-gold-on-parchment);
 }
 
 .putting-together__prompt-button--muted:hover {

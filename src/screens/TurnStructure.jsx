@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './TurnStructure.css'
 
 const PHASES = [
@@ -24,7 +23,13 @@ const PHASES = [
     id: 'combat',
     label: 'Combat Phase',
     title: 'Combat Phase',
-    body: 'This is where creatures fight. You choose which of your creatures attack, your opponent chooses which of theirs block, and damage is dealt. Creatures with toughness equal to or greater than the damage they take survive.',
+    substeps: [
+      'Beginning of combat: Abilities that trigger at the start of combat happen here.',
+      'Declare attackers: You choose which untapped creatures attack. They tap as they attack.',
+      'Declare blockers: Your opponent chooses which creatures block which attackers.',
+      'Combat damage: Damage is dealt. Creatures with toughness greater than the damage they took survive.',
+      'End of combat: Cleanup before the second main phase.',
+    ],
   },
   {
     id: 'second-main',
@@ -40,12 +45,23 @@ const PHASES = [
   },
 ]
 
-export default function TurnStructure({ session }) {
-  void session
+export default function TurnStructure({ session: _session }) {
   const navigate = useNavigate()
   const [selectedId, setSelectedId] = useState('beginning')
+  const [visitedIds, setVisitedIds] = useState(() => new Set(['beginning']))
 
   const selected = PHASES.find((p) => p.id === selectedId) ?? PHASES[0]
+  const panelId = `turn-phase-panel-${selectedId}`
+
+  function selectPhase(id) {
+    setSelectedId(id)
+    setVisitedIds((prev) => {
+      if (prev.has(id)) return prev
+      const next = new Set(prev)
+      next.add(id)
+      return next
+    })
+  }
 
   return (
     <div className="turn-structure">
@@ -66,9 +82,11 @@ export default function TurnStructure({ session }) {
               <button
                 type="button"
                 role="tab"
+                id={`turn-tab-${phase.id}`}
                 aria-selected={selectedId === phase.id}
-                className={`turn-structure__node${selectedId === phase.id ? ' turn-structure__node--active' : ''}`}
-                onClick={() => setSelectedId(phase.id)}
+                aria-controls={panelId}
+                className={`turn-structure__node${selectedId === phase.id ? ' turn-structure__node--active' : ''}${visitedIds.has(phase.id) ? ' turn-structure__node--visited' : ''}`}
+                onClick={() => selectPhase(phase.id)}
               >
                 {phase.label}
               </button>
@@ -76,7 +94,17 @@ export default function TurnStructure({ session }) {
           ))}
         </div>
 
-        <div key={selectedId} className="turn-structure__detail">
+        <p className="turn-structure__progress" aria-live="polite">
+          Viewed {visitedIds.size} of {PHASES.length} phases
+        </p>
+
+        <div
+          key={selectedId}
+          id={panelId}
+          role="tabpanel"
+          aria-labelledby={`turn-tab-${selectedId}`}
+          className="turn-structure__detail"
+        >
           <h2 className="turn-structure__detail-title">{selected.title}</h2>
           {selected.substeps ? (
             <ul className="turn-structure__substeps">
@@ -98,7 +126,8 @@ export default function TurnStructure({ session }) {
 
         <p className="turn-structure__closing">
           The two main phases are what trips most new players up. Remember: you get two chances to
-          play cards each turn, one before combat and one after.
+          play cards each turn, one before combat and one after. Only instants can be played at any
+          time.
         </p>
 
         <div className="turn-structure__actions">
@@ -117,7 +146,6 @@ export default function TurnStructure({ session }) {
             Next
           </button>
         </div>
-        <ProgressDots activeIndex={PROGRESS.LESSON_3} />
       </div>
     </div>
   )

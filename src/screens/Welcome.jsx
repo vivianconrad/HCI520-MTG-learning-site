@@ -5,7 +5,7 @@ import './Welcome.css'
 
 export default function Welcome({ session }) {
   const navigate = useNavigate()
-  const { sessionId, selectedQuestions, selectQuestions } = session
+  const { selectedQuestions, selectQuestions } = session
 
   useEffect(() => {
     if (selectedQuestions === null) {
@@ -22,14 +22,15 @@ export default function Welcome({ session }) {
         <p className="welcome__subheading">
           A quick guide to reading cards, understanding card types, and taking your first turn.
         </p>
-        <p className="welcome__duration">
-          This guide takes about 15–20 minutes. At the end, you&apos;ll know enough to sit down and
-          play.
+        <p className="welcome__flow">
+          Pre-test → four short lessons → post-test → your results
         </p>
-        <p className="welcome__session">Your session ID: {sessionId}</p>
+        <p className="welcome__duration">
+          Plan for about 15–20 minutes. At the end, you&apos;ll know enough to sit down and play.
+        </p>
         <div className="welcome__actions">
           <button type="button" className="welcome__button" onClick={() => navigate('/intro')}>
-            Start →
+            Start
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.WELCOME} />
