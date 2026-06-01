@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './Consent.css'
 
@@ -6,7 +7,7 @@ export default function Consent() {
   const navigate = useNavigate()
 
   return (
-    <div className="consent">
+    <PageLayout title="Consent · Learn to Play MTG" className="consent">
       <div className="consent__frame">
         <p className="consent__breadcrumb">Magic: The Gathering · HCI 520 Research Study</p>
         <h1 className="consent__heading">Before You Begin</h1>
@@ -72,6 +73,6 @@ export default function Consent() {
 
         <ProgressDots activeIndex={PROGRESS.CONSENT} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

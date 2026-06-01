@@ -1,27 +1,14 @@
--- Run in Supabase SQL Editor for HCI520 participant research data
+-- Run this in Supabase SQL Editor if inserts work but updates leave columns null.
+-- Symptom: PATCH returns Content-Range: */0 (zero rows updated) for anon role.
 
-create table if not exists public.participants (
-  id uuid default gen_random_uuid() primary key,
-  participant_id text not null,
-  session_id text not null unique,
-  selected_questions jsonb not null,
-  pretest_answers jsonb,
-  pretest_score integer,
-  posttest_answers jsonb,
-  posttest_score integer,
-  screens_time jsonb,
-  lessons_completed boolean default false,
-  scenarios_attempted integer default 0,
-  completed_at timestamptz,
-  created_at timestamptz default now()
-);
-
-alter table public.participants enable row level security;
-
+-- Remove legacy/conflicting policies (safe to re-run)
 drop policy if exists "Allow update own row" on public.participants;
 drop policy if exists "Allow update for all" on public.participants;
 drop policy if exists "Allow insert for all" on public.participants;
 drop policy if exists "Deny select for all" on public.participants;
+drop policy if exists "Allow select for instructor dashboard" on public.participants;
+
+alter table public.participants enable row level security;
 
 create policy "Allow insert for all"
   on public.participants for insert

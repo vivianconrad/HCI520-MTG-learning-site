@@ -1,12 +1,16 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBrowserBackConfirm } from '../hooks/useBrowserBackConfirm.js'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { savePosttest } from '../lib/db.js'
 import { useConfirm } from '../context/ConfirmContext.jsx'
-import { POSTTEST_LEAVE_CONFIRM_MESSAGE } from '../lib/lessonNav.js'
+import {
+  POSTTEST_LEAVE_CONFIRM_MESSAGE,
+  POSTTEST_LEAVE_CONFIRM_TITLE,
+} from '../lib/lessonNav.js'
 import { calculateTestScore } from '../lib/testScore.js'
 
 export default function PostTest({ session }) {
@@ -20,13 +24,13 @@ export default function PostTest({ session }) {
   } = session
 
   useScreenTime(session, 'PostTest')
-  useBrowserBackConfirm(true, POSTTEST_LEAVE_CONFIRM_MESSAGE)
+  useBrowserBackConfirm(true, POSTTEST_LEAVE_CONFIRM_MESSAGE, POSTTEST_LEAVE_CONFIRM_TITLE)
 
   const handleComplete = useCallback(
-    (lastAnswer) => {
+    async (lastAnswer) => {
       const answers = { ...posttestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
-      savePosttest(sessionId, answers, score)
+      await savePosttest(sessionId, answers, score)
       navigate('/calculating')
     },
     [posttestAnswers, selectedQuestions, sessionId, navigate],
@@ -34,15 +38,22 @@ export default function PostTest({ session }) {
 
   if (!selectedQuestions || selectedQuestions.length === 0) {
     return (
-      <div className="pretest">
+      <PageLayout title="Post-Test · Learn to Play MTG" className="pretest">
         <div className="pretest__frame">
+          <h1 className="pretest__empty">Post-Test unavailable</h1>
           <p className="pretest__empty">No questions loaded. Return to the start and try again.</p>
           <div className="pretest__actions">
             <button
               type="button"
               className="pretest__button"
               onClick={async () => {
-                if (!(await confirm(POSTTEST_LEAVE_CONFIRM_MESSAGE))) return
+                if (
+                  !(await confirm(POSTTEST_LEAVE_CONFIRM_MESSAGE, {
+                    title: POSTTEST_LEAVE_CONFIRM_TITLE,
+                  }))
+                ) {
+                  return
+                }
                 navigate('/welcome')
               }}
             >
@@ -50,21 +61,24 @@ export default function PostTest({ session }) {
             </button>
           </div>
         </div>
-      </div>
+      </PageLayout>
     )
   }
 
   return (
-    <TestQuestionFlow
-      testLabel="Post-Test"
-      progressIndex={PROGRESS.POSTTEST}
-      selectedQuestions={selectedQuestions}
-      setAnswer={setPosttestAnswer}
-      onComplete={handleComplete}
-      firstQuestionBackPath="/lesson/complete"
-      leaveConfirmMessage={POSTTEST_LEAVE_CONFIRM_MESSAGE}
-      lastButtonLabel="Submit"
-      introNote="These are the same questions as the pre-test. Answer from what you learned in the lessons."
-    />
+    <PageLayout title="Post-Test · Learn to Play MTG" className="pretest">
+      <TestQuestionFlow
+        testLabel="Post-Test"
+        progressIndex={PROGRESS.POSTTEST}
+        selectedQuestions={selectedQuestions}
+        setAnswer={setPosttestAnswer}
+        onComplete={handleComplete}
+        firstQuestionBackPath="/lesson/complete"
+        leaveConfirmMessage={POSTTEST_LEAVE_CONFIRM_MESSAGE}
+        leaveConfirmTitle={POSTTEST_LEAVE_CONFIRM_TITLE}
+        lastButtonLabel="Submit"
+        introNote="These are the same questions as the pre-test. Answer from what you learned in the lessons."
+      />
+    </PageLayout>
   )
 }

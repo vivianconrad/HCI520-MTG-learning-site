@@ -1,14 +1,19 @@
 import { useEffect, useRef } from 'react'
+import { useFocusTrap } from '../hooks/useFocusTrap.js'
 import './ConfirmDialog.css'
 
 export default function ConfirmDialog({
+  title = 'Leave this step?',
   message,
   confirmLabel = 'Leave',
   cancelLabel = 'Stay',
   onConfirm,
   onCancel,
 }) {
+  const panelRef = useRef(null)
   const cancelRef = useRef(null)
+
+  useFocusTrap(panelRef, true)
 
   useEffect(() => {
     cancelRef.current?.focus()
@@ -28,6 +33,7 @@ export default function ConfirmDialog({
         onClick={onCancel}
       />
       <div
+        ref={panelRef}
         className="confirm-dialog__panel"
         role="alertdialog"
         aria-modal="true"
@@ -35,7 +41,7 @@ export default function ConfirmDialog({
         aria-describedby="confirm-dialog-message"
       >
         <h2 id="confirm-dialog-title" className="confirm-dialog__title">
-          Leave this step?
+          {title}
         </h2>
         <p id="confirm-dialog-message" className="confirm-dialog__message">
           {message}

@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
+import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import { createParticipantRow } from '../lib/db.js'
 import './Intro.css'
@@ -9,18 +10,33 @@ export default function Intro({ session }) {
   const navigate = useNavigate()
   const { sessionId, selectedQuestions, participantId, setParticipantId } = session
   const creatingRef = useRef(false)
+  const [rowError, setRowError] = useState(null)
+  const rowReady = Boolean(participantId)
 
   useEffect(() => {
     if (participantId || !selectedQuestions?.length || creatingRef.current) return
 
+    let cancelled = false
     creatingRef.current = true
+    setRowError(null)
+
     createParticipantRow(sessionId, selectedQuestions).then((id) => {
-      if (id) setParticipantId(id)
+      creatingRef.current = false
+      if (cancelled) return
+      if (id) {
+        setParticipantId(id)
+      } else {
+        setRowError('Could not save your session. Refresh the page and try again.')
+      }
     })
+
+    return () => {
+      cancelled = true
+    }
   }, [participantId, selectedQuestions, sessionId, setParticipantId])
 
   return (
-    <div className="intro">
+    <PageLayout title="Study Overview · Learn to Play MTG" className="intro">
       <div className="intro__frame">
         <p className="intro__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="intro__heading">Before We Begin</h1>
@@ -40,6 +56,16 @@ export default function Intro({ session }) {
           </p>
         </div>
         <CopySessionId sessionId={sessionId} className="intro__session" />
+        {rowError ? (
+          <p className="intro__error" role="alert">
+            {rowError}
+          </p>
+        ) : null}
+        {!rowReady && !rowError ? (
+          <p className="intro__status" aria-live="polite">
+            Preparing your session…
+          </p>
+        ) : null}
         <div className="intro__actions intro__actions--split">
           <button
             type="button"
@@ -48,12 +74,17 @@ export default function Intro({ session }) {
           >
             Back
           </button>
-          <button type="button" className="intro__button" onClick={() => navigate('/pretest')}>
+          <button
+            type="button"
+            className="intro__button"
+            disabled={!rowReady}
+            onClick={() => navigate('/pretest')}
+          >
             I&apos;m Ready
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.INTRO} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

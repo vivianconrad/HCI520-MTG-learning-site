@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import PageLayout from '../components/PageLayout.jsx'
 import { useNavigate } from 'react-router-dom'
 import LessonActions from '../components/LessonActions.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
@@ -58,7 +59,7 @@ export default function TurnStructure({ session }) {
   const panelId = `turn-phase-panel-${selectedId}`
   const allPhasesExplored = visitedIds.size === PHASES.length
 
-  function selectPhase(id) {
+  const selectPhase = useCallback((id) => {
     setSelectedId(id)
     setVisitedIds((prev) => {
       if (prev.has(id)) return prev
@@ -66,10 +67,32 @@ export default function TurnStructure({ session }) {
       next.add(id)
       return next
     })
+    window.setTimeout(() => {
+      document.getElementById(`turn-tab-${id}`)?.focus()
+    }, 0)
+  }, [])
+
+  function handleTabListKeyDown(event) {
+    const currentIndex = PHASES.findIndex((phase) => phase.id === selectedId)
+    if (currentIndex < 0) return
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      event.preventDefault()
+      selectPhase(PHASES[(currentIndex + 1) % PHASES.length].id)
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      event.preventDefault()
+      selectPhase(PHASES[(currentIndex - 1 + PHASES.length) % PHASES.length].id)
+    } else if (event.key === 'Home') {
+      event.preventDefault()
+      selectPhase(PHASES[0].id)
+    } else if (event.key === 'End') {
+      event.preventDefault()
+      selectPhase(PHASES[PHASES.length - 1].id)
+    }
   }
 
   return (
-    <div className="turn-structure">
+    <PageLayout title="Lesson 3 · Turn Structure" className="turn-structure">
       <div className="turn-structure__frame">
         <p className="turn-structure__breadcrumb">Lesson 03 · Turn Structure</p>
         <h1 className="turn-structure__heading">How a Turn Works</h1>
@@ -80,7 +103,12 @@ export default function TurnStructure({ session }) {
           always know what you can do and when.
         </p>
 
-        <div className="turn-structure__timeline" role="tablist" aria-label="Turn phases">
+        <div
+          className="turn-structure__timeline"
+          role="tablist"
+          aria-label="Turn phases"
+          onKeyDown={handleTabListKeyDown}
+        >
           {PHASES.map((phase, index) => (
             <span key={phase.id} style={{ display: 'contents' }}>
               {index > 0 && <span className="turn-structure__connector" aria-hidden="true" />}
@@ -145,6 +173,6 @@ export default function TurnStructure({ session }) {
         />
         <ProgressDots activeIndex={PROGRESS.LESSON_3} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

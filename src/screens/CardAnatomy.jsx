@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import LessonActions from '../components/LessonActions.jsx'
+import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import './CardAnatomy.css'
@@ -137,7 +138,7 @@ export default function CardAnatomy({ session }) {
   }
 
   return (
-    <div className="card-anatomy">
+    <PageLayout title="Lesson 1 · Card Anatomy" className="card-anatomy">
       <div className="card-anatomy__frame">
         <p className="card-anatomy__breadcrumb">Lesson 01 · Card Anatomy</p>
         <h1 className="card-anatomy__heading">How to Read a Card</h1>
@@ -209,6 +210,6 @@ export default function CardAnatomy({ session }) {
 
         <ProgressDots activeIndex={PROGRESS.LESSON_1} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

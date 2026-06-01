@@ -12,6 +12,7 @@ export function ConfirmProvider({ children }) {
       resolveRef.current = resolve
       setDialog({
         message,
+        title: options.title ?? 'Leave this step?',
         confirmLabel: options.confirmLabel ?? 'Leave',
         cancelLabel: options.cancelLabel ?? 'Stay',
       })
@@ -26,9 +27,10 @@ export function ConfirmProvider({ children }) {
 
   return (
     <ConfirmContext.Provider value={confirm}>
-      {children}
+      <div inert={dialog ? true : undefined}>{children}</div>
       {dialog && (
         <ConfirmDialog
+          title={dialog.title}
           message={dialog.message}
           confirmLabel={dialog.confirmLabel}
           cancelLabel={dialog.cancelLabel}

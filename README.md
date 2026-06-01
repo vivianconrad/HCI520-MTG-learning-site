@@ -97,9 +97,10 @@ Research data is saved incrementally to the `participants` table:
 
 **Setup**
 
-1. Run `supabase/participants.sql` in the [Supabase SQL editor](https://supabase.com/dashboard).
-2. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-3. Rebuild (`npm run build`) before deploying so env vars are embedded for GitHub Pages.
+1. Run `supabase/participants.sql` in the [Supabase SQL editor](https://supabase.com/dashboard). If rows insert but later columns stay null, also run `supabase/fix-participants-rls.sql` (anon `UPDATE` was blocked).
+2. Verify with `node scripts/verify-participants-db.mjs` — it should print `OK: anon INSERT + UPDATE works`.
+3. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+4. Rebuild (`npm run build`) before deploying so env vars are embedded for GitHub Pages.
 
 **Instructor analysis**
 

@@ -5,7 +5,8 @@ import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import { saveLessonProgress, saveScreenTime } from '../lib/db.js'
 import { PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import { useConfirm } from '../context/ConfirmContext.jsx'
-import { LESSON_BACK_CONFIRM_MESSAGE } from '../lib/lessonNav.js'
+import PageLayout from '../components/PageLayout.jsx'
+import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import './LessonComplete.css'
 
 const RECAP = [
@@ -24,11 +25,14 @@ export default function LessonComplete({ session }) {
   useEffect(() => {
     setLessonsCompleted(true)
     saveLessonProgress(sessionId, true, scenariosAttempted)
+  }, [sessionId, scenariosAttempted, setLessonsCompleted])
+
+  useEffect(() => {
     saveScreenTime(sessionId, screenTimes)
-  }, [sessionId, scenariosAttempted, screenTimes, setLessonsCompleted])
+  }, [sessionId, screenTimes])
 
   return (
-    <div className="lesson-complete">
+    <PageLayout title="Lessons Complete · Learn to Play MTG" className="lesson-complete">
       <div className="lesson-complete__frame">
         <p className="lesson-complete__breadcrumb">
           Magic: The Gathering · Beginner&apos;s Guide
@@ -60,7 +64,13 @@ export default function LessonComplete({ session }) {
             type="button"
             className="lesson-complete__button lesson-complete__button--back"
             onClick={async () => {
-              if (!(await confirm(LESSON_BACK_CONFIRM_MESSAGE))) return
+              if (
+                !(await confirm(LESSON_BACK_CONFIRM_MESSAGE, {
+                  title: LESSON_BACK_CONFIRM_TITLE,
+                }))
+              ) {
+                return
+              }
               navigate('/lesson/4')
             }}
           >
@@ -76,6 +86,6 @@ export default function LessonComplete({ session }) {
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_COMPLETE} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

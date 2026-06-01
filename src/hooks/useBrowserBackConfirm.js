@@ -5,7 +5,7 @@ import { useConfirm } from '../context/ConfirmContext.jsx'
  * Confirms before the user leaves via the browser Back button (popstate).
  * Pushes a history entry so the first Back triggers a confirm instead of leaving immediately.
  */
-export function useBrowserBackConfirm(enabled, message) {
+export function useBrowserBackConfirm(enabled, message, title) {
   const confirm = useConfirm()
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function useBrowserBackConfirm(enabled, message) {
 
     function onPopState() {
       void (async () => {
-        if (await confirm(message)) {
+        if (await confirm(message, { title })) {
           window.removeEventListener('popstate', onPopState)
           window.history.back()
           return
@@ -39,5 +39,5 @@ export function useBrowserBackConfirm(enabled, message) {
 
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
-  }, [enabled, message, confirm])
+  }, [enabled, message, title, confirm])
 }

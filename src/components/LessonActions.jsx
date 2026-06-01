@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useConfirm } from '../context/ConfirmContext.jsx'
-import { LESSON_BACK_CONFIRM_MESSAGE } from '../lib/lessonNav.js'
+import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import './LessonActions.css'
 
 export default function LessonActions({
@@ -23,7 +23,12 @@ export default function LessonActions({
   }, [canProceed])
 
   async function handleBack() {
-    if (backConfirm && !(await confirm(LESSON_BACK_CONFIRM_MESSAGE))) return
+    if (
+      backConfirm &&
+      !(await confirm(LESSON_BACK_CONFIRM_MESSAGE, { title: LESSON_BACK_CONFIRM_TITLE }))
+    ) {
+      return
+    }
     onBack()
   }
 

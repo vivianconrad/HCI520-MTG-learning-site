@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { useConfirm } from '../context/ConfirmContext.jsx'
-import { LESSON_BACK_CONFIRM_MESSAGE } from '../lib/lessonNav.js'
+import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
+import PageLayout from '../components/PageLayout.jsx'
 import shockImg from '../assets/instant-shock.jpg'
 import giantGrowthImg from '../assets/instant-giant-growth.jpg'
 import llanowarElvesImg from '../assets/creature-llanowar-elves.jpg'
@@ -185,7 +186,7 @@ export default function PuttingItTogether({ session }) {
   }
 
   return (
-    <div className="putting-together">
+    <PageLayout title="Lesson 4 · Putting It Together" className="putting-together">
       <div className="putting-together__frame">
         <p className="putting-together__breadcrumb">Lesson 04 · Putting It Together</p>
         <h1 className="putting-together__heading">Let&apos;s Put It Together</h1>
@@ -236,6 +237,8 @@ export default function PuttingItTogether({ session }) {
         {phase === 'feedback' && (
           <div
             className={`putting-together__feedback${isCorrect ? ' putting-together__feedback--correct' : ' putting-together__feedback--incorrect'}`}
+            role="status"
+            aria-live="polite"
           >
             <p className="putting-together__feedback-verdict">
               <span className="putting-together__feedback-icon" aria-hidden="true">
@@ -288,7 +291,13 @@ export default function PuttingItTogether({ session }) {
             type="button"
             className="putting-together__button putting-together__button--back putting-together__button--stacked"
             onClick={async () => {
-              if (!(await confirm(LESSON_BACK_CONFIRM_MESSAGE))) return
+              if (
+                !(await confirm(LESSON_BACK_CONFIRM_MESSAGE, {
+                  title: LESSON_BACK_CONFIRM_TITLE,
+                }))
+              ) {
+                return
+              }
               navigate('/lesson/3')
             }}
           >
@@ -308,6 +317,6 @@ export default function PuttingItTogether({ session }) {
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_4} />
       </div>
-    </div>
+    </PageLayout>
   )
 }

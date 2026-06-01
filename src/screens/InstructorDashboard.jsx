@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useId, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import PageLayout from '../components/PageLayout.jsx'
 import {
   TOPIC_LABELS,
   TOPIC_ORDER,
@@ -20,6 +21,7 @@ function formatMean(value, digits = 1) {
 }
 
 export default function InstructorDashboard() {
+  const passwordErrorId = useId()
   const [password, setPassword] = useState('')
   const [unlocked, setUnlocked] = useState(false)
   const [sessions, setSessions] = useState([])
@@ -80,7 +82,7 @@ export default function InstructorDashboard() {
 
   if (!isSupabaseConfigured()) {
     return (
-      <div className="instructor">
+      <PageLayout title="Instructor Dashboard · Learn to Play MTG" className="instructor">
         <div className="instructor__frame">
           <h1 className="instructor__heading">Instructor dashboard</h1>
           <p className="instructor__error">
@@ -91,13 +93,15 @@ export default function InstructorDashboard() {
             ← Back to lesson
           </Link>
         </div>
-      </div>
+      </PageLayout>
     )
   }
 
   if (!unlocked) {
+    const passwordInvalid = error === 'Incorrect instructor password.'
+
     return (
-      <div className="instructor">
+      <PageLayout title="Instructor Dashboard · Learn to Play MTG" className="instructor">
         <div className="instructor__frame">
           <h1 className="instructor__heading">Instructor dashboard</h1>
           <p className="instructor__intro">
@@ -116,8 +120,14 @@ export default function InstructorDashboard() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="current-password"
+              aria-invalid={passwordInvalid || undefined}
+              aria-describedby={error ? passwordErrorId : undefined}
             />
-            {error && <p className="instructor__error">{error}</p>}
+            {error && (
+              <p id={passwordErrorId} className="instructor__error" role="alert">
+                {error}
+              </p>
+            )}
             <button type="submit" className="instructor__button">
               Unlock
             </button>
@@ -126,12 +136,12 @@ export default function InstructorDashboard() {
             ← Back to lesson
           </Link>
         </div>
-      </div>
+      </PageLayout>
     )
   }
 
   return (
-    <div className="instructor">
+    <PageLayout title="Instructor Dashboard · Learn to Play MTG" className="instructor">
       <div className="instructor__frame">
         <div className="instructor__toolbar">
           <h1 className="instructor__heading">Instructor dashboard</h1>
@@ -155,7 +165,11 @@ export default function InstructorDashboard() {
           </div>
         </div>
 
-        {error && <p className="instructor__error">{error}</p>}
+        {error && (
+          <p className="instructor__error" role="alert">
+            {error}
+          </p>
+        )}
 
         <section className="instructor__summary" aria-label="Cohort summary">
           <p className="instructor__stat">
@@ -253,6 +267,6 @@ export default function InstructorDashboard() {
           ← Back to lesson
         </Link>
       </div>
-    </div>
+    </PageLayout>
   )
 }
