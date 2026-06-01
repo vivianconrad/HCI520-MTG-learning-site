@@ -100,7 +100,8 @@
 
 .lesson-intro__actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 32px;
 }
 
@@ -109,16 +110,28 @@
   font-size: 1rem;
   color: var(--color-text-dark);
   background: transparent;
-  border: 1.5px solid var(--color-gold);
   border-radius: 0;
   padding: 10px 24px;
   cursor: pointer;
   transition:
     background var(--transition-fast),
-    color var(--transition-fast);
+    color var(--transition-fast),
+    border-color var(--transition-fast);
 }
 
-.lesson-intro__button:hover {
+.lesson-intro__button--back {
+  border: 1.5px solid var(--color-gold-muted);
+}
+
+.lesson-intro__button--back:hover {
+  border-color: var(--color-gold);
+}
+
+.lesson-intro__button--next {
+  border: 1.5px solid var(--color-gold);
+}
+
+.lesson-intro__button--next:hover {
   background: var(--color-gold);
   color: var(--color-navy);
 }

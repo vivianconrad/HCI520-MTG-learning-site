@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './Calculating.css'
 
 export default function Calculating({ session: _session }) {
@@ -26,6 +27,7 @@ export default function Calculating({ session: _session }) {
           <span className="calculating__dot calculating__dot--3" />
         </div>
         <p className="calculating__subtext">You will be redirected automatically.</p>
+        <ProgressDots activeIndex={PROGRESS.CALCULATING} />
       </div>
     </div>
   )
