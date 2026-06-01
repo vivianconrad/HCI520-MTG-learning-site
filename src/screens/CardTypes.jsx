@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './CardTypes.css'
 
 const CARD_TYPES = [
@@ -187,6 +188,7 @@ export default function CardTypes({ session }) {
   const [overlayId, setOverlayId] = useState(null)
   const [isClosing, setIsClosing] = useState(false)
   const [seenIds, setSeenIds] = useState(() => new Set())
+  const [activeExampleIndex, setActiveExampleIndex] = useState(0)
 
   const activeType = CARD_TYPES.find((t) => t.id === overlayId)
   const allViewed = seenIds.size === CARD_TYPES.length
@@ -219,17 +221,34 @@ export default function CardTypes({ session }) {
   }, [isClosing])
 
   useEffect(() => {
+    setActiveExampleIndex(0)
+  }, [overlayId])
+
+  useEffect(() => {
     if (!overlayId) return undefined
 
     function handleKeyDown(event) {
       if (event.key === 'Escape') {
         closeOverlay()
+        return
+      }
+
+      if (!activeType || activeType.examples.length <= 1) return
+
+      if (event.key === 'ArrowRight') {
+        setActiveExampleIndex((prev) => (prev + 1) % activeType.examples.length)
+      }
+
+      if (event.key === 'ArrowLeft') {
+        setActiveExampleIndex(
+          (prev) => (prev - 1 + activeType.examples.length) % activeType.examples.length,
+        )
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [overlayId, closeOverlay])
+  }, [overlayId, closeOverlay, activeType])
 
   return (
     <div className="card-types">
@@ -283,6 +302,7 @@ export default function CardTypes({ session }) {
             Next
           </button>
         </div>
+        <ProgressDots activeIndex={PROGRESS.LESSON_2} />
       </div>
 
       {activeType && (
@@ -300,6 +320,18 @@ export default function CardTypes({ session }) {
               activeType.examples.length === 1 ? ' card-types__overlay-card--single' : ''
             }`}
           >
+            {(() => {
+              const activeExample = activeType.examples[activeExampleIndex] ?? activeType.examples[0]
+              const canCycle = activeType.examples.length > 1
+              const goToNext = () =>
+                setActiveExampleIndex((prev) => (prev + 1) % activeType.examples.length)
+              const goToPrevious = () =>
+                setActiveExampleIndex(
+                  (prev) => (prev - 1 + activeType.examples.length) % activeType.examples.length,
+                )
+
+              return (
+                <>
             <button
               type="button"
               className="card-types__overlay-close"
@@ -309,22 +341,46 @@ export default function CardTypes({ session }) {
               ×
             </button>
             <div className="card-types__overlay-gallery">
-              {activeType.examples.map((example) => (
-                <figure key={example.label} className="card-types__overlay-figure">
-                  <div className="card-types__overlay-image">
-                    <CardThumbnail
-                      src={example.src}
-                      alt={`${example.label}, ${activeType.name} card`}
-                      className="card-types__thumbnail-image"
-                    />
-                  </div>
-                  <figcaption className="card-types__overlay-caption">{example.label}</figcaption>
-                </figure>
-              ))}
+              <figure key={activeExample.label} className="card-types__overlay-figure">
+                <div className="card-types__overlay-image">
+                  <CardThumbnail
+                    src={activeExample.src}
+                    alt={`${activeExample.label}, ${activeType.name} card`}
+                    className="card-types__thumbnail-image"
+                  />
+                </div>
+                <figcaption className="card-types__overlay-caption">{activeExample.label}</figcaption>
+              </figure>
             </div>
+            {canCycle && (
+              <div className="card-types__overlay-controls">
+                <button
+                  type="button"
+                  className="card-types__overlay-nav"
+                  onClick={goToPrevious}
+                  aria-label={`Previous ${activeType.name} example`}
+                >
+                  ◂ Prev
+                </button>
+                <span className="card-types__overlay-count" aria-live="polite">
+                  {activeExampleIndex + 1} / {activeType.examples.length}
+                </span>
+                <button
+                  type="button"
+                  className="card-types__overlay-nav"
+                  onClick={goToNext}
+                  aria-label={`Next ${activeType.name} example`}
+                >
+                  Next ▸
+                </button>
+              </div>
+            )}
             <h3 className="card-types__overlay-name">{activeType.name}</h3>
             <p className="card-types__overlay-description">{activeType.description}</p>
             <span className="card-types__tag">{activeType.tag}</span>
+                </>
+              )
+            })()}
           </div>
         </div>
       )}
