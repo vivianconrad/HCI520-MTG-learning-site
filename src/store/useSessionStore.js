@@ -35,6 +35,9 @@ export default function useSessionStore() {
 
   const [sessionId] = useState(() => saved?.sessionId ?? generateSessionId())
   const [participantId, setParticipantIdState] = useState(() => saved?.participantId ?? null)
+  const [participantRowReady, setParticipantRowReady] = useState(
+    () => saved?.participantRowReady ?? Boolean(saved?.participantId),
+  )
   const [selectedQuestions, setSelectedQuestions] = useState(
     () => saved?.selectedQuestions ?? null,
   )
@@ -59,6 +62,7 @@ export default function useSessionStore() {
     persistSession({
       sessionId,
       participantId,
+      participantRowReady,
       selectedQuestions,
       pretestAnswers,
       posttestAnswers,
@@ -70,6 +74,7 @@ export default function useSessionStore() {
   }, [
     sessionId,
     participantId,
+    participantRowReady,
     selectedQuestions,
     pretestAnswers,
     posttestAnswers,
@@ -95,6 +100,10 @@ export default function useSessionStore() {
 
   const setParticipantId = useCallback((id) => {
     setParticipantIdState(id)
+  }, [])
+
+  const markParticipantRowReady = useCallback(() => {
+    setParticipantRowReady(true)
   }, [])
 
   const recordScreenEnter = useCallback((screenName) => {
@@ -130,21 +139,17 @@ export default function useSessionStore() {
   }, [])
 
   const resetSession = useCallback(() => {
+    // Clear storage and reload immediately. Do not call setState here — the persist
+    // effect would write the old sessionId back into sessionStorage before navigation.
     clearPersistedSession()
-    setParticipantIdState(null)
-    setSelectedQuestions(null)
-    setPretestAnswers({})
-    setPosttestAnswers({})
-    setScreenStartTimes({})
-    setScreenTimes({})
-    setScenariosAttempted(0)
-    setLessonsCompleted(false)
-    window.location.href = `${import.meta.env.BASE_URL}`
+    window.location.replace(`${import.meta.env.BASE_URL}`)
   }, [])
 
   return {
     sessionId,
     participantId,
+    participantRowReady,
+    markParticipantRowReady,
     selectedQuestions,
     selectQuestions,
     pretestAnswers,
