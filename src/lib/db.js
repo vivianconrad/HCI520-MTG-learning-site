@@ -82,17 +82,20 @@ export async function createParticipantRow(sessionId, selectedQuestions) {
   }
 
   const participantId = nanoid(10)
-  const { data, error, status } = await supabase.from('participants').insert({
-    participant_id: participantId,
-    session_id: sessionId,
-    selected_questions: selectedQuestions,
-    created_at: new Date().toISOString(),
-  })
+  const { data, error, status } = await supabase.from('participants').upsert(
+    {
+      participant_id: participantId,
+      session_id: sessionId,
+      selected_questions: selectedQuestions,
+      created_at: new Date().toISOString(),
+    },
+    { onConflict: 'session_id', ignoreDuplicates: true },
+  )
 
   console.log('[db] createParticipantRow: response', { status, error, data })
 
   if (error) {
-    console.error('[db] createParticipantRow: insert failed', error)
+    console.error('[db] createParticipantRow: upsert failed', error)
     return null
   }
 

@@ -1,4 +1,10 @@
 .copy-session-id {
+  --copy-label-color: var(--color-text-dark);
+  --copy-code-bg: var(--color-parchment-dark);
+  --copy-code-color: var(--color-gold-on-parchment);
+  --copy-btn-color: var(--color-text-dark);
+  --copy-btn-border: var(--color-gold-muted);
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -9,14 +15,14 @@
 .copy-session-id__label {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-text-dark);
+  color: var(--copy-label-color);
 }
 
 .copy-session-id__value {
   font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
   font-size: 13px;
-  color: var(--color-gold-muted);
-  background: var(--color-parchment-dark);
+  color: var(--copy-code-color);
+  background: var(--copy-code-bg);
   padding: 4px 8px;
   border-radius: 3px;
 }
@@ -24,9 +30,9 @@
 .copy-session-id__button {
   font-family: var(--font-display);
   font-size: 13px;
-  color: var(--color-text-dark);
+  color: var(--copy-btn-color);
   background: transparent;
-  border: 1px solid var(--color-gold-muted);
+  border: 1px solid var(--copy-btn-border);
   border-radius: 0;
   padding: 4px 12px;
   cursor: pointer;

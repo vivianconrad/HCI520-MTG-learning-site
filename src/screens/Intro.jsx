@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import PageLayout from '../components/PageLayout.jsx'
@@ -8,23 +8,28 @@ import './Intro.css'
 
 export default function Intro({ session }) {
   const navigate = useNavigate()
-  const { sessionId, selectedQuestions, participantId, setParticipantId } = session
-  const creatingRef = useRef(false)
+  const {
+    sessionId,
+    selectedQuestions,
+    participantId,
+    participantRowReady,
+    setParticipantId,
+    markParticipantRowReady,
+  } = session
   const [rowError, setRowError] = useState(null)
-  const rowReady = Boolean(participantId)
+  const rowReady = participantRowReady || Boolean(participantId)
 
   useEffect(() => {
-    if (participantId || !selectedQuestions?.length || creatingRef.current) return
+    if (participantRowReady || participantId || !selectedQuestions?.length) return
 
     let cancelled = false
-    creatingRef.current = true
     setRowError(null)
 
     createParticipantRow(sessionId, selectedQuestions).then((id) => {
-      creatingRef.current = false
       if (cancelled) return
       if (id) {
         setParticipantId(id)
+        markParticipantRowReady()
       } else {
         setRowError('Could not save your session. Refresh the page and try again.')
       }
@@ -33,7 +38,14 @@ export default function Intro({ session }) {
     return () => {
       cancelled = true
     }
-  }, [participantId, selectedQuestions, sessionId, setParticipantId])
+  }, [
+    participantRowReady,
+    participantId,
+    selectedQuestions,
+    sessionId,
+    setParticipantId,
+    markParticipantRowReady,
+  ])
 
   return (
     <PageLayout title="Study Overview · Learn to Play MTG" className="intro">
