@@ -70,6 +70,21 @@
   text-align: left;
 }
 
+.welcome__hero-cards {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 12px 0 8px;
+}
+
+.welcome__hero-card {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--color-gold-muted);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+}
+
 .welcome__session {
   font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
   font-size: 12px;

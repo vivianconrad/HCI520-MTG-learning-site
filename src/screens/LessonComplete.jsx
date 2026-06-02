@@ -9,6 +9,14 @@ import PageLayout from '../components/PageLayout.jsx'
 import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import './LessonComplete.css'
 
+const REVIEW_CARDS = [
+  new URL('../assets/creature-shadowmage-infiltrator.webp', import.meta.url).href,
+  new URL('../assets/instant-counterspell.webp', import.meta.url).href,
+  new URL('../assets/sorcery-cultivate.jpg', import.meta.url).href,
+  new URL('../assets/artifact-sol-ring.jpg', import.meta.url).href,
+  new URL('../assets/land-woodland-cemetery.jpg', import.meta.url).href,
+]
+
 const RECAP = [
   'How to read a card and what each part means',
   'The seven card types and when you can cast them',
@@ -55,6 +63,11 @@ export default function LessonComplete({ session }) {
             Now it&apos;s time to answer the same questions you saw at the start. Don&apos;t
             overthink it. Just go with what you know.
           </p>
+        </div>
+        <div className="lesson-complete__review-strip" aria-label="Cards covered in lessons">
+          {REVIEW_CARDS.map((src, index) => (
+            <img key={src} className="lesson-complete__review-card" src={src} alt={`Lesson review card ${index + 1}`} />
+          ))}
         </div>
 
         <CopySessionId sessionId={session.sessionId} className="lesson-complete__session" />
