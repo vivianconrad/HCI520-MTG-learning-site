@@ -3,6 +3,8 @@ import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './Consent.css'
 
+const consentCardArt = new URL('../assets/hero.png', import.meta.url).href
+
 export default function Consent() {
   const navigate = useNavigate()
 
@@ -12,6 +14,7 @@ export default function Consent() {
         <p className="consent__breadcrumb">Magic: The Gathering · HCI 520 Research Study</p>
         <h1 className="consent__heading">Before You Begin</h1>
         <hr className="consent__rule" aria-hidden="true" />
+        <img className="consent__hero-art" src={consentCardArt} alt="Magic card inspired artwork" />
 
         <div className="consent__body">
           <p className="consent__paragraph consent__paragraph--lead">

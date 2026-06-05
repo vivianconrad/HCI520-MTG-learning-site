@@ -69,12 +69,20 @@
 }
 
 .lesson-intro__list li {
-  position: relative;
-  padding-left: 1.25em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-body);
   font-size: 14px;
   color: var(--color-text-dark);
   line-height: 1.4;
+}
+
+.lesson-intro__lesson-image {
+  width: 38px;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--color-gold-muted);
 }
 
 .lesson-intro__lesson-num {

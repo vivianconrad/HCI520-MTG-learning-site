@@ -14,7 +14,7 @@ const CALLOUTS = [
     label: 'Name',
     number: 1,
     text: "The card's name is how you identify it in the game. In most formats, you can only have four copies of any card with the same name in your deck. Basic lands are the exception. You can have as many as you want.",
-    position: { top: '5%', left: '30%' },
+    position: { top: '7%', left: '-0.5%' },
     tipDir: 'below',
   },
   {
@@ -22,7 +22,7 @@ const CALLOUTS = [
     label: 'Mana Cost',
     number: 2,
     text: 'The symbols in the top right corner tell you what mana you need to cast this card. Coloured symbols like the blue and black ones here mean you need that specific colour of mana. Numbers in a grey circle mean you can use any colour of mana to pay for them. This card costs one of any colour plus one blue and one black, so three mana total.',
-    position: { top: '5%', right: '5%' },
+    position: { top: '7%', right: '-1%' },
     tipDir: 'below',
   },
   {
@@ -30,7 +30,7 @@ const CALLOUTS = [
     label: 'Type Line',
     number: 3,
     text: "The type line tells you what kind of card this is. This card is a Creature, which means it stays on the battlefield and can attack and block. After the dash you'll see the subtype, in this case Human Wizard. Subtypes don't change the rules but some cards care about them specifically. For example, a card might say 'whenever a Wizard enters the battlefield.'",
-    position: { top: '58%', left: '5%' },
+    position: { top: '58%', left: '-0.5%' },
     tipDir: 'right',
   },
   {
@@ -46,7 +46,7 @@ const CALLOUTS = [
     label: 'Power',
     number: 5,
     text: "The first number in the bottom right corner is the creature's power. Power is how much damage this creature deals when it attacks or blocks in combat. Shadowmage Infiltrator has a power of 1, so it deals 1 damage in combat.",
-    position: { bottom: '3%', left: '30%' },
+    position: { bottom: '8.5%', left: '74%' },
     tipDir: 'above',
   },
   {
@@ -54,7 +54,7 @@ const CALLOUTS = [
     label: 'Toughness',
     number: 6,
     text: "The second number in the bottom right corner is the creature's toughness. Toughness is how much damage a creature can take before it dies. Shadowmage Infiltrator has a toughness of 3, meaning it can survive up to 3 damage. At the end of each turn, damage on creatures is removed, so a creature that takes 2 damage out of 3 toughness survives the turn and heals back to full.",
-    position: { bottom: '3%', left: '55%' },
+    position: { bottom: '8.5%', left: '98%' },
     tipDir: 'above',
   },
 ]
@@ -91,7 +91,7 @@ function getMarkerModifier(position) {
   return 'card-anatomy__marker--anchor-tl'
 }
 
-function CardMarker({ callout, isActive, onToggle }) {
+function CardMarker({ callout, isActive, isSeen, onToggle }) {
   const { id, label, number, position, tipDir } = callout
 
   return (
@@ -100,6 +100,7 @@ function CardMarker({ callout, isActive, onToggle }) {
         'card-anatomy__marker',
         getMarkerModifier(position),
         tipDir ? `card-anatomy__marker--tip-${tipDir}` : '',
+        isSeen ? 'card-anatomy__marker--seen' : '',
         isActive ? 'card-anatomy__marker--active' : '',
       ].filter(Boolean).join(' ')}
       style={position}
@@ -156,6 +157,7 @@ export default function CardAnatomy({ session }) {
                 key={callout.id}
                 callout={callout}
                 isActive={activeCallout === callout.id}
+                isSeen={seenIds.has(callout.id)}
                 onToggle={toggleCallout}
               />
             ))}

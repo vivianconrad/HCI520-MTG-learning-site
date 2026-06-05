@@ -82,6 +82,10 @@
   z-index: 1;
 }
 
+.card-anatomy__marker--active {
+  z-index: 3;
+}
+
 .card-anatomy__marker--anchor-tl {
   transform: translate(-50%, -50%);
 }
@@ -102,38 +106,54 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   padding: 0;
-  border: 1.5px solid var(--color-gold);
+  border: 2.5px solid var(--color-gold);
   border-radius: 50%;
   background: var(--color-navy);
   color: var(--color-text-light);
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
+  box-shadow:
+    0 0 0 2px rgb(255 255 255 / 85%),
+    0 2px 8px rgb(0 0 0 / 45%);
   transition:
     background var(--transition-fast),
     color var(--transition-fast),
-    border-color var(--transition-fast);
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.card-anatomy__marker--seen .card-anatomy__callout-marker {
+  background: var(--color-parchment);
+  color: var(--color-navy);
+  border-color: var(--color-gold);
+  box-shadow:
+    0 0 0 2px rgb(255 255 255 / 70%),
+    0 2px 6px rgb(0 0 0 / 35%);
 }
 
 .card-anatomy__marker-tooltip {
   position: absolute;
-  padding: 3px 8px;
+  padding: 4px 10px;
   background: var(--color-navy);
-  border: 1px solid var(--color-gold);
-  border-radius: 3px;
+  border: 1.5px solid var(--color-gold);
+  border-radius: 4px;
   font-family: var(--font-display);
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--color-gold);
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--transition-fast);
   z-index: 10;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 35%);
   /* default: above */
   bottom: calc(100% + 6px);
   left: 50%;
@@ -173,15 +193,37 @@
   transform: translateY(-50%);
 }
 
-.card-anatomy__marker:hover .card-anatomy__callout-marker,
-.card-anatomy__marker--active .card-anatomy__callout-marker {
+.card-anatomy__marker:hover .card-anatomy__callout-marker {
+  transform: scale(1.08);
   background: var(--color-gold);
   color: var(--color-navy);
+  box-shadow:
+    0 0 0 3px rgb(255 255 255 / 90%),
+    0 0 0 5px rgb(201 162 39 / 55%),
+    0 3px 10px rgb(0 0 0 / 45%);
+}
+
+.card-anatomy__marker--active .card-anatomy__callout-marker {
+  transform: scale(1.12);
+  background: var(--color-gold);
+  color: var(--color-navy);
+  border-width: 3px;
+  box-shadow:
+    0 0 0 3px rgb(255 255 255 / 95%),
+    0 0 0 7px rgb(201 162 39 / 65%),
+    0 4px 12px rgb(0 0 0 / 45%);
 }
 
 .card-anatomy__marker:hover .card-anatomy__marker-tooltip,
 .card-anatomy__marker--active .card-anatomy__marker-tooltip {
   opacity: 1;
+}
+
+.card-anatomy__marker--active .card-anatomy__marker-tooltip {
+  background: var(--color-parchment);
+  color: var(--color-text-dark);
+  border-color: var(--color-gold);
+  font-size: 14px;
 }
 
 .card-anatomy__hint {

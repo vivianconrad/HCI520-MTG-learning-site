@@ -4,10 +4,30 @@ import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import './LessonIntro.css'
 
 const LESSONS = [
-  { num: '01', title: 'How to Read a Card', time: '~4 min' },
-  { num: '02', title: 'The Seven Card Types', time: '~4 min' },
-  { num: '03', title: 'How a Turn Works', time: '~4 min' },
-  { num: '04', title: 'Putting It Together', time: '~5 min' },
+  {
+    num: '01',
+    title: 'How to Read a Card',
+    time: '~4 min',
+    image: new URL('../assets/creature-shadowmage-infiltrator.webp', import.meta.url).href,
+  },
+  {
+    num: '02',
+    title: 'The Seven Card Types',
+    time: '~4 min',
+    image: new URL('../assets/artifact-sol-ring.jpg', import.meta.url).href,
+  },
+  {
+    num: '03',
+    title: 'How a Turn Works',
+    time: '~4 min',
+    image: new URL('../assets/land-forest.jpg', import.meta.url).href,
+  },
+  {
+    num: '04',
+    title: 'Putting It Together',
+    time: '~5 min',
+    image: new URL('../assets/instant-shock.jpg', import.meta.url).href,
+  },
 ]
 
 export default function LessonIntro({ session: _session }) {
@@ -32,6 +52,7 @@ export default function LessonIntro({ session: _session }) {
         <ul className="lesson-intro__list">
           {LESSONS.map((lesson) => (
             <li key={lesson.num}>
+              <img className="lesson-intro__lesson-image" src={lesson.image} alt={`Lesson ${lesson.num} card preview`} />
               <span className="lesson-intro__lesson-num">Lesson {lesson.num}</span>
               {': '}
               {lesson.title}

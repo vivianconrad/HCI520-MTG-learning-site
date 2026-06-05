@@ -16,12 +16,16 @@ const PHASES = [
       'Upkeep: Triggered abilities that say \'at the beginning of your upkeep\' happen here. Most turns nothing happens during upkeep.',
       'Draw: You draw one card from the top of your library. The first player to go skips this on their very first turn.',
     ],
+    image: new URL('../assets/land-island.png', import.meta.url).href,
+    imageAlt: 'Island land card',
   },
   {
     id: 'first-main',
     label: 'First Main Phase',
     title: 'First Main Phase',
     body: 'This is your first chance to play cards. You can play a land, cast creatures, sorceries, enchantments, artifacts, and planeswalkers. You can also cast instants here, though instants can be cast at any time.',
+    image: new URL('../assets/creature-llanowar-elves.jpg', import.meta.url).href,
+    imageAlt: 'Llanowar Elves creature card',
   },
   {
     id: 'combat',
@@ -34,18 +38,24 @@ const PHASES = [
       'Combat damage: Damage is dealt. Creatures with toughness greater than the damage they took survive.',
       'End of combat: Cleanup before the second main phase.',
     ],
+    image: new URL('../assets/creature-hellkite-tyrant.webp', import.meta.url).href,
+    imageAlt: 'Hellkite Tyrant creature card',
   },
   {
     id: 'second-main',
     label: 'Second Main Phase',
     title: 'Second Main Phase',
     body: 'A second chance to play lands and cast spells after combat. This is a good time for cards you were holding back, or to cast spells after seeing how combat went.',
+    image: new URL('../assets/artifact-sol-ring.jpg', import.meta.url).href,
+    imageAlt: 'Sol Ring artifact card',
   },
   {
     id: 'end',
     label: 'End Phase',
     title: 'End Phase',
     body: 'The turn wraps up here. If you have more than seven cards in hand you must discard down to seven. Damage on creatures is removed and \'until end of turn\' effects expire.',
+    image: new URL('../assets/enchantment-sylvan-library.webp', import.meta.url).href,
+    imageAlt: 'Sylvan Library enchantment card',
   },
 ]
 
@@ -139,6 +149,7 @@ export default function TurnStructure({ session }) {
           className="turn-structure__detail"
         >
           <h2 className="turn-structure__detail-title">{selected.title}</h2>
+          <img className="turn-structure__phase-image" src={selected.image} alt={selected.imageAlt} />
           {selected.substeps ? (
             <ul className="turn-structure__substeps">
               {selected.substeps.map((text) => (
