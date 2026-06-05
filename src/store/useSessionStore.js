@@ -30,6 +30,11 @@ function pickQuestions() {
   })
 }
 
+function isTestFullyAnswered(answers, questions) {
+  if (!questions?.length) return false
+  return questions.every((question) => answers[question.id] !== undefined)
+}
+
 export default function useSessionStore() {
   const savedRef = useRef(null)
   if (savedRef.current === null) {
@@ -61,6 +66,16 @@ export default function useSessionStore() {
   const [lessonsCompleted, setLessonsCompletedState] = useState(
     () => saved?.lessonsCompleted ?? false,
   )
+  const [pretestCompleted, setPretestCompletedState] = useState(
+    () =>
+      saved?.pretestCompleted ??
+      isTestFullyAnswered(saved?.pretestAnswers ?? {}, saved?.selectedQuestions),
+  )
+  const [posttestCompleted, setPosttestCompletedState] = useState(
+    () =>
+      saved?.posttestCompleted ??
+      isTestFullyAnswered(saved?.posttestAnswers ?? {}, saved?.selectedQuestions),
+  )
 
   useEffect(() => {
     persistSession({
@@ -74,6 +89,8 @@ export default function useSessionStore() {
       screenTimes,
       scenariosAttempted,
       lessonsCompleted,
+      pretestCompleted,
+      posttestCompleted,
     })
   }, [
     sessionId,
@@ -86,6 +103,8 @@ export default function useSessionStore() {
     screenTimes,
     scenariosAttempted,
     lessonsCompleted,
+    pretestCompleted,
+    posttestCompleted,
   ])
 
   const selectQuestions = useCallback(() => {
@@ -142,6 +161,14 @@ export default function useSessionStore() {
     setLessonsCompletedState(value)
   }, [])
 
+  const markPretestCompleted = useCallback(() => {
+    setPretestCompletedState(true)
+  }, [])
+
+  const markPosttestCompleted = useCallback(() => {
+    setPosttestCompletedState(true)
+  }, [])
+
   const resetSession = useCallback(() => {
     // Clear storage and reload immediately. Do not call setState here: the persist
     // effect would write the old sessionId back into sessionStorage before navigation.
@@ -165,10 +192,14 @@ export default function useSessionStore() {
     screenTimes,
     scenariosAttempted,
     lessonsCompleted,
+    pretestCompleted,
+    posttestCompleted,
     recordScreenEnter,
     recordScreenExit,
     incrementScenarios,
     setLessonsCompleted,
+    markPretestCompleted,
+    markPosttestCompleted,
     resetSession,
   }
 }

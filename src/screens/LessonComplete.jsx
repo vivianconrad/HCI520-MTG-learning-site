@@ -28,7 +28,13 @@ const RECAP = [
 export default function LessonComplete({ session }) {
   const navigate = useNavigate()
   const confirm = useConfirm()
-  const { sessionId, scenariosAttempted, screenTimes, setLessonsCompleted } = session
+  const {
+    sessionId,
+    scenariosAttempted,
+    screenTimes,
+    setLessonsCompleted,
+    posttestCompleted,
+  } = session
   const completedAllPractice = scenariosAttempted >= PRACTICE_SCENARIO_COUNT
 
   useEffect(() => {
@@ -93,9 +99,9 @@ export default function LessonComplete({ session }) {
           <button
             type="button"
             className="lesson-complete__button lesson-complete__button--next"
-            onClick={() => navigate('/posttest')}
+            onClick={() => navigate(posttestCompleted ? '/results' : '/posttest')}
           >
-            Start Post-Test
+            {posttestCompleted ? 'View results' : 'Start Post-Test'}
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_COMPLETE} />

@@ -7,7 +7,7 @@ import './Intro.css'
 
 export default function Intro({ session }) {
   const navigate = useNavigate()
-  const { sessionId } = session
+  const { sessionId, pretestCompleted } = session
   const { rowReady, rowError } = useParticipantBootstrap(session)
 
   return (
@@ -54,9 +54,9 @@ export default function Intro({ session }) {
             type="button"
             className="intro__button"
             disabled={!rowReady}
-            onClick={() => navigate('/pretest')}
+            onClick={() => navigate(pretestCompleted ? '/pretest-complete' : '/pretest')}
           >
-            I&apos;m Ready
+            {pretestCompleted ? 'Continue' : "I'm Ready"}
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.INTRO} />

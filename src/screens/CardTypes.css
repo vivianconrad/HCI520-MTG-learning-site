@@ -227,6 +227,15 @@
   text-align: left;
 }
 
+.card-types__timing-footnote {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text-dark);
+  margin: 12px 0 0;
+  line-height: 1.55;
+  text-align: left;
+}
+
 .card-types__note {
   font-family: var(--font-body);
   font-size: 15px;

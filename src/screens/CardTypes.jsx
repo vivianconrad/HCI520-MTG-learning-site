@@ -16,8 +16,21 @@ const CARD_TYPES = [
     id: 'creature',
     name: 'Creature',
     description: 'Fights on your behalf. Stays on the battlefield until it dies.',
-    tag: 'Main phase only',
+    tag: 'Main phase · stack empty',
     wide: false,
+    details: [
+      'Creatures are cast during your main phase when the stack is empty. Pay the mana cost in the corner, put the creature on the stack, and let your opponent respond before it resolves. Once it resolves, it stays on the battlefield as a permanent.',
+      {
+        heading: 'Combat',
+        list: [
+          'Attack: during your combat phase, you choose untapped creatures to attack the defending player (or one of their planeswalkers). Each attacker taps as it attacks.',
+          'Block: the defending player chooses untapped creatures to block attackers. A blocker must be able to block that attacker under the normal rules.',
+          'Damage: creatures deal damage equal to their power. If a creature takes damage equal to or greater than its toughness in one turn, it dies and goes to the graveyard. Unblocked attackers deal their power as damage to the player or planeswalker being attacked.',
+          'At end of turn, damage on creatures is cleared. A creature that survived with 1 toughness left is back at full health next turn.',
+        ],
+      },
+      'Most creatures you cast this turn have summoning sickness: they cannot attack or use tap abilities until they have been under your control since the start of your turn.',
+    ],
     examples: [
       {
         src: cardImage('creature-llanowar-elves.jpg'),
@@ -38,7 +51,7 @@ const CARD_TYPES = [
     name: 'Land',
     description:
       'Lands give you mana (the energy you spend to cast spells). Play one land per turn in your main phase (lands are played, not cast).',
-    tag: 'Main phase only',
+    tag: 'Main phase · one per turn',
     wide: false,
     details: [
       {
@@ -48,6 +61,15 @@ const CARD_TYPES = [
       {
         heading: 'What is mana?',
         text: 'Mana is the magical energy you use to cast spells and activate abilities. It is not a physical card or token on the table. You produce it during your turn, spend it when you cast something, and any left over fades away when the step or phase ends. Every non-land spell shows a mana cost in the top-right corner (you saw this in Lesson 1). Coloured symbols mean you need that specific colour of mana; a number in a grey circle means you can pay with mana of any colour. Lands are the main way to produce that mana.',
+      },
+      {
+        heading: 'How to pay for a spell',
+        list: [
+          'Tap lands (or other mana sources) to add mana to your mana pool.',
+          'Cast the spell and pay its mana cost from that pool.',
+          'The spell goes on the stack; your opponent can respond before it resolves.',
+          'Any mana left in your pool when the step or phase ends disappears — spend it or lose it.',
+        ],
       },
       'Most decks need plenty of lands, often about 24 in a 60-card deck, though faster or slower decks adjust that number.',
       {
@@ -91,10 +113,11 @@ const CARD_TYPES = [
     name: 'Instant',
     description:
       'Fast spells you can cast any time, including in response to spells on the stack.',
-    tag: 'Any time',
+    tag: 'Any time · you have priority',
     wide: false,
     details: [
-      'When you cast an instant, it goes on the stack like any other spell. The difference is when you are allowed to cast it: instants can be cast at any time you have priority, even when the stack is not empty.',
+      'Priority is your window to play cards, activate abilities, or pass and let the game move on. When you have priority, you can act; when you pass, your opponent gets a chance.',
+      'When you cast an instant, it goes on the stack like any other spell. The difference is when you are allowed to cast it: instants can be cast any time you have priority, even when the stack is not empty.',
       'That lets you respond to your opponent. If they cast a spell, you can cast an instant while their spell is still on the stack, before it resolves. Counterspell is a classic example: it counters another spell that is waiting on the stack.',
       'Instants also work during your main phase, combat, or on your opponent’s turn. Shock can deal damage during combat; Giant Growth can save a creature from dying after damage is assigned.',
     ],
@@ -118,7 +141,7 @@ const CARD_TYPES = [
     name: 'Sorcery',
     description:
       'Powerful one-shot spells. Cast only during your main phase when the stack is empty.',
-    tag: 'Main phase only, stack empty',
+    tag: 'Main phase · stack empty',
     wide: false,
     details: [
       'Sorceries are spells that do their job and then go to the graveyard. They do not stay on the battlefield like creatures or artifacts.',
@@ -141,7 +164,7 @@ const CARD_TYPES = [
     name: 'Artifact',
     description:
       'Permanent objects: relics, devices, and gear. Most are colourless; many produce mana or protect your creatures.',
-    tag: 'Main phase only, stack empty',
+    tag: 'Main phase · stack empty',
     wide: false,
     details: [
       'Artifacts are magical objects you cast and keep on the battlefield, like creatures or enchantments. They are not lands. You cast them during your main phase when the stack is empty, paying their mana cost like any other spell. Once in play, their rules text tells you what they do.',
@@ -175,8 +198,19 @@ const CARD_TYPES = [
     id: 'enchantment',
     name: 'Enchantment',
     description: 'Ongoing effects that linger on the battlefield.',
-    tag: 'Main phase only',
+    tag: 'Main phase · stack empty',
     wide: false,
+    details: [
+      'Enchantments are permanent spells you cast during your main phase when the stack is empty. They stay on the battlefield and change how the game works while they remain in play.',
+      {
+        heading: 'Auras vs. other enchantments',
+        list: [
+          'Non-aura enchantments (like Sylvan Library or Goblin Oriflamme) sit on the battlefield and affect the game broadly — your draws, your creatures, the whole table, and so on.',
+          'Aura enchantments target something specific, usually a creature, land, or player, and attach to it. If the thing they are attached to leaves the battlefield, the aura goes to the graveyard.',
+        ],
+        text: 'Read the rules text to see exactly what each enchantment changes. They leave play if destroyed or if an effect exiles them.',
+      },
+    ],
     examples: [
       {
         src: cardImage('enchantment-sylvan-library.webp'),
@@ -196,8 +230,20 @@ const CARD_TYPES = [
     id: 'planeswalker',
     name: 'Planeswalker',
     description: 'Powerful allies with loyalty abilities you activate each turn.',
-    tag: 'Main phase only',
+    tag: 'Main phase · stack empty',
     wide: true,
+    details: [
+      'Planeswalkers are permanent allies you cast during your main phase when the stack is empty. They enter the battlefield with loyalty counters (shown in the bottom-right corner).',
+      {
+        heading: 'Loyalty abilities',
+        list: [
+          'Each planeswalker has two or three loyalty abilities, marked with +, −, or neutral loyalty costs in their text box.',
+          'You may activate one loyalty ability per planeswalker per turn, during your main phase when the stack is empty (same timing as casting a sorcery).',
+          'Abilities with a + cost add loyalty; abilities with a − cost subtract loyalty. If a planeswalker has zero loyalty, it goes to the graveyard.',
+        ],
+      },
+      'Opponents can attack your planeswalkers with creatures, as if the planeswalker were a player. You can block those attacks with your creatures. Damage dealt to a planeswalker removes that many loyalty counters.',
+    ],
     examples: [
       {
         src: cardImage('planeswalker-nahiri.webp'),
@@ -278,7 +324,7 @@ function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
     <article className={[
       'card-types__item',
       type.wide ? 'card-types__item--wide' : '',
-      type.tag === 'Any time' ? 'card-types__item--any-time' : '',
+      type.id === 'instant' ? 'card-types__item--any-time' : '',
     ].filter(Boolean).join(' ')}>
       <h3 className="card-types__type-name">{type.name}</h3>
       <div className="card-types__examples" aria-label={`${type.name} examples`}>
@@ -427,9 +473,17 @@ export default function CardTypes({ session }) {
         <StackExplainer variant="brief" />
 
         <p className="card-types__closing">
-          Notice that only instants can be cast at any time. Creatures, sorceries, enchantments,
-          artifacts, and planeswalkers are cast during your main phase when the stack is empty, unless
-          the card says otherwise, such as flash.
+          Notice that only instants can be cast at any time you have priority. Creatures, sorceries,
+          enchantments, artifacts, and planeswalkers are cast during your main phase when the stack is
+          empty. Lands are different: they are played (not cast) during a main phase, one per turn,
+          and never use the stack.
+        </p>
+
+        <p className="card-types__timing-footnote">
+          On the tags above, &ldquo;Main phase · stack empty&rdquo; means your turn, a main phase,
+          and nothing waiting on the stack — the usual timing for casting creatures, sorceries,
+          artifacts, enchantments, and planeswalkers. Some cards break these rules; read the card if
+          you are unsure.
         </p>
 
         <p className="card-types__note">

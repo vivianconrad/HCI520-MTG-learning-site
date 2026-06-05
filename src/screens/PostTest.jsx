@@ -12,6 +12,7 @@ import {
   POSTTEST_LEAVE_CONFIRM_TITLE,
 } from '../lib/lessonNav.js'
 import { calculateTestScore } from '../lib/testScore.js'
+import useRedirectIfTestComplete from '../hooks/useRedirectIfTestComplete.js'
 
 export default function PostTest({ session }) {
   const navigate = useNavigate()
@@ -21,20 +22,32 @@ export default function PostTest({ session }) {
     selectedQuestions,
     setPosttestAnswer,
     posttestAnswers,
+    posttestCompleted,
+    markPosttestCompleted,
   } = session
 
+  useRedirectIfTestComplete(posttestCompleted, '/results')
   useScreenTime(session, 'PostTest')
-  useBrowserBackConfirm(true, POSTTEST_LEAVE_CONFIRM_MESSAGE, POSTTEST_LEAVE_CONFIRM_TITLE)
+  useBrowserBackConfirm(
+    !posttestCompleted,
+    POSTTEST_LEAVE_CONFIRM_MESSAGE,
+    POSTTEST_LEAVE_CONFIRM_TITLE,
+  )
 
   const handleComplete = useCallback(
     async (lastAnswer) => {
       const answers = { ...posttestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
       await savePosttest(sessionId, answers, score)
-      navigate('/calculating')
+      markPosttestCompleted()
+      navigate('/calculating', { replace: true })
     },
-    [posttestAnswers, selectedQuestions, sessionId, navigate],
+    [posttestAnswers, selectedQuestions, sessionId, navigate, markPosttestCompleted],
   )
+
+  if (posttestCompleted) {
+    return null
+  }
 
   if (!selectedQuestions || selectedQuestions.length === 0) {
     return (

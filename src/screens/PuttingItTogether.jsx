@@ -17,17 +17,18 @@ const CARD_IMAGES = {
   'cultivate.jpg': cardImage('sorcery-cultivate.jpg'),
   'sol-ring.jpg': cardImage('artifact-sol-ring.jpg'),
   'counterspell.jpg': cardImage('instant-counterspell.webp'),
+  'hellkite-tyrant.webp': cardImage('creature-hellkite-tyrant.webp'),
 }
 
 const SCENARIOS = [
   {
     id: 's1',
-    text: "It's your main phase. You have a Shock in your hand. Shock is an instant that deals 2 damage and costs one red mana. You have one mountain on the battlefield. Can you cast it right now?",
+    text: "It's your main phase. Shock is in your hand; it costs one red mana and deals 2 damage. You have one untapped Mountain on the battlefield (tap it to add one red mana to your pool). Can you cast Shock now?",
     cardImage: 'shock.jpg',
     cardImageAlt: 'Shock: Instant',
     correctAnswer: true,
     explanation:
-      'Yes. Shock is an instant, and instants can be cast any time, including your main phase. You also have exactly enough mana to cast it.',
+      'Yes. Tap your Mountain for one red mana, then cast Shock. Instants can be cast any time you have priority, including your main phase, and you have enough mana after tapping.',
   },
   {
     id: 's2',
@@ -40,12 +41,12 @@ const SCENARIOS = [
   },
   {
     id: 's3',
-    text: "It's your first main phase. You have a Llanowar Elves in your hand. Llanowar Elves is a creature that costs one green mana. You have one forest land on the battlefield. Can you cast Llanowar Elves right now?",
+    text: "It's your first main phase and the stack is empty. Llanowar Elves is in your hand; it costs one green mana. You have one untapped Forest on the battlefield. Can you tap the Forest for mana and cast Llanowar Elves?",
     cardImage: 'llanowar-elves.jpg',
     cardImageAlt: 'Llanowar Elves: Creature',
     correctAnswer: true,
     explanation:
-      'Yes. Creatures are cast during your main phase, and you have exactly one green mana available from your forest. Llanowar Elves costs one green mana, so you can cast it.',
+      'Yes. During your main phase with an empty stack, tap your Forest for one green mana, then cast Llanowar Elves for one green. Creatures use the same timing as other non-instant spells.',
   },
   {
     id: 's4',
@@ -90,7 +91,16 @@ const SCENARIOS = [
     cardImageAlt: 'Counterspell: Instant',
     correctAnswer: true,
     explanation:
-      "Yes. Counterspell is an instant, so it can be cast at any time, including in response to your opponent's spell while it is on the stack. This is one of the most powerful things instants can do.",
+      "Yes. Counterspell is an instant, so you can cast it when you have priority, including in response to your opponent's spell while it is on the stack. This is one of the most powerful things instants can do.",
+  },
+  {
+    id: 's9',
+    text: "It's your combat phase. You attack with a 5/5 creature. Your opponent does not block it. Will your opponent's life total go down?",
+    cardImage: 'hellkite-tyrant.webp',
+    cardImageAlt: 'Creature attacking (5/5 example)',
+    correctAnswer: true,
+    explanation:
+      'Yes. An unblocked attacker deals damage equal to its power to the defending player. Your 5/5 deals 5 damage, lowering their life total. Most games end when a player reaches 0 life.',
   },
 ]
 
@@ -188,6 +198,12 @@ export default function PuttingItTogether({ session }) {
         <p className="putting-together__intro">
           Now that you know the card types and the turn structure, let&apos;s see how they connect.
           Read each scenario and decide what you would do.
+        </p>
+
+        <p className="putting-together__intro">
+          When a scenario involves casting a spell, remember the usual sequence: tap lands or other
+          sources to add mana to your pool, cast the spell and pay from that pool, then let it
+          resolve from the stack. Leftover mana disappears when the step or phase ends.
         </p>
 
         <p className="putting-together__progress" aria-live="polite">

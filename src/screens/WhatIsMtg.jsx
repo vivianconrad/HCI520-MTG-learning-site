@@ -13,7 +13,8 @@ const ZONES = [
   },
   {
     name: 'Hand',
-    description: 'Cards you are holding and can play on your turn (subject to timing rules).',
+    description:
+      'Cards you are holding. You play or cast them when the rules allow — mostly on your turn, though instants can be cast on your opponent’s turn too.',
   },
   {
     name: 'Battlefield',
@@ -65,16 +66,29 @@ export default function WhatIsMtg({ session }) {
 
           <h2 className="what-is-mtg__subheading">Playing vs casting</h2>
           <p className="what-is-mtg__paragraph">
-            <strong>Lands are played</strong> from your hand during a main phase (one land per turn
-            by default). <strong>Spells are cast</strong>. You pay their mana cost, put them on the
-            stack, and let opponents respond before they resolve.
+            Magic uses two different words on purpose. <strong>Lands are played</strong> from your
+            hand during a main phase (one land per turn by default). They go straight onto the
+            battlefield — no stack, and your opponent cannot respond the way they can to a spell.{' '}
+            <strong>Everything else with a mana cost is cast</strong>: you pay mana, put the spell on
+            the stack, and let opponents respond before it resolves.
           </p>
 
           <h2 className="what-is-mtg__subheading">Tap</h2>
           <p className="what-is-mtg__paragraph">
             To <strong>tap</strong> a card, turn it sideways. That marks it as used for now. Lands
             tap to produce mana; creatures tap when they attack. At the start of your turn, the{' '}
-            <strong>untap step</strong> turns your permanents upright again.
+            <strong>untap step</strong> turns your permanents upright again so you can use them once
+            more.
+          </p>
+
+          <h2 className="what-is-mtg__subheading">Paying for a spell</h2>
+          <p className="what-is-mtg__paragraph">
+            When you cast a spell, you usually follow this sequence: <strong>tap lands</strong> (or
+            other mana sources) to add mana to your <strong>mana pool</strong>;{' '}
+            <strong>cast the spell</strong> and pay its mana cost from that pool; the spell goes on
+            the <strong>stack</strong> and your opponent can respond; after it resolves, any mana
+            still in your pool disappears when the step or phase ends. Lesson 2 and Lesson 3 go deeper
+            on the stack and timing.
           </p>
 
           <h2 className="what-is-mtg__subheading">Zones on the table</h2>

@@ -12,6 +12,7 @@ import {
   PRETEST_LEAVE_CONFIRM_TITLE,
 } from '../lib/lessonNav.js'
 import { calculateTestScore } from '../lib/testScore.js'
+import useRedirectIfTestComplete from '../hooks/useRedirectIfTestComplete.js'
 
 export default function PreTest({ session }) {
   const navigate = useNavigate()
@@ -22,10 +23,17 @@ export default function PreTest({ session }) {
     selectQuestions,
     setPretestAnswer,
     pretestAnswers,
+    pretestCompleted,
+    markPretestCompleted,
   } = session
 
+  useRedirectIfTestComplete(pretestCompleted, '/pretest-complete')
   useScreenTime(session, 'PreTest')
-  useBrowserBackConfirm(true, PRETEST_LEAVE_CONFIRM_MESSAGE, PRETEST_LEAVE_CONFIRM_TITLE)
+  useBrowserBackConfirm(
+    !pretestCompleted,
+    PRETEST_LEAVE_CONFIRM_MESSAGE,
+    PRETEST_LEAVE_CONFIRM_TITLE,
+  )
 
   useEffect(() => {
     if (selectedQuestions === null) {
@@ -38,10 +46,15 @@ export default function PreTest({ session }) {
       const answers = { ...pretestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
       await savePretest(sessionId, answers, score)
-      navigate('/pretest-complete')
+      markPretestCompleted()
+      navigate('/pretest-complete', { replace: true })
     },
-    [pretestAnswers, selectedQuestions, sessionId, navigate],
+    [pretestAnswers, selectedQuestions, sessionId, navigate, markPretestCompleted],
   )
+
+  if (pretestCompleted) {
+    return null
+  }
 
   if (!selectedQuestions || selectedQuestions.length === 0) {
     return (
