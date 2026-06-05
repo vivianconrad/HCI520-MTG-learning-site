@@ -106,6 +106,7 @@ export default function TestQuestionFlow({
         <QuestionCardImage
           src={getQuestionImage(question.imageKey)}
           alt={question.imageAlt}
+          layout={question.imageLayout}
         />
       )}
       <div

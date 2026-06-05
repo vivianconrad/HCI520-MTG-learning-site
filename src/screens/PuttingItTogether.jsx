@@ -10,6 +10,7 @@ import './PuttingItTogether.css'
 
 const CARD_IMAGES = {
   'shock.jpg': cardImage('instant-shock.jpg'),
+  'mountain.webp': cardImage('land-mountain.webp'),
   'giant-growth.jpg': cardImage('instant-giant-growth.jpg'),
   'llanowar-elves.jpg': cardImage('creature-llanowar-elves.jpg'),
   'forest.jpg': cardImage('land-forest.jpg'),
@@ -24,8 +25,10 @@ const SCENARIOS = [
   {
     id: 's1',
     text: "It's your main phase. Shock is in your hand; it costs one red mana and deals 2 damage. You have one untapped Mountain on the battlefield (tap it to add one red mana to your pool). Can you cast Shock now?",
-    cardImage: 'shock.jpg',
-    cardImageAlt: 'Shock: Instant',
+    images: [
+      { key: 'mountain.webp', alt: 'Mountain: Land' },
+      { key: 'shock.jpg', alt: 'Shock: Instant' },
+    ],
     correctAnswer: true,
     explanation:
       'Yes. Tap your Mountain for one red mana, then cast Shock. Instants can be cast any time you have priority, including your main phase, and you have enough mana after tapping.',
@@ -215,10 +218,20 @@ export default function PuttingItTogether({ session }) {
         </p>
 
         <div className="putting-together__scenario">
-          <ScenarioCardImage
-            src={CARD_IMAGES[scenario.cardImage]}
-            alt={scenario.cardImageAlt}
-          />
+          <div
+            className={`putting-together__cards${
+              (scenario.images ?? [{ key: scenario.cardImage, alt: scenario.cardImageAlt }])
+                .length > 1
+                ? ' putting-together__cards--pair'
+                : ''
+            }`}
+          >
+            {(scenario.images ?? [{ key: scenario.cardImage, alt: scenario.cardImageAlt }]).map(
+              ({ key, alt }) => (
+                <ScenarioCardImage key={key} src={CARD_IMAGES[key]} alt={alt} />
+              ),
+            )}
+          </div>
           <div className="putting-together__scenario-text-box">
             <p className="putting-together__scenario-text">{scenario.text}</p>
           </div>

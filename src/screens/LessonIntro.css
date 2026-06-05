@@ -113,6 +113,10 @@
   margin-top: 32px;
 }
 
+.lesson-intro__actions--end {
+  justify-content: flex-end;
+}
+
 .lesson-intro__button {
   font-family: var(--font-display);
   font-size: 1rem;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export default function QuestionCardImage({ src, alt = 'Magic card' }) {
+export default function QuestionCardImage({ src, alt = 'Magic card', layout = 'card' }) {
   const [error, setError] = useState(false)
 
   useEffect(() => {
@@ -8,12 +8,31 @@ export default function QuestionCardImage({ src, alt = 'Magic card' }) {
   }, [src])
 
   if (!src || error) {
-    return <div className="pretest__image-slot">Card image</div>
+    return (
+      <div
+        className={`pretest__image-slot${
+          layout === 'wide' ? ' pretest__image-slot--wide' : ''
+        }`}
+      >
+        Card image
+      </div>
+    )
   }
 
   return (
-    <div className="pretest__image-slot">
-      <img className="pretest__card-image" src={src} alt={alt} onError={() => setError(true)} />
+    <div
+      className={`pretest__image-slot${
+        layout === 'wide' ? ' pretest__image-slot--wide' : ''
+      }`}
+    >
+      <img
+        className={`pretest__card-image${
+          layout === 'wide' ? ' pretest__card-image--wide' : ''
+        }`}
+        src={src}
+        alt={alt}
+        onError={() => setError(true)}
+      />
     </div>
   )
 }

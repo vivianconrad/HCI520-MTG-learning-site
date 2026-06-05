@@ -92,13 +92,28 @@ const CARD_TYPES = [
     ],
     examples: [
       {
-        src: cardImage('land-forest.jpg'),
-        label: 'Forest',
+        src: cardImage('land-plains.webp'),
+        label: 'Plains',
+        role: 'Basic land',
+      },
+      {
+        src: cardImage('land-island.png'),
+        label: 'Island',
         role: 'Basic land',
       },
       {
         src: cardImage('land-swamp.jpg'),
         label: 'Swamp',
+        role: 'Basic land',
+      },
+      {
+        src: cardImage('land-mountain.webp'),
+        label: 'Mountain',
+        role: 'Basic land',
+      },
+      {
+        src: cardImage('land-forest.jpg'),
+        label: 'Forest',
         role: 'Basic land',
       },
       {
@@ -206,7 +221,7 @@ const CARD_TYPES = [
         heading: 'Auras vs. other enchantments',
         list: [
           'Non-aura enchantments (like Sylvan Library or Goblin Oriflamme) sit on the battlefield and affect the game broadly — your draws, your creatures, the whole table, and so on.',
-          'Aura enchantments target something specific, usually a creature, land, or player, and attach to it. If the thing they are attached to leaves the battlefield, the aura goes to the graveyard.',
+          'Aura enchantments target something specific, usually a creature, land, or player, and attach to it. Alien Symbiosis and Hyena Umbra are auras that attach to a creature. If the thing they are attached to leaves the battlefield, the aura goes to the graveyard.',
         ],
         text: 'Read the rules text to see exactly what each enchantment changes. They leave play if destroyed or if an effect exiles them.',
       },
@@ -215,14 +230,27 @@ const CARD_TYPES = [
       {
         src: cardImage('enchantment-sylvan-library.webp'),
         label: 'Sylvan Library',
+        role: 'Non-aura',
       },
       {
         src: cardImage('enchantment-valakut-exploration.webp'),
         label: 'Valakut Exploration',
+        role: 'Non-aura',
       },
       {
         src: cardImage('enchantment-goblin-origlamme.jpg'),
         label: 'Goblin Oriflamme',
+        role: 'Non-aura',
+      },
+      {
+        src: cardImage('enchantment-alien-symbiosis.webp'),
+        label: 'Alien Symbiosis',
+        role: 'Aura',
+      },
+      {
+        src: cardImage('enchantment-hyenaumbra.jpg'),
+        label: 'Hyena Umbra',
+        role: 'Aura',
       },
     ],
   },
@@ -235,11 +263,22 @@ const CARD_TYPES = [
     details: [
       'Planeswalkers are permanent allies you cast during your main phase when the stack is empty. They enter the battlefield with loyalty counters (shown in the bottom-right corner).',
       {
+        heading: 'What is loyalty?',
+        text: 'Loyalty counters track how much life your planeswalker has left in the game and how much power they can spend on abilities. The number in the corner is not mana, and planeswalkers do not have power or toughness like creatures. Loyalty belongs only to that planeswalker card.',
+        list: [
+          'Starting loyalty: most planeswalkers enter with a fixed number of counters printed on the card (for example, Liliana of the Veil enters with 3 loyalty).',
+          'Gaining loyalty: abilities marked with + add that many counters when they resolve. They are usually smaller effects that build your planeswalker up for later turns.',
+          'Spending loyalty: abilities marked with − subtract counters as a cost before the effect happens. You can only activate a − ability if the planeswalker has at least that many counters.',
+          'Losing loyalty: combat damage and some spells remove loyalty counters one for one. When a planeswalker has zero loyalty, it is put into the graveyard.',
+        ],
+      },
+      {
         heading: 'Loyalty abilities',
         list: [
-          'Each planeswalker has two or three loyalty abilities, marked with +, −, or neutral loyalty costs in their text box.',
+          'Each planeswalker has two or three loyalty abilities in its text box, each marked with +, −, or a neutral loyalty cost.',
           'You may activate one loyalty ability per planeswalker per turn, during your main phase when the stack is empty (same timing as casting a sorcery).',
-          'Abilities with a + cost add loyalty; abilities with a − cost subtract loyalty. If a planeswalker has zero loyalty, it goes to the graveyard.',
+          'Neutral-cost abilities (no + or −) do not change loyalty; they still count as your one loyalty ability that turn.',
+          'Read each ability carefully: a strong − effect often costs several loyalty counters and leaves your planeswalker closer to dying.',
         ],
       },
       'Opponents can attack your planeswalkers with creatures, as if the planeswalker were a player. You can block those attacks with your creatures. Damage dealt to a planeswalker removes that many loyalty counters.',
@@ -248,6 +287,18 @@ const CARD_TYPES = [
       {
         src: cardImage('planeswalker-nahiri.webp'),
         label: 'Nahiri, the Lithomancer',
+      },
+      {
+        src: cardImage('planeswalker-ajani.webp'),
+        label: 'Ajani, Mentor of Heroes',
+      },
+      {
+        src: cardImage('planeswalker-liliana-of-the-veil.jpg'),
+        label: 'Liliana of the Veil',
+      },
+      {
+        src: cardImage('planeswalker-liliana-vess.png'),
+        label: 'Liliana Vess',
       },
     ],
   },
@@ -451,6 +502,10 @@ export default function CardTypes({ session }) {
 
         <CastVsPlayExplainer variant="brief" />
 
+        <TapExplainer variant="brief" />
+
+        <StackExplainer variant="brief" />
+
         <div className="card-types__grid">
           {CARD_TYPES.map((type) => (
             <CardTypeItem
@@ -467,10 +522,6 @@ export default function CardTypes({ session }) {
         </p>
 
         <hr className="card-types__divider" aria-hidden="true" />
-
-        <TapExplainer variant="brief" />
-
-        <StackExplainer variant="brief" />
 
         <p className="card-types__closing">
           Notice that only instants can be cast at any time you have priority. Creatures, sorceries,

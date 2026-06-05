@@ -57,6 +57,16 @@
   object-fit: cover;
 }
 
+.pretest__image-slot--wide {
+  width: min(100%, 420px);
+  height: auto;
+  aspect-ratio: 16 / 10;
+}
+
+.pretest__card-image--wide {
+  object-fit: contain;
+}
+
 .pretest__options {
   display: flex;
   flex-direction: column;

@@ -30,14 +30,7 @@ export default function PretestComplete({ session }) {
 
         <p className="lesson-intro__closing">When you are ready, see what&apos;s coming next.</p>
 
-        <div className="lesson-intro__actions">
-          <button
-            type="button"
-            className="lesson-intro__button lesson-intro__button--back"
-            onClick={() => navigate('/intro')}
-          >
-            Back to study overview
-          </button>
+        <div className="lesson-intro__actions lesson-intro__actions--end">
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--next"

@@ -68,6 +68,19 @@
   margin-bottom: 16px;
 }
 
+.putting-together__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.putting-together__cards--pair .putting-together__card-image,
+.putting-together__cards--pair .putting-together__card-placeholder {
+  width: 120px;
+  height: 168px;
+}
+
 .putting-together__card-image {
   width: 140px;
   height: 196px;
