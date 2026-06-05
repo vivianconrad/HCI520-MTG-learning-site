@@ -38,7 +38,7 @@ export default function PreTest({ session }) {
       const answers = { ...pretestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
       await savePretest(sessionId, answers, score)
-      navigate('/lesson/intro')
+      navigate('/pretest-complete')
     },
     [pretestAnswers, selectedQuestions, sessionId, navigate],
   )
@@ -83,7 +83,7 @@ export default function PreTest({ session }) {
         firstQuestionBackPath="/intro"
         leaveConfirmMessage={PRETEST_LEAVE_CONFIRM_MESSAGE}
         leaveConfirmTitle={PRETEST_LEAVE_CONFIRM_TITLE}
-        lastButtonLabel="Begin Lessons"
+        lastButtonLabel="Continue"
       />
     </PageLayout>
   )

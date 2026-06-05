@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusTrap } from '../hooks/useFocusTrap.js'
 import { useNavigate } from 'react-router-dom'
+import CastVsPlayExplainer from '../components/CastVsPlayExplainer.jsx'
 import LessonActions from '../components/LessonActions.jsx'
 import PageLayout from '../components/PageLayout.jsx'
+import StackExplainer from '../components/StackExplainer.jsx'
+import TapExplainer from '../components/TapExplainer.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
+import { cardImage } from '../assets/cards/index.js'
 import './CardTypes.css'
 
 const CARD_TYPES = [
@@ -16,15 +20,15 @@ const CARD_TYPES = [
     wide: false,
     examples: [
       {
-        src: new URL('../assets/creature-llanowar-elves.jpg', import.meta.url).href,
+        src: cardImage('creature-llanowar-elves.jpg'),
         label: 'Llanowar Elves',
       },
       {
-        src: new URL('../assets/creature-shadowmage-infiltrator.webp', import.meta.url).href,
+        src: cardImage('creature-shadowmage-infiltrator.webp'),
         label: 'Shadowmage Infiltrator',
       },
       {
-        src: new URL('../assets/creature-legendary-grothama.webp', import.meta.url).href,
+        src: cardImage('creature-legendary-grothama.webp'),
         label: 'Grothama, All-Devouring',
       },
     ],
@@ -33,38 +37,50 @@ const CARD_TYPES = [
     id: 'land',
     name: 'Land',
     description:
-      'Your mana source. Play one land per turn in your main phase—lands are played, not cast.',
+      'Lands give you mana (the energy you spend to cast spells). Play one land per turn in your main phase (lands are played, not cast).',
     tag: 'Main phase only',
     wide: false,
     details: [
-      'Mana from lands pays for your spells and abilities. Most decks need plenty of lands—often about 24 in a 60-card deck, though faster or slower decks adjust that number.',
+      {
+        heading: 'Playing vs. casting',
+        text: 'Lands are played, not cast. Playing a land puts it directly onto the battlefield during your main phase and does not use the stack. Every other card type in this lesson (with a mana cost in the corner) is cast: you pay mana, the spell goes on the stack, and your opponent can respond before it resolves.',
+      },
+      {
+        heading: 'What is mana?',
+        text: 'Mana is the magical energy you use to cast spells and activate abilities. It is not a physical card or token on the table. You produce it during your turn, spend it when you cast something, and any left over fades away when the step or phase ends. Every non-land spell shows a mana cost in the top-right corner (you saw this in Lesson 1). Coloured symbols mean you need that specific colour of mana; a number in a grey circle means you can pay with mana of any colour. Lands are the main way to produce that mana.',
+      },
+      'Most decks need plenty of lands, often about 24 in a 60-card deck, though faster or slower decks adjust that number.',
       {
         heading: 'The five basic lands',
         list: [
-          'Plains — adds white mana (W)',
-          'Island — adds blue mana (U)',
-          'Swamp — adds black mana (B)',
-          'Mountain — adds red mana (R)',
-          'Forest — adds green mana (G)',
+          'Plains: adds white mana (W)',
+          'Island: adds blue mana (U)',
+          'Swamp: adds black mana (B)',
+          'Mountain: adds red mana (R)',
+          'Forest: adds green mana (G)',
         ],
         text: 'Each basic land’s name matches its type (a card named Forest is a basic Forest). You may put any number of the same basic land in your deck.',
       },
-      'Non-basic lands are every other land card. They might produce two colors, enter the battlefield tapped, or have extra rules text. They still count as lands and follow the one-land-per-turn rule—read the card to see what they do. Woodland Cemetery is an example of a non-basic land that can produce black or green mana.',
-      'To use a land’s mana, tap it (turn it sideways). That mana is available until you spend it or the step or phase ends. Lands are permanent; they stay on the battlefield unless something removes them.',
+      'Non-basic lands are every other land card. They might produce two colors, enter the battlefield tapped, or have extra rules text. They still count as lands and follow the one-land-per-turn rule, read the card to see what they do. Woodland Cemetery is an example of a non-basic land that can produce black or green mana.',
+      {
+        heading: 'What does tap mean?',
+        text: 'To tap a card, turn it sideways. That marks it as used for the rest of the turn. Tap a land to add mana to your pool, you cannot tap the same land again until it untaps at the start of your next turn. If a land entered the battlefield tapped, it starts sideways and cannot produce mana until then.',
+      },
+      'Lands stay on the battlefield unless something removes them.',
     ],
     examples: [
       {
-        src: new URL('../assets/land-forest.jpg', import.meta.url).href,
+        src: cardImage('land-forest.jpg'),
         label: 'Forest',
         role: 'Basic land',
       },
       {
-        src: new URL('../assets/land-swamp.jpg', import.meta.url).href,
+        src: cardImage('land-swamp.jpg'),
         label: 'Swamp',
         role: 'Basic land',
       },
       {
-        src: new URL('../assets/land-woodland-cemetery.jpg', import.meta.url).href,
+        src: cardImage('land-woodland-cemetery.jpg'),
         label: 'Woodland Cemetery',
         role: 'Non-basic land',
       },
@@ -73,20 +89,26 @@ const CARD_TYPES = [
   {
     id: 'instant',
     name: 'Instant',
-    description: 'Fast spells that can surprise your opponent at any moment.',
+    description:
+      'Fast spells you can cast any time, including in response to spells on the stack.',
     tag: 'Any time',
     wide: false,
+    details: [
+      'When you cast an instant, it goes on the stack like any other spell. The difference is when you are allowed to cast it: instants can be cast at any time you have priority, even when the stack is not empty.',
+      'That lets you respond to your opponent. If they cast a spell, you can cast an instant while their spell is still on the stack, before it resolves. Counterspell is a classic example: it counters another spell that is waiting on the stack.',
+      'Instants also work during your main phase, combat, or on your opponent’s turn. Shock can deal damage during combat; Giant Growth can save a creature from dying after damage is assigned.',
+    ],
     examples: [
       {
-        src: new URL('../assets/instant-shock.jpg', import.meta.url).href,
+        src: cardImage('instant-shock.jpg'),
         label: 'Shock',
       },
       {
-        src: new URL('../assets/instant-counterspell.webp', import.meta.url).href,
+        src: cardImage('instant-counterspell.webp'),
         label: 'Counterspell',
       },
       {
-        src: new URL('../assets/instant-giant-growth.jpg', import.meta.url).href,
+        src: cardImage('instant-giant-growth.jpg'),
         label: 'Giant Growth',
       },
     ],
@@ -94,16 +116,22 @@ const CARD_TYPES = [
   {
     id: 'sorcery',
     name: 'Sorcery',
-    description: 'Powerful spells that require your full attention to cast.',
+    description:
+      'Powerful one-shot spells. Cast only during your main phase when the stack is empty.',
     tag: 'Main phase only, stack empty',
     wide: false,
+    details: [
+      'Sorceries are spells that do their job and then go to the graveyard. They do not stay on the battlefield like creatures or artifacts.',
+      'You can only cast a sorcery during your own main phase when the stack is empty. That means no other spell is waiting to resolve, and it is your turn. You cannot cast sorceries during combat, on your opponent’s turn, or while responding to something on the stack.',
+      'Because of that timing, sorceries tend to be bigger or slower effects, searching your library, destroying multiple permanents, or drawing several cards. Cultivate puts lands onto the battlefield; Duress makes your opponent discard a card.',
+    ],
     examples: [
       {
-        src: new URL('../assets/sorcery-cultivate.jpg', import.meta.url).href,
+        src: cardImage('sorcery-cultivate.jpg'),
         label: 'Cultivate',
       },
       {
-        src: new URL('../assets/sorcery-duress.jpg', import.meta.url).href,
+        src: cardImage('sorcery-duress.jpg'),
         label: 'Duress',
       },
     ],
@@ -111,17 +139,35 @@ const CARD_TYPES = [
   {
     id: 'artifact',
     name: 'Artifact',
-    description: 'Objects and tools. Most are colourless and fit in any deck.',
-    tag: 'Main phase only',
+    description:
+      'Permanent objects: relics, devices, and gear. Most are colourless; many produce mana or protect your creatures.',
+    tag: 'Main phase only, stack empty',
     wide: false,
+    details: [
+      'Artifacts are magical objects you cast and keep on the battlefield, like creatures or enchantments. They are not lands. You cast them during your main phase when the stack is empty, paying their mana cost like any other spell. Once in play, their rules text tells you what they do.',
+      'Most artifacts are colourless (their mana cost uses grey symbols only), so they can fit into decks of any colour. Some artifacts are coloured and need specific mana to cast, check the mana cost in the corner.',
+      {
+        heading: 'What artifacts can do',
+        list: [
+          'Produce mana: tap the artifact to add mana to your pool, similar to a land. Sol Ring adds two colourless mana; Commander’s Sphere adds one mana of any colour.',
+          'Equip creatures: Equipment artifacts attach to a creature you control to give it power, toughness, or abilities (for example, +2/+2 or “can’t be blocked”). You pay an equip cost to move the Equipment onto a creature.',
+          'Protect or strengthen your board: some artifacts grant hexproof, prevent damage, or make your creatures harder to block. Others affect the whole game, like drawing extra cards or searching your library.',
+          'Utility effects: anything else the card says: sacrifice for a benefit, pay mana to activate an ability, or trigger when something happens. Always read the rules text.',
+        ],
+      },
+      'Many artifact abilities use the tap symbol (turn the card sideways) and sometimes a mana cost. You can use those abilities only when you could cast a sorcery, usually during your main phase when the stack is empty, unless the card says otherwise.',
+      'Commander’s Sphere also shows a second use: you can sacrifice it (send it to the graveyard) to draw a card. Not every artifact produces mana; some exist purely for protection, card advantage, or combat tricks.',
+    ],
     examples: [
       {
-        src: new URL('../assets/artifact-sol-ring.jpg', import.meta.url).href,
+        src: cardImage('artifact-sol-ring.jpg'),
         label: 'Sol Ring',
+        role: 'Produces mana',
       },
       {
-        src: new URL('../assets/artifact-commanders-sphere.webp', import.meta.url).href,
+        src: cardImage('artifact-commanders-sphere.webp'),
         label: "Commander's Sphere",
+        role: 'Mana and card draw',
       },
     ],
   },
@@ -133,15 +179,15 @@ const CARD_TYPES = [
     wide: false,
     examples: [
       {
-        src: new URL('../assets/enchantment-sylvan-library.webp', import.meta.url).href,
+        src: cardImage('enchantment-sylvan-library.webp'),
         label: 'Sylvan Library',
       },
       {
-        src: new URL('../assets/enchantment-valakut-exploration.webp', import.meta.url).href,
+        src: cardImage('enchantment-valakut-exploration.webp'),
         label: 'Valakut Exploration',
       },
       {
-        src: new URL('../assets/enchantment-goblin-origlamme.jpg', import.meta.url).href,
+        src: cardImage('enchantment-goblin-origlamme.jpg'),
         label: 'Goblin Oriflamme',
       },
     ],
@@ -154,12 +200,21 @@ const CARD_TYPES = [
     wide: true,
     examples: [
       {
-        src: new URL('../assets/planeswalker-nahiri.webp', import.meta.url).href,
+        src: cardImage('planeswalker-nahiri.webp'),
         label: 'Nahiri, the Lithomancer',
       },
     ],
   },
 ]
+
+function CardTypeTimingTag({ timing }) {
+  return (
+    <span className="card-types__tag">
+      <span className="card-types__tag-label">When you can play</span>
+      <span className="card-types__tag-value">{timing}</span>
+    </span>
+  )
+}
 
 function CardThumbnail({ src, alt, className }) {
   const [hasImage, setHasImage] = useState(true)
@@ -244,7 +299,7 @@ function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
         ))}
       </div>
       <CardTypeDetails description={type.description} />
-      <span className="card-types__tag">{type.tag}</span>
+      <CardTypeTimingTag timing={type.tag} />
       <button
         type="button"
         className={`card-types__see-card${hasBeenViewed ? ' card-types__see-card--viewed' : ''}`}
@@ -345,8 +400,10 @@ export default function CardTypes({ session }) {
         <p className="card-types__intro">
           Magic has a few other card types too, but these seven are the main ones you will see in
           most games. Each type determines what the card does and, more importantly, when you can
-          cast it (lands are played, not cast).
+          play or cast it.
         </p>
+
+        <CastVsPlayExplainer variant="brief" />
 
         <div className="card-types__grid">
           {CARD_TYPES.map((type) => (
@@ -365,14 +422,19 @@ export default function CardTypes({ session }) {
 
         <hr className="card-types__divider" aria-hidden="true" />
 
+        <TapExplainer variant="brief" />
+
+        <StackExplainer variant="brief" />
+
         <p className="card-types__closing">
-          Notice that only instants can be cast at any time. Every other type has restrictions.
-          Keep that in mind as you learn the turn structure in the next lesson.
+          Notice that only instants can be cast at any time. Creatures, sorceries, enchantments,
+          artifacts, and planeswalkers are cast during your main phase when the stack is empty, unless
+          the card says otherwise, such as flash.
         </p>
 
         <p className="card-types__note">
           There are exceptions to every rule in Magic, and many cards use keywords that change how
-          they work. What you saw here is a basic introduction—enough to get started, not every
+          they work. What you saw here is a basic introduction: enough to get started, not every
           special case you will meet in a real game.
         </p>
 
@@ -470,7 +532,7 @@ export default function CardTypes({ session }) {
               details={activeType.details}
               variant="overlay"
             />
-            <span className="card-types__tag">{activeType.tag}</span>
+            <CardTypeTimingTag timing={activeType.tag} />
                 </>
               )
             })()}

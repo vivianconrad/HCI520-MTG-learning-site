@@ -7,14 +7,15 @@ import { PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import { useConfirm } from '../context/ConfirmContext.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
+import { cardImage } from '../assets/cards/index.js'
 import './LessonComplete.css'
 
 const REVIEW_CARDS = [
-  new URL('../assets/creature-shadowmage-infiltrator.webp', import.meta.url).href,
-  new URL('../assets/instant-counterspell.webp', import.meta.url).href,
-  new URL('../assets/sorcery-cultivate.jpg', import.meta.url).href,
-  new URL('../assets/artifact-sol-ring.jpg', import.meta.url).href,
-  new URL('../assets/land-woodland-cemetery.jpg', import.meta.url).href,
+  cardImage('creature-shadowmage-infiltrator.webp'),
+  cardImage('instant-counterspell.webp'),
+  cardImage('sorcery-cultivate.jpg'),
+  cardImage('artifact-sol-ring.jpg'),
+  cardImage('land-woodland-cemetery.jpg'),
 ]
 
 const RECAP = [
@@ -52,7 +53,7 @@ export default function LessonComplete({ session }) {
           <p className="lesson-complete__paragraph">
             {completedAllPractice
               ? "You've worked through all four lessons, including every practice scenario in Lesson 4. Here's what you covered:"
-              : "You've finished all four lesson modules. You skipped some optional practice scenarios in Lesson 4 — you can return to them anytime before the post-test. Here's what you covered:"}
+              : "You've finished all four lesson modules. You skipped some optional practice scenarios in Lesson 4. You can return to them anytime before the post-test. Here's what you covered:"}
           </p>
           <ul className="lesson-complete__recap">
             {RECAP.map((item) => (

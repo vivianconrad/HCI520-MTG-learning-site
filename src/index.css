@@ -2,7 +2,6 @@
 @import './styles/a11y.css';
 @import './styles/responsive.css';
 @import './components/PageLayout.css';
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;

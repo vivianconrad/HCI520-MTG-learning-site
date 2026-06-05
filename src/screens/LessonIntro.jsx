@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import { cardImage } from '../assets/cards/index.js'
 import './LessonIntro.css'
 
 const LESSONS = [
@@ -8,25 +9,25 @@ const LESSONS = [
     num: '01',
     title: 'How to Read a Card',
     time: '~4 min',
-    image: new URL('../assets/creature-shadowmage-infiltrator.webp', import.meta.url).href,
+    image: cardImage('creature-shadowmage-infiltrator.webp'),
   },
   {
     num: '02',
     title: 'The Seven Card Types',
     time: '~4 min',
-    image: new URL('../assets/artifact-sol-ring.jpg', import.meta.url).href,
+    image: cardImage('artifact-sol-ring.jpg'),
   },
   {
     num: '03',
     title: 'How a Turn Works',
     time: '~4 min',
-    image: new URL('../assets/land-forest.jpg', import.meta.url).href,
+    image: cardImage('land-forest.jpg'),
   },
   {
     num: '04',
     title: 'Putting It Together',
     time: '~5 min',
-    image: new URL('../assets/instant-shock.jpg', import.meta.url).href,
+    image: cardImage('instant-shock.jpg'),
   },
 ]
 
@@ -41,9 +42,12 @@ export default function LessonIntro({ session: _session }) {
         <hr className="lesson-intro__rule" aria-hidden="true" />
 
         <div className="lesson-intro__body">
-          <p className="lesson-intro__paragraph">You just finished the pre-test. Now it&apos;s time to learn.</p>
           <p className="lesson-intro__paragraph">
-            Over the next four lessons, you&apos;ll cover everything you need to sit down and play
+            You finished the pre-test. Great work. Before the lessons begin, here is a quick preview
+            of what you will cover.
+          </p>
+          <p className="lesson-intro__paragraph">
+            Over the next four lessons, you&apos;ll learn everything you need to sit down and play
             your first game of Magic: The Gathering.
           </p>
           <p className="lesson-intro__paragraph">Here&apos;s what we&apos;ll go through:</p>
@@ -67,16 +71,16 @@ export default function LessonIntro({ session: _session }) {
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--back"
-            onClick={() => navigate('/intro')}
+            onClick={() => navigate('/pretest-complete')}
           >
-            Back to overview
+            Back
           </button>
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--next"
-            onClick={() => navigate('/lesson/1')}
+            onClick={() => navigate('/what-is-mtg')}
           >
-            Start Lesson 1
+            Continue to overview
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_INTRO} />

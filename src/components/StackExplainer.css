@@ -1,0 +1,59 @@
+.stack-explainer {
+  margin: 24px 0 0;
+  padding: 20px 22px;
+  border: 1px solid var(--color-gold-muted);
+  border-radius: 6px;
+  background: var(--color-parchment-dark);
+  text-align: left;
+}
+
+.stack-explainer + .stack-explainer {
+  margin-top: 16px;
+}
+
+.stack-explainer--brief {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.stack-explainer__heading {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--color-text-dark);
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+
+.stack-explainer__subheading {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--color-text-dark);
+  margin: 14px 0 8px;
+}
+
+.stack-explainer__paragraph,
+.stack-explainer__list {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text-dark);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.stack-explainer__paragraph + .stack-explainer__paragraph,
+.stack-explainer__block + .stack-explainer__paragraph,
+.stack-explainer__paragraph + .stack-explainer__block {
+  margin-top: 10px;
+}
+
+.stack-explainer__list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.stack-explainer__list li + li {
+  margin-top: 6px;
+}

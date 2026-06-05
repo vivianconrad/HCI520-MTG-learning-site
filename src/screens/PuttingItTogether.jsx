@@ -5,25 +5,18 @@ import useScreenTime from '../hooks/useScreenTime.js'
 import { useConfirm } from '../context/ConfirmContext.jsx'
 import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import PageLayout from '../components/PageLayout.jsx'
-import shockImg from '../assets/instant-shock.jpg'
-import giantGrowthImg from '../assets/instant-giant-growth.jpg'
-import llanowarElvesImg from '../assets/creature-llanowar-elves.jpg'
-import forestImg from '../assets/land-forest.jpg'
-import woodlandCemeteryImg from '../assets/land-woodland-cemetery.jpg'
-import cultivateImg from '../assets/sorcery-cultivate.jpg'
-import solRingImg from '../assets/artifact-sol-ring.jpg'
-import counterspellImg from '../assets/instant-counterspell.webp'
+import { cardImage } from '../assets/cards/index.js'
 import './PuttingItTogether.css'
 
 const CARD_IMAGES = {
-  'shock.jpg': shockImg,
-  'giant-growth.jpg': giantGrowthImg,
-  'llanowar-elves.jpg': llanowarElvesImg,
-  'forest.jpg': forestImg,
-  'woodland-cemetery.jpg': woodlandCemeteryImg,
-  'cultivate.jpg': cultivateImg,
-  'sol-ring.jpg': solRingImg,
-  'counterspell.jpg': counterspellImg,
+  'shock.jpg': cardImage('instant-shock.jpg'),
+  'giant-growth.jpg': cardImage('instant-giant-growth.jpg'),
+  'llanowar-elves.jpg': cardImage('creature-llanowar-elves.jpg'),
+  'forest.jpg': cardImage('land-forest.jpg'),
+  'woodland-cemetery.jpg': cardImage('land-woodland-cemetery.jpg'),
+  'cultivate.jpg': cardImage('sorcery-cultivate.jpg'),
+  'sol-ring.jpg': cardImage('artifact-sol-ring.jpg'),
+  'counterspell.jpg': cardImage('instant-counterspell.webp'),
 }
 
 const SCENARIOS = [
@@ -31,7 +24,7 @@ const SCENARIOS = [
     id: 's1',
     text: "It's your main phase. You have a Shock in your hand. Shock is an instant that deals 2 damage and costs one red mana. You have one mountain on the battlefield. Can you cast it right now?",
     cardImage: 'shock.jpg',
-    cardImageAlt: 'Shock — Instant',
+    cardImageAlt: 'Shock: Instant',
     correctAnswer: true,
     explanation:
       'Yes. Shock is an instant, and instants can be cast any time, including your main phase. You also have exactly enough mana to cast it.',
@@ -40,7 +33,7 @@ const SCENARIOS = [
     id: 's2',
     text: "It's your opponent's turn and they just attacked you with a creature. You have a Giant Growth in your hand. Giant Growth is an instant that gives a creature +3/+3. Can you cast it right now to boost your blocker?",
     cardImage: 'giant-growth.jpg',
-    cardImageAlt: 'Giant Growth — Instant',
+    cardImageAlt: 'Giant Growth: Instant',
     correctAnswer: true,
     explanation:
       "Yes. Giant Growth is an instant, which means you can cast it at any time, including on your opponent's turn during combat. This is exactly what instants are designed for.",
@@ -49,7 +42,7 @@ const SCENARIOS = [
     id: 's3',
     text: "It's your first main phase. You have a Llanowar Elves in your hand. Llanowar Elves is a creature that costs one green mana. You have one forest land on the battlefield. Can you cast Llanowar Elves right now?",
     cardImage: 'llanowar-elves.jpg',
-    cardImageAlt: 'Llanowar Elves — Creature',
+    cardImageAlt: 'Llanowar Elves: Creature',
     correctAnswer: true,
     explanation:
       'Yes. Creatures are cast during your main phase, and you have exactly one green mana available from your forest. Llanowar Elves costs one green mana, so you can cast it.',
@@ -58,7 +51,7 @@ const SCENARIOS = [
     id: 's4',
     text: "It's your first main phase. You have two forest lands in your hand and no lands on the battlefield yet. Can you play both of them this turn?",
     cardImage: 'forest.jpg',
-    cardImageAlt: 'Forest — Land',
+    cardImageAlt: 'Forest: Land',
     correctAnswer: false,
     explanation:
       "No. You can only play one land per turn. It doesn't matter how many you have in your hand. Pick one, play it, and save the other for next turn.",
@@ -67,7 +60,7 @@ const SCENARIOS = [
     id: 's5',
     text: "You just played a Woodland Cemetery. The card says 'Woodland Cemetery enters the battlefield tapped unless you control a Swamp or a Forest.' You don't have a Swamp or a Forest. You need one black mana right now to cast a spell. Can you tap Woodland Cemetery for mana immediately after playing it?",
     cardImage: 'woodland-cemetery.jpg',
-    cardImageAlt: 'Woodland Cemetery — Land',
+    cardImageAlt: 'Woodland Cemetery: Land',
     correctAnswer: false,
     explanation:
       "No. Because you don't control a Swamp or a Forest, Woodland Cemetery entered the battlefield tapped. You cannot tap it for mana this turn. It will untap during your next untap step, and then you can use it normally.",
@@ -76,7 +69,7 @@ const SCENARIOS = [
     id: 's6',
     text: "It's your opponent's turn and they just finished attacking you. You have a Cultivate in your hand. Cultivate is a sorcery that searches for land cards. Can you cast it right now?",
     cardImage: 'cultivate.jpg',
-    cardImageAlt: 'Cultivate — Sorcery',
+    cardImageAlt: 'Cultivate: Sorcery',
     correctAnswer: false,
     explanation:
       "No. Sorceries can only be cast during your own main phase when the stack is empty. Since it's your opponent's turn, you'll have to wait.",
@@ -85,7 +78,7 @@ const SCENARIOS = [
     id: 's7',
     text: "It's your first main phase and the stack is empty. You have a Sol Ring in your hand. Sol Ring is an artifact that produces mana. Can you cast it right now?",
     cardImage: 'sol-ring.jpg',
-    cardImageAlt: 'Sol Ring — Artifact',
+    cardImageAlt: 'Sol Ring: Artifact',
     correctAnswer: true,
     explanation:
       'Yes. Artifacts are cast during your main phase when the stack is empty, same as creatures and sorceries. Sol Ring is one of the most commonly cast artifacts in the game.',
@@ -94,7 +87,7 @@ const SCENARIOS = [
     id: 's8',
     text: 'Your opponent just cast a spell and it is currently on the stack. You have a Counterspell in your hand. Counterspell is an instant that cancels another spell. Can you cast it right now to stop their spell?',
     cardImage: 'counterspell.jpg',
-    cardImageAlt: 'Counterspell — Instant',
+    cardImageAlt: 'Counterspell: Instant',
     correctAnswer: true,
     explanation:
       "Yes. Counterspell is an instant, so it can be cast at any time, including in response to your opponent's spell while it is on the stack. This is one of the most powerful things instants can do.",
@@ -278,7 +271,7 @@ export default function PuttingItTogether({ session }) {
                 <span className="putting-together__choice-label">Finish Lesson</span>
                 <span className="putting-together__choice-hint">
                   {allSeen
-                    ? 'You completed all scenarios — go to the lesson wrap-up'
+                    ? 'You completed all scenarios. Go to the lesson wrap-up'
                     : 'Skip any remaining scenarios and go to the lesson wrap-up'}
                 </span>
               </button>

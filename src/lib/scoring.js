@@ -1,7 +1,12 @@
 /** Internal topic keys (not shown in the learner UI). */
-export const TOPIC_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
+export const TOPIC_ORDER = ['LO0', 'LO1', 'LO2', 'LO3', 'LO4']
+
+export const QUESTIONS_PER_TOPIC = 2
+
+export const DEFAULT_TEST_QUESTION_COUNT = TOPIC_ORDER.length * QUESTIONS_PER_TOPIC
 
 export const TOPIC_LABELS = {
+  LO0: 'MTG Basics',
   LO1: 'How to Read a Card',
   LO2: 'How a Turn Works',
   LO3: 'Turn Steps in Detail',
@@ -9,6 +14,7 @@ export const TOPIC_LABELS = {
 }
 
 export const TOPIC_LESSON_PATHS = {
+  LO0: '/what-is-mtg',
   LO1: '/lesson/1',
   LO2: '/lesson/3',
   LO3: '/lesson/3',
@@ -28,12 +34,12 @@ export function calculateScores(selectedQuestions, pretestAnswers, posttestAnswe
 
     if (preIndex === question.correctIndex) {
       pretestCorrect += 1
-      loScores[question.lo].pre += 1
+      if (loScores[question.lo]) loScores[question.lo].pre += 1
     }
 
     if (postIndex === question.correctIndex) {
       posttestCorrect += 1
-      loScores[question.lo].post += 1
+      if (loScores[question.lo]) loScores[question.lo].post += 1
     }
   }
 

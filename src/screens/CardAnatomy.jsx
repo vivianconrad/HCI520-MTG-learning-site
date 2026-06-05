@@ -4,9 +4,10 @@ import LessonActions from '../components/LessonActions.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
+import { cardImage } from '../assets/cards/index.js'
 import './CardAnatomy.css'
 
-const cardImageUrl = new URL('../assets/creature-shadowmage-infiltrator.webp', import.meta.url).href
+const cardImageUrl = cardImage('creature-shadowmage-infiltrator.webp')
 
 const CALLOUTS = [
   {
@@ -204,7 +205,7 @@ export default function CardAnatomy({ session }) {
         <LessonActions
           classPrefix="card-anatomy"
           backHint="Return to lesson overview"
-          onBack={() => navigate('/lesson/intro')}
+          onBack={() => navigate('/what-is-mtg')}
           onNext={() => navigate('/lesson/2')}
           canProceed={allExplored}
           gateMessage="Explore all six numbered markers on the card before continuing."

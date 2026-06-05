@@ -1,13 +1,10 @@
-import shadowmageInfiltratorImg from '../assets/creature-shadowmage-infiltrator.webp'
-import shockImg from '../assets/instant-shock.jpg'
-import cultivateImg from '../assets/sorcery-cultivate.jpg'
-import giantGrowthImg from '../assets/instant-giant-growth.jpg'
+import { cardImage } from '../assets/cards/index.js'
 
 const QUESTION_IMAGES = {
-  'shadowmage-infiltrator': shadowmageInfiltratorImg,
-  shock: shockImg,
-  cultivate: cultivateImg,
-  'giant-growth': giantGrowthImg,
+  'shadowmage-infiltrator': cardImage('creature-shadowmage-infiltrator.webp'),
+  shock: cardImage('instant-shock.jpg'),
+  cultivate: cardImage('sorcery-cultivate.jpg'),
+  'giant-growth': cardImage('instant-giant-growth.jpg'),
 }
 
 export function getQuestionImage(imageKey) {

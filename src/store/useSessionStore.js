@@ -1,12 +1,12 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import questionBank from '../data/questionBank.js'
+import { TOPIC_ORDER } from '../lib/scoring.js'
 import {
   loadPersistedSession,
   persistSession,
   clearPersistedSession,
 } from './sessionStorage.js'
 
-const TOPIC_ORDER = ['LO1', 'LO2', 'LO3', 'LO4']
 const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 
 function generateSessionId() {
@@ -31,7 +31,11 @@ function pickQuestions() {
 }
 
 export default function useSessionStore() {
-  const saved = loadPersistedSession()
+  const savedRef = useRef(null)
+  if (savedRef.current === null) {
+    savedRef.current = loadPersistedSession()
+  }
+  const saved = savedRef.current
 
   const [sessionId] = useState(() => saved?.sessionId ?? generateSessionId())
   const [participantId, setParticipantIdState] = useState(() => saved?.participantId ?? null)
@@ -139,7 +143,7 @@ export default function useSessionStore() {
   }, [])
 
   const resetSession = useCallback(() => {
-    // Clear storage and reload immediately. Do not call setState here — the persist
+    // Clear storage and reload immediately. Do not call setState here: the persist
     // effect would write the old sessionId back into sessionStorage before navigation.
     clearPersistedSession()
     window.location.replace(`${import.meta.env.BASE_URL}`)

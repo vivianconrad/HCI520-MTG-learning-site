@@ -14,7 +14,7 @@ export function persistSession(data) {
   try {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data))
   } catch {
-    // Storage full or unavailable — session continues in memory only
+    // Storage full or unavailable: session continues in memory only
   }
 }
 

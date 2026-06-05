@@ -1,5 +1,102 @@
 const questionBank = [
-  // LO1 — Card anatomy
+  // LO0: MTG basics (formats, zones, tap, play vs cast)
+  {
+    id: 'lo0_q1',
+    lo: 'LO0',
+    question: 'Magic: The Gathering is best described as…',
+    options: [
+      'A collectible card game where players use decks to cast spells and reduce opponents’ life to 0',
+      'A board game with a fixed set of pieces and no deck building',
+      'A video game series with no physical cards',
+      'A single-player puzzle game with no opponents',
+    ],
+    correctIndex: 0,
+  },
+  {
+    id: 'lo0_q2',
+    lo: 'LO0',
+    question: 'Which deck size is typical for a Commander game?',
+    options: ['40 cards minimum', '60 cards minimum', '100 cards (singleton)', 'No limit'],
+    correctIndex: 2,
+  },
+  {
+    id: 'lo0_q3',
+    lo: 'LO0',
+    question: 'In most Standard-style constructed formats, a deck must contain at least how many cards?',
+    options: ['40', '60', '75', '100'],
+    correctIndex: 1,
+  },
+  {
+    id: 'lo0_q4',
+    lo: 'LO0',
+    question: 'How do you put a land onto the battlefield from your hand?',
+    options: ['Cast it like a spell', 'Play it during a main phase', 'Discard it to the graveyard', 'Exile it from your hand'],
+    correctIndex: 1,
+  },
+  {
+    id: 'lo0_q5',
+    lo: 'LO0',
+    question: 'What is the difference between playing a land and casting a spell?',
+    options: [
+      'Lands are played; spells are cast and use the stack',
+      'Both are cast the same way',
+      'Lands are cast; spells are played',
+      'Only instants can be played',
+    ],
+    correctIndex: 0,
+  },
+  {
+    id: 'lo0_q6',
+    lo: 'LO0',
+    question: 'What does it mean to tap a permanent?',
+    options: [
+      'Turn it sideways to show it has been used',
+      'Put it on top of your library',
+      'Move it to the graveyard',
+      'Flip it face down permanently',
+    ],
+    correctIndex: 0,
+  },
+  {
+    id: 'lo0_q7',
+    lo: 'LO0',
+    question: 'Where is your deck during the game?',
+    options: ['Hand', 'Library', 'Graveyard', 'Exile'],
+    correctIndex: 1,
+  },
+  {
+    id: 'lo0_q8',
+    lo: 'LO0',
+    question: 'Where do most creatures go when they die?',
+    options: ['Exile', 'Library', 'Graveyard', 'Hand'],
+    correctIndex: 2,
+  },
+  {
+    id: 'lo0_q9',
+    lo: 'LO0',
+    question: 'What is the exile zone?',
+    options: [
+      'Where cards removed from the game are kept, separate from the graveyard',
+      'Another name for the graveyard',
+      'Where you draw cards from each turn',
+      'The same as the battlefield',
+    ],
+    correctIndex: 0,
+  },
+  {
+    id: 'lo0_q10',
+    lo: 'LO0',
+    question: 'During your untap step, what happens to your tapped permanents?',
+    options: [
+      'They are exiled',
+      'They untap (turn upright) and can be used again',
+      'They go to the graveyard',
+      'You draw an extra card for each one',
+    ],
+    correctIndex: 1,
+  },
+
+  // LO1: Card anatomy
   // Distractors: other card types learners might confuse with creatures
   {
     id: 'lo1_q1',
@@ -7,7 +104,7 @@ const questionBank = [
     question: 'What type of card is this?',
     hasImage: true,
     imageKey: 'shadowmage-infiltrator',
-    imageAlt: 'Shadowmage Infiltrator — Creature',
+    imageAlt: 'Shadowmage Infiltrator: Creature',
     options: ['Creature', 'Instant', 'Land', 'Sorcery'],
     correctIndex: 0,
   },
@@ -36,7 +133,7 @@ const questionBank = [
     correctIndex: 1,
   },
 
-  // LO2 — Turn structure
+  // LO2: Turn structure
   // Distractors: reorder phases or swap main/combat order
   {
     id: 'lo2_q1',
@@ -58,7 +155,7 @@ const questionBank = [
     options: ['Combat', 'Second main phase', 'First main phase', 'Upkeep'],
     correctIndex: 2,
   },
-  // Distractors: "Stack phase" is not a turn phase — tests phase vs. zone confusion
+  // Distractors: "Stack phase" is not a turn phase: tests phase vs. zone confusion
   {
     id: 'lo2_q3',
     lo: 'LO2',
@@ -67,7 +164,7 @@ const questionBank = [
     correctIndex: 1,
   },
 
-  // LO3 — Turn steps in detail
+  // LO3: Turn steps in detail
   // Distractors: other steps where drawing might be incorrectly associated
   {
     id: 'lo3_q1',
@@ -111,7 +208,7 @@ const questionBank = [
     correctIndex: 1,
   },
 
-  // LO4 — Instant vs sorcery timing
+  // LO4: Instant vs sorcery timing
   // Distractors: restrict instants to main phase, combat, or opponent's turn
   {
     id: 'lo4_q1',
@@ -119,7 +216,7 @@ const questionBank = [
     question: 'When can you cast an instant?',
     hasImage: true,
     imageKey: 'shock',
-    imageAlt: 'Shock — Instant',
+    imageAlt: 'Shock: Instant',
     options: [
       'Only during your main phase',
       'Only during combat',
@@ -128,14 +225,14 @@ const questionBank = [
     ],
     correctIndex: 2,
   },
-  // Distractors: "any time" is the instant rule — tests sorcery restriction
+  // Distractors: "any time" is the instant rule: tests sorcery restriction
   {
     id: 'lo4_q2',
     lo: 'LO4',
     question: 'When can you cast a sorcery?',
     hasImage: true,
     imageKey: 'cultivate',
-    imageAlt: 'Cultivate — Sorcery',
+    imageAlt: 'Cultivate: Sorcery',
     options: [
       'Any time',
       'Only during your main phase when the stack is empty',
@@ -152,7 +249,7 @@ const questionBank = [
       'Your opponent just attacked you with a creature. You have an instant in your hand. Can you cast it?',
     hasImage: true,
     imageKey: 'giant-growth',
-    imageAlt: 'Giant Growth — Instant',
+    imageAlt: 'Giant Growth: Instant',
     options: [
       'Yes, instants can be cast any time',
       "No, it's not your turn",
@@ -161,17 +258,17 @@ const questionBank = [
     ],
     correctIndex: 0,
   },
-  // Distractors: pair instants with other types that have different timing rules
+  // Distractors: groups that include instants or omit types with sorcery-speed timing
   {
     id: 'lo4_q4',
     lo: 'LO4',
     question:
-      'Which two card types can only be cast during your own main phase when the stack is empty?',
+      'Which card types can only be cast during your own main phase when the stack is empty (unless the card says otherwise)?',
     options: [
-      'Instants and enchantments',
-      'Sorceries and instants',
-      'Creatures and instants',
-      'Sorceries and enchantments',
+      'Instants, sorceries, and enchantments',
+      'Sorceries, instants, and creatures',
+      'Creatures, instants, and lands',
+      'Sorceries, creatures, and enchantments',
     ],
     correctIndex: 3,
   },

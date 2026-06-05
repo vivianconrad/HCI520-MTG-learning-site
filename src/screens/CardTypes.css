@@ -185,14 +185,30 @@
 }
 
 .card-types__tag {
-  display: inline-block;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
   align-self: flex-start;
-  padding: 2px 8px;
+  padding: 4px 10px;
   border: 1px solid var(--color-gold-muted);
   border-radius: 999px;
   font-family: var(--font-body);
   font-size: 11px;
   color: var(--color-gold-on-parchment);
+  line-height: 1.35;
+}
+
+.card-types__tag-label {
+  font-weight: 500;
+}
+
+.card-types__tag-label::after {
+  content: ':';
+}
+
+.card-types__tag-value {
+  font-weight: 700;
 }
 
 .card-types__divider {

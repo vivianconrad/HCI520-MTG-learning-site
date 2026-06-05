@@ -12,7 +12,7 @@ async function patchParticipant(sessionId, payload, logLabel) {
   console.log(`[db] ${logLabel}: sessionId=`, sessionId, 'payload=', payload)
 
   if (!sessionId) {
-    console.error(`[db] ${logLabel}: aborted — sessionId is missing`)
+    console.error(`[db] ${logLabel}: aborted: sessionId is missing`)
     return { ok: false, rowsUpdated: 0, error: 'missing sessionId' }
   }
 
@@ -56,7 +56,7 @@ async function patchParticipant(sessionId, payload, logLabel) {
 
   if (res.ok && rowsUpdated === 0) {
     console.warn(
-      `[db] ${logLabel}: 0 rows updated — participant row missing or UPDATE blocked by RLS. ` +
+      `[db] ${logLabel}: 0 rows updated: participant row missing or UPDATE blocked by RLS. ` +
         'Run supabase/fix-participants-rls.sql in the Supabase SQL Editor.',
     )
   }

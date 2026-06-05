@@ -2,6 +2,7 @@ import { useCallback, useId, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import {
+  DEFAULT_TEST_QUESTION_COUNT,
   TOPIC_LABELS,
   TOPIC_ORDER,
   aggregateCohortStats,
@@ -177,11 +178,15 @@ export default function InstructorDashboard() {
             <span className="instructor__stat-value">{cohort.count}</span>
           </p>
           <p className="instructor__stat">
-            <span className="instructor__stat-label">Mean pre-test (of 8)</span>
+            <span className="instructor__stat-label">
+              Mean pre-test (of {DEFAULT_TEST_QUESTION_COUNT})
+            </span>
             <span className="instructor__stat-value">{formatMean(cohort.meanPretest)}</span>
           </p>
           <p className="instructor__stat">
-            <span className="instructor__stat-label">Mean post-test (of 8)</span>
+            <span className="instructor__stat-label">
+              Mean post-test (of {DEFAULT_TEST_QUESTION_COUNT})
+            </span>
             <span className="instructor__stat-value">{formatMean(cohort.meanPosttest)}</span>
           </p>
           <p className="instructor__stat">
@@ -236,18 +241,24 @@ export default function InstructorDashboard() {
                     const pre = row.pretest_score ?? 0
                     const post = row.posttest_score ?? 0
                     const gain = post - pre
+                    const questionCount =
+                      row.selected_questions?.length ?? DEFAULT_TEST_QUESTION_COUNT
                     return (
                       <tr key={row.session_id}>
                         <td>
                           <code>{row.session_id}</code>
                         </td>
-                        <td>{pre} / 8</td>
-                        <td>{post} / 8</td>
+                        <td>
+                          {pre} / {questionCount}
+                        </td>
+                        <td>
+                          {post} / {questionCount}
+                        </td>
                         <td>{gain >= 0 ? `+${gain}` : gain}</td>
                         <td>
                           {row.completed_at
                             ? new Date(row.completed_at).toLocaleString()
-                            : '—'}
+                            : '-'}
                         </td>
                       </tr>
                     )
@@ -259,8 +270,8 @@ export default function InstructorDashboard() {
         </section>
 
         <p className="instructor__note">
-          Scores use each participant&apos;s randomly drawn 8 questions (2 per topic). See{' '}
-          <code>docs/evaluation.md</code> for reporting caveats.
+          Scores use each participant&apos;s randomly drawn {DEFAULT_TEST_QUESTION_COUNT} questions
+          (2 per topic). See <code>docs/evaluation.md</code> for reporting caveats.
         </p>
 
         <Link className="instructor__back" to="/">

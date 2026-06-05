@@ -27,8 +27,8 @@ export function ConfirmProvider({ children }) {
 
   return (
     <ConfirmContext.Provider value={confirm}>
-      <div inert={dialog ? true : undefined}>{children}</div>
-      {dialog && (
+      <div {...(dialog ? { inert: true } : {})}>{children}</div>
+      {dialog ? (
         <ConfirmDialog
           title={dialog.title}
           message={dialog.message}
@@ -37,7 +37,7 @@ export function ConfirmProvider({ children }) {
           onCancel={() => close(false)}
           onConfirm={() => close(true)}
         />
-      )}
+      ) : null}
     </ConfirmContext.Provider>
   )
 }

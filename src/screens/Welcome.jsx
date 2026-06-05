@@ -2,19 +2,21 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
+import { cardImage } from '../assets/cards/index.js'
 import './Welcome.css'
 
 const HERO_CARDS = [
   {
-    src: new URL('../assets/creature-llanowar-elves.jpg', import.meta.url).href,
+    src: cardImage('creature-llanowar-elves.jpg'),
     alt: 'Llanowar Elves creature card',
   },
   {
-    src: new URL('../assets/instant-shock.jpg', import.meta.url).href,
+    src: cardImage('instant-shock.jpg'),
     alt: 'Shock instant card',
   },
   {
-    src: new URL('../assets/land-forest.jpg', import.meta.url).href,
+    src: cardImage('land-forest.jpg'),
     alt: 'Forest land card',
   },
 ]
@@ -29,6 +31,8 @@ export default function Welcome({ session }) {
     }
   }, [selectedQuestions, selectQuestions])
 
+  useParticipantBootstrap(session)
+
   return (
     <PageLayout title="Welcome · Learn to Play MTG" className="welcome">
       <div className="welcome__frame">
@@ -39,7 +43,7 @@ export default function Welcome({ session }) {
           A quick guide to reading cards, understanding card types, and taking your first turn.
         </p>
         <p className="welcome__flow">
-          Pre-test → four short lessons → post-test → your results
+          Pre-test → overview → four short lessons → post-test → your results
         </p>
         <p className="welcome__duration">
           Plan for about 15–20 minutes. At the end, you&apos;ll know enough to sit down and play.

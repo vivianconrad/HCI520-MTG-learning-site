@@ -1,9 +1,13 @@
 import { useCallback, useState } from 'react'
+import TapExplainer from '../components/TapExplainer.jsx'
+import CastVsPlayExplainer from '../components/CastVsPlayExplainer.jsx'
 import PageLayout from '../components/PageLayout.jsx'
+import StackExplainer from '../components/StackExplainer.jsx'
 import { useNavigate } from 'react-router-dom'
 import LessonActions from '../components/LessonActions.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
+import { cardImage } from '../assets/cards/index.js'
 import './TurnStructure.css'
 
 const PHASES = [
@@ -12,19 +16,19 @@ const PHASES = [
     label: 'Beginning Phase',
     title: 'Beginning Phase',
     substeps: [
-      'Untap: You untap all of your permanents. Tapped cards become ready to use again.',
+      'Untap: You untap all of your permanents. Turn every tapped card upright so it can be used again. Tapping means turning a card sideways to show it has been used; untapping reverses that at the start of each of your turns.',
       'Upkeep: Triggered abilities that say \'at the beginning of your upkeep\' happen here. Most turns nothing happens during upkeep.',
       'Draw: You draw one card from the top of your library. The first player to go skips this on their very first turn.',
     ],
-    image: new URL('../assets/land-island.png', import.meta.url).href,
+    image: cardImage('land-island.png'),
     imageAlt: 'Island land card',
   },
   {
     id: 'first-main',
     label: 'First Main Phase',
     title: 'First Main Phase',
-    body: 'This is your first chance to play cards. You can play a land, cast creatures, sorceries, enchantments, artifacts, and planeswalkers. You can also cast instants here, though instants can be cast at any time.',
-    image: new URL('../assets/creature-llanowar-elves.jpg', import.meta.url).href,
+    body: 'This is your first chance to play cards. You can play one land (lands are played, not cast) and cast creatures, sorceries, enchantments, artifacts, and planeswalkers. You can also cast instants here, though instants can be cast at any time.',
+    image: cardImage('creature-llanowar-elves.jpg'),
     imageAlt: 'Llanowar Elves creature card',
   },
   {
@@ -33,20 +37,20 @@ const PHASES = [
     title: 'Combat Phase',
     substeps: [
       'Beginning of combat: Abilities that trigger at the start of combat happen here.',
-      'Declare attackers: You choose which untapped creatures attack. They tap as they attack.',
+      'Declare attackers: You choose which untapped creatures attack. Each attacker taps as it attacks, so it cannot attack again this turn.',
       'Declare blockers: Your opponent chooses which creatures block which attackers.',
       'Combat damage: Damage is dealt. Creatures with toughness greater than the damage they took survive.',
       'End of combat: Cleanup before the second main phase.',
     ],
-    image: new URL('../assets/creature-hellkite-tyrant.webp', import.meta.url).href,
+    image: cardImage('creature-hellkite-tyrant.webp'),
     imageAlt: 'Hellkite Tyrant creature card',
   },
   {
     id: 'second-main',
     label: 'Second Main Phase',
     title: 'Second Main Phase',
-    body: 'A second chance to play lands and cast spells after combat. This is a good time for cards you were holding back, or to cast spells after seeing how combat went.',
-    image: new URL('../assets/artifact-sol-ring.jpg', import.meta.url).href,
+    body: 'A second chance to play one land and cast spells after combat. This is a good time for cards you were holding back, or to cast spells after seeing how combat went.',
+    image: cardImage('artifact-sol-ring.jpg'),
     imageAlt: 'Sol Ring artifact card',
   },
   {
@@ -54,7 +58,7 @@ const PHASES = [
     label: 'End Phase',
     title: 'End Phase',
     body: 'The turn wraps up here. If you have more than seven cards in hand you must discard down to seven. Damage on creatures is removed and \'until end of turn\' effects expire.',
-    image: new URL('../assets/enchantment-sylvan-library.webp', import.meta.url).href,
+    image: cardImage('enchantment-sylvan-library.webp'),
     imageAlt: 'Sylvan Library enchantment card',
   },
 ]
@@ -166,12 +170,19 @@ export default function TurnStructure({ session }) {
           )}
         </div>
 
+        <CastVsPlayExplainer variant="full" />
+
+        <TapExplainer variant="full" />
+
+        <StackExplainer variant="full" />
+
         <hr className="turn-structure__divider" aria-hidden="true" />
 
         <p className="turn-structure__closing">
-          The two main phases are what trips most new players up. Remember: you get two chances to
-          play lands and cast spells each turn, one before combat and one after. Only instants can
-          be cast at any time.
+          The two main phases are what trips most new players up. You get two chances to play one
+          land and cast spells each turn, one before combat and one after. Lands are played; spells
+          are cast. Tapped cards untap at the start of your turn. Sorceries need an empty stack;
+          instants can be cast at any time, including in response to spells on the stack.
         </p>
 
         <LessonActions

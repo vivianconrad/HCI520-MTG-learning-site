@@ -115,11 +115,15 @@ export default function Results({ session }) {
           <div className="results__metrics">
             <div className="results__metric">
               <span className="results__metric-label">Pre-Test</span>
-              <span className="results__metric-score">{scores.pretestCorrect} / 8</span>
+              <span className="results__metric-score">
+                {scores.pretestCorrect} / {selectedQuestions.length}
+              </span>
             </div>
             <div className="results__metric">
               <span className="results__metric-label">Post-Test</span>
-              <span className="results__metric-score">{scores.posttestCorrect} / 8</span>
+              <span className="results__metric-score">
+                {scores.posttestCorrect} / {selectedQuestions.length}
+              </span>
             </div>
           </div>
           <p className={improvement.className}>{improvement.text}</p>
@@ -246,7 +250,7 @@ export default function Results({ session }) {
                         </span>
                       ) : (
                         <span className="results__correct-tag results__correct-tag--empty">
-                          —
+                          -
                         </span>
                       )}
                     </td>
