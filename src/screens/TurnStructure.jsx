@@ -27,7 +27,7 @@ const PHASES = [
     id: 'first-main',
     label: 'First Main Phase',
     title: 'First Main Phase',
-    body: 'This is your first chance to play cards. You can play one land (lands are played, not cast) and cast creatures, sorceries, enchantments, artifacts, and planeswalkers. You can also cast instants here, though instants can be cast at any time.',
+    body: 'This is your first window to cast spells when the stack is empty — creatures, sorceries, enchantments, artifacts, and planeswalkers. You may also play your one land for the turn here (lands are played, not cast), or save that land drop for your second main phase. Instants can be cast any time you have priority, including here.',
     image: cardImage('creature-llanowar-elves.jpg'),
     imageAlt: 'Llanowar Elves creature card',
   },
@@ -49,7 +49,7 @@ const PHASES = [
     id: 'second-main',
     label: 'Second Main Phase',
     title: 'Second Main Phase',
-    body: 'A second chance to play one land and cast spells after combat. This is a good time for cards you were holding back, or to cast spells after seeing how combat went.',
+    body: 'After combat, you get a second main phase — mainly another window to cast spells when the stack is empty. Many players hold back creatures or sorceries until they see how combat went. If you have not played a land yet this turn, you may play it now; you still get only one land per turn total.',
     image: cardImage('artifact-sol-ring.jpg'),
     imageAlt: 'Sol Ring artifact card',
   },
@@ -106,7 +106,7 @@ export default function TurnStructure({ session }) {
   }
 
   return (
-    <PageLayout title="Lesson 3 · Turn Structure" className="turn-structure">
+    <PageLayout title="Lesson 3 · Turn Structure" className="turn-structure" showKeywordDictionary>
       <div className="turn-structure__frame">
         <p className="turn-structure__breadcrumb">Lesson 03 · Turn Structure</p>
         <h1 className="turn-structure__heading">How a Turn Works</h1>
@@ -179,10 +179,11 @@ export default function TurnStructure({ session }) {
         <hr className="turn-structure__divider" aria-hidden="true" />
 
         <p className="turn-structure__closing">
-          The two main phases are what trips most new players up. You get two chances to play one
-          land and cast spells each turn, one before combat and one after. Lands are played; spells
-          are cast. Tapped cards untap at the start of your turn. Sorceries need an empty stack;
-          instants can be cast at any time, including in response to spells on the stack.
+          The two main phases are what trips most new players up. You get two windows to cast spells
+          (before and after combat), but only one land per turn — played in your first or second
+          main phase, not one in each. Lands are played; spells are cast. Tapped cards untap at the
+          start of your turn. Sorceries need an empty stack; instants can be cast any time you have
+          priority, including in response to spells on the stack.
         </p>
 
         <LessonActions

@@ -13,7 +13,7 @@ const FULL = [
     heading: 'Playing a land',
     list: [
       'Only land cards are played (not cast).',
-      'You may play one land per turn during a main phase when you have priority.',
+      'You may play one land per turn during your first or second main phase when you have priority — not one in each phase.',
       'The land goes directly onto the battlefield. It never goes on the stack.',
       'Your opponent cannot respond to you playing a land the way they can to a spell.',
     ],

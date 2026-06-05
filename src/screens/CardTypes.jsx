@@ -50,13 +50,13 @@ const CARD_TYPES = [
     id: 'land',
     name: 'Land',
     description:
-      'Lands give you mana (the energy you spend to cast spells). Play one land per turn in your main phase (lands are played, not cast).',
+      'Lands give you mana (the energy you spend to cast spells). Play one land per turn during your first or second main phase (lands are played, not cast).',
     tag: 'Main phase · one per turn',
     wide: false,
     details: [
       {
         heading: 'Playing vs. casting',
-        text: 'Lands are played, not cast. Playing a land puts it directly onto the battlefield during your main phase and does not use the stack. Every other card type in this lesson (with a mana cost in the corner) is cast: you pay mana, the spell goes on the stack, and your opponent can respond before it resolves.',
+        text: 'Lands are played, not cast. You may play one land per turn during your first main phase or your second main phase — not both. Playing a land puts it directly onto the battlefield and does not use the stack. Every other card type in this lesson (with a mana cost in the corner) is cast: you pay mana, the spell goes on the stack, and your opponent can respond before it resolves.',
       },
       {
         heading: 'What is mana?',
@@ -193,7 +193,7 @@ const CARD_TYPES = [
           'Utility effects: anything else the card says: sacrifice for a benefit, pay mana to activate an ability, or trigger when something happens. Always read the rules text.',
         ],
       },
-      'Many artifact abilities use the tap symbol (turn the card sideways) and sometimes a mana cost. You can use those abilities only when you could cast a sorcery, usually during your main phase when the stack is empty, unless the card says otherwise.',
+      'Many artifact abilities use the tap symbol (turn the card sideways) and sometimes a mana cost. You activate those abilities — you do not cast them. Tapping Sol Ring for mana is activating an ability, not casting a spell. You can usually activate only when you could cast a sorcery (your main phase, stack empty), unless the card says otherwise.',
       'Commander’s Sphere also shows a second use: you can sacrifice it (send it to the graveyard) to draw a card. Not every artifact produces mana; some exist purely for protection, card advantage, or combat tricks.',
     ],
     examples: [
@@ -261,7 +261,7 @@ const CARD_TYPES = [
     tag: 'Main phase · stack empty',
     wide: true,
     details: [
-      'Planeswalkers are permanent allies you cast during your main phase when the stack is empty. They enter the battlefield with loyalty counters (shown in the bottom-right corner).',
+      'Planeswalkers are permanent allies you cast during your main phase when the stack is empty. They enter the battlefield with loyalty counters (shown in the bottom-right corner). After a planeswalker is in play, you activate its loyalty abilities — you do not cast those abilities from your hand.',
       {
         heading: 'What is loyalty?',
         text: 'Loyalty counters track how much life your planeswalker has left in the game and how much power they can spend on abilities. The number in the corner is not mana, and planeswalkers do not have power or toughness like creatures. Loyalty belongs only to that planeswalker card.',
@@ -488,7 +488,7 @@ export default function CardTypes({ session }) {
   }, [overlayId, closeOverlay, activeType])
 
   return (
-    <PageLayout title="Lesson 2 · Card Types" className="card-types">
+    <PageLayout title="Lesson 2 · Card Types" className="card-types" showKeywordDictionary>
       <div className="card-types__frame">
         <p className="card-types__breadcrumb">Lesson 02 · Card Types</p>
         <h1 className="card-types__heading">The Seven Card Types</h1>
@@ -526,15 +526,16 @@ export default function CardTypes({ session }) {
         <p className="card-types__closing">
           Notice that only instants can be cast at any time you have priority. Creatures, sorceries,
           enchantments, artifacts, and planeswalkers are cast during your main phase when the stack is
-          empty. Lands are different: they are played (not cast) during a main phase, one per turn,
-          and never use the stack.
+          empty. Lands are different: they are played (not cast) during your first or second main
+          phase, one per turn total, and never use the stack.
         </p>
 
         <p className="card-types__timing-footnote">
-          On the tags above, &ldquo;Main phase · stack empty&rdquo; means your turn, a main phase,
-          and nothing waiting on the stack — the usual timing for casting creatures, sorceries,
-          artifacts, enchantments, and planeswalkers. Some cards break these rules; read the card if
-          you are unsure.
+          On the tags above, &ldquo;Main phase · stack empty&rdquo; means your turn, your first or
+          second main phase, and nothing waiting on the stack — the usual timing for casting
+          creatures, sorceries, artifacts, enchantments, and planeswalkers. Lands use &ldquo;Main
+          phase · one per turn&rdquo;: one land total, played in either main phase. Some cards break
+          these rules; read the card if you are unsure.
         </p>
 
         <p className="card-types__note">

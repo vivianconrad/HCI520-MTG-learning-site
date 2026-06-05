@@ -1,7 +1,8 @@
+import KeywordDictionary from './KeywordDictionary.jsx'
 import { usePageTitle } from '../hooks/usePageTitle.js'
 import './PageLayout.css'
 
-export default function PageLayout({ title, className, children }) {
+export default function PageLayout({ title, className, children, showKeywordDictionary = false }) {
   usePageTitle(title)
 
   return (
@@ -14,6 +15,7 @@ export default function PageLayout({ title, className, children }) {
           {children}
         </main>
       </div>
+      {showKeywordDictionary ? <KeywordDictionary /> : null}
     </>
   )
 }

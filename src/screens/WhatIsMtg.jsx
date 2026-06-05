@@ -38,7 +38,7 @@ export default function WhatIsMtg({ session }) {
   useScreenTime(session, 'WhatIsMtg')
 
   return (
-    <PageLayout title="What Is Magic? · Learn to Play MTG" className="what-is-mtg">
+    <PageLayout title="What Is Magic? · Learn to Play MTG" className="what-is-mtg" showKeywordDictionary>
       <div className="what-is-mtg__frame">
         <p className="what-is-mtg__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="what-is-mtg__heading">What Is Magic?</h1>
@@ -67,7 +67,8 @@ export default function WhatIsMtg({ session }) {
           <h2 className="what-is-mtg__subheading">Playing vs casting</h2>
           <p className="what-is-mtg__paragraph">
             Magic uses two different words on purpose. <strong>Lands are played</strong> from your
-            hand during a main phase (one land per turn by default). They go straight onto the
+            hand during your first or second main phase (one land per turn by default). They go
+            straight onto the
             battlefield — no stack, and your opponent cannot respond the way they can to a spell.{' '}
             <strong>Everything else with a mana cost is cast</strong>: you pay mana, put the spell on
             the stack, and let opponents respond before it resolves.

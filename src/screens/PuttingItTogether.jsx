@@ -19,6 +19,7 @@ const CARD_IMAGES = {
   'sol-ring.jpg': cardImage('artifact-sol-ring.jpg'),
   'counterspell.jpg': cardImage('instant-counterspell.webp'),
   'hellkite-tyrant.webp': cardImage('creature-hellkite-tyrant.webp'),
+  'shadowmage-infiltrator.webp': cardImage('creature-shadowmage-infiltrator.webp'),
 }
 
 const SCENARIOS = [
@@ -35,12 +36,12 @@ const SCENARIOS = [
   },
   {
     id: 's2',
-    text: "It's your opponent's turn and they just attacked you with a creature. You have a Giant Growth in your hand. Giant Growth is an instant that gives a creature +3/+3. Can you cast it right now to boost your blocker?",
+    text: "During combat on your opponent's turn, they attack you with a creature. You declare your untapped 2/2 creature as a blocker. You have Giant Growth in your hand — an instant that gives a creature +3/+3 until end of turn. Can you cast Giant Growth now to boost your blocker?",
     cardImage: 'giant-growth.jpg',
     cardImageAlt: 'Giant Growth: Instant',
     correctAnswer: true,
     explanation:
-      "Yes. Giant Growth is an instant, which means you can cast it at any time, including on your opponent's turn during combat. This is exactly what instants are designed for.",
+      "Yes. Giant Growth is an instant, so you can cast it when you have priority — including during combat on your opponent's turn. Target your blocking creature before damage is dealt to pump it up.",
   },
   {
     id: 's3',
@@ -58,7 +59,7 @@ const SCENARIOS = [
     cardImageAlt: 'Forest: Land',
     correctAnswer: false,
     explanation:
-      "No. You can only play one land per turn. It doesn't matter how many you have in your hand. Pick one, play it, and save the other for next turn.",
+      "No. You can only play one land per turn (during your first or second main phase). It doesn't matter how many you have in your hand. Pick one, play it, and save the other for next turn.",
   },
   {
     id: 's5',
@@ -80,12 +81,12 @@ const SCENARIOS = [
   },
   {
     id: 's7',
-    text: "It's your first main phase and the stack is empty. You have a Sol Ring in your hand. Sol Ring is an artifact that produces mana. Can you cast it right now?",
+    text: "It's your first main phase and the stack is empty. You have a Sol Ring in your hand — it costs {2} (two mana of any type). You have two untapped lands that can produce at least two mana total. Can you tap them for mana and cast Sol Ring right now?",
     cardImage: 'sol-ring.jpg',
     cardImageAlt: 'Sol Ring: Artifact',
     correctAnswer: true,
     explanation:
-      'Yes. Artifacts are cast during your main phase when the stack is empty, same as creatures and sorceries. Sol Ring is one of the most commonly cast artifacts in the game.',
+      'Yes. Artifacts are cast during your main phase when the stack is empty, same as creatures and sorceries. Tap your lands for two mana, pay {2}, and cast Sol Ring.',
   },
   {
     id: 's8',
@@ -104,6 +105,15 @@ const SCENARIOS = [
     correctAnswer: true,
     explanation:
       'Yes. An unblocked attacker deals damage equal to its power to the defending player. Your 5/5 deals 5 damage, lowering their life total. Most games end when a player reaches 0 life.',
+  },
+  {
+    id: 's10',
+    text: "It's your combat phase on the same turn you cast a creature. The creature is untapped and you want to attack with it. Can you attack with it this turn?",
+    cardImage: 'shadowmage-infiltrator.webp',
+    cardImageAlt: 'Creature (summoning sickness example)',
+    correctAnswer: false,
+    explanation:
+      'No. Creatures you cast this turn have summoning sickness — they cannot attack until they have been under your control since the start of your turn. They can still block if they are untapped.',
   },
 ]
 
@@ -192,7 +202,7 @@ export default function PuttingItTogether({ session }) {
   }
 
   return (
-    <PageLayout title="Lesson 4 · Putting It Together" className="putting-together">
+    <PageLayout title="Lesson 4 · Putting It Together" className="putting-together" showKeywordDictionary>
       <div className="putting-together__frame">
         <p className="putting-together__breadcrumb">Lesson 04 · Putting It Together</p>
         <h1 className="putting-together__heading">Let&apos;s Put It Together</h1>

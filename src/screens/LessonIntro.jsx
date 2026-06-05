@@ -35,7 +35,7 @@ export default function LessonIntro({ session: _session }) {
   const navigate = useNavigate()
 
   return (
-    <PageLayout title="Lessons Overview · Learn to Play MTG" className="lesson-intro">
+    <PageLayout title="Lessons Overview · Learn to Play MTG" className="lesson-intro" showKeywordDictionary>
       <div className="lesson-intro__frame">
         <p className="lesson-intro__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="lesson-intro__heading">Here&apos;s What&apos;s Coming</h1>
