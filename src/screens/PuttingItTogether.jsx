@@ -211,7 +211,8 @@ export default function PuttingItTogether({ session }) {
 
         <p className="putting-together__intro">
           Now that you know the card types and the turn structure, let&apos;s see how they connect.
-          Read each scenario and decide what you would do.
+          Read each scenario and decide what you would do. You can finish after the first scenario;
+          the rest are optional practice.
         </p>
 
         <p className="putting-together__intro">

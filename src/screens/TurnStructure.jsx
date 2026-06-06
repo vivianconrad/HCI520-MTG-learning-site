@@ -118,6 +118,10 @@ export default function TurnStructure({ session }) {
           always know what you can do and when.
         </p>
 
+        <p className="turn-structure__hint">
+          Click each phase in the timeline below to read about it. Open all five before you continue.
+        </p>
+
         <div
           className="turn-structure__timeline"
           role="tablist"

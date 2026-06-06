@@ -71,7 +71,8 @@ export default function LessonComplete({ session }) {
         <p className="lesson-complete__breadcrumb">
           Magic: The Gathering · Beginner&apos;s Guide
         </p>
-        <h1 className="lesson-complete__heading">Your mana is tapped, your hand is ready.</h1>
+        <h1 className="lesson-complete__heading">You&apos;ve finished all four lessons.</h1>
+        <p className="lesson-complete__tagline">Your mana is tapped, your hand is ready.</p>
         <hr className="lesson-complete__rule" aria-hidden="true" />
 
         <div className="lesson-complete__body">

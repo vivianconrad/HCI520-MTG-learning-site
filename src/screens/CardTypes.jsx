@@ -643,6 +643,11 @@ export default function CardTypes({ session }) {
 
         <CastVsPlayExplainer variant="brief" />
 
+        <p className="card-types__hint">
+          Tap <strong>See Cards</strong> on each type below once to read about it. You do not need to
+          swipe through every example photo.
+        </p>
+
         <div className="card-types__grid">
           {CARD_TYPES.map((type) => (
             <CardTypeItem
@@ -680,7 +685,7 @@ export default function CardTypes({ session }) {
           onBack={() => navigate('/lesson/1')}
           onNext={() => navigate('/lesson/3')}
           canProceed={allViewed}
-          gateMessage="Open each card type and view its examples before continuing."
+          gateMessage="Open See Cards on each of the seven card types before continuing."
         />
         <ProgressDots activeIndex={PROGRESS.LESSON_2} />
       </div>

@@ -41,7 +41,7 @@ export default function WhatIsMtg({ session }) {
   return (
     <PageLayout title="What Is Magic? · Learn to Play MTG" className="what-is-mtg" showKeywordDictionary>
       <div className="what-is-mtg__frame page-layout__content-frame">
-        <p className="what-is-mtg__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
+        <p className="what-is-mtg__breadcrumb">Overview · What Is Magic?</p>
         <h1 className="what-is-mtg__heading">What Is Magic?</h1>
         <hr className="what-is-mtg__rule" aria-hidden="true" />
 

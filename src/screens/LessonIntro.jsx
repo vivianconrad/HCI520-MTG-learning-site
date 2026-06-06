@@ -4,6 +4,12 @@ import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import { cardImage } from '../assets/cards/index.js'
 import './LessonIntro.css'
 
+const OVERVIEW = {
+  title: 'What Is Magic?',
+  time: '~6 min',
+  image: new URL('../assets/batrlefield-simple.jpg', import.meta.url).href,
+}
+
 const LESSONS = [
   {
     num: '01',
@@ -47,15 +53,26 @@ export default function LessonIntro({ session: _session }) {
             of what you will cover.
           </p>
           <p className="lesson-intro__paragraph">
-            Over the next four lessons, you&apos;ll learn everything you need to sit down and play
-            your first game of Magic: The Gathering. Official rules terms appear in gold in the
-            lessons — hover or tap one for a quick definition. Use the Keyword guide in the corner
-            for the full list, including informal terms like summoning sickness.
+            You&apos;ll start with a short overview, then work through four interactive lessons.
+            Official rules terms appear in gold — hover or tap one for a quick definition. Use the
+            Keyword guide in the corner for the full list, including informal terms like summoning
+            sickness.
           </p>
           <p className="lesson-intro__paragraph">Here&apos;s what we&apos;ll go through:</p>
         </div>
 
         <ul className="lesson-intro__list">
+          <li>
+            <img
+              className="lesson-intro__lesson-image"
+              src={OVERVIEW.image}
+              alt="Overview battlefield diagram preview"
+            />
+            <span className="lesson-intro__lesson-num">Overview</span>
+            {': '}
+            {OVERVIEW.title}
+            <span className="lesson-intro__lesson-time"> ({OVERVIEW.time})</span>
+          </li>
           {LESSONS.map((lesson) => (
             <li key={lesson.num}>
               <img className="lesson-intro__lesson-image" src={lesson.image} alt={`Lesson ${lesson.num} card preview`} />
@@ -82,7 +99,7 @@ export default function LessonIntro({ session: _session }) {
             className="lesson-intro__button lesson-intro__button--next"
             onClick={() => navigate('/what-is-mtg')}
           >
-            Continue to overview
+            Continue to What Is Magic?
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_INTRO} />

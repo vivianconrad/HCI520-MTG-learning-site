@@ -388,6 +388,15 @@
 }
 
 @media (max-width: 640px) {
+  .putting-together__scenario {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .putting-together__scenario-text-box {
+    width: 100%;
+  }
+
   .putting-together__follow-up-options {
     grid-template-columns: 1fr;
   }

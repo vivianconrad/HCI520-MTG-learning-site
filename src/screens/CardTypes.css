@@ -52,6 +52,15 @@
   text-align: left;
 }
 
+.card-types__hint {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-gold-on-parchment);
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
 .card-types__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
