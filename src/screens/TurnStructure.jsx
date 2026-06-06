@@ -71,7 +71,7 @@ export default function TurnStructure({ session }) {
   const [visitedIds, setVisitedIds] = useState(() => new Set(['beginning']))
 
   const selected = PHASES.find((p) => p.id === selectedId) ?? PHASES[0]
-  const panelId = `turn-phase-panel-${selectedId}`
+  const panelId = 'turn-phase-panel'
   const allPhasesExplored = visitedIds.size === PHASES.length
 
   const selectPhase = useCallback((id) => {
@@ -137,6 +137,7 @@ export default function TurnStructure({ session }) {
                 id={`turn-tab-${phase.id}`}
                 aria-selected={selectedId === phase.id}
                 aria-controls={panelId}
+                tabIndex={selectedId === phase.id ? 0 : -1}
                 className={`turn-structure__node${selectedId === phase.id ? ' turn-structure__node--active' : ''}${visitedIds.has(phase.id) ? ' turn-structure__node--visited' : ''}`}
                 onClick={() => selectPhase(phase.id)}
               >
@@ -186,11 +187,7 @@ export default function TurnStructure({ session }) {
         <hr className="turn-structure__divider" aria-hidden="true" />
 
         <p className="turn-structure__closing">
-          The two main phases are what trips most new players up. You get two windows to cast spells
-          (before and after combat), but only one land per turn — played in your first or second
-          main phase, not one in each. Lands are played; spells are cast. Tapped cards untap at the
-          start of your turn. Sorceries need an empty stack; instants can be cast any time you have
-          priority, including in response to spells on the stack.
+          <GlossaryText text="The two main phases are what trips most new players up. You get two windows to cast spells (before and after combat), but only one land per turn — played in your first or second main phase, not one in each. Lands are played; spells are cast. Tapped cards untap at the start of your turn. Sorceries need an empty stack; instants can be cast any time you have priority, including in response to spells on the stack." />
         </p>
 
         <LessonActions
