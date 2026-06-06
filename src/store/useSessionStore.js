@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import questionBank from '../data/questionBank.js'
 import { TOPIC_ORDER } from '../lib/scoring.js'
 import {
   loadPersistedSession,
@@ -28,7 +27,17 @@ function shuffle(array) {
   return copy
 }
 
-function pickQuestions() {
+let questionBankPromise = null
+
+function loadQuestionBank() {
+  if (!questionBankPromise) {
+    questionBankPromise = import('../data/questionBank.js').then((module) => module.default)
+  }
+  return questionBankPromise
+}
+
+async function pickQuestions() {
+  const questionBank = await loadQuestionBank()
   return TOPIC_ORDER.flatMap((topicKey) => {
     const pool = questionBank.filter((q) => q.lo === topicKey)
     return shuffle(pool).slice(0, 2)
@@ -123,8 +132,8 @@ export default function useSessionStore() {
     posttestCompleted,
   ])
 
-  const selectQuestions = useCallback(() => {
-    const selected = pickQuestions()
+  const selectQuestions = useCallback(async () => {
+    const selected = await pickQuestions()
     setSelectedQuestions(selected)
     return selected
   }, [])

@@ -1,11 +1,12 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBrowserBackConfirm } from '../hooks/useBrowserBackConfirm.js'
 import useScreenTime from '../hooks/useScreenTime.js'
-import { savePosttest } from '../lib/db.js'
+import { isParticipantUpdateBlocked, savePosttest } from '../lib/db.js'
+import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
 import { useConfirm } from '../context/ConfirmContext.jsx'
 import {
   POSTTEST_LEAVE_CONFIRM_MESSAGE,
@@ -17,6 +18,7 @@ import useRedirectIfTestComplete from '../hooks/useRedirectIfTestComplete.js'
 export default function PostTest({ session }) {
   const navigate = useNavigate()
   const confirm = useConfirm()
+  const [saveWarning, setSaveWarning] = useState(null)
   const {
     sessionId,
     sessionSecret,
@@ -39,8 +41,18 @@ export default function PostTest({ session }) {
     async (lastAnswer) => {
       const answers = { ...posttestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
-      await savePosttest(sessionId, sessionSecret, answers, score)
+      const result = await savePosttest(sessionId, sessionSecret, answers, score)
       markPosttestCompleted()
+
+      if (isParticipantUpdateBlocked(result)) {
+        if (import.meta.env.DEV) {
+          console.warn('[PostTest] savePosttest blocked:', result)
+        }
+        setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
+        window.setTimeout(() => navigate('/calculating', { replace: true }), 2500)
+        return
+      }
+
       navigate('/calculating', { replace: true })
     },
     [posttestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPosttestCompleted],
@@ -89,6 +101,11 @@ export default function PostTest({ session }) {
       className="pretest"
       showKeywordDictionary={false}
     >
+      {saveWarning ? (
+        <p className="pretest__save-warning" role="alert">
+          {saveWarning}
+        </p>
+      ) : null}
       <TestQuestionFlow
         testLabel="Post-Test"
         progressIndex={PROGRESS.POSTTEST}

@@ -77,6 +77,10 @@
   pointer-events: none;
 }
 
+.keyword-tooltip--open .keyword-tooltip__popup {
+  pointer-events: auto;
+}
+
 .keyword-tooltip--below .keyword-tooltip__popup {
   top: calc(100% + 10px);
   bottom: auto;
@@ -84,10 +88,6 @@
 
 .keyword-tooltip--open .keyword-tooltip__popup {
   display: block;
-}
-
-.keyword-tooltip--pinned .keyword-tooltip__popup {
-  pointer-events: auto;
 }
 
 .keyword-tooltip__popup::after {

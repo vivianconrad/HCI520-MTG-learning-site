@@ -1,11 +1,12 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBrowserBackConfirm } from '../hooks/useBrowserBackConfirm.js'
 import useScreenTime from '../hooks/useScreenTime.js'
-import { savePretest } from '../lib/db.js'
+import { isParticipantUpdateBlocked, savePretest } from '../lib/db.js'
+import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
 import { useConfirm } from '../context/ConfirmContext.jsx'
 import {
   PRETEST_LEAVE_CONFIRM_MESSAGE,
@@ -17,6 +18,7 @@ import useRedirectIfTestComplete from '../hooks/useRedirectIfTestComplete.js'
 export default function PreTest({ session }) {
   const navigate = useNavigate()
   const confirm = useConfirm()
+  const [saveWarning, setSaveWarning] = useState(null)
   const {
     sessionId,
     sessionSecret,
@@ -46,8 +48,18 @@ export default function PreTest({ session }) {
     async (lastAnswer) => {
       const answers = { ...pretestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
-      await savePretest(sessionId, sessionSecret, answers, score)
+      const result = await savePretest(sessionId, sessionSecret, answers, score)
       markPretestCompleted()
+
+      if (isParticipantUpdateBlocked(result)) {
+        if (import.meta.env.DEV) {
+          console.warn('[PreTest] savePretest blocked:', result)
+        }
+        setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
+        window.setTimeout(() => navigate('/pretest-complete', { replace: true }), 2500)
+        return
+      }
+
       navigate('/pretest-complete', { replace: true })
     },
     [pretestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPretestCompleted],
@@ -96,6 +108,11 @@ export default function PreTest({ session }) {
       className="pretest"
       showKeywordDictionary={false}
     >
+      {saveWarning ? (
+        <p className="pretest__save-warning" role="alert">
+          {saveWarning}
+        </p>
+      ) : null}
       <TestQuestionFlow
         testLabel="Pre-Test"
         progressIndex={PROGRESS.PRETEST}

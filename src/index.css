@@ -13,3 +13,10 @@ body {
   background: var(--color-navy);
   font-family: var(--font-body);
 }
+
+.route-fallback {
+  margin: 0;
+  padding: 2rem;
+  color: var(--color-cream);
+  text-align: center;
+}

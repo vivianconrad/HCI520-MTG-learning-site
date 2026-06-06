@@ -1,0 +1,1 @@
+var e=`/lesson/4`;export{e as t};

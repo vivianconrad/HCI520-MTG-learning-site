@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createParticipantRow } from '../lib/db.js'
+import { SESSION_UPDATE_BLOCKED_MESSAGE } from '../lib/sessionErrors.js'
 
 /**
  * Creates the Supabase participant row as soon as questions are selected so
@@ -30,7 +31,7 @@ export default function useParticipantBootstrap(session) {
         setParticipantId(id)
         markParticipantRowReady()
       } else {
-        setRowError('Could not save your session. Refresh the page and try again.')
+        setRowError(SESSION_UPDATE_BLOCKED_MESSAGE)
       }
     })
 

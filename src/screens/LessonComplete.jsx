@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
-import { saveLessonProgress, saveScreenTime } from '../lib/db.js'
+import { isParticipantUpdateBlocked, saveLessonProgress, saveScreenTime } from '../lib/db.js'
+import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
 import { PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import { useConfirm } from '../context/ConfirmContext.jsx'
 import PageLayout from '../components/PageLayout.jsx'
@@ -39,14 +40,29 @@ export default function LessonComplete({ session }) {
     posttestCompleted,
   } = session
   const completedAllPractice = scenariosAttempted >= PRACTICE_SCENARIO_COUNT
+  const [saveWarning, setSaveWarning] = useState(null)
 
   useEffect(() => {
     setLessonsCompleted(true)
-    saveLessonProgress(sessionId, sessionSecret, true, scenariosAttempted)
+    saveLessonProgress(sessionId, sessionSecret, true, scenariosAttempted).then((result) => {
+      if (isParticipantUpdateBlocked(result)) {
+        if (import.meta.env.DEV) {
+          console.warn('[LessonComplete] saveLessonProgress blocked:', result)
+        }
+        setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
+      }
+    })
   }, [sessionId, sessionSecret, scenariosAttempted, setLessonsCompleted])
 
   useEffect(() => {
-    saveScreenTime(sessionId, sessionSecret, screenTimes)
+    saveScreenTime(sessionId, sessionSecret, screenTimes).then((result) => {
+      if (isParticipantUpdateBlocked(result)) {
+        if (import.meta.env.DEV) {
+          console.warn('[LessonComplete] saveScreenTime blocked:', result)
+        }
+        setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
+      }
+    })
   }, [sessionId, sessionSecret, screenTimes])
 
   return (
@@ -81,6 +97,12 @@ export default function LessonComplete({ session }) {
         </div>
 
         <CopySessionId sessionId={session.sessionId} className="lesson-complete__session" />
+
+        {saveWarning ? (
+          <p className="lesson-complete__save-warning" role="status">
+            {saveWarning}
+          </p>
+        ) : null}
 
         <div className="lesson-complete__actions">
           <button

@@ -1,8 +1,5 @@
 import { nanoid } from 'nanoid'
 import { supabase } from './supabase'
-import { SESSION_UPDATE_BLOCKED_MESSAGE } from './sessionErrors.js'
-
-export { SESSION_UPDATE_BLOCKED_MESSAGE } from './sessionErrors.js'
 
 /** True when PATCH succeeded at HTTP level but RLS blocked the update (wrong session secret or missing row). */
 export function isParticipantUpdateBlocked(result) {

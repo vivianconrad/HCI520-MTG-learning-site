@@ -1,0 +1,1 @@
+import{t as e}from"./vendor-supabase-C6gw_uLY.js";var t=e(`https://scoupfjynfxholvwfglp.supabase.co`,`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNjb3VwZmp5bmZ4aG9sdndmZ2xwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMzIxNDMsImV4cCI6MjA5NTkwODE0M30.QNkKTCBfR-QnFlRKZxH-j6r9qPodFzQe6aLwoyZCRjM`);export{t};

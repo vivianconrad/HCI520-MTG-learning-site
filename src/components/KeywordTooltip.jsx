@@ -40,13 +40,7 @@ export default function KeywordTooltip({ term, definition, children }) {
   }, [open, definition])
 
   useEffect(() => {
-    if (!pinned) return undefined
-
-    function onPointerDown(event) {
-      if (rootRef.current?.contains(event.target)) return
-      setPinned(false)
-      setHovered(false)
-    }
+    if (!open) return undefined
 
     function onKeyDown(event) {
       if (event.key === 'Escape') {
@@ -55,12 +49,21 @@ export default function KeywordTooltip({ term, definition, children }) {
       }
     }
 
-    document.addEventListener('pointerdown', onPointerDown)
     document.addEventListener('keydown', onKeyDown)
-    return () => {
-      document.removeEventListener('pointerdown', onPointerDown)
-      document.removeEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [open])
+
+  useEffect(() => {
+    if (!pinned) return undefined
+
+    function onPointerDown(event) {
+      if (rootRef.current?.contains(event.target)) return
+      setPinned(false)
+      setHovered(false)
     }
+
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
   }, [pinned])
 
   return (

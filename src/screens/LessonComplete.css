@@ -89,6 +89,15 @@
   margin: 0 0 32px;
 }
 
+.lesson-complete__save-warning {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-error);
+  text-align: center;
+  margin: -16px 0 24px;
+  line-height: 1.45;
+}
+
 .lesson-complete__review-strip {
   display: flex;
   justify-content: center;

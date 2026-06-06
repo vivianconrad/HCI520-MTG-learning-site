@@ -29,7 +29,7 @@ Copy environment variables (not committed):
 cp .env.example .env.local
 ```
 
-Edit `.env.local` with your Supabase project URL and anon key. Optional: set `VITE_INSTRUCTOR_PASSWORD` for the `/instructor` dashboard gate.
+Edit `.env.local` with your Supabase project URL and anon key.
 
 Start the dev server:
 
@@ -104,10 +104,20 @@ Research data is saved incrementally to the `participants` table:
 
 **Instructor analysis**
 
-- Browser dashboard: `/instructor` (optional; run `supabase/instructor-select-policy.sql` because default RLS blocks reads)
-- Or use the Supabase **Table Editor** (recommended with deny-select policy)
+- Browser route `/instructor` shows the dashboard UI and attempts to load cohort data. With deny-select RLS (the default from `participants.sql`), browser reads fail—this is expected.
+- **Recommended:** use the Supabase **Table Editor** (→ `participants`) to view and export cohort data. The dashboard displays this guidance when RLS blocks reads.
+- Do **not** run `supabase/instructor-select-policy.sql` to enable browser reads—that file is intentionally a no-op and must stay that way.
 
 See `docs/evaluation.md` for reporting metrics.
+
+**Deploying session_secret migration**
+
+For existing Supabase projects that already have a `participants` table without `session_secret`:
+
+1. Deploy the updated app (with `session_secret` handling in `src/lib/db.js`) **before** running `supabase/migrations/add-session-secret.sql`.
+2. After the migration, participants who started a session before the update must reset: clear session storage (or start a new session) so the app generates and stores a matching `session_secret`.
+3. If participant saves return 0 rows updated, run `supabase/fix-participants-rls.sql` in the Supabase SQL editor.
+4. Optional: run `supabase/validate-participant-scores.sql` to add score bounds validation on insert/update.
 
 ## Security
 
