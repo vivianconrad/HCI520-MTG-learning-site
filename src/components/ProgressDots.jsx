@@ -25,7 +25,7 @@ export default function ProgressDots({ activeIndex }) {
 
   return (
     <nav className="progress-dots" aria-label="Lesson progress">
-      <span className="progress-dots__label">
+      <span className="progress-dots__label" aria-current="step">
         Step {stepNumber} of {PROGRESS_STEP_COUNT}
       </span>
       <div className="progress-dots__track" aria-hidden="true">

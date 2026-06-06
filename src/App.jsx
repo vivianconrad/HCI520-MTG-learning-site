@@ -22,9 +22,16 @@ const InstructorDashboard = lazy(() => import('./screens/InstructorDashboard.jsx
 
 function RouteFallback() {
   return (
-    <p className="route-fallback" aria-live="polite">
-      Loading…
-    </p>
+    <>
+      <a href="#main" className="skip-link">
+        Skip to main content
+      </a>
+      <main id="main" tabIndex={-1}>
+        <p className="route-fallback" aria-live="polite">
+          Loading…
+        </p>
+      </main>
+    </>
   )
 }
 

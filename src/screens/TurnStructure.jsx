@@ -152,7 +152,6 @@ export default function TurnStructure({ session }) {
         </p>
 
         <div
-          key={selectedId}
           id={panelId}
           role="tabpanel"
           aria-labelledby={`turn-tab-${selectedId}`}

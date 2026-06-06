@@ -17,6 +17,6 @@ body {
 .route-fallback {
   margin: 0;
   padding: 2rem;
-  color: var(--color-cream);
+  color: var(--color-text-light);
   text-align: center;
 }

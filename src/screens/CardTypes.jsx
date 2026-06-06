@@ -535,7 +535,7 @@ function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
           >
             <CardThumbnail
               src={example.src}
-              alt={`${example.label}, ${type.name} card`}
+              alt=""
               className="card-types__thumbnail-image"
             />
           </button>
@@ -562,10 +562,9 @@ export default function CardTypes({ session }) {
   const [seenIds, setSeenIds] = useState(() => new Set())
   const [activeExampleIndex, setActiveExampleIndex] = useState(0)
   const overlayPanelRef = useRef(null)
-  const closeButtonRef = useRef(null)
 
   const activeType = CARD_TYPES.find((t) => t.id === overlayId)
-  const overlayOpen = Boolean(activeType && !isClosing)
+  const overlayOpen = Boolean(activeType)
 
   useFocusTrap(overlayPanelRef, overlayOpen)
   const allViewed = seenIds.size === CARD_TYPES.length
@@ -597,12 +596,6 @@ export default function CardTypes({ session }) {
 
     return () => window.clearTimeout(timer)
   }, [isClosing])
-
-  useEffect(() => {
-    if (overlayOpen) {
-      closeButtonRef.current?.focus()
-    }
-  }, [overlayOpen])
 
   useEffect(() => {
     if (!overlayId) return undefined
@@ -693,18 +686,22 @@ export default function CardTypes({ session }) {
       {activeType && (
         <div
           className={`card-types__overlay${isClosing ? ' card-types__overlay--closing' : ''}`}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${activeType.name} card type`}
-          onClick={(event) => {
-            if (event.target === event.currentTarget) closeOverlay()
-          }}
+          role="presentation"
         >
+          <button
+            type="button"
+            className="card-types__overlay-backdrop"
+            aria-label={`Close ${activeType.name} card type`}
+            onClick={closeOverlay}
+          />
           <div
             ref={overlayPanelRef}
             className={`card-types__overlay-card${
               activeType.examples.length === 1 ? ' card-types__overlay-card--single' : ''
             }${activeType.details?.length ? ' card-types__overlay-card--detailed' : ''}`}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="card-types-overlay-title"
           >
             {(() => {
               const activeExample = activeType.examples[activeExampleIndex] ?? activeType.examples[0]
@@ -719,7 +716,6 @@ export default function CardTypes({ session }) {
               return (
                 <>
             <button
-              ref={closeButtonRef}
               type="button"
               className="card-types__overlay-close"
               aria-label="Close"
@@ -767,7 +763,9 @@ export default function CardTypes({ session }) {
                 </button>
               </div>
             )}
-            <h3 className="card-types__overlay-name">{activeType.name}</h3>
+            <h3 id="card-types-overlay-title" className="card-types__overlay-name">
+              {activeType.name}
+            </h3>
             <CardTypeDetails
               description={activeType.description}
               details={activeType.details}

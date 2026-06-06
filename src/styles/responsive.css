@@ -24,9 +24,9 @@
   }
 
   .card-anatomy__callout-marker {
-    width: 28px;
-    height: 28px;
-    font-size: 13px;
+    width: 44px;
+    height: 44px;
+    font-size: 14px;
   }
 
   .card-anatomy__marker--active .card-anatomy__marker-tooltip {
@@ -40,6 +40,10 @@
 }
 
 button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
 [role='tab']:focus-visible,
 [role='radio']:focus-visible {
   outline: 2px solid var(--color-gold);

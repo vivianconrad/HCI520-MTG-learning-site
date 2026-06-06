@@ -249,7 +249,8 @@ export default function PuttingItTogether({ session }) {
           </div>
         </div>
 
-        <div className="putting-together__answers">
+        <fieldset className="putting-together__answers">
+          <legend className="visually-hidden">Can you do what this scenario describes?</legend>
           <button
             type="button"
             className={getAnswerClassName(true)}
@@ -266,7 +267,7 @@ export default function PuttingItTogether({ session }) {
           >
             No
           </button>
-        </div>
+        </fieldset>
 
         {phase === 'feedback' && (
           <div

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useConfirm } from '../context/ConfirmContext.jsx'
 import ProgressDots from './ProgressDots.jsx'
@@ -20,6 +20,8 @@ export default function TestQuestionFlow({
 }) {
   const navigate = useNavigate()
   const confirm = useConfirm()
+  const optionRefs = useRef([])
+  const shouldFocusOptionRef = useRef(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedIndex, setSelectedIndex] = useState(null)
 
@@ -28,6 +30,8 @@ export default function TestQuestionFlow({
   const isLast = currentIndex === total - 1
   const isFirst = currentIndex === 0
   const questionHeadingId = `test-question-${question.id}`
+  const progressAnnouncement = `${testLabel} · Question ${currentIndex + 1} of ${total}`
+  const focusableOptionIndex = selectedIndex ?? 0
 
   const handleNext = useCallback(() => {
     if (selectedIndex === null) return
@@ -44,39 +48,47 @@ export default function TestQuestionFlow({
   }, [selectedIndex, question.id, setAnswer, isLast, onComplete])
 
   useEffect(() => {
-    function handleKeyDown(event) {
-      const optionCount = question.options.length
-      const keyNum = parseInt(event.key, 10)
-      if (keyNum >= 1 && keyNum <= optionCount) {
-        setSelectedIndex(keyNum - 1)
-        return
-      }
+    optionRefs.current = optionRefs.current.slice(0, question.options.length)
+  }, [question.options.length, currentIndex])
 
-      if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
-        event.preventDefault()
-        setSelectedIndex((prev) =>
-          prev === null ? 0 : (prev + 1) % optionCount,
-        )
-        return
-      }
+  useEffect(() => {
+    if (!shouldFocusOptionRef.current) return
+    shouldFocusOptionRef.current = false
+    optionRefs.current[focusableOptionIndex]?.focus()
+  }, [focusableOptionIndex, selectedIndex])
 
-      if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-        event.preventDefault()
-        setSelectedIndex((prev) =>
-          prev === null ? optionCount - 1 : (prev - 1 + optionCount) % optionCount,
-        )
-        return
-      }
+  function handleFrameKeyDown(event) {
+    if (event.target.closest('.pretest__actions')) return
 
-      if (event.key === 'Enter' && selectedIndex !== null) {
-        event.preventDefault()
-        handleNext()
-      }
+    const optionCount = question.options.length
+    const keyNum = parseInt(event.key, 10)
+    if (keyNum >= 1 && keyNum <= optionCount) {
+      shouldFocusOptionRef.current = true
+      setSelectedIndex(keyNum - 1)
+      return
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [question.options.length, selectedIndex, handleNext])
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+      event.preventDefault()
+      shouldFocusOptionRef.current = true
+      setSelectedIndex((prev) => (prev === null ? 0 : (prev + 1) % optionCount))
+      return
+    }
+
+    if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+      event.preventDefault()
+      shouldFocusOptionRef.current = true
+      setSelectedIndex((prev) =>
+        prev === null ? optionCount - 1 : (prev - 1 + optionCount) % optionCount,
+      )
+      return
+    }
+
+    if (event.key === 'Enter' && selectedIndex !== null && event.target.closest('[role="radiogroup"]')) {
+      event.preventDefault()
+      handleNext()
+    }
+  }
 
   async function handleBack() {
     if (isFirst) {
@@ -94,13 +106,13 @@ export default function TestQuestionFlow({
   }
 
   return (
-    <div className="pretest__frame">
-      <p className="pretest__breadcrumb">
-        {testLabel} · Question {currentIndex + 1} of {total}
+    <div className="pretest__frame" onKeyDown={handleFrameKeyDown}>
+      <p className="pretest__breadcrumb" aria-live="polite" aria-atomic="true">
+        {progressAnnouncement}
       </p>
       {introNote && <p className="pretest__intro-note">{introNote}</p>}
       {/* Plain text only — no inline keyword highlights during assessment. */}
-      <p id={questionHeadingId} className="pretest__question" aria-live="polite">
+      <p id={questionHeadingId} className="pretest__question">
         {question.question}
       </p>
       {question.hasImage && (
@@ -120,9 +132,13 @@ export default function TestQuestionFlow({
           return (
             <button
               key={option}
+              ref={(element) => {
+                optionRefs.current[index] = element
+              }}
               type="button"
               role="radio"
               aria-checked={isSelected}
+              tabIndex={index === focusableOptionIndex ? 0 : -1}
               className={`pretest__option${isSelected ? ' pretest__option--selected' : ''}`}
               onClick={() => setSelectedIndex(index)}
             >
