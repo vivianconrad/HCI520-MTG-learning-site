@@ -15,6 +15,8 @@ const REVIEW_CARDS = [
   cardImage('instant-counterspell.webp'),
   cardImage('sorcery-cultivate.jpg'),
   cardImage('artifact-sol-ring.jpg'),
+  cardImage('enchantment-sylvan-library.webp'),
+  cardImage('planeswalker-nahiri.webp'),
   cardImage('land-woodland-cemetery.jpg'),
 ]
 

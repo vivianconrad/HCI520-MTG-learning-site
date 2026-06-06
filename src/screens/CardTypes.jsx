@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusTrap } from '../hooks/useFocusTrap.js'
 import { useNavigate } from 'react-router-dom'
-import CastVsPlayExplainer from '../components/CastVsPlayExplainer.jsx'
 import LessonActions from '../components/LessonActions.jsx'
 import PageLayout from '../components/PageLayout.jsx'
-import StackExplainer from '../components/StackExplainer.jsx'
-import TapExplainer from '../components/TapExplainer.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { cardImage } from '../assets/cards/index.js'
@@ -33,6 +30,10 @@ const CARD_TYPES = [
     ],
     examples: [
       {
+        src: cardImage('creature-explanation.png'),
+        label: 'Creature (card back explanation)',
+      },
+      {
         src: cardImage('creature-llanowar-elves.jpg'),
         label: 'Llanowar Elves',
       },
@@ -43,6 +44,34 @@ const CARD_TYPES = [
       {
         src: cardImage('creature-legendary-grothama.webp'),
         label: 'Grothama, All-Devouring',
+      },
+      {
+        src: cardImage('creature-avatar-of-woe.png'),
+        label: 'Avatar of Woe',
+      },
+      {
+        src: cardImage('creature-hellkite-tyrant.webp'),
+        label: 'Hellkite Tyrant',
+      },
+      {
+        src: cardImage('creature-legendary-amareth.jpg'),
+        label: 'Amareth, the Lustrous',
+      },
+      {
+        src: cardImage('creature-legendary-mmmenon.webp'),
+        label: 'Memnon',
+      },
+      {
+        src: cardImage('creature-legendary-zimone-all-questioning.png'),
+        label: 'Zimone, All-Questioning',
+      },
+      {
+        src: cardImage('creature-skilled-animator.jpg'),
+        label: 'Skilled Animator',
+      },
+      {
+        src: cardImage('creature-ashling-flame-dancer.webp'),
+        label: 'Ashling, Flame Dancer',
       },
     ],
   },
@@ -92,6 +121,16 @@ const CARD_TYPES = [
     ],
     examples: [
       {
+        src: cardImage('land-basic-explanation.png'),
+        label: 'Basic Land',
+        role: 'Basic land',
+      }, 
+      {
+        src: cardImage('land-nonbasic-explanation.png'),
+        label: 'Non-basic land',
+        role: 'Non-basic land',
+      }, 
+      {
         src: cardImage('land-plains.webp'),
         label: 'Plains',
         role: 'Basic land',
@@ -121,6 +160,26 @@ const CARD_TYPES = [
         label: 'Woodland Cemetery',
         role: 'Non-basic land',
       },
+      {
+        src: cardImage('land-blast-zone.webp'),
+        label: 'Blast Zone',
+        role: 'Non-basic land',
+      },
+      {
+        src: cardImage('land-canopy-vista.png'),
+        label: 'Canopy Vista',
+        role: 'Non-basic land',
+      },
+      {
+        src: cardImage('land-castle-vantress.jpg'),
+        label: 'Castle Vantress',
+        role: 'Non-basic land',
+      },
+      {
+        src: cardImage('land-dol-amroth.png'),
+        label: 'Dol Amroth',
+        role: 'Non-basic land',
+      },
     ],
   },
   {
@@ -138,6 +197,10 @@ const CARD_TYPES = [
     ],
     examples: [
       {
+        src: cardImage('instant-explanation.png'),
+        label: 'Instant Explanation',
+      },
+      {
         src: cardImage('instant-shock.jpg'),
         label: 'Shock',
       },
@@ -148,6 +211,26 @@ const CARD_TYPES = [
       {
         src: cardImage('instant-giant-growth.jpg'),
         label: 'Giant Growth',
+      },
+      {
+        src: cardImage('instant-brainstorm.webp'),
+        label: 'Brainstorm',
+      },
+      {
+        src: cardImage('instant-abrade.png'),
+        label: 'Abrade',
+      },
+      {
+        src: cardImage('instant-assassins-trophy.jpg'),
+        label: "Assassin's Trophy",
+      },
+      {
+        src: cardImage('instant-emerge-unscathed.webp'),
+        label: 'Emerge Unscathed',
+      },
+      {
+        src: cardImage('instant-oblation.png'),
+        label: 'Oblation',
       },
     ],
   },
@@ -164,6 +247,14 @@ const CARD_TYPES = [
       'Because of that timing, sorceries tend to be bigger or slower effects, searching your library, destroying multiple permanents, or drawing several cards. Cultivate puts lands onto the battlefield; Duress makes your opponent discard a card.',
     ],
     examples: [
+      {
+        src: cardImage('sorcery-explanation.png'),
+        label: 'Sorcery (card back explanation)',
+      },
+      {
+        src: cardImage('sorcery-gift-of-estates.png'),
+        label: 'Gift of Estates',
+      },
       {
         src: cardImage('sorcery-cultivate.jpg'),
         label: 'Cultivate',
@@ -198,6 +289,10 @@ const CARD_TYPES = [
     ],
     examples: [
       {
+        src: cardImage('artifact-explanation.png'),
+        label: 'Artifact (card back explanation)',
+      },
+      {
         src: cardImage('artifact-sol-ring.jpg'),
         label: 'Sol Ring',
         role: 'Produces mana',
@@ -206,6 +301,16 @@ const CARD_TYPES = [
         src: cardImage('artifact-commanders-sphere.webp'),
         label: "Commander's Sphere",
         role: 'Mana and card draw',
+      },
+      {
+        src: cardImage('artifact-ensnaring-bridge.webp'),
+        label: 'Ensnaring Bridge',
+        role: 'Protection',
+      },
+      {
+        src: cardImage('artifact-angels-tomb.webp'),
+        label: "Angel's Tomb",
+        role: 'Utility',
       },
     ],
   },
@@ -227,6 +332,10 @@ const CARD_TYPES = [
       },
     ],
     examples: [
+      {
+        src: cardImage('enchantment-explanation.png'),
+        label: 'Enchantment (card back explanation)',
+      },
       {
         src: cardImage('enchantment-sylvan-library.webp'),
         label: 'Sylvan Library',
@@ -251,6 +360,11 @@ const CARD_TYPES = [
         src: cardImage('enchantment-hyenaumbra.jpg'),
         label: 'Hyena Umbra',
         role: 'Aura',
+      },
+      {
+        src: cardImage('enchantment-loadingzone-hardenedscales.webp'),
+        label: 'Hardened Scales',
+        role: 'Non-aura',
       },
     ],
   },
@@ -285,6 +399,10 @@ const CARD_TYPES = [
     ],
     examples: [
       {
+        src: cardImage('planeswalker-explanation.png'),
+        label: 'Planeswalker (card back explanation)',
+      },
+      {
         src: cardImage('planeswalker-nahiri.webp'),
         label: 'Nahiri, the Lithomancer',
       },
@@ -299,6 +417,22 @@ const CARD_TYPES = [
       {
         src: cardImage('planeswalker-liliana-vess.png'),
         label: 'Liliana Vess',
+      },
+      {
+        src: cardImage('planeswalker-liliana-death-wielder.webp'),
+        label: 'Liliana, Death Wielder',
+      },
+      {
+        src: cardImage('planeswalker-oko-thief-of-crowns.jpg'),
+        label: 'Oko, Thief of Crowns',
+      },
+      {
+        src: cardImage('planeswalker-oko-the-trickster.webp'),
+        label: 'Oko, the Trickster',
+      },
+      {
+        src: cardImage('planeswalker-oko-the-ringleader.jpg'),
+        label: 'Oko, the Ringleader',
       },
     ],
   },
@@ -499,12 +633,6 @@ export default function CardTypes({ session }) {
           most games. Each type determines what the card does and, more importantly, when you can
           play or cast it.
         </p>
-
-        <CastVsPlayExplainer variant="brief" />
-
-        <TapExplainer variant="brief" />
-
-        <StackExplainer variant="brief" />
 
         <div className="card-types__grid">
           {CARD_TYPES.map((type) => (

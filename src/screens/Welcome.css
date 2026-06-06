@@ -72,13 +72,14 @@
 
 .welcome__hero-cards {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
   justify-content: center;
   margin: 12px 0 8px;
 }
 
 .welcome__hero-card {
-  width: 120px;
+  width: 80px;
   height: auto;
   border-radius: 8px;
   border: 1px solid var(--color-gold-muted);

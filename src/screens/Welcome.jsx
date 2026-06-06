@@ -16,6 +16,22 @@ const HERO_CARDS = [
     alt: 'Shock instant card',
   },
   {
+    src: cardImage('sorcery-cultivate.jpg'),
+    alt: 'Cultivate sorcery card',
+  },
+  {
+    src: cardImage('artifact-sol-ring.jpg'),
+    alt: 'Sol Ring artifact card',
+  },
+  {
+    src: cardImage('enchantment-sylvan-library.webp'),
+    alt: 'Sylvan Library enchantment card',
+  },
+  {
+    src: cardImage('planeswalker-ajani.webp'),
+    alt: 'Ajani planeswalker card',
+  },
+  {
     src: cardImage('land-forest.jpg'),
     alt: 'Forest land card',
   },

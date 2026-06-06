@@ -20,7 +20,6 @@ const QUESTION_IMAGES = {
   duress: cardImage('sorcery-duress.jpg'),
   island: cardImage('land-island.png'),
   'llanowar-elves': cardImage('creature-llanowar-elves.jpg'),
-  'hyena-umbra': cardImage('enchantment-hyenaumbra.jpg'),
   nahiri: cardImage('planeswalker-nahiri.webp'),
 }
 
