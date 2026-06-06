@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import { isParticipantUpdateBlocked, saveLessonProgress, saveScreenTime } from '../lib/db.js'
 import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
 import { PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
-import { useConfirm } from '../context/ConfirmContext.jsx'
+import { useConfirm } from '../context/useConfirm.js'
 import PageLayout from '../components/PageLayout.jsx'
 import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import { cardImage } from '../assets/cards/index.js'
@@ -41,8 +42,12 @@ export default function LessonComplete({ session }) {
   } = session
   const completedAllPractice = scenariosAttempted >= PRACTICE_SCENARIO_COUNT
   const [saveWarning, setSaveWarning] = useState(null)
+  const hasSavedRef = useRef(false)
 
   useEffect(() => {
+    if (hasSavedRef.current) return
+    hasSavedRef.current = true
+
     setLessonsCompleted(true)
     saveLessonProgress(sessionId, sessionSecret, true, scenariosAttempted).then((result) => {
       if (isParticipantUpdateBlocked(result)) {
@@ -52,9 +57,6 @@ export default function LessonComplete({ session }) {
         setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
       }
     })
-  }, [sessionId, sessionSecret, scenariosAttempted, setLessonsCompleted])
-
-  useEffect(() => {
     saveScreenTime(sessionId, sessionSecret, screenTimes).then((result) => {
       if (isParticipantUpdateBlocked(result)) {
         if (import.meta.env.DEV) {
@@ -63,7 +65,9 @@ export default function LessonComplete({ session }) {
         setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
       }
     })
-  }, [sessionId, sessionSecret, screenTimes])
+    // Save once on mount with values captured at visit time.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <PageLayout title="Lessons Complete · Learn to Play MTG" className="lesson-complete">
@@ -78,8 +82,8 @@ export default function LessonComplete({ session }) {
         <div className="lesson-complete__body">
           <p className="lesson-complete__paragraph">
             {completedAllPractice
-              ? "You've worked through all four lessons, including every practice scenario in Lesson 4. Here's what you covered:"
-              : "You've finished all four lesson modules. You skipped some optional practice scenarios in Lesson 4. You can return to them anytime before the post-test. Here's what you covered:"}
+              ? 'You finished all four lessons, including every practice scenario in Lesson 4. Topics from the lessons:'
+              : 'You finished all four lessons but skipped some optional practice in Lesson 4. You can go back before the post-test. Topics from the lessons:'}
           </p>
           <ul className="lesson-complete__recap">
             {RECAP.map((item) => (

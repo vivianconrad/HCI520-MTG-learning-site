@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBrowserBackConfirm } from '../hooks/useBrowserBackConfirm.js'
 import useScreenTime from '../hooks/useScreenTime.js'
-import { isParticipantUpdateBlocked, savePretest } from '../lib/db.js'
+import { savePretest } from '../lib/db.js'
 import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
-import { useConfirm } from '../context/ConfirmContext.jsx'
+import { useConfirm } from '../context/useConfirm.js'
 import {
   PRETEST_LEAVE_CONFIRM_MESSAGE,
   PRETEST_LEAVE_CONFIRM_TITLE,
@@ -49,18 +49,17 @@ export default function PreTest({ session }) {
       const answers = { ...pretestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
       const result = await savePretest(sessionId, sessionSecret, answers, score)
-      markPretestCompleted()
 
-      if (isParticipantUpdateBlocked(result)) {
-        if (import.meta.env.DEV) {
-          console.warn('[PreTest] savePretest blocked:', result)
-        }
-        setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
-        window.setTimeout(() => navigate('/pretest-complete', { replace: true }), 2500)
+      if (result?.ok) {
+        markPretestCompleted()
+        navigate('/pretest-complete', { replace: true })
         return
       }
 
-      navigate('/pretest-complete', { replace: true })
+      if (import.meta.env.DEV) {
+        console.warn('[PreTest] savePretest failed:', result)
+      }
+      setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
     },
     [pretestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPretestCompleted],
   )
@@ -109,9 +108,16 @@ export default function PreTest({ session }) {
       showKeywordDictionary={false}
     >
       {saveWarning ? (
-        <p className="pretest__save-warning" role="alert">
-          {saveWarning}
-        </p>
+        <div className="pretest__save-warning-block" role="alert">
+          <p className="pretest__save-warning">{saveWarning}</p>
+          <button
+            type="button"
+            className="pretest__button"
+            onClick={() => navigate('/pretest-complete', { replace: true })}
+          >
+            Continue without saving
+          </button>
+        </div>
       ) : null}
       <TestQuestionFlow
         testLabel="Pre-Test"
@@ -123,6 +129,7 @@ export default function PreTest({ session }) {
         leaveConfirmMessage={PRETEST_LEAVE_CONFIRM_MESSAGE}
         leaveConfirmTitle={PRETEST_LEAVE_CONFIRM_TITLE}
         lastButtonLabel="Continue"
+        introNote="You have not been taught these topics yet. Answer with your best guess — wrong answers are expected and help show what the lessons should cover."
       />
     </PageLayout>
   )

@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import './Calculating.css'
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-export default function Calculating({ session: _session }) {
+export default function Calculating() {
   const navigate = useNavigate()
   const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion)
 
@@ -54,7 +55,7 @@ export default function Calculating({ session: _session }) {
           </>
         ) : (
           <p className="calculating__subtext" aria-live="polite">
-            You will be redirected automatically.
+            Redirecting shortly.
           </p>
         )}
         <ProgressDots activeIndex={PROGRESS.CALCULATING} />

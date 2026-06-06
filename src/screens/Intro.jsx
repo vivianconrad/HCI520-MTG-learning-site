@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import './Intro.css'
 
@@ -18,14 +19,14 @@ export default function Intro({ session }) {
         <hr className="intro__rule" aria-hidden="true" />
         <div className="intro__body">
           <p className="intro__paragraph">
-            We&apos;ll start with a few quick questions about Magic: The Gathering. Don&apos;t worry
-            if you don&apos;t know the answers. That&apos;s exactly the point. These questions help
-            us understand what you already know before you go through the lessons.
+            We&apos;ll start with a short pre-test about Magic: The Gathering. You have not been
+            taught these topics yet — guessing is expected, and wrong answers are normal. The pre-test
+            measures what you know before any lessons, not whether you are already an expert.
           </p>
           <p className="intro__paragraph">
-            After the questions, you&apos;ll read a short overview of what Magic is, then work
-            through four short lessons covering how to read a card, the different card types, how a
-            turn works, and how to put it all together.
+            After the pre-test, you&apos;ll read a short overview, walk through starting a game and
+            your first turn, then work through four lessons covering how to read a card, card types,
+            turn structure, and putting it all together.
           </p>
           <p className="intro__paragraph">
             Some questions may touch on ideas the lessons explain in more detail — that is expected.

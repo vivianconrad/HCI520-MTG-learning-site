@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useConfirm } from '../context/ConfirmContext.jsx'
+import { useConfirm } from '../context/useConfirm.js'
 import ProgressDots from './ProgressDots.jsx'
 import QuestionCardImage from './QuestionCardImage.jsx'
 import { getQuestionImage } from '../data/questionImages.js'

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
-import { useConfirm } from '../context/ConfirmContext.jsx'
+import { useConfirm } from '../context/useConfirm.js'
 import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import PageLayout from '../components/PageLayout.jsx'
 import { cardImage } from '../assets/cards/index.js'
@@ -116,6 +117,15 @@ const SCENARIOS = [
     explanation:
       'No. Summoning sickness applies to creatures you did not control at the start of your turn — they cannot attack or use tap abilities (including tap-for-mana) until your next turn begins. They can still block if they are untapped.',
   },
+  {
+    id: 's11',
+    text: "Your opponent attacks you with a 3/3 creature. You control an untapped 2/2 creature. Can you declare it as a blocker to stop the attack?",
+    cardImage: 'llanowar-elves.jpg',
+    cardImageAlt: 'Creature blocking example',
+    correctAnswer: true,
+    explanation:
+      'Yes. Blockers must be untapped creatures you control. Your 2/2 can block the 3/3. Each creature deals damage equal to its power to the other — your 2/2 will die, but you prevent 3 damage to your life total.',
+  },
 ]
 
 function fisherYates(arr) {
@@ -127,12 +137,8 @@ function fisherYates(arr) {
   return a
 }
 
-function ScenarioCardImage({ src, alt }) {
+function ScenarioCardImageContent({ src, alt }) {
   const [error, setError] = useState(false)
-
-  useEffect(() => {
-    setError(false)
-  }, [src])
 
   if (error) {
     return <div className="putting-together__card-placeholder">{alt}</div>
@@ -146,6 +152,10 @@ function ScenarioCardImage({ src, alt }) {
       onError={() => setError(true)}
     />
   )
+}
+
+function ScenarioCardImage({ src, alt }) {
+  return <ScenarioCardImageContent key={src} src={src} alt={alt} />
 }
 
 export default function PuttingItTogether({ session }) {
@@ -206,13 +216,12 @@ export default function PuttingItTogether({ session }) {
     <PageLayout title="Lesson 4 · Putting It Together" className="putting-together" showKeywordDictionary>
       <div className="putting-together__frame page-layout__content-frame">
         <p className="putting-together__breadcrumb">Lesson 04 · Putting It Together</p>
-        <h1 className="putting-together__heading">Let&apos;s Put It Together</h1>
+        <h1 className="putting-together__heading">Putting It Together</h1>
         <hr className="putting-together__rule" aria-hidden="true" />
 
         <p className="putting-together__intro">
-          Now that you know the card types and the turn structure, let&apos;s see how they connect.
-          Read each scenario and decide what you would do. You can finish after the first scenario;
-          the rest are optional practice.
+          This lesson ties card types and turn structure together. Read each scenario and decide what
+          you would do. You can stop after the first scenario; the rest is optional practice.
         </p>
 
         <p className="putting-together__intro">
@@ -224,7 +233,7 @@ export default function PuttingItTogether({ session }) {
             ? 'All scenarios completed.'
             : hasCompletedRequiredScenario
               ? `Completed ${seenIds.size} of ${SCENARIOS.length} scenarios (first required, rest optional)`
-              : 'Complete the first scenario to unlock Finish Lesson. Remaining scenarios are optional.'}
+              : 'Finish the first scenario to continue. The rest are optional.'}
         </p>
 
         <div className="putting-together__scenario">

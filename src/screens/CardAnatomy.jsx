@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import LessonActions from '../components/LessonActions.jsx'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { cardImage } from '../assets/cards/index.js'
@@ -207,8 +208,8 @@ export default function CardAnatomy({ session }) {
 
         <LessonActions
           classPrefix="card-anatomy"
-          backHint="Return to lesson overview"
-          onBack={() => navigate('/what-is-mtg')}
+          backHint="Return to starting a game"
+          onBack={() => navigate('/first-game')}
           onNext={() => navigate('/lesson/2')}
           canProceed={allExplored}
           gateMessage="Explore all six numbered markers on the card before continuing."

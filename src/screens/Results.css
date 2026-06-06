@@ -255,6 +255,16 @@
   min-width: 0;
 }
 
+.results__question-explanation {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text-dark);
+  line-height: 1.45;
+  margin: 8px 0 0;
+  white-space: normal;
+  opacity: 0.92;
+}
+
 .results__answer {
   display: flex;
   align-items: flex-start;

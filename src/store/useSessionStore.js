@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { TOPIC_ORDER } from '../lib/scoring.js'
 import {
   loadPersistedSession,
@@ -49,12 +49,10 @@ function isTestFullyAnswered(answers, questions) {
   return questions.every((question) => answers[question.id] !== undefined)
 }
 
+const initialPersistedSession = loadPersistedSession()
+
 export default function useSessionStore() {
-  const savedRef = useRef(null)
-  if (savedRef.current === null) {
-    savedRef.current = loadPersistedSession()
-  }
-  const saved = savedRef.current
+  const saved = initialPersistedSession
 
   const [sessionId] = useState(() => saved?.sessionId ?? generateSessionId())
   const [sessionSecret] = useState(
@@ -86,6 +84,9 @@ export default function useSessionStore() {
     }
     return []
   })
+  const [consentGiven, setConsentGivenState] = useState(
+    () => saved?.consentGiven ?? false,
+  )
   const [lessonsCompleted, setLessonsCompletedState] = useState(
     () => saved?.lessonsCompleted ?? false,
   )
@@ -112,6 +113,7 @@ export default function useSessionStore() {
       screenStartTimes,
       screenTimes,
       scenarioIdsAttempted,
+      consentGiven,
       lessonsCompleted,
       pretestCompleted,
       posttestCompleted,
@@ -127,6 +129,7 @@ export default function useSessionStore() {
     screenStartTimes,
     screenTimes,
     scenarioIdsAttempted,
+    consentGiven,
     lessonsCompleted,
     pretestCompleted,
     posttestCompleted,
@@ -185,6 +188,10 @@ export default function useSessionStore() {
     })
   }, [])
 
+  const markConsentGiven = useCallback(() => {
+    setConsentGivenState(true)
+  }, [])
+
   const setLessonsCompleted = useCallback((value) => {
     setLessonsCompletedState(value)
   }, [])
@@ -221,6 +228,8 @@ export default function useSessionStore() {
     screenTimes,
     scenarioIdsAttempted,
     scenariosAttempted: scenarioIdsAttempted.length,
+    consentGiven,
+    markConsentGiven,
     lessonsCompleted,
     pretestCompleted,
     posttestCompleted,

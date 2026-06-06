@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBrowserBackConfirm } from '../hooks/useBrowserBackConfirm.js'
 import useScreenTime from '../hooks/useScreenTime.js'
-import { isParticipantUpdateBlocked, savePosttest } from '../lib/db.js'
+import { savePosttest } from '../lib/db.js'
 import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
-import { useConfirm } from '../context/ConfirmContext.jsx'
+import { useConfirm } from '../context/useConfirm.js'
 import {
   POSTTEST_LEAVE_CONFIRM_MESSAGE,
   POSTTEST_LEAVE_CONFIRM_TITLE,
@@ -42,18 +42,17 @@ export default function PostTest({ session }) {
       const answers = { ...posttestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
       const result = await savePosttest(sessionId, sessionSecret, answers, score)
-      markPosttestCompleted()
 
-      if (isParticipantUpdateBlocked(result)) {
-        if (import.meta.env.DEV) {
-          console.warn('[PostTest] savePosttest blocked:', result)
-        }
-        setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
-        window.setTimeout(() => navigate('/calculating', { replace: true }), 2500)
+      if (result?.ok) {
+        markPosttestCompleted()
+        navigate('/calculating', { replace: true })
         return
       }
 
-      navigate('/calculating', { replace: true })
+      if (import.meta.env.DEV) {
+        console.warn('[PostTest] savePosttest failed:', result)
+      }
+      setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
     },
     [posttestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPosttestCompleted],
   )
@@ -102,9 +101,16 @@ export default function PostTest({ session }) {
       showKeywordDictionary={false}
     >
       {saveWarning ? (
-        <p className="pretest__save-warning" role="alert">
-          {saveWarning}
-        </p>
+        <div className="pretest__save-warning-block" role="alert">
+          <p className="pretest__save-warning">{saveWarning}</p>
+          <button
+            type="button"
+            className="pretest__button"
+            onClick={() => navigate('/calculating', { replace: true })}
+          >
+            Continue without saving
+          </button>
+        </div>
       ) : null}
       <TestQuestionFlow
         testLabel="Post-Test"

@@ -1,11 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-export default function QuestionCardImage({ src, alt = 'Magic card', layout = 'card' }) {
+function QuestionCardImageContent({ src, alt, layout }) {
   const [error, setError] = useState(false)
-
-  useEffect(() => {
-    setError(false)
-  }, [src])
 
   if (!src || error) {
     return (
@@ -35,4 +31,8 @@ export default function QuestionCardImage({ src, alt = 'Magic card', layout = 'c
       />
     </div>
   )
+}
+
+export default function QuestionCardImage({ src, alt = 'Magic card', layout = 'card' }) {
+  return <QuestionCardImageContent key={src} src={src} alt={alt} layout={layout} />
 }

@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import { cardImage } from '../assets/cards/index.js'
 import './Welcome.css'
@@ -49,7 +50,7 @@ export default function Welcome({ session }) {
     }
   }, [selectedQuestions, selectQuestions])
 
-  useParticipantBootstrap(session)
+  const { rowReady, rowError } = useParticipantBootstrap(session)
 
   return (
     <PageLayout title="Welcome · Learn to Play MTG" className="welcome">
@@ -62,18 +63,35 @@ export default function Welcome({ session }) {
           A quick guide to reading cards, understanding card types, and taking your first turn.
         </p>
         <p className="welcome__flow">
-          Pre-test → overview → four short lessons → post-test → your results
+          Pre-test → overview → starting a game → four lessons → post-test → your results
         </p>
         <p className="welcome__duration">
-          Plan for about 15–20 minutes. At the end, you&apos;ll know enough to sit down and play.
+          Plan for about 18–22 minutes. You&apos;ll learn the rules vocabulary, how a turn works, and
+          what to do when you sit down for your first game — with a friend at the table to fill in
+          the rest.
         </p>
         <div className="welcome__hero-cards" aria-label="Sample Magic cards">
           {HERO_CARDS.map((card) => (
             <img key={card.alt} className="welcome__hero-card" src={card.src} alt={card.alt} />
           ))}
         </div>
+        {rowError ? (
+          <p className="welcome__error" role="alert">
+            {rowError}
+          </p>
+        ) : null}
+        {!rowReady && !rowError ? (
+          <p className="welcome__status" aria-live="polite">
+            Preparing your session…
+          </p>
+        ) : null}
         <div className="welcome__actions">
-          <button type="button" className="welcome__button" onClick={() => navigate('/intro')}>
+          <button
+            type="button"
+            className="welcome__button"
+            disabled={!rowReady}
+            onClick={() => navigate('/intro')}
+          >
             Start
           </button>
         </div>

@@ -23,7 +23,6 @@ export default function KeywordDictionary() {
 
   useEffect(() => {
     if (!open) return undefined
-    setQuery('')
     const id = window.requestAnimationFrame(() => searchRef.current?.focus())
     function onKeyDown(event) {
       if (event.key === 'Escape') setOpen(false)
@@ -51,7 +50,10 @@ export default function KeywordDictionary() {
         aria-expanded={open}
         aria-controls="keyword-dictionary-panel"
         title="Open the full keyword guide, including informal terms like summoning sickness."
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setQuery('')
+          setOpen(true)
+        }}
       >
         Keyword guide
       </button>

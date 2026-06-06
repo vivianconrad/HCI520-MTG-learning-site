@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import {
   TOPIC_LABELS,
   TOPIC_LESSON_PATHS,
@@ -14,6 +15,7 @@ import {
   getReviewLessonPath,
 } from '../lib/scoring.js'
 import { LESSON_4_PATH, PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
+import { getQuestionExplanation } from '../lib/questionExplanations.js'
 import './Results.css'
 
 function getTopicReviewPath(topicKey, selectedQuestions, pretestAnswers, posttestAnswers) {
@@ -249,6 +251,7 @@ export default function Results({ session }) {
                 const postIndex = posttestAnswers[question.id]
                 const eitherWrong =
                   preIndex !== question.correctIndex || postIndex !== question.correctIndex
+                const explanation = eitherWrong ? getQuestionExplanation(question) : null
 
                 return (
                   <tr
@@ -260,6 +263,9 @@ export default function Results({ session }) {
                     </th>
                     <td className="results__question-text" title={question.question}>
                       {question.question}
+                      {explanation ? (
+                        <p className="results__question-explanation">{explanation}</p>
+                      ) : null}
                     </td>
                     <td>
                       <AnswerCell answerIndex={preIndex} question={question} />
@@ -299,11 +305,15 @@ export default function Results({ session }) {
               const postIndex = posttestAnswers[question.id]
               const eitherWrong =
                 preIndex !== question.correctIndex || postIndex !== question.correctIndex
+              const explanation = eitherWrong ? getQuestionExplanation(question) : null
 
               return (
                 <article key={question.id} className="results__question-card">
                   <p className="results__question-card-num">Question {index + 1}</p>
                   <p className="results__question-card-text">{question.question}</p>
+                  {explanation ? (
+                    <p className="results__question-explanation">{explanation}</p>
+                  ) : null}
                   <div className="results__question-card-answers">
                     <div>
                       <span className="results__question-card-label">Pre-Test</span>

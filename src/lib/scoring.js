@@ -23,6 +23,15 @@ export const TOPIC_LESSON_PATHS = {
 
 const CARD_TYPE_QUESTION_PREFIX = 'What type of card'
 
+/** LO0 questions about setup, play vs cast, tap, and first-turn flow. */
+const FIRST_GAME_QUESTION_IDS = new Set([
+  'lo0_q4',
+  'lo0_q5',
+  'lo0_q6',
+  'lo0_q10',
+  'lo0_q11',
+])
+
 /** LO1 pool questions that identify card types are taught in Lesson 2. */
 export function isCardTypeIdentificationQuestion(question) {
   return (
@@ -33,9 +42,13 @@ export function isCardTypeIdentificationQuestion(question) {
 }
 
 export function getReviewLessonPath(question) {
+  if (question?.reviewLesson) return question.reviewLesson
   if (!question?.lo) return '/what-is-mtg'
   if (question.lo === 'LO4') return '/lesson/4'
-  if (question.lo === 'LO0') return '/what-is-mtg'
+  if (question.lo === 'LO0') {
+    if (FIRST_GAME_QUESTION_IDS.has(question.id)) return '/first-game'
+    return '/what-is-mtg'
+  }
   if (isCardTypeIdentificationQuestion(question)) return '/lesson/2'
   return TOPIC_LESSON_PATHS[question.lo] ?? '/what-is-mtg'
 }
@@ -76,20 +89,20 @@ export function getImprovementMessage(pretestCorrect, posttestCorrect) {
     const diff = posttestCorrect - pretestCorrect
     const unit = diff === 1 ? 'point' : 'points'
     return {
-      text: `You improved by ${diff} ${unit}. Great work.`,
+      text: `You improved by ${diff} ${unit}.`,
       className: 'results__improvement results__improvement--positive',
     }
   }
 
   if (posttestCorrect === pretestCorrect) {
     return {
-      text: 'Your score stayed the same. Review the lessons below if you want another pass.',
+      text: 'Same score as the pre-test. Use the review links below if you want to revisit a topic.',
       className: 'results__improvement results__improvement--neutral',
     }
   }
 
   return {
-    text: 'Your score dropped on some questions. Use the review links below to revisit those topics.',
+    text: 'You missed more than on the pre-test. Use the review links below for the topics that tripped you up.',
     className: 'results__improvement results__improvement--neutral',
   }
 }

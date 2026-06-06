@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import './Consent.css'
 
 const consentCardArt = new URL('../assets/hero.png', import.meta.url).href
 
-export default function Consent() {
+export default function Consent({ session }) {
   const navigate = useNavigate()
+  const { markConsentGiven } = session
 
   return (
     <PageLayout title="Consent · Learn to Play MTG" className="consent">
@@ -26,10 +28,10 @@ export default function Consent() {
           <section className="consent__section">
             <h2 className="consent__section-heading">What this involves:</h2>
             <ul className="consent__list">
-              <li>A short pre-test before the lessons (about 2 minutes)</li>
+              <li>A short pre-test before any teaching (about 2 minutes)</li>
               <li>
-                Four interactive lessons covering card anatomy, card types, turn structure, and
-                gameplay scenarios (about 15 minutes)
+                A brief overview, a starting-a-game walkthrough, and four lessons on card anatomy,
+                card types, turn structure, and gameplay scenarios (about 18 minutes)
               </li>
               <li>
                 The same post-test after the lessons to measure what you learned (about 2 minutes).
@@ -68,7 +70,10 @@ export default function Consent() {
           <button
             type="button"
             className="consent__button"
-            onClick={() => navigate('/welcome')}
+            onClick={() => {
+              markConsentGiven()
+              navigate('/welcome')
+            }}
           >
             I Agree and Continue →
           </button>

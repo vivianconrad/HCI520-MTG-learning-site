@@ -1,24 +1,7 @@
 import './ProgressDots.css'
+import { PROGRESS_STEP_COUNT } from './progressConstants.js'
 
-export const PROGRESS_STEP_COUNT = 15
-
-export const PROGRESS = {
-  CONSENT: 0,
-  WELCOME: 1,
-  INTRO: 2,
-  PRETEST: 3,
-  PRETEST_COMPLETE: 4,
-  LESSON_INTRO: 5,
-  WHAT_IS_MTG: 6,
-  LESSON_1: 7,
-  LESSON_2: 8,
-  LESSON_3: 9,
-  LESSON_4: 10,
-  LESSON_COMPLETE: 11,
-  POSTTEST: 12,
-  CALCULATING: 13,
-  RESULTS: 14,
-}
+export { PROGRESS, PROGRESS_STEP_COUNT } from './progressConstants.js'
 
 export default function ProgressDots({ activeIndex }) {
   const stepNumber = activeIndex + 1

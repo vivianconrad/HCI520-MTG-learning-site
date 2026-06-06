@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import './WhatIsMtg.css'
@@ -54,30 +55,10 @@ export default function WhatIsMtg({ session }) {
 
           <h2 className="what-is-mtg__subheading">Formats</h2>
           <p className="what-is-mtg__paragraph">
-            Magic has many <strong>formats</strong>, which are rule sets that define which cards you can use
-            and how decks are built. <strong>Standard</strong> and <strong>Commander</strong> are
-            among the most popular. Standard-style constructed decks are usually{' '}
-            <strong>60 cards</strong> (minimum). Commander decks are{' '}
-            <strong>100-card</strong> singleton decks with a legendary commander.
-          </p>
-          <p className="what-is-mtg__paragraph">
-            The lessons ahead teach core rules: reading cards, turn order, and timing. Those apply no
-            matter which format you play.
-          </p>
-
-          <h2 className="what-is-mtg__subheading">Playing vs casting</h2>
-          <p className="what-is-mtg__paragraph">
-            <GlossaryText text="Magic uses two different words on purpose. Lands are played from your hand during your first or second main phase (one land per turn by default). They go straight onto the battlefield — no stack, and your opponent cannot respond the way they can to a spell. Everything else with a mana cost is cast: you pay mana, put the spell on the stack, and let opponents respond before it resolves." />
-          </p>
-
-          <h2 className="what-is-mtg__subheading">Tap</h2>
-          <p className="what-is-mtg__paragraph">
-            <GlossaryText text="To tap a card, turn it sideways. That marks it as used for now. Lands tap to produce mana; creatures tap when they attack. At the start of your turn, the untap step turns your permanents upright again so you can use them once more." />
-          </p>
-
-          <h2 className="what-is-mtg__subheading">Paying for a spell</h2>
-          <p className="what-is-mtg__paragraph">
-            <GlossaryText text="When you cast a spell, you usually follow this sequence: tap lands (or other mana sources) to add mana to your mana pool; cast the spell and pay its mana cost from that pool; the spell goes on the stack and your opponent can respond; after it resolves, any mana still in your pool disappears when the step or phase ends. Lesson 2 and Lesson 3 go deeper on the stack and timing." />
+            Magic has many <strong>formats</strong> — rule sets that define which cards you can use.
+            <strong> Standard</strong> decks are usually at least 60 cards;{' '}
+            <strong>Commander</strong> uses 100-card singleton decks. The lessons teach core rules
+            that apply in every format.
           </p>
 
           <h2 className="what-is-mtg__subheading">Zones on the table</h2>
@@ -118,9 +99,9 @@ export default function WhatIsMtg({ session }) {
           <button
             type="button"
             className="what-is-mtg__button"
-            onClick={() => navigate('/lesson/1')}
+            onClick={() => navigate('/first-game')}
           >
-            Start Lesson 1
+            Continue to Starting a Game
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.WHAT_IS_MTG} />

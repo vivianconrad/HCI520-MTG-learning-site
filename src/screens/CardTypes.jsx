@@ -5,7 +5,8 @@ import LessonActions from '../components/LessonActions.jsx'
 import CastVsPlayExplainer from '../components/CastVsPlayExplainer.jsx'
 import GlossaryText from '../components/GlossaryText.jsx'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { cardImage } from '../assets/cards/index.js'
 import './CardTypes.css'
@@ -448,7 +449,9 @@ function CardTypeTimingTag({ timing }) {
   return (
     <span className="card-types__tag">
       <span className="card-types__tag-label">When you can play</span>
-      <span className="card-types__tag-value">{timing}</span>
+      <span className="card-types__tag-value">
+        <GlossaryText text={timing} />
+      </span>
     </span>
   )
 }
@@ -637,8 +640,8 @@ export default function CardTypes({ session }) {
         <CastVsPlayExplainer variant="brief" />
 
         <p className="card-types__hint">
-          Tap <strong>See Cards</strong> on each type below once to read about it. You do not need to
-          swipe through every example photo.
+          Tap See Cards on each type below once to read about it. You do not need to swipe through
+          every example photo.
         </p>
 
         <div className="card-types__grid">

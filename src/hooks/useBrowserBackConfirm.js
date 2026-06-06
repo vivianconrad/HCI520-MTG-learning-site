@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useConfirm } from '../context/ConfirmContext.jsx'
+import { useConfirm } from '../context/useConfirm.js'
 
 /**
  * Confirms before the user leaves via the browser Back button (popstate).

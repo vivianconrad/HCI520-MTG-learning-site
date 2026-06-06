@@ -22,13 +22,12 @@ export default function PretestComplete({ session }) {
             already an expert.
           </p>
           <p className="lesson-intro__paragraph">
-            Next, you&apos;ll preview the four lessons ahead. After that comes a short overview of
-            Magic basics, then the interactive lessons, and finally the same questions again as a
-            post-test.
+            Next comes a preview of the path, a Magic overview, a first-turn walkthrough, four
+            lessons, and the post-test with the same questions.
           </p>
         </div>
 
-        <p className="lesson-intro__closing">When you are ready, see what&apos;s coming next.</p>
+        <p className="lesson-intro__closing">Continue when you&apos;re ready.</p>
 
         <div className="lesson-intro__actions lesson-intro__actions--end">
           <button

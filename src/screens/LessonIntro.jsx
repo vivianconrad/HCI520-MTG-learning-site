@@ -1,13 +1,20 @@
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import { cardImage } from '../assets/cards/index.js'
 import './LessonIntro.css'
 
 const OVERVIEW = {
   title: 'What Is Magic?',
-  time: '~6 min',
+  time: '~4 min',
   image: new URL('../assets/batrlefield-simple.jpg', import.meta.url).href,
+}
+
+const FIRST_GAME = {
+  title: 'Starting a Game & Your First Turn',
+  time: '~5 min',
+  image: cardImage('land-forest.jpg'),
 }
 
 const LESSONS = [
@@ -37,28 +44,26 @@ const LESSONS = [
   },
 ]
 
-export default function LessonIntro({ session: _session }) {
+export default function LessonIntro() {
   const navigate = useNavigate()
 
   return (
     <PageLayout title="Lessons Overview · Learn to Play MTG" className="lesson-intro" showKeywordDictionary>
       <div className="lesson-intro__frame page-layout__content-frame">
         <p className="lesson-intro__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
-        <h1 className="lesson-intro__heading">Here&apos;s What&apos;s Coming</h1>
+        <h1 className="lesson-intro__heading">What comes next</h1>
         <hr className="lesson-intro__rule" aria-hidden="true" />
 
         <div className="lesson-intro__body">
           <p className="lesson-intro__paragraph">
-            You finished the pre-test. Great work. Before the lessons begin, here is a quick preview
-            of what you will cover.
+            You finished the pre-test. Next you&apos;ll see a short overview of Magic, walk through
+            starting a game and your first turn, then four lessons before the post-test.
           </p>
           <p className="lesson-intro__paragraph">
-            You&apos;ll start with a short overview, then work through four interactive lessons.
-            Official rules terms appear in gold — hover or tap one for a quick definition. Use the
+            Official rules terms appear in gold. Hover or tap one for a short definition, or open the
             Keyword guide in the corner for the full list, including informal terms like summoning
             sickness.
           </p>
-          <p className="lesson-intro__paragraph">Here&apos;s what we&apos;ll go through:</p>
         </div>
 
         <ul className="lesson-intro__list">
@@ -73,6 +78,17 @@ export default function LessonIntro({ session: _session }) {
             {OVERVIEW.title}
             <span className="lesson-intro__lesson-time"> ({OVERVIEW.time})</span>
           </li>
+          <li>
+            <img
+              className="lesson-intro__lesson-image"
+              src={FIRST_GAME.image}
+              alt="Starting a game preview"
+            />
+            <span className="lesson-intro__lesson-num">Overview</span>
+            {': '}
+            {FIRST_GAME.title}
+            <span className="lesson-intro__lesson-time"> ({FIRST_GAME.time})</span>
+          </li>
           {LESSONS.map((lesson) => (
             <li key={lesson.num}>
               <img className="lesson-intro__lesson-image" src={lesson.image} alt={`Lesson ${lesson.num} card preview`} />
@@ -84,7 +100,7 @@ export default function LessonIntro({ session: _session }) {
           ))}
         </ul>
 
-        <p className="lesson-intro__closing">Take your time with each lesson. There&apos;s no rush.</p>
+        <p className="lesson-intro__closing">Work at your own pace.</p>
 
         <div className="lesson-intro__actions">
           <button

@@ -1,7 +1,6 @@
-import { createContext, useCallback, useContext, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import ConfirmDialog from '../components/ConfirmDialog.jsx'
-
-const ConfirmContext = createContext(null)
+import { ConfirmContext } from './confirmContext.js'
 
 export function ConfirmProvider({ children }) {
   const [dialog, setDialog] = useState(null)
@@ -40,12 +39,4 @@ export function ConfirmProvider({ children }) {
       ) : null}
     </ConfirmContext.Provider>
   )
-}
-
-export function useConfirm() {
-  const confirm = useContext(ConfirmContext)
-  if (!confirm) {
-    throw new Error('useConfirm must be used within ConfirmProvider')
-  }
-  return confirm
 }
