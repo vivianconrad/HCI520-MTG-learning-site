@@ -42,12 +42,9 @@ export default function LessonComplete({ session }) {
   } = session
   const completedAllPractice = scenariosAttempted >= PRACTICE_SCENARIO_COUNT
   const [saveWarning, setSaveWarning] = useState(null)
-  const hasSavedRef = useRef(false)
+  const screenTimeSaved = useRef(false)
 
   useEffect(() => {
-    if (hasSavedRef.current) return
-    hasSavedRef.current = true
-
     setLessonsCompleted(true)
     saveLessonProgress(sessionId, sessionSecret, true, scenariosAttempted).then((result) => {
       if (isParticipantUpdateBlocked(result)) {
@@ -57,6 +54,11 @@ export default function LessonComplete({ session }) {
         setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
       }
     })
+  }, [sessionId, sessionSecret, scenariosAttempted, setLessonsCompleted])
+
+  useEffect(() => {
+    if (screenTimeSaved.current) return
+    screenTimeSaved.current = true
     saveScreenTime(sessionId, sessionSecret, screenTimes).then((result) => {
       if (isParticipantUpdateBlocked(result)) {
         if (import.meta.env.DEV) {
@@ -65,9 +67,7 @@ export default function LessonComplete({ session }) {
         setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
       }
     })
-    // Save once on mount with values captured at visit time.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [sessionId, sessionSecret, screenTimes])
 
   return (
     <PageLayout title="Lessons Complete · Learn to Play MTG" className="lesson-complete">

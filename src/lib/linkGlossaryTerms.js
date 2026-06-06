@@ -47,12 +47,12 @@ function collectMatches(text) {
   for (const { pattern, term } of GLOSSARY_MATCHES) {
     if (!isOfficialKeyword(term)) continue
 
-    const re = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`)
-    let match = re.exec(text)
+    pattern.lastIndex = 0
+    let match = pattern.exec(text)
     while (match) {
       const definition = getKeywordDefinition(term)
       if (!definition) {
-        match = re.exec(text)
+        match = pattern.exec(text)
         continue
       }
 
@@ -63,7 +63,7 @@ function collectMatches(text) {
         term,
         definition,
       })
-      match = re.exec(text)
+      match = pattern.exec(text)
     }
   }
 
