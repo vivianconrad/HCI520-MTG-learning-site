@@ -72,6 +72,7 @@ export const KEYWORD_TERMS = [
   },
   {
     term: 'Summoning sickness',
+    official: false,
     definition:
       'Informal shorthand (not an official rules term) for a creature that was not under your control at the start of your turn — usually one you just cast. Until your next turn begins, it cannot attack and cannot use activated abilities that include a tap symbol in the cost (for example, Llanowar Elves cannot tap for mana the turn it enters). It can still block if it is untapped. Creatures with haste ignore summoning sickness.',
   },
@@ -86,7 +87,16 @@ const KEYWORD_DEFINITION_BY_TERM = new Map(
   KEYWORD_TERMS.map(({ term, definition }) => [term, definition]),
 )
 
+const KEYWORD_OFFICIAL_BY_TERM = new Map(
+  KEYWORD_TERMS.map(({ term, official = true }) => [term, official]),
+)
+
 /** Full definition for a canonical glossary term label. */
 export function getKeywordDefinition(term) {
   return KEYWORD_DEFINITION_BY_TERM.get(term) ?? null
+}
+
+/** Official rules vocabulary — eligible for inline lesson highlights (not pre/post tests). */
+export function isOfficialKeyword(term) {
+  return KEYWORD_OFFICIAL_BY_TERM.get(term) ?? false
 }

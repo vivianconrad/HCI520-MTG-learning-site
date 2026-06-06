@@ -52,7 +52,11 @@ export default function PostTest({ session }) {
 
   if (!selectedQuestions || selectedQuestions.length === 0) {
     return (
-      <PageLayout title="Post-Test · Learn to Play MTG" className="pretest">
+      <PageLayout
+        title="Post-Test · Learn to Play MTG"
+        className="pretest"
+        showKeywordDictionary={false}
+      >
         <div className="pretest__frame">
           <h1 className="pretest__empty">Post-Test unavailable</h1>
           <p className="pretest__empty">No questions loaded. Return to the start and try again.</p>
@@ -80,7 +84,11 @@ export default function PostTest({ session }) {
   }
 
   return (
-    <PageLayout title="Post-Test · Learn to Play MTG" className="pretest">
+    <PageLayout
+      title="Post-Test · Learn to Play MTG"
+      className="pretest"
+      showKeywordDictionary={false}
+    >
       <TestQuestionFlow
         testLabel="Post-Test"
         progressIndex={PROGRESS.POSTTEST}

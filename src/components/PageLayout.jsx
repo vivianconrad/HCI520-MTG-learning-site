@@ -1,11 +1,16 @@
 import KeywordDictionary from './KeywordDictionary.jsx'
+import KeywordInlineHint from './KeywordInlineHint.jsx'
+import { shouldShowKeywordDictionary } from '../lib/assessmentRoutes.js'
 import { usePageTitle } from '../hooks/usePageTitle.js'
+import { useLocation } from 'react-router-dom'
 import './PageLayout.css'
 
 export default function PageLayout({ title, className, children, showKeywordDictionary = false }) {
   usePageTitle(title)
+  const { pathname } = useLocation()
+  const showKeywords = shouldShowKeywordDictionary(pathname, showKeywordDictionary)
 
-  const rootClassName = [className, showKeywordDictionary ? 'page-layout--with-keywords' : '']
+  const rootClassName = [className, showKeywords ? 'page-layout--with-keywords' : '']
     .filter(Boolean)
     .join(' ')
 
@@ -19,7 +24,12 @@ export default function PageLayout({ title, className, children, showKeywordDict
           {children}
         </main>
       </div>
-      {showKeywordDictionary ? <KeywordDictionary /> : null}
+      {showKeywords ? (
+        <>
+          <KeywordInlineHint />
+          <KeywordDictionary />
+        </>
+      ) : null}
     </>
   )
 }

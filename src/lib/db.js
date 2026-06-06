@@ -1,5 +1,13 @@
 import { nanoid } from 'nanoid'
 import { supabase } from './supabase'
+import { SESSION_UPDATE_BLOCKED_MESSAGE } from './sessionErrors.js'
+
+export { SESSION_UPDATE_BLOCKED_MESSAGE } from './sessionErrors.js'
+
+/** True when PATCH succeeded at HTTP level but RLS blocked the update (wrong session secret or missing row). */
+export function isParticipantUpdateBlocked(result) {
+  return Boolean(result && result.ok === false && result.rowsUpdated === 0)
+}
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -119,6 +127,25 @@ export async function createParticipantRow(sessionId, sessionSecret, selectedQue
 
   if (error) {
     devError('[db] createParticipantRow: upsert failed', error)
+    return null
+  }
+
+  const verify = await patchParticipant(
+    sessionId,
+    sessionSecret,
+    { screens_time: {} },
+    'createParticipantRow:verifyAccess',
+  )
+
+  if (isParticipantUpdateBlocked(verify)) {
+    devWarn(
+      '[db] createParticipantRow: verify PATCH blocked — session secret likely mismatches DB row',
+    )
+    return null
+  }
+
+  if (!verify.ok) {
+    devError('[db] createParticipantRow: verify PATCH failed', verify.error)
     return null
   }
 

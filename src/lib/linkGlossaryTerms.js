@@ -1,4 +1,4 @@
-import { getKeywordDefinition } from '../data/keywordDictionary.js'
+import { getKeywordDefinition, isOfficialKeyword } from '../data/keywordDictionary.js'
 
 /**
  * Match phrases in lesson copy to canonical glossary terms.
@@ -32,22 +32,36 @@ const GLOSSARY_MATCHES = [
   { pattern: /\bresolv(?:e|es|ed|ing)\b/gi, term: 'Resolve' },
   { pattern: /\brespond(?:ing|s)?\b/gi, term: 'Respond' },
   { pattern: /\bin response\b/gi, term: 'Respond' },
-  { pattern: /\bcast(?:ing|s)?\b/gi, term: 'Cast' },
+  { pattern: /\bcast(?:ing|s)?\s+(?:a\s+)?(?:spell|creature|instant|sorcery|planeswalker|artifact)\b/gi, term: 'Cast' },
+  { pattern: /\b(?:you|then|to|just|and)\s+cast(?:s|ing)?\b/gi, term: 'Cast' },
+  { pattern: /\bcast(?:s|ing)?\s+it\b/gi, term: 'Cast' },
+  { pattern: /\b(?:can|could)\s+(?:only\s+)?be\s+cast\b/gi, term: 'Cast' },
+  { pattern: /\b(?:can|could)\s+(?:you\s+)?cast\b/gi, term: 'Cast' },
+  { pattern: /\bopponent\s+just\s+cast\b/gi, term: 'Cast' },
+  { pattern: /\bcast(?:s|ing)?\s+[A-Z][\w'-]+(?:\s+[A-Z][\w'-]+)*\b/g, term: 'Cast' },
 ]
 
 function collectMatches(text) {
   const matches = []
 
   for (const { pattern, term } of GLOSSARY_MATCHES) {
+    if (!isOfficialKeyword(term)) continue
+
     const re = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`)
     let match = re.exec(text)
     while (match) {
+      const definition = getKeywordDefinition(term)
+      if (!definition) {
+        match = re.exec(text)
+        continue
+      }
+
       matches.push({
         start: match.index,
         end: match.index + match[0].length,
         value: match[0],
         term,
-        definition: getKeywordDefinition(term),
+        definition,
       })
       match = re.exec(text)
     }
@@ -56,22 +70,27 @@ function collectMatches(text) {
   return matches
 }
 
+function rangesOverlap(a, b) {
+  return a.start < b.end && a.end > b.start
+}
+
 function selectNonOverlapping(matches) {
   const sorted = [...matches].sort((a, b) => {
+    const lengthDiff = b.end - b.start - (a.end - a.start)
+    if (lengthDiff !== 0) return lengthDiff
     if (a.start !== b.start) return a.start - b.start
-    return b.end - b.start - (a.end - a.start)
+    return 0
   })
 
   const selected = []
-  let cursor = 0
 
   for (const match of sorted) {
-    if (match.start < cursor || !match.definition) continue
+    if (!match.definition) continue
+    if (selected.some((picked) => rangesOverlap(match, picked))) continue
     selected.push(match)
-    cursor = match.end
   }
 
-  return selected
+  return selected.sort((a, b) => a.start - b.start)
 }
 
 /**

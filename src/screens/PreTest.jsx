@@ -59,7 +59,11 @@ export default function PreTest({ session }) {
 
   if (!selectedQuestions || selectedQuestions.length === 0) {
     return (
-      <PageLayout title="Pre-Test · Learn to Play MTG" className="pretest">
+      <PageLayout
+        title="Pre-Test · Learn to Play MTG"
+        className="pretest"
+        showKeywordDictionary={false}
+      >
         <div className="pretest__frame">
           <h1 className="pretest__empty">Pre-Test unavailable</h1>
           <p className="pretest__empty">No questions loaded. Return to the start and try again.</p>
@@ -87,7 +91,11 @@ export default function PreTest({ session }) {
   }
 
   return (
-    <PageLayout title="Pre-Test · Learn to Play MTG" className="pretest">
+    <PageLayout
+      title="Pre-Test · Learn to Play MTG"
+      className="pretest"
+      showKeywordDictionary={false}
+    >
       <TestQuestionFlow
         testLabel="Pre-Test"
         progressIndex={PROGRESS.PRETEST}

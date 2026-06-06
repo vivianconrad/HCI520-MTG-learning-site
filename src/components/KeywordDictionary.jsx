@@ -50,7 +50,7 @@ export default function KeywordDictionary() {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls="keyword-dictionary-panel"
-        title="Open the full keyword guide. Dotted terms in lessons also show quick definitions on hover or tap."
+        title="Open the full keyword guide, including informal terms like summoning sickness."
         onClick={() => setOpen(true)}
       >
         Keyword guide
@@ -73,9 +73,16 @@ export default function KeywordDictionary() {
             aria-labelledby="keyword-dictionary-title"
           >
             <header className="keyword-dictionary__header">
-              <h2 id="keyword-dictionary-title" className="keyword-dictionary__title">
-                Keyword guide
-              </h2>
+              <div className="keyword-dictionary__intro">
+                <h2 id="keyword-dictionary-title" className="keyword-dictionary__title">
+                  Keyword guide
+                </h2>
+                <p className="keyword-dictionary__lede">
+                  Search every term here, including informal ones like summoning sickness. Official
+                  rules terms in lessons also appear in gold — hover or tap them for the same quick
+                  definitions.
+                </p>
+              </div>
               <button
                 type="button"
                 className="keyword-dictionary__close"

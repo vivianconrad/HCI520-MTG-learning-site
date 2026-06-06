@@ -99,6 +99,7 @@ export default function TestQuestionFlow({
         {testLabel} · Question {currentIndex + 1} of {total}
       </p>
       {introNote && <p className="pretest__intro-note">{introNote}</p>}
+      {/* Plain text only — no inline keyword highlights during assessment. */}
       <p id={questionHeadingId} className="pretest__question" aria-live="polite">
         {question.question}
       </p>

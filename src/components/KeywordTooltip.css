@@ -1,3 +1,21 @@
+.mtg-rules-term {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.98em;
+  letter-spacing: 0.015em;
+  color: var(--color-gold-on-parchment);
+  background: linear-gradient(
+    180deg,
+    rgba(201, 168, 76, 0.34) 0%,
+    rgba(201, 168, 76, 0.18) 100%
+  );
+  padding: 0.05em 0.35em 0.1em;
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  box-shadow: inset 0 -2px 0 var(--color-gold);
+}
+
 .keyword-tooltip {
   position: relative;
   display: inline;
@@ -6,23 +24,31 @@
 
 .keyword-tooltip__trigger {
   display: inline;
-  padding: 0;
   margin: 0;
+  padding: 0;
   font: inherit;
-  color: inherit;
   text-align: inherit;
   text-decoration: none;
-  background: none;
   border: none;
-  border-bottom: 1px dotted var(--color-gold);
-  cursor: help;
-  border-radius: 0;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 .keyword-tooltip__trigger:hover,
-.keyword-tooltip__trigger:focus-visible {
+.keyword-tooltip__trigger:focus-visible,
+.keyword-tooltip--open .keyword-tooltip__trigger {
   color: var(--color-navy);
-  background: rgba(212, 175, 55, 0.18);
+  background: linear-gradient(
+    180deg,
+    rgba(201, 168, 76, 0.52) 0%,
+    rgba(201, 168, 76, 0.3) 100%
+  );
+  box-shadow: inset 0 -2px 0 var(--color-navy);
+}
+
+.keyword-tooltip--pinned .keyword-tooltip__trigger {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 1px;
 }
 
 .keyword-tooltip__trigger:focus-visible {
@@ -33,10 +59,10 @@
 .keyword-tooltip__popup {
   position: absolute;
   left: 50%;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 10px);
   z-index: 850;
   display: none;
-  width: min(280px, 70vw);
+  width: min(300px, calc(100vw - 32px));
   padding: 10px 12px;
   font-family: var(--font-body);
   font-size: 0.875rem;
@@ -51,10 +77,39 @@
   pointer-events: none;
 }
 
-.keyword-tooltip--open .keyword-tooltip__popup,
-.keyword-tooltip:focus-within .keyword-tooltip__popup,
-.keyword-tooltip:hover .keyword-tooltip__popup {
+.keyword-tooltip--below .keyword-tooltip__popup {
+  top: calc(100% + 10px);
+  bottom: auto;
+}
+
+.keyword-tooltip--open .keyword-tooltip__popup {
   display: block;
+}
+
+.keyword-tooltip--pinned .keyword-tooltip__popup {
+  pointer-events: auto;
+}
+
+.keyword-tooltip__popup::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  background: var(--color-parchment);
+  border-right: 1.5px solid var(--color-gold);
+  border-bottom: 1.5px solid var(--color-gold);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.keyword-tooltip--below .keyword-tooltip__popup::after {
+  top: -7px;
+  bottom: auto;
+  border-right: none;
+  border-bottom: none;
+  border-left: 1.5px solid var(--color-gold);
+  border-top: 1.5px solid var(--color-gold);
 }
 
 .keyword-tooltip__term {
@@ -70,9 +125,30 @@
   display: block;
 }
 
+.keyword-tooltip__hint {
+  display: block;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(201, 168, 76, 0.45);
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--color-ink-muted, var(--color-text-dark));
+}
+
 @media (max-width: 640px) {
   .keyword-tooltip__popup {
     left: 0;
     transform: none;
+  }
+
+  .keyword-tooltip__popup::after {
+    left: 24px;
+    transform: rotate(45deg);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .keyword-tooltip__hint {
+    display: none;
   }
 }

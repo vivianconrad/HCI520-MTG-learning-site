@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import {
@@ -38,6 +38,7 @@ export default function InstructorDashboard() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [rlsBlocked, setRlsBlocked] = useState(false)
+  const [loadAttempted, setLoadAttempted] = useState(false)
 
   const cohort = useMemo(() => aggregateCohortStats(sessions), [sessions])
 
@@ -47,6 +48,7 @@ export default function InstructorDashboard() {
       return
     }
 
+    setLoadAttempted(true)
     setLoading(true)
     setError(null)
     setRlsBlocked(false)
@@ -70,12 +72,6 @@ export default function InstructorDashboard() {
 
     setSessions(data ?? [])
   }, [])
-
-  useEffect(() => {
-    if (isSupabaseConfigured()) {
-      loadSessions()
-    }
-  }, [loadSessions])
 
   function handleExportCsv() {
     const csv = sessionsToCsv(sessions)
@@ -117,7 +113,11 @@ export default function InstructorDashboard() {
               onClick={loadSessions}
               disabled={loading}
             >
-              {loading ? 'Refreshing…' : 'Refresh'}
+              {loading
+                ? 'Loading…'
+                : loadAttempted
+                  ? 'Refresh'
+                  : 'Try loading cohort data'}
             </button>
             <button
               type="button"
@@ -130,6 +130,15 @@ export default function InstructorDashboard() {
           </div>
         </div>
 
+        {!loadAttempted && (
+          <p className="instructor__intro">
+            Cohort summaries come from Supabase when browser access is allowed. Row-level security
+            often blocks SELECT on the <code>participants</code> table — use your Supabase project →
+            Table Editor → <code>participants</code> to view and export submissions. Click{' '}
+            <strong>Try loading cohort data</strong> when you want to attempt a dashboard load.
+          </p>
+        )}
+
         {error && (
           <p className="instructor__error" role="alert">
             {error}
@@ -138,13 +147,12 @@ export default function InstructorDashboard() {
 
         {rlsBlocked && (
           <p className="instructor__intro">
-            This page attempts to load cohort data automatically. When RLS denies browser reads,
-            open your Supabase project → Table Editor → <code>participants</code> to review
-            submissions.
+            Browser reads are blocked by RLS. Open Supabase → Table Editor →{' '}
+            <code>participants</code> to review cohort submissions directly.
           </p>
         )}
 
-        {!rlsBlocked && (
+        {loadAttempted && !rlsBlocked && !error && (
           <>
             <section className="instructor__summary" aria-label="Cohort summary">
               <p className="instructor__stat">

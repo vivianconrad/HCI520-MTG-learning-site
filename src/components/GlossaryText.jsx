@@ -1,11 +1,18 @@
 import { linkGlossaryTerms } from '../lib/linkGlossaryTerms.js'
 import KeywordTooltip from './KeywordTooltip.jsx'
 
-export default function GlossaryText({ text, children, as: Tag = 'span', className }) {
+/** Lesson-only helper. Do not use in pre-test or post-test question copy. */
+export default function GlossaryText({
+  text,
+  children,
+  as: Tag = 'span',
+  className,
+  enabled = true,
+}) {
   const source = text ?? children
 
-  if (typeof source !== 'string') {
-    return source ?? null
+  if (!enabled || typeof source !== 'string') {
+    return typeof source === 'string' ? <Tag className={className}>{source}</Tag> : source ?? null
   }
 
   const segments = linkGlossaryTerms(source)
