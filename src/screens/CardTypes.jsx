@@ -265,6 +265,10 @@ const CARD_TYPES = [
         src: cardImage('sorcery-duress.jpg'),
         label: 'Duress',
       },
+      {
+        src: cardImage('divination.jpg'),
+        label: 'Divination',
+      },
     ],
   },
   {
@@ -569,6 +573,7 @@ export default function CardTypes({ session }) {
   const openOverlay = useCallback((id) => {
     setIsClosing(false)
     setOverlayId(id)
+    setActiveExampleIndex(0)
     setSeenIds((prev) => {
       if (prev.has(id)) return prev
       const next = new Set(prev)
@@ -592,10 +597,6 @@ export default function CardTypes({ session }) {
 
     return () => window.clearTimeout(timer)
   }, [isClosing])
-
-  useEffect(() => {
-    setActiveExampleIndex(0)
-  }, [overlayId])
 
   useEffect(() => {
     if (overlayOpen) {

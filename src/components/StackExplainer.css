@@ -57,3 +57,11 @@
 .stack-explainer__list li + li {
   margin-top: 6px;
 }
+
+.stack-explainer__tap-symbol {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin: 0 0 12px;
+}

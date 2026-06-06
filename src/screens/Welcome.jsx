@@ -6,6 +6,8 @@ import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import { cardImage } from '../assets/cards/index.js'
 import './Welcome.css'
 
+const mtgOpeningImg = new URL('../assets/cards/Magic_ The Gathering-opening.png', import.meta.url).href
+
 const HERO_CARDS = [
   {
     src: cardImage('creature-llanowar-elves.jpg'),
@@ -55,6 +57,7 @@ export default function Welcome({ session }) {
         <p className="welcome__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="welcome__heading">Learn to Play</h1>
         <hr className="welcome__rule" aria-hidden="true" />
+        <img src={mtgOpeningImg} alt="Magic: The Gathering" className="welcome__opening-image" />
         <p className="welcome__subheading">
           A quick guide to reading cards, understanding card types, and taking your first turn.
         </p>

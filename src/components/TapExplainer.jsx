@@ -1,6 +1,8 @@
 import './StackExplainer.css'
 import { renderGlossaryListItem, renderGlossaryString } from './glossaryRender.jsx'
 
+const tapSymbolImg = new URL('../assets/tap-symbol mtg.webp', import.meta.url).href
+
 const BRIEF = [
   'To tap a card, turn it sideways. That marks it as used for now. Most tapped cards cannot be used again until they untap.',
   'Lands tap to produce mana. Creatures tap when they attack. Many cards show a curved-arrow tap symbol for abilities that require tapping. At the start of your turn, the untap step turns your permanents upright again.',
@@ -58,6 +60,11 @@ export default function TapExplainer({ variant = 'brief' }) {
       <h2 id="tap-explainer-heading" className="stack-explainer__heading">
         What does tap mean?
       </h2>
+      <img
+        src={tapSymbolImg}
+        alt="The MTG tap symbol: a curved arrow pointing clockwise"
+        className="stack-explainer__tap-symbol"
+      />
       {blocks.map(renderBlock)}
     </aside>
   )
