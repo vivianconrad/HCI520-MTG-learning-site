@@ -6,6 +6,7 @@ import StackExplainer from '../components/StackExplainer.jsx'
 import { useNavigate } from 'react-router-dom'
 import LessonActions from '../components/LessonActions.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { cardImage } from '../assets/cards/index.js'
 import './TurnStructure.css'
@@ -27,7 +28,7 @@ const PHASES = [
     id: 'first-main',
     label: 'First Main Phase',
     title: 'First Main Phase',
-    body: 'This is your first window to cast spells when the stack is empty — creatures, sorceries, enchantments, artifacts, and planeswalkers. You may also play your one land for the turn here (lands are played, not cast), or save that land drop for your second main phase. Instants can be cast any time you have priority, including here.',
+    body: 'This is your first window to cast spells when the stack is empty — creatures, sorceries, enchantments, artifacts, and planeswalkers. You may also play your one land for the turn here (lands are played, not cast), or save that land drop for your second main phase. Instants can be cast any time you have priority, including here. The example card, Llanowar Elves, can tap to add green mana — that is activating an ability, not casting a spell. If you cast it this turn, summoning sickness stops it from attacking or using that tap ability until your next turn begins.',
     image: cardImage('creature-llanowar-elves.jpg'),
     imageAlt: 'Llanowar Elves creature card',
   },
@@ -107,7 +108,7 @@ export default function TurnStructure({ session }) {
 
   return (
     <PageLayout title="Lesson 3 · Turn Structure" className="turn-structure" showKeywordDictionary>
-      <div className="turn-structure__frame">
+      <div className="turn-structure__frame page-layout__content-frame">
         <p className="turn-structure__breadcrumb">Lesson 03 · Turn Structure</p>
         <h1 className="turn-structure__heading">How a Turn Works</h1>
         <hr className="turn-structure__rule" aria-hidden="true" />
@@ -161,20 +162,22 @@ export default function TurnStructure({ session }) {
                   <span className="turn-structure__bullet" aria-hidden="true">
                     ◆
                   </span>
-                  {text}
+                  <GlossaryText text={text} />
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="turn-structure__detail-body">{selected.body}</p>
+            <p className="turn-structure__detail-body">
+              <GlossaryText text={selected.body} />
+            </p>
           )}
         </div>
 
-        <CastVsPlayExplainer variant="full" />
+        <CastVsPlayExplainer variant="brief" />
 
-        <TapExplainer variant="full" />
+        <TapExplainer variant="brief" />
 
-        <StackExplainer variant="full" />
+        <StackExplainer variant="brief" />
 
         <hr className="turn-structure__divider" aria-hidden="true" />
 

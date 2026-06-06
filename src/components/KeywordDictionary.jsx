@@ -50,6 +50,7 @@ export default function KeywordDictionary() {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls="keyword-dictionary-panel"
+        title="Open the full keyword guide. Dotted terms in lessons also show quick definitions on hover or tap."
         onClick={() => setOpen(true)}
       >
         Keyword guide

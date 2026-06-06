@@ -1,4 +1,4 @@
-import { useCallback, useId, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import {
@@ -15,19 +15,29 @@ function isSupabaseConfigured() {
   return Boolean(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY)
 }
 
-const EXPECTED_PASSWORD = import.meta.env.VITE_INSTRUCTOR_PASSWORD ?? ''
+function isRlsBlocked(error) {
+  if (!error) return false
+  const message = error.message?.toLowerCase() ?? ''
+  return (
+    error.code === '42501' ||
+    message.includes('policy') ||
+    message.includes('permission') ||
+    message.includes('row-level security')
+  )
+}
+
+const RLS_BLOCKED_MESSAGE =
+  'Cohort data is not readable from the public browser. Row-level security blocks SELECT on the participants table. Use the Supabase Table Editor to view and export cohort data.'
 
 function formatMean(value, digits = 1) {
   return Number(value).toFixed(digits)
 }
 
 export default function InstructorDashboard() {
-  const passwordErrorId = useId()
-  const [password, setPassword] = useState('')
-  const [unlocked, setUnlocked] = useState(false)
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [rlsBlocked, setRlsBlocked] = useState(false)
 
   const cohort = useMemo(() => aggregateCohortStats(sessions), [sessions])
 
@@ -39,6 +49,7 @@ export default function InstructorDashboard() {
 
     setLoading(true)
     setError(null)
+    setRlsBlocked(false)
 
     const { data, error: fetchError } = await supabase
       .from('participants')
@@ -48,27 +59,23 @@ export default function InstructorDashboard() {
     setLoading(false)
 
     if (fetchError) {
-      setError(fetchError.message)
+      if (isRlsBlocked(fetchError)) {
+        setRlsBlocked(true)
+        setError(RLS_BLOCKED_MESSAGE)
+      } else {
+        setError(fetchError.message)
+      }
       return
     }
 
     setSessions(data ?? [])
   }, [])
 
-  function handleUnlock(event) {
-    event.preventDefault()
-    if (!EXPECTED_PASSWORD) {
-      setUnlocked(true)
+  useEffect(() => {
+    if (isSupabaseConfigured()) {
       loadSessions()
-      return
     }
-    if (password === EXPECTED_PASSWORD) {
-      setUnlocked(true)
-      loadSessions()
-    } else {
-      setError('Incorrect instructor password.')
-    }
-  }
+  }, [loadSessions])
 
   function handleExportCsv() {
     const csv = sessionsToCsv(sessions)
@@ -90,49 +97,6 @@ export default function InstructorDashboard() {
             Supabase environment variables are missing. Copy <code>.env.example</code> to{' '}
             <code>.env.local</code> and rebuild.
           </p>
-          <Link className="instructor__back" to="/">
-            ← Back to lesson
-          </Link>
-        </div>
-      </PageLayout>
-    )
-  }
-
-  if (!unlocked) {
-    const passwordInvalid = error === 'Incorrect instructor password.'
-
-    return (
-      <PageLayout title="Instructor Dashboard · Learn to Play MTG" className="instructor">
-        <div className="instructor__frame">
-          <h1 className="instructor__heading">Instructor dashboard</h1>
-          <p className="instructor__intro">
-            View cohort pre/post scores and export data for HCI520 evaluation. Participant rows
-            use RLS that blocks browser reads; use the Supabase Table Editor for full access, or
-            run <code>supabase/instructor-select-policy.sql</code> to enable this dashboard.
-          </p>
-          <form className="instructor__unlock" onSubmit={handleUnlock}>
-            <label className="instructor__label" htmlFor="instructor-password">
-              Password
-            </label>
-            <input
-              id="instructor-password"
-              type="password"
-              className="instructor__input"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              autoComplete="current-password"
-              aria-invalid={passwordInvalid || undefined}
-              aria-describedby={error ? passwordErrorId : undefined}
-            />
-            {error && (
-              <p id={passwordErrorId} className="instructor__error" role="alert">
-                {error}
-              </p>
-            )}
-            <button type="submit" className="instructor__button">
-              Unlock
-            </button>
-          </form>
           <Link className="instructor__back" to="/">
             ← Back to lesson
           </Link>
@@ -172,107 +136,121 @@ export default function InstructorDashboard() {
           </p>
         )}
 
-        <section className="instructor__summary" aria-label="Cohort summary">
-          <p className="instructor__stat">
-            <span className="instructor__stat-label">Participants</span>
-            <span className="instructor__stat-value">{cohort.count}</span>
+        {rlsBlocked && (
+          <p className="instructor__intro">
+            This page attempts to load cohort data automatically. When RLS denies browser reads,
+            open your Supabase project → Table Editor → <code>participants</code> to review
+            submissions.
           </p>
-          <p className="instructor__stat">
-            <span className="instructor__stat-label">
-              Mean pre-test (of {DEFAULT_TEST_QUESTION_COUNT})
-            </span>
-            <span className="instructor__stat-value">{formatMean(cohort.meanPretest)}</span>
-          </p>
-          <p className="instructor__stat">
-            <span className="instructor__stat-label">
-              Mean post-test (of {DEFAULT_TEST_QUESTION_COUNT})
-            </span>
-            <span className="instructor__stat-value">{formatMean(cohort.meanPosttest)}</span>
-          </p>
-          <p className="instructor__stat">
-            <span className="instructor__stat-label">Mean gain</span>
-            <span className="instructor__stat-value">{formatMean(cohort.meanGain, 2)}</span>
-          </p>
-        </section>
+        )}
 
-        <section className="instructor__lo" aria-label="Mean score by topic">
-          <h2 className="instructor__subheading">Mean score by topic (of 2 questions each)</h2>
-          <table className="instructor__table">
-            <thead>
-              <tr>
-                <th scope="col">Topic</th>
-                <th scope="col">Pre</th>
-                <th scope="col">Post</th>
-                <th scope="col">Gain</th>
-              </tr>
-            </thead>
-            <tbody>
-              {TOPIC_ORDER.map((topicKey) => (
-                <tr key={topicKey}>
-                  <td>{TOPIC_LABELS[topicKey]}</td>
-                  <td>{formatMean(cohort.loMeans[topicKey]?.pre ?? 0)}</td>
-                  <td>{formatMean(cohort.loMeans[topicKey]?.post ?? 0)}</td>
-                  <td>{formatMean(cohort.loMeans[topicKey]?.gain ?? 0, 2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
+        {!rlsBlocked && (
+          <>
+            <section className="instructor__summary" aria-label="Cohort summary">
+              <p className="instructor__stat">
+                <span className="instructor__stat-label">Participants</span>
+                <span className="instructor__stat-value">{cohort.count}</span>
+              </p>
+              <p className="instructor__stat">
+                <span className="instructor__stat-label">
+                  Mean pre-test (of {DEFAULT_TEST_QUESTION_COUNT})
+                </span>
+                <span className="instructor__stat-value">{formatMean(cohort.meanPretest)}</span>
+              </p>
+              <p className="instructor__stat">
+                <span className="instructor__stat-label">
+                  Mean post-test (of {DEFAULT_TEST_QUESTION_COUNT})
+                </span>
+                <span className="instructor__stat-value">{formatMean(cohort.meanPosttest)}</span>
+              </p>
+              <p className="instructor__stat">
+                <span className="instructor__stat-label">Mean gain</span>
+                <span className="instructor__stat-value">{formatMean(cohort.meanGain, 2)}</span>
+              </p>
+            </section>
 
-        <section className="instructor__participants" aria-label="Participants">
-          <h2 className="instructor__subheading">Participants</h2>
-          {!sessions.length && !loading && (
-            <p className="instructor__empty">No sessions yet. Participants submit after the post-test.</p>
-          )}
-          {sessions.length > 0 && (
-            <div className="instructor__table-wrap">
-              <table className="instructor__table instructor__table--compact">
+            <section className="instructor__lo" aria-label="Mean score by topic">
+              <h2 className="instructor__subheading">Mean score by topic (of 2 questions each)</h2>
+              <table className="instructor__table">
                 <thead>
                   <tr>
-                    <th scope="col">Session ID</th>
+                    <th scope="col">Topic</th>
                     <th scope="col">Pre</th>
                     <th scope="col">Post</th>
                     <th scope="col">Gain</th>
-                    <th scope="col">Submitted</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {sessions.map((row) => {
-                    const pre = row.pretest_score ?? 0
-                    const post = row.posttest_score ?? 0
-                    const gain = post - pre
-                    const questionCount =
-                      row.selected_questions?.length ?? DEFAULT_TEST_QUESTION_COUNT
-                    return (
-                      <tr key={row.session_id}>
-                        <td>
-                          <code>{row.session_id}</code>
-                        </td>
-                        <td>
-                          {pre} / {questionCount}
-                        </td>
-                        <td>
-                          {post} / {questionCount}
-                        </td>
-                        <td>{gain >= 0 ? `+${gain}` : gain}</td>
-                        <td>
-                          {row.completed_at
-                            ? new Date(row.completed_at).toLocaleString()
-                            : '-'}
-                        </td>
-                      </tr>
-                    )
-                  })}
+                  {TOPIC_ORDER.map((topicKey) => (
+                    <tr key={topicKey}>
+                      <td>{TOPIC_LABELS[topicKey]}</td>
+                      <td>{formatMean(cohort.loMeans[topicKey]?.pre ?? 0)}</td>
+                      <td>{formatMean(cohort.loMeans[topicKey]?.post ?? 0)}</td>
+                      <td>{formatMean(cohort.loMeans[topicKey]?.gain ?? 0, 2)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
-            </div>
-          )}
-        </section>
+            </section>
 
-        <p className="instructor__note">
-          Scores use each participant&apos;s randomly drawn {DEFAULT_TEST_QUESTION_COUNT} questions
-          (2 per topic). See <code>docs/evaluation.md</code> for reporting caveats.
-        </p>
+            <section className="instructor__participants" aria-label="Participants">
+              <h2 className="instructor__subheading">Participants</h2>
+              {!sessions.length && !loading && (
+                <p className="instructor__empty">
+                  No sessions yet. Participants submit after the post-test.
+                </p>
+              )}
+              {sessions.length > 0 && (
+                <div className="instructor__table-wrap">
+                  <table className="instructor__table instructor__table--compact">
+                    <thead>
+                      <tr>
+                        <th scope="col">Session ID</th>
+                        <th scope="col">Pre</th>
+                        <th scope="col">Post</th>
+                        <th scope="col">Gain</th>
+                        <th scope="col">Submitted</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sessions.map((row) => {
+                        const pre = row.pretest_score ?? 0
+                        const post = row.posttest_score ?? 0
+                        const gain = post - pre
+                        const questionCount =
+                          row.selected_questions?.length ?? DEFAULT_TEST_QUESTION_COUNT
+                        return (
+                          <tr key={row.session_id}>
+                            <td>
+                              <code>{row.session_id}</code>
+                            </td>
+                            <td>
+                              {pre} / {questionCount}
+                            </td>
+                            <td>
+                              {post} / {questionCount}
+                            </td>
+                            <td>{gain >= 0 ? `+${gain}` : gain}</td>
+                            <td>
+                              {row.completed_at
+                                ? new Date(row.completed_at).toLocaleString()
+                                : '-'}
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </section>
+
+            <p className="instructor__note">
+              Scores use each participant&apos;s randomly drawn {DEFAULT_TEST_QUESTION_COUNT}{' '}
+              questions (2 per topic). See <code>docs/evaluation.md</code> for reporting caveats.
+            </p>
+          </>
+        )}
 
         <Link className="instructor__back" to="/">
           ← Back to lesson

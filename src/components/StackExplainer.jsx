@@ -1,4 +1,5 @@
 import './StackExplainer.css'
+import { renderGlossaryListItem, renderGlossaryString } from './glossaryRender.jsx'
 
 const BRIEF = [
   'When you cast a spell (not a land), it goes on the stack first. It is a waiting line where spells and abilities sit before they happen.',
@@ -20,11 +21,7 @@ const FULL = [
 
 function renderBlock(block, index) {
   if (typeof block === 'string') {
-    return (
-      <p key={index} className="stack-explainer__paragraph">
-        {block}
-      </p>
-    )
+    return renderGlossaryString(block, index, 'stack-explainer__paragraph')
   }
 
   return (
@@ -33,7 +30,7 @@ function renderBlock(block, index) {
       {block.list && (
         <ul className="stack-explainer__list">
           {block.list.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item}>{renderGlossaryListItem(item)}</li>
           ))}
         </ul>
       )}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { useConfirm } from '../context/ConfirmContext.jsx'
 import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
@@ -36,7 +37,7 @@ const SCENARIOS = [
   },
   {
     id: 's2',
-    text: "During combat on your opponent's turn, they attack you with a creature. You declare your untapped 2/2 creature as a blocker. You have Giant Growth in your hand — an instant that gives a creature +3/+3 until end of turn. Can you cast Giant Growth now to boost your blocker?",
+    text: "During combat on your opponent's turn, they attack you with a creature. You declare your untapped 2/2 creature as a blocker — blockers must be untapped and able to block that attacker under the normal rules. You have Giant Growth in your hand — an instant that gives a creature +3/+3 until end of turn. Can you cast Giant Growth now to boost your blocker?",
     cardImage: 'giant-growth.jpg',
     cardImageAlt: 'Giant Growth: Instant',
     correctAnswer: true,
@@ -81,12 +82,12 @@ const SCENARIOS = [
   },
   {
     id: 's7',
-    text: "It's your first main phase and the stack is empty. You have a Sol Ring in your hand — it costs {2} (two mana of any type). You have two untapped lands that can produce at least two mana total. Can you tap them for mana and cast Sol Ring right now?",
+    text: "It's your first main phase and the stack is empty. You have a Sol Ring in your hand — it costs {2} (two generic mana). You have two untapped lands that can produce at least two mana total. Can you tap them for mana and cast Sol Ring right now?",
     cardImage: 'sol-ring.jpg',
     cardImageAlt: 'Sol Ring: Artifact',
     correctAnswer: true,
     explanation:
-      'Yes. Artifacts are cast during your main phase when the stack is empty, same as creatures and sorceries. Tap your lands for two mana, pay {2}, and cast Sol Ring.',
+      'Yes. Artifacts are cast during your main phase when the stack is empty, same as creatures and sorceries. Tap your lands for two generic mana, pay {2}, and cast Sol Ring.',
   },
   {
     id: 's8',
@@ -113,7 +114,7 @@ const SCENARIOS = [
     cardImageAlt: 'Creature (summoning sickness example)',
     correctAnswer: false,
     explanation:
-      'No. Creatures you cast this turn have summoning sickness — they cannot attack until they have been under your control since the start of your turn. They can still block if they are untapped.',
+      'No. Summoning sickness applies to creatures you did not control at the start of your turn — they cannot attack or use tap abilities (including tap-for-mana) until your next turn begins. They can still block if they are untapped.',
   },
 ]
 
@@ -150,7 +151,7 @@ function ScenarioCardImage({ src, alt }) {
 export default function PuttingItTogether({ session }) {
   const navigate = useNavigate()
   const confirm = useConfirm()
-  const { incrementScenarios } = session
+  const { recordScenarioAttempt } = session
 
   useScreenTime(session, 'PuttingItTogether')
 
@@ -187,7 +188,7 @@ export default function PuttingItTogether({ session }) {
     if (phase !== 'question') return
     setSelectedAnswer(answer)
     setSeenIds((prev) => new Set([...prev, scenario.id]))
-    incrementScenarios()
+    recordScenarioAttempt(scenario.id)
     setPhase('feedback')
   }
 
@@ -203,7 +204,7 @@ export default function PuttingItTogether({ session }) {
 
   return (
     <PageLayout title="Lesson 4 · Putting It Together" className="putting-together" showKeywordDictionary>
-      <div className="putting-together__frame">
+      <div className="putting-together__frame page-layout__content-frame">
         <p className="putting-together__breadcrumb">Lesson 04 · Putting It Together</p>
         <h1 className="putting-together__heading">Let&apos;s Put It Together</h1>
         <hr className="putting-together__rule" aria-hidden="true" />
@@ -214,9 +215,7 @@ export default function PuttingItTogether({ session }) {
         </p>
 
         <p className="putting-together__intro">
-          When a scenario involves casting a spell, remember the usual sequence: tap lands or other
-          sources to add mana to your pool, cast the spell and pay from that pool, then let it
-          resolve from the stack. Leftover mana disappears when the step or phase ends.
+          <GlossaryText text="When a scenario involves casting a spell, remember the usual sequence: tap lands or other sources to add mana to your pool, cast the spell and pay from that pool, then let it resolve from the stack. Leftover mana disappears when the step or phase ends." />
         </p>
 
         <p className="putting-together__progress" aria-live="polite">
@@ -243,7 +242,9 @@ export default function PuttingItTogether({ session }) {
             )}
           </div>
           <div className="putting-together__scenario-text-box">
-            <p className="putting-together__scenario-text">{scenario.text}</p>
+            <p className="putting-together__scenario-text">
+              <GlossaryText text={scenario.text} />
+            </p>
           </div>
         </div>
 
@@ -278,7 +279,9 @@ export default function PuttingItTogether({ session }) {
               </span>
               {isCorrect ? 'Correct!' : 'Not quite.'}
             </p>
-            <p className="putting-together__feedback-explanation">{scenario.explanation}</p>
+            <p className="putting-together__feedback-explanation">
+              <GlossaryText text={scenario.explanation} />
+            </p>
           </div>
         )}
 

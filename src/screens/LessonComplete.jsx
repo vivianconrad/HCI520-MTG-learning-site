@@ -22,7 +22,7 @@ const REVIEW_CARDS = [
 
 const RECAP = [
   'How to read a card and what each part means',
-  'The seven card types and when you can cast them',
+  'The seven card types and when you can play or cast them',
   'How a turn is structured from start to finish',
   'How card types and timing work together in real scenarios',
 ]
@@ -32,6 +32,7 @@ export default function LessonComplete({ session }) {
   const confirm = useConfirm()
   const {
     sessionId,
+    sessionSecret,
     scenariosAttempted,
     screenTimes,
     setLessonsCompleted,
@@ -41,12 +42,12 @@ export default function LessonComplete({ session }) {
 
   useEffect(() => {
     setLessonsCompleted(true)
-    saveLessonProgress(sessionId, true, scenariosAttempted)
-  }, [sessionId, scenariosAttempted, setLessonsCompleted])
+    saveLessonProgress(sessionId, sessionSecret, true, scenariosAttempted)
+  }, [sessionId, sessionSecret, scenariosAttempted, setLessonsCompleted])
 
   useEffect(() => {
-    saveScreenTime(sessionId, screenTimes)
-  }, [sessionId, screenTimes])
+    saveScreenTime(sessionId, sessionSecret, screenTimes)
+  }, [sessionId, sessionSecret, screenTimes])
 
   return (
     <PageLayout title="Lessons Complete · Learn to Play MTG" className="lesson-complete">

@@ -13,7 +13,7 @@ export const KEYWORD_TERMS = [
   {
     term: 'Colorless mana',
     definition:
-      'Mana with no color, shown as a grey symbol or the number in a grey circle in a mana cost. Sol Ring’s {2} means two mana of any type, including colorless.',
+      'Mana with no color, shown as a diamond symbol in a mana cost (for example, the diamond in {C}{C} on some cards). Sol Ring’s {2} is generic mana, not colorless mana — you can pay it with any type of mana, including colorless.',
   },
   {
     term: 'Counter (a spell)',
@@ -73,7 +73,7 @@ export const KEYWORD_TERMS = [
   {
     term: 'Summoning sickness',
     definition:
-      'Creatures you cast this turn usually cannot attack and cannot use tap abilities until they have been under your control since the start of your turn. They can still block if they are untapped.',
+      'Informal shorthand (not an official rules term) for a creature that was not under your control at the start of your turn — usually one you just cast. Until your next turn begins, it cannot attack and cannot use activated abilities that include a tap symbol in the cost (for example, Llanowar Elves cannot tap for mana the turn it enters). It can still block if it is untapped. Creatures with haste ignore summoning sickness.',
   },
   {
     term: 'Tap / Untap',
@@ -81,3 +81,12 @@ export const KEYWORD_TERMS = [
       'Tap: turn a card sideways to show it has been used (lands for mana, creatures when attacking). Untap: turn it upright again during your untap step at the start of your turn.',
   },
 ]
+
+const KEYWORD_DEFINITION_BY_TERM = new Map(
+  KEYWORD_TERMS.map(({ term, definition }) => [term, definition]),
+)
+
+/** Full definition for a canonical glossary term label. */
+export function getKeywordDefinition(term) {
+  return KEYWORD_DEFINITION_BY_TERM.get(term) ?? null
+}

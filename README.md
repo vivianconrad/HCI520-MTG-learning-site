@@ -109,6 +109,13 @@ Research data is saved incrementally to the `participants` table:
 
 See `docs/evaluation.md` for reporting metrics.
 
+## Security
+
+- The Supabase **anon key** is public by design; row-level security (RLS) protects participant data.
+- Participant **updates** require a per-session `session_secret` header enforced by RLS.
+- **Instructor** participant reads are not available from the browser when deny-select RLS is applied.
+- Do **not** commit `.env.local` or other files containing secrets.
+
 ## Notes
 
 - Vite `base` is set for GitHub Pages at:

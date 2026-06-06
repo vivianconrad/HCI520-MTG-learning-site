@@ -4,6 +4,7 @@ create table if not exists public.participants (
   id uuid default gen_random_uuid() primary key,
   participant_id text not null,
   session_id text not null unique,
+  session_secret text not null,
   selected_questions jsonb not null,
   pretest_answers jsonb,
   pretest_score integer,
@@ -20,19 +21,28 @@ alter table public.participants enable row level security;
 
 drop policy if exists "Allow update own row" on public.participants;
 drop policy if exists "Allow update for all" on public.participants;
+drop policy if exists "Allow update with session secret" on public.participants;
 drop policy if exists "Allow insert for all" on public.participants;
 drop policy if exists "Deny select for all" on public.participants;
+drop policy if exists "Allow select for instructor dashboard" on public.participants;
 
 create policy "Allow insert for all"
   on public.participants for insert
   to anon, authenticated
-  with check (true);
+  with check (
+    session_secret is not null
+    and length(trim(session_secret)) > 0
+  );
 
-create policy "Allow update for all"
+create policy "Allow update with session secret"
   on public.participants for update
   to anon, authenticated
-  using (true)
-  with check (true);
+  using (
+    (current_setting('request.headers', true)::json->>'x-session-secret') = session_secret
+  )
+  with check (
+    (current_setting('request.headers', true)::json->>'x-session-secret') = session_secret
+  );
 
 create policy "Deny select for all"
   on public.participants for select

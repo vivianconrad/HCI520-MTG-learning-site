@@ -4,6 +4,7 @@
 import { readFileSync } from 'fs'
 import { createClient } from '@supabase/supabase-js'
 import { nanoid } from 'nanoid'
+import { randomBytes } from 'crypto'
 
 const env = Object.fromEntries(
   readFileSync('.env.local', 'utf8')
@@ -18,6 +19,7 @@ const env = Object.fromEntries(
 const url = env.VITE_SUPABASE_URL
 const key = env.VITE_SUPABASE_ANON_KEY
 const sessionId = 'SIM' + nanoid(8)
+const sessionSecret = randomBytes(16).toString('hex')
 const sb = createClient(url, key)
 
 console.log('[simulate] sessionId=', sessionId)
@@ -26,6 +28,7 @@ const participantId = nanoid(10)
 const ins = await sb.from('participants').insert({
   participant_id: participantId,
   session_id: sessionId,
+  session_secret: sessionSecret,
   selected_questions: [{ id: 'q1', lo: 'LO1' }],
 })
 console.log('[simulate] createParticipantRow', { status: ins.status, error: ins.error?.message })
@@ -38,6 +41,7 @@ const patch = await fetch(
       apikey: key,
       Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
+      'x-session-secret': sessionSecret,
       Prefer: 'return=minimal,count=exact',
     },
     body: JSON.stringify({ pretest_answers: { q1: 0 }, pretest_score: 1 }),

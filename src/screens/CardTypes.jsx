@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useFocusTrap } from '../hooks/useFocusTrap.js'
 import { useNavigate } from 'react-router-dom'
 import LessonActions from '../components/LessonActions.jsx'
+import CastVsPlayExplainer from '../components/CastVsPlayExplainer.jsx'
+import GlossaryText from '../components/GlossaryText.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
@@ -26,7 +28,7 @@ const CARD_TYPES = [
           'At end of turn, damage on creatures is cleared. A creature that survived with 1 toughness left is back at full health next turn.',
         ],
       },
-      'Most creatures you cast this turn have summoning sickness: they cannot attack or use tap abilities until they have been under your control since the start of your turn.',
+      'Most creatures you cast have summoning sickness: until your next turn begins, they cannot attack or use activated abilities with a tap symbol in the cost. Llanowar Elves is a common example — it cannot tap for green mana the turn it enters, but it can on later turns. Activating that ability is not casting a spell.',
     ],
     examples: [
       {
@@ -475,13 +477,13 @@ function CardTypeDetails({ description, details, variant = 'grid' }) {
           variant === 'overlay' ? 'card-types__overlay-description' : 'card-types__description'
         }
       >
-        {description}
+        <GlossaryText text={description} />
       </p>
       {details?.map((block, index) => {
         if (typeof block === 'string') {
           return (
             <p key={index} className="card-types__detail">
-              {block}
+              <GlossaryText text={block} />
             </p>
           )
         }
@@ -492,11 +494,17 @@ function CardTypeDetails({ description, details, variant = 'grid' }) {
             {block.list && (
               <ul className="card-types__detail-list">
                 {block.list.map((item) => (
-                  <li key={item}>{item}</li>
+                  <li key={item}>
+                    <GlossaryText text={item} />
+                  </li>
                 ))}
               </ul>
             )}
-            {block.text && <p className="card-types__detail">{block.text}</p>}
+            {block.text && (
+              <p className="card-types__detail">
+                <GlossaryText text={block.text} />
+              </p>
+            )}
           </div>
         )
       })}
@@ -623,16 +631,16 @@ export default function CardTypes({ session }) {
 
   return (
     <PageLayout title="Lesson 2 · Card Types" className="card-types" showKeywordDictionary>
-      <div className="card-types__frame">
+      <div className="card-types__frame page-layout__content-frame">
         <p className="card-types__breadcrumb">Lesson 02 · Card Types</p>
         <h1 className="card-types__heading">The Seven Card Types</h1>
         <hr className="card-types__rule" aria-hidden="true" />
 
         <p className="card-types__intro">
-          Magic has a few other card types too, but these seven are the main ones you will see in
-          most games. Each type determines what the card does and, more importantly, when you can
-          play or cast it.
+          <GlossaryText text="Magic has a few other card types too, but these seven are the main ones you will see in most games. Each type determines what the card does and, more importantly, when you can play or cast it." />
         </p>
+
+        <CastVsPlayExplainer variant="brief" />
 
         <div className="card-types__grid">
           {CARD_TYPES.map((type) => (
@@ -652,18 +660,11 @@ export default function CardTypes({ session }) {
         <hr className="card-types__divider" aria-hidden="true" />
 
         <p className="card-types__closing">
-          Notice that only instants can be cast at any time you have priority. Creatures, sorceries,
-          enchantments, artifacts, and planeswalkers are cast during your main phase when the stack is
-          empty. Lands are different: they are played (not cast) during your first or second main
-          phase, one per turn total, and never use the stack.
+          <GlossaryText text="Notice that only instants can be cast at any time you have priority. Creatures, sorceries, enchantments, artifacts, and planeswalkers are cast during your main phase when the stack is empty. Lands are different: they are played (not cast) during your first or second main phase, one per turn total, and never use the stack." />
         </p>
 
         <p className="card-types__timing-footnote">
-          On the tags above, &ldquo;Main phase · stack empty&rdquo; means your turn, your first or
-          second main phase, and nothing waiting on the stack — the usual timing for casting
-          creatures, sorceries, artifacts, enchantments, and planeswalkers. Lands use &ldquo;Main
-          phase · one per turn&rdquo;: one land total, played in either main phase. Some cards break
-          these rules; read the card if you are unsure.
+          <GlossaryText text='On the tags above, "Main phase · stack empty" means your turn, your first or second main phase, and nothing waiting on the stack — the usual timing for casting creatures, sorceries, artifacts, enchantments, and planeswalkers. Lands use "Main phase · one per turn": one land total, played in either main phase. Some cards break these rules; read the card if you are unsure.' />
         </p>
 
         <p className="card-types__note">

@@ -1,4 +1,5 @@
 import './StackExplainer.css'
+import { renderGlossaryListItem, renderGlossaryString } from './glossaryRender.jsx'
 
 const BRIEF = [
   'In Magic, playing and casting are different actions. You play lands; you cast everything else that is a spell.',
@@ -32,11 +33,7 @@ const FULL = [
 
 function renderBlock(block, index) {
   if (typeof block === 'string') {
-    return (
-      <p key={index} className="stack-explainer__paragraph">
-        {block}
-      </p>
-    )
+    return renderGlossaryString(block, index, 'stack-explainer__paragraph')
   }
 
   return (
@@ -45,11 +42,11 @@ function renderBlock(block, index) {
       {block.list && (
         <ul className="stack-explainer__list">
           {block.list.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item}>{renderGlossaryListItem(item)}</li>
           ))}
         </ul>
       )}
-      {block.text && <p className="stack-explainer__paragraph">{block.text}</p>}
+      {block.text && renderGlossaryString(block.text, `${index}-text`, 'stack-explainer__paragraph')}
     </div>
   )
 }

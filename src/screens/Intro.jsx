@@ -28,6 +28,10 @@ export default function Intro({ session }) {
             turn works, and how to put it all together.
           </p>
           <p className="intro__paragraph">
+            Some questions may touch on ideas the lessons explain in more detail — that is expected.
+            Answer with your best guess; the lessons will fill in the gaps.
+          </p>
+          <p className="intro__paragraph">
             When you&apos;re ready, copy your session ID below. You&apos;ll need it at the end.
           </p>
         </div>

@@ -21,6 +21,25 @@ export const TOPIC_LESSON_PATHS = {
   LO4: '/lesson/4',
 }
 
+const CARD_TYPE_QUESTION_PREFIX = 'What type of card'
+
+/** LO1 pool questions that identify card types are taught in Lesson 2. */
+export function isCardTypeIdentificationQuestion(question) {
+  return (
+    question?.lo === 'LO1' &&
+    typeof question.question === 'string' &&
+    question.question.startsWith(CARD_TYPE_QUESTION_PREFIX)
+  )
+}
+
+export function getReviewLessonPath(question) {
+  if (!question?.lo) return '/what-is-mtg'
+  if (question.lo === 'LO4') return '/lesson/4'
+  if (question.lo === 'LO0') return '/what-is-mtg'
+  if (isCardTypeIdentificationQuestion(question)) return '/lesson/2'
+  return TOPIC_LESSON_PATHS[question.lo] ?? '/what-is-mtg'
+}
+
 export function calculateScores(selectedQuestions, pretestAnswers, posttestAnswers) {
   let pretestCorrect = 0
   let posttestCorrect = 0

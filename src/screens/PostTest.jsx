@@ -19,6 +19,7 @@ export default function PostTest({ session }) {
   const confirm = useConfirm()
   const {
     sessionId,
+    sessionSecret,
     selectedQuestions,
     setPosttestAnswer,
     posttestAnswers,
@@ -38,11 +39,11 @@ export default function PostTest({ session }) {
     async (lastAnswer) => {
       const answers = { ...posttestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
-      await savePosttest(sessionId, answers, score)
+      await savePosttest(sessionId, sessionSecret, answers, score)
       markPosttestCompleted()
       navigate('/calculating', { replace: true })
     },
-    [posttestAnswers, selectedQuestions, sessionId, navigate, markPosttestCompleted],
+    [posttestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPosttestCompleted],
   )
 
   if (posttestCompleted) {

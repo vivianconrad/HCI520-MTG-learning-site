@@ -5,6 +5,7 @@
  */
 import { createClient } from '@supabase/supabase-js'
 import { readFileSync } from 'fs'
+import { randomBytes } from 'crypto'
 
 const env = Object.fromEntries(
   readFileSync('.env.local', 'utf8')
@@ -19,12 +20,14 @@ const env = Object.fromEntries(
 const url = env.VITE_SUPABASE_URL
 const key = env.VITE_SUPABASE_ANON_KEY
 const sessionId = `VERIFY${Date.now().toString(36).toUpperCase().slice(-6)}`
+const sessionSecret = randomBytes(16).toString('hex')
 
 const sb = createClient(url, key)
 
 const ins = await sb.from('participants').insert({
   participant_id: 'verify1',
   session_id: sessionId,
+  session_secret: sessionSecret,
   selected_questions: [{ id: 'q1' }],
 })
 console.log('INSERT', { status: ins.status, error: ins.error?.message ?? null })
@@ -35,6 +38,7 @@ const res = await fetch(`${url}/rest/v1/participants?session_id=eq.${encodeURICo
     apikey: key,
     Authorization: `Bearer ${key}`,
     'Content-Type': 'application/json',
+    'x-session-secret': sessionSecret,
     Prefer: 'return=minimal,count=exact',
   },
   body: JSON.stringify({ pretest_score: 1 }),

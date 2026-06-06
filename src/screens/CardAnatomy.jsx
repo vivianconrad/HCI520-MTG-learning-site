@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import LessonActions from '../components/LessonActions.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { cardImage } from '../assets/cards/index.js'
 import './CardAnatomy.css'
@@ -30,7 +31,7 @@ const CALLOUTS = [
     id: 'typeLine',
     label: 'Type Line',
     number: 3,
-    text: "The type line tells you what kind of card this is. This card is a Creature, which means it stays on the battlefield and can attack and block. Most creatures cannot attack the turn you cast them (summoning sickness); Lesson 2 explains that in more detail. After the dash you'll see the subtype, in this case Human Wizard. Subtypes don't change the rules but some cards care about them specifically. For example, a card might say 'whenever a Wizard enters the battlefield.'",
+    text: "The type line tells you what kind of card this is. This card is a Creature, which means it stays on the battlefield and can attack and block. Creatures you cast usually cannot attack or use tap abilities until your next turn (summoning sickness); Lesson 2 explains that in more detail. After the dash you'll see the subtype, in this case Human Wizard. Subtypes don't change the rules but some cards care about them specifically. For example, a card might say 'whenever a Wizard enters the battlefield.'",
     position: { top: '58%', left: '-0.5%' },
     tipDir: 'right',
   },
@@ -141,7 +142,7 @@ export default function CardAnatomy({ session }) {
 
   return (
     <PageLayout title="Lesson 1 · Card Anatomy" className="card-anatomy" showKeywordDictionary>
-      <div className="card-anatomy__frame">
+      <div className="card-anatomy__frame page-layout__content-frame">
         <p className="card-anatomy__breadcrumb">Lesson 01 · Card Anatomy</p>
         <h1 className="card-anatomy__heading">How to Read a Card</h1>
         <hr className="card-anatomy__rule" aria-hidden="true" />
@@ -149,6 +150,24 @@ export default function CardAnatomy({ session }) {
         <p className="card-anatomy__hint">
           Tap each numbered marker on the card to learn what that part means.
         </p>
+
+        <p className="card-anatomy__intro">
+          Each Magic: The Gathering card contains key information about what it does on the
+          battlefield.
+          Learning to read a card&apos;s anatomy is the first step to building and piloting any deck.
+        </p>
+
+        <h2 className="card-anatomy__subheading">Card Anatomy at a Glance</h2>
+        <ul className="card-anatomy__list">
+          {BULLETS.map((text) => (
+            <li key={text} className="card-anatomy__list-item">
+              <span className="card-anatomy__bullet" aria-hidden="true">
+                ◆
+              </span>
+              <GlossaryText text={text} />
+            </li>
+          ))}
+        </ul>
 
         <div className="card-anatomy__diagram">
           <div className="card-anatomy__card-wrap">
@@ -170,7 +189,9 @@ export default function CardAnatomy({ session }) {
             <h2 id="callout-heading" className="card-anatomy__info-panel-title">
               {activeCalloutData.label}
             </h2>
-            <p className="card-anatomy__info-panel-text">{activeCalloutData.text}</p>
+            <p className="card-anatomy__info-panel-text">
+              <GlossaryText text={activeCalloutData.text} />
+            </p>
           </div>
         ) : (
           <p className="card-anatomy__info-placeholder">Select a marker to read its explanation.</p>
@@ -183,24 +204,6 @@ export default function CardAnatomy({ session }) {
         </p>
 
         <hr className="card-anatomy__divider" aria-hidden="true" />
-
-        <p className="card-anatomy__intro">
-          Each Magic: The Gathering card contains key information about what it does on the
-          battlefield.
-          Learning to read a card&apos;s anatomy is the first step to building and piloting any deck.
-        </p>
-
-        <h2 className="card-anatomy__subheading">Card Anatomy at a Glance</h2>
-        <ul className="card-anatomy__list">
-          {BULLETS.map((text) => (
-            <li key={text} className="card-anatomy__list-item">
-              <span className="card-anatomy__bullet" aria-hidden="true">
-                ◆
-              </span>
-              {text}
-            </li>
-          ))}
-        </ul>
 
         <LessonActions
           classPrefix="card-anatomy"

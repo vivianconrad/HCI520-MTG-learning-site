@@ -8,6 +8,7 @@ import { createParticipantRow } from '../lib/db.js'
 export default function useParticipantBootstrap(session) {
   const {
     sessionId,
+    sessionSecret,
     selectedQuestions,
     participantId,
     participantRowReady,
@@ -23,7 +24,7 @@ export default function useParticipantBootstrap(session) {
 
     let cancelled = false
 
-    createParticipantRow(sessionId, selectedQuestions).then((id) => {
+    createParticipantRow(sessionId, sessionSecret, selectedQuestions).then((id) => {
       if (cancelled) return
       if (id) {
         setParticipantId(id)
@@ -41,6 +42,7 @@ export default function useParticipantBootstrap(session) {
     participantId,
     selectedQuestions,
     sessionId,
+    sessionSecret,
     setParticipantId,
     markParticipantRowReady,
   ])

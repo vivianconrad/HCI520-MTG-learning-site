@@ -1,8 +1,11 @@
--- Optional: allow instructor dashboard reads in the browser (class project only).
--- Default participants.sql denies SELECT for anon.
-
-drop policy if exists "Deny select for all" on public.participants;
-
-create policy "Allow select for instructor dashboard"
-  on public.participants for select
-  using (true);
+-- DO NOT RUN: intentionally a no-op.
+--
+-- Previous versions of this file enabled anon SELECT on public.participants, which
+-- exposed all participant rows to anyone with the public anon key in the browser.
+--
+-- Instructor access should use one of:
+--   - Supabase Dashboard → Table Editor (service role bypasses RLS)
+--   - Authenticated backend / Edge Function with service role, not anon SELECT
+--
+-- participants.sql and fix-participants-rls.sql keep SELECT denied for anon and
+-- authenticated client roles. Do not re-enable open SELECT policies here.

@@ -1,4 +1,5 @@
 import './StackExplainer.css'
+import { renderGlossaryListItem, renderGlossaryString } from './glossaryRender.jsx'
 
 const BRIEF = [
   'To tap a card, turn it sideways. That marks it as used for now. Most tapped cards cannot be used again until they untap.',
@@ -23,16 +24,12 @@ const FULL = [
     ],
   },
   'During your untap step at the beginning of your turn, you untap all permanents you control. They turn upright and are ready to use again. You never choose which to untap; they all untap at once.',
-  'If a card is already tapped, you cannot tap it again for a second effect. Summoning sickness also stops most creatures from attacking or using tap abilities the turn they enter the battlefield.',
+  'If a card is already tapped, you cannot tap it again for a second effect. Summoning sickness also stops a creature from attacking or using tap abilities (abilities with a tap symbol in the cost) until it has been under your control since the start of your turn.',
 ]
 
 function renderBlock(block, index) {
   if (typeof block === 'string') {
-    return (
-      <p key={index} className="stack-explainer__paragraph">
-        {block}
-      </p>
-    )
+    return renderGlossaryString(block, index, 'stack-explainer__paragraph')
   }
 
   return (
@@ -41,11 +38,11 @@ function renderBlock(block, index) {
       {block.list && (
         <ul className="stack-explainer__list">
           {block.list.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item}>{renderGlossaryListItem(item)}</li>
           ))}
         </ul>
       )}
-      {block.text && <p className="stack-explainer__paragraph">{block.text}</p>}
+      {block.text && renderGlossaryString(block.text, `${index}-text`, 'stack-explainer__paragraph')}
     </div>
   )
 }

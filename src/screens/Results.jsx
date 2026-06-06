@@ -11,9 +11,24 @@ import {
   calculateScores,
   getImprovementMessage,
   getLoTag,
+  getReviewLessonPath,
 } from '../lib/scoring.js'
 import { LESSON_4_PATH, PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import './Results.css'
+
+function getTopicReviewPath(topicKey, selectedQuestions, pretestAnswers, posttestAnswers) {
+  if (topicKey === 'LO4') return LESSON_4_PATH
+
+  const missedQuestion = selectedQuestions.find((question) => {
+    if (question.lo !== topicKey) return false
+    const preIndex = pretestAnswers[question.id]
+    const postIndex = posttestAnswers[question.id]
+    return preIndex !== question.correctIndex || postIndex !== question.correctIndex
+  })
+
+  if (missedQuestion) return getReviewLessonPath(missedQuestion)
+  return TOPIC_LESSON_PATHS[topicKey] ?? '/what-is-mtg'
+}
 
 function AnswerCell({ answerIndex, question }) {
   if (answerIndex === undefined || answerIndex === null) {
@@ -154,7 +169,16 @@ export default function Results({ session }) {
                     <button
                       type="button"
                       className="results__review-link"
-                      onClick={() => navigate(TOPIC_LESSON_PATHS[topicKey])}
+                      onClick={() =>
+                        navigate(
+                          getTopicReviewPath(
+                            topicKey,
+                            selectedQuestions,
+                            pretestAnswers,
+                            posttestAnswers,
+                          ),
+                        )
+                      }
                     >
                       {topicKey === 'LO4' ? 'Review scenarios' : 'Review lesson'}
                     </button>
@@ -245,8 +269,17 @@ export default function Results({ session }) {
                     </td>
                     <td>
                       {eitherWrong ? (
-                        <span className="results__correct-tag">
-                          Correct: {question.options[question.correctIndex]}
+                        <span className="results__question-review-cell">
+                          <span className="results__correct-tag">
+                            Correct: {question.options[question.correctIndex]}
+                          </span>
+                          <button
+                            type="button"
+                            className="results__review-link"
+                            onClick={() => navigate(getReviewLessonPath(question))}
+                          >
+                            Review lesson
+                          </button>
                         </span>
                       ) : (
                         <span className="results__correct-tag results__correct-tag--empty">
@@ -282,9 +315,18 @@ export default function Results({ session }) {
                     </div>
                   </div>
                   {eitherWrong && (
-                    <p className="results__question-card-correct">
-                      Correct: {question.options[question.correctIndex]}
-                    </p>
+                    <>
+                      <p className="results__question-card-correct">
+                        Correct: {question.options[question.correctIndex]}
+                      </p>
+                      <button
+                        type="button"
+                        className="results__review-link results__review-link--standalone"
+                        onClick={() => navigate(getReviewLessonPath(question))}
+                      >
+                        Review lesson
+                      </button>
+                    </>
                   )}
                 </article>
               )

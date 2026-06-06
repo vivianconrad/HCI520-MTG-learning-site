@@ -19,6 +19,7 @@ export default function PreTest({ session }) {
   const confirm = useConfirm()
   const {
     sessionId,
+    sessionSecret,
     selectedQuestions,
     selectQuestions,
     setPretestAnswer,
@@ -45,11 +46,11 @@ export default function PreTest({ session }) {
     async (lastAnswer) => {
       const answers = { ...pretestAnswers, ...lastAnswer }
       const score = calculateTestScore(selectedQuestions, answers)
-      await savePretest(sessionId, answers, score)
+      await savePretest(sessionId, sessionSecret, answers, score)
       markPretestCompleted()
       navigate('/pretest-complete', { replace: true })
     },
-    [pretestAnswers, selectedQuestions, sessionId, navigate, markPretestCompleted],
+    [pretestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPretestCompleted],
   )
 
   if (pretestCompleted) {

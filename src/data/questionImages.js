@@ -21,6 +21,8 @@ const QUESTION_IMAGES = {
   island: cardImage('land-island.png'),
   'llanowar-elves': cardImage('creature-llanowar-elves.jpg'),
   nahiri: cardImage('planeswalker-nahiri.webp'),
+  forest: cardImage('land-forest.jpg'),
+  'woodland-cemetery': cardImage('land-woodland-cemetery.jpg'),
 }
 
 export function getQuestionImage(imageKey) {

@@ -10,8 +10,13 @@ import {
 const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 
 function generateSessionId() {
-  const bytes = crypto.getRandomValues(new Uint8Array(8))
+  const bytes = crypto.getRandomValues(new Uint8Array(12))
   return Array.from(bytes, (b) => CHARS[b % CHARS.length]).join('')
+}
+
+function generateSessionSecret() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16))
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('')
 }
 
 function shuffle(array) {
@@ -43,6 +48,9 @@ export default function useSessionStore() {
   const saved = savedRef.current
 
   const [sessionId] = useState(() => saved?.sessionId ?? generateSessionId())
+  const [sessionSecret] = useState(
+    () => saved?.sessionSecret ?? generateSessionSecret(),
+  )
   const [participantId, setParticipantIdState] = useState(() => saved?.participantId ?? null)
   const [participantRowReady, setParticipantRowReady] = useState(
     () => saved?.participantRowReady ?? Boolean(saved?.participantId),
@@ -60,9 +68,15 @@ export default function useSessionStore() {
     () => saved?.screenStartTimes ?? {},
   )
   const [screenTimes, setScreenTimes] = useState(() => saved?.screenTimes ?? {})
-  const [scenariosAttempted, setScenariosAttempted] = useState(
-    () => saved?.scenariosAttempted ?? 0,
-  )
+  const [scenarioIdsAttempted, setScenarioIdsAttempted] = useState(() => {
+    if (Array.isArray(saved?.scenarioIdsAttempted)) return saved.scenarioIdsAttempted
+    const legacyCount = saved?.scenariosAttempted
+    if (typeof legacyCount === 'number' && legacyCount > 0) {
+      const capped = Math.min(legacyCount, 10)
+      return Array.from({ length: capped }, (_, index) => `legacy-${index}`)
+    }
+    return []
+  })
   const [lessonsCompleted, setLessonsCompletedState] = useState(
     () => saved?.lessonsCompleted ?? false,
   )
@@ -80,6 +94,7 @@ export default function useSessionStore() {
   useEffect(() => {
     persistSession({
       sessionId,
+      sessionSecret,
       participantId,
       participantRowReady,
       selectedQuestions,
@@ -87,13 +102,14 @@ export default function useSessionStore() {
       posttestAnswers,
       screenStartTimes,
       screenTimes,
-      scenariosAttempted,
+      scenarioIdsAttempted,
       lessonsCompleted,
       pretestCompleted,
       posttestCompleted,
     })
   }, [
     sessionId,
+    sessionSecret,
     participantId,
     participantRowReady,
     selectedQuestions,
@@ -101,7 +117,7 @@ export default function useSessionStore() {
     posttestAnswers,
     screenStartTimes,
     screenTimes,
-    scenariosAttempted,
+    scenarioIdsAttempted,
     lessonsCompleted,
     pretestCompleted,
     posttestCompleted,
@@ -153,8 +169,11 @@ export default function useSessionStore() {
     })
   }, [])
 
-  const incrementScenarios = useCallback(() => {
-    setScenariosAttempted((count) => count + 1)
+  const recordScenarioAttempt = useCallback((scenarioId) => {
+    setScenarioIdsAttempted((prev) => {
+      if (prev.includes(scenarioId)) return prev
+      return [...prev, scenarioId]
+    })
   }, [])
 
   const setLessonsCompleted = useCallback((value) => {
@@ -178,6 +197,7 @@ export default function useSessionStore() {
 
   return {
     sessionId,
+    sessionSecret,
     participantId,
     participantRowReady,
     markParticipantRowReady,
@@ -190,13 +210,14 @@ export default function useSessionStore() {
     setParticipantId,
     screenStartTimes,
     screenTimes,
-    scenariosAttempted,
+    scenarioIdsAttempted,
+    scenariosAttempted: scenarioIdsAttempted.length,
     lessonsCompleted,
     pretestCompleted,
     posttestCompleted,
     recordScreenEnter,
     recordScreenExit,
-    incrementScenarios,
+    recordScenarioAttempt,
     setLessonsCompleted,
     markPretestCompleted,
     markPosttestCompleted,

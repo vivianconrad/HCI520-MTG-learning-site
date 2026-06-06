@@ -151,3 +151,16 @@
   color: var(--color-text-dark);
   margin: 0;
 }
+
+@media (max-width: 640px) {
+  .keyword-dictionary__trigger {
+    bottom: 88px;
+    right: 12px;
+    font-size: 0.875rem;
+    padding: 8px 12px;
+  }
+
+  .page-layout--with-keywords .page-layout__content-frame {
+    padding-bottom: 88px;
+  }
+}

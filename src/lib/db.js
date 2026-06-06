@@ -4,20 +4,37 @@ import { supabase } from './supabase'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
+function devLog(...args) {
+  if (import.meta.env.DEV) console.log(...args)
+}
+
+function devWarn(...args) {
+  if (import.meta.env.DEV) console.warn(...args)
+}
+
+function devError(...args) {
+  if (import.meta.env.DEV) console.error(...args)
+}
+
 /**
  * PATCH participants by session_id and log how many rows were updated.
  * Uses Prefer: count=exact because SELECT is denied by RLS on this table.
  */
-async function patchParticipant(sessionId, payload, logLabel) {
-  console.log(`[db] ${logLabel}: sessionId=`, sessionId, 'payload=', payload)
+async function patchParticipant(sessionId, sessionSecret, payload, logLabel) {
+  devLog(`[db] ${logLabel}: sessionId=`, sessionId, 'payload=', payload)
 
   if (!sessionId) {
-    console.error(`[db] ${logLabel}: aborted: sessionId is missing`)
+    devError(`[db] ${logLabel}: aborted: sessionId is missing`)
     return { ok: false, rowsUpdated: 0, error: 'missing sessionId' }
   }
 
+  if (!sessionSecret) {
+    devError(`[db] ${logLabel}: aborted: sessionSecret is missing`)
+    return { ok: false, rowsUpdated: 0, error: 'missing sessionSecret' }
+  }
+
   if (!supabaseUrl || !supabaseAnonKey) {
-    console.error(`[db] ${logLabel}: missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY`)
+    devError(`[db] ${logLabel}: missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY`)
     return { ok: false, rowsUpdated: 0, error: 'missing env' }
   }
 
@@ -28,6 +45,7 @@ async function patchParticipant(sessionId, payload, logLabel) {
       apikey: supabaseAnonKey,
       Authorization: `Bearer ${supabaseAnonKey}`,
       'Content-Type': 'application/json',
+      'x-session-secret': sessionSecret,
       Prefer: 'return=minimal,count=exact',
     },
     body: JSON.stringify(payload),
@@ -43,7 +61,7 @@ async function patchParticipant(sessionId, payload, logLabel) {
   let errorBody = null
   if (!res.ok) {
     errorBody = await res.text()
-    console.error(`[db] ${logLabel}: HTTP ${res.status}`, errorBody)
+    devError(`[db] ${logLabel}: HTTP ${res.status}`, errorBody)
   }
 
   const result = {
@@ -52,10 +70,10 @@ async function patchParticipant(sessionId, payload, logLabel) {
     rowsUpdated,
     error: errorBody,
   }
-  console.log(`[db] ${logLabel}: response`, result)
+  devLog(`[db] ${logLabel}: response`, result)
 
   if (res.ok && rowsUpdated === 0) {
-    console.warn(
+    devWarn(
       `[db] ${logLabel}: 0 rows updated: participant row missing or UPDATE blocked by RLS. ` +
         'Run supabase/fix-participants-rls.sql in the Supabase SQL Editor.',
     )
@@ -64,8 +82,8 @@ async function patchParticipant(sessionId, payload, logLabel) {
   return result
 }
 
-export async function createParticipantRow(sessionId, selectedQuestions) {
-  console.log(
+export async function createParticipantRow(sessionId, sessionSecret, selectedQuestions) {
+  devLog(
     '[db] createParticipantRow: sessionId=',
     sessionId,
     'questionCount=',
@@ -73,11 +91,15 @@ export async function createParticipantRow(sessionId, selectedQuestions) {
   )
 
   if (!sessionId) {
-    console.error('[db] createParticipantRow: missing sessionId')
+    devError('[db] createParticipantRow: missing sessionId')
+    return null
+  }
+  if (!sessionSecret) {
+    devError('[db] createParticipantRow: missing sessionSecret')
     return null
   }
   if (!selectedQuestions?.length) {
-    console.error('[db] createParticipantRow: selectedQuestions not ready')
+    devError('[db] createParticipantRow: selectedQuestions not ready')
     return null
   }
 
@@ -86,25 +108,27 @@ export async function createParticipantRow(sessionId, selectedQuestions) {
     {
       participant_id: participantId,
       session_id: sessionId,
+      session_secret: sessionSecret,
       selected_questions: selectedQuestions,
       created_at: new Date().toISOString(),
     },
     { onConflict: 'session_id', ignoreDuplicates: true },
   )
 
-  console.log('[db] createParticipantRow: response', { status, error, data })
+  devLog('[db] createParticipantRow: response', { status, error, data })
 
   if (error) {
-    console.error('[db] createParticipantRow: upsert failed', error)
+    devError('[db] createParticipantRow: upsert failed', error)
     return null
   }
 
   return participantId
 }
 
-export async function savePretest(sessionId, answers, score) {
+export async function savePretest(sessionId, sessionSecret, answers, score) {
   return patchParticipant(
     sessionId,
+    sessionSecret,
     {
       pretest_answers: answers,
       pretest_score: score,
@@ -113,9 +137,10 @@ export async function savePretest(sessionId, answers, score) {
   )
 }
 
-export async function savePosttest(sessionId, answers, score) {
+export async function savePosttest(sessionId, sessionSecret, answers, score) {
   return patchParticipant(
     sessionId,
+    sessionSecret,
     {
       posttest_answers: answers,
       posttest_score: score,
@@ -125,13 +150,19 @@ export async function savePosttest(sessionId, answers, score) {
   )
 }
 
-export async function saveScreenTime(sessionId, screenTimes) {
-  return patchParticipant(sessionId, { screens_time: screenTimes }, 'saveScreenTime')
+export async function saveScreenTime(sessionId, sessionSecret, screenTimes) {
+  return patchParticipant(sessionId, sessionSecret, { screens_time: screenTimes }, 'saveScreenTime')
 }
 
-export async function saveLessonProgress(sessionId, lessonsCompleted, scenariosAttempted) {
+export async function saveLessonProgress(
+  sessionId,
+  sessionSecret,
+  lessonsCompleted,
+  scenariosAttempted,
+) {
   return patchParticipant(
     sessionId,
+    sessionSecret,
     {
       lessons_completed: lessonsCompleted,
       scenarios_attempted: scenariosAttempted,

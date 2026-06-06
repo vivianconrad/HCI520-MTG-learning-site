@@ -103,6 +103,16 @@ const questionBank = [
     ],
     correctIndex: 1,
   },
+  {
+    id: 'lo0_q11',
+    lo: 'LO0',
+    question: 'How many lands can you play on your turn (by default)?',
+    hasImage: true,
+    imageKey: 'forest',
+    imageAlt: 'Forest: Land',
+    options: ['One', 'Two (one in each main phase)', 'As many as you want', 'Only if the stack is empty'],
+    correctIndex: 0,
+  },
 
   // LO1: Card anatomy
   // Distractors: other card types learners might confuse with creatures
@@ -326,6 +336,18 @@ const questionBank = [
     options: ['Combat phase', 'Stack phase', 'Main phase', 'End phase'],
     correctIndex: 1,
   },
+  {
+    id: 'lo2_q4',
+    lo: 'LO2',
+    question: 'On the very first turn of the game, who skips their draw step?',
+    options: [
+      'The player who goes first',
+      'The player who goes second',
+      'Both players skip it',
+      'Neither player skips it',
+    ],
+    correctIndex: 0,
+  },
 
   // LO3: Turn steps in detail
   // Distractors: other steps where drawing might be incorrectly associated
@@ -369,6 +391,50 @@ const questionBank = [
     question: 'When can a player declare attackers?',
     options: ['First main phase', 'Combat phase', 'End step', 'Upkeep'],
     correctIndex: 1,
+  },
+  {
+    id: 'lo3_q5',
+    lo: 'LO3',
+    question:
+      'You cast a creature this turn. It is untapped. Can it attack during your combat phase this turn?',
+    hasImage: true,
+    imageKey: 'shadowmage-infiltrator',
+    imageAlt: 'Shadowmage Infiltrator: Creature',
+    options: [
+      'No — it has summoning sickness',
+      'Yes — any untapped creature can attack',
+      'Yes, but only if it has haste',
+      'No — creatures cannot attack the turn they are cast unless they have vigilance',
+    ],
+    correctIndex: 0,
+  },
+  {
+    id: 'lo3_q6',
+    lo: 'LO3',
+    question:
+      'A land entered the battlefield tapped because of its rules text. Can you tap it for mana immediately?',
+    hasImage: true,
+    imageKey: 'woodland-cemetery',
+    imageAlt: 'Woodland Cemetery: Land',
+    options: [
+      'No — tapped lands cannot be tapped again for mana',
+      'Yes — entering tapped does not matter',
+      'Only if you pay 1 life',
+      'Only during your opponent\'s turn',
+    ],
+    correctIndex: 0,
+  },
+  {
+    id: 'lo3_q7',
+    lo: 'LO3',
+    question: 'When declaring blockers, which statement is true?',
+    options: [
+      'Blockers must be untapped creatures you control',
+      'Blockers tap when they block',
+      'Any creature can block any number of attackers',
+      'Only creatures with flying can block',
+    ],
+    correctIndex: 0,
   },
 
   // LO4: Instant vs sorcery timing
@@ -441,17 +507,18 @@ const questionBank = [
   {
     id: 'lo4_q5',
     lo: 'LO4',
-    question: 'When can you cast an instant?',
+    question:
+      'Your opponent casts a spell and it is on the stack. You have Counterspell in your hand. What can you do?',
     hasImage: true,
-    imageKey: 'assassins-trophy',
-    imageAlt: "Assassin's Trophy: Instant",
+    imageKey: 'counterspell',
+    imageAlt: 'Counterspell: Instant',
     options: [
-      'Only during your main phase',
-      'Only during combat',
-      'At any time',
-      "Only during your opponent's turn",
+      'Cast Counterspell now while their spell is waiting to resolve',
+      'You must wait until their spell resolves',
+      'You can only cast Counterspell during your main phase',
+      'Instants cannot target spells on the stack',
     ],
-    correctIndex: 2,
+    correctIndex: 0,
   },
 ]
 

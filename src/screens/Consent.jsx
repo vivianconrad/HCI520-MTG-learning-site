@@ -32,8 +32,8 @@ export default function Consent() {
                 gameplay scenarios (about 15 minutes)
               </li>
               <li>
-                The same pre-test again after the lessons to measure what you learned (about 2
-                minutes)
+                The same post-test after the lessons to measure what you learned (about 2 minutes).
+                It uses the same questions as the pre-test.
               </li>
             </ul>
           </section>

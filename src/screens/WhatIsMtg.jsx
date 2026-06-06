@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import './WhatIsMtg.css'
 
@@ -39,16 +40,16 @@ export default function WhatIsMtg({ session }) {
 
   return (
     <PageLayout title="What Is Magic? · Learn to Play MTG" className="what-is-mtg" showKeywordDictionary>
-      <div className="what-is-mtg__frame">
+      <div className="what-is-mtg__frame page-layout__content-frame">
         <p className="what-is-mtg__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="what-is-mtg__heading">What Is Magic?</h1>
         <hr className="what-is-mtg__rule" aria-hidden="true" />
 
         <div className="what-is-mtg__body">
           <p className="what-is-mtg__paragraph">
-            <strong>Magic: The Gathering</strong> is a collectible card game. Each player brings a
-            deck of cards and takes turns playing lands, casting spells, and attacking with
-            creatures. Most games end when a player&apos;s life total reaches 0.
+            <strong>Magic: The Gathering</strong> is a collectible card game.{' '}
+            <GlossaryText text="Each player brings a deck of cards and takes turns playing lands, casting spells, and attacking with creatures." />{' '}
+            Most games end when a player&apos;s life total reaches 0.
           </p>
 
           <h2 className="what-is-mtg__subheading">Formats</h2>
@@ -66,30 +67,17 @@ export default function WhatIsMtg({ session }) {
 
           <h2 className="what-is-mtg__subheading">Playing vs casting</h2>
           <p className="what-is-mtg__paragraph">
-            Magic uses two different words on purpose. <strong>Lands are played</strong> from your
-            hand during your first or second main phase (one land per turn by default). They go
-            straight onto the
-            battlefield — no stack, and your opponent cannot respond the way they can to a spell.{' '}
-            <strong>Everything else with a mana cost is cast</strong>: you pay mana, put the spell on
-            the stack, and let opponents respond before it resolves.
+            <GlossaryText text="Magic uses two different words on purpose. Lands are played from your hand during your first or second main phase (one land per turn by default). They go straight onto the battlefield — no stack, and your opponent cannot respond the way they can to a spell. Everything else with a mana cost is cast: you pay mana, put the spell on the stack, and let opponents respond before it resolves." />
           </p>
 
           <h2 className="what-is-mtg__subheading">Tap</h2>
           <p className="what-is-mtg__paragraph">
-            To <strong>tap</strong> a card, turn it sideways. That marks it as used for now. Lands
-            tap to produce mana; creatures tap when they attack. At the start of your turn, the{' '}
-            <strong>untap step</strong> turns your permanents upright again so you can use them once
-            more.
+            <GlossaryText text="To tap a card, turn it sideways. That marks it as used for now. Lands tap to produce mana; creatures tap when they attack. At the start of your turn, the untap step turns your permanents upright again so you can use them once more." />
           </p>
 
           <h2 className="what-is-mtg__subheading">Paying for a spell</h2>
           <p className="what-is-mtg__paragraph">
-            When you cast a spell, you usually follow this sequence: <strong>tap lands</strong> (or
-            other mana sources) to add mana to your <strong>mana pool</strong>;{' '}
-            <strong>cast the spell</strong> and pay its mana cost from that pool; the spell goes on
-            the <strong>stack</strong> and your opponent can respond; after it resolves, any mana
-            still in your pool disappears when the step or phase ends. Lesson 2 and Lesson 3 go deeper
-            on the stack and timing.
+            <GlossaryText text="When you cast a spell, you usually follow this sequence: tap lands (or other mana sources) to add mana to your mana pool; cast the spell and pay its mana cost from that pool; the spell goes on the stack and your opponent can respond; after it resolves, any mana still in your pool disappears when the step or phase ends. Lesson 2 and Lesson 3 go deeper on the stack and timing." />
           </p>
 
           <h2 className="what-is-mtg__subheading">Zones on the table</h2>
@@ -104,15 +92,16 @@ export default function WhatIsMtg({ session }) {
               alt="Diagram of a two-player table showing each player's play area in the center and library and graveyard piles on the sides"
             />
             <figcaption className="what-is-mtg__figure-caption">
-              A simplified table layout: play areas (battlefield) in the middle, decks (libraries) and
-              discard piles (graveyards) on each side.
+              <GlossaryText text="A simplified table layout: play areas (battlefield) in the middle, decks (libraries) and discard piles (graveyards) on each side." />
             </figcaption>
           </figure>
           <dl className="what-is-mtg__zones">
             {ZONES.map((zone) => (
               <div key={zone.name} className="what-is-mtg__zone">
                 <dt className="what-is-mtg__zone-name">{zone.name}</dt>
-                <dd className="what-is-mtg__zone-desc">{zone.description}</dd>
+                <dd className="what-is-mtg__zone-desc">
+                  <GlossaryText text={zone.description} />
+                </dd>
               </div>
             ))}
           </dl>
