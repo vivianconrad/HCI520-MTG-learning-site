@@ -48,7 +48,9 @@ export default function LessonIntro({ session: _session }) {
           </p>
           <p className="lesson-intro__paragraph">
             Over the next four lessons, you&apos;ll learn everything you need to sit down and play
-            your first game of Magic: The Gathering.
+            your first game of Magic: The Gathering. Key terms in the lessons are underlined with
+            dots — hover or tap them for a quick definition, or open the Keyword guide in the corner
+            for the full list.
           </p>
           <p className="lesson-intro__paragraph">Here&apos;s what we&apos;ll go through:</p>
         </div>
