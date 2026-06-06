@@ -396,7 +396,7 @@ const questionBank = [
     id: 'lo3_q5',
     lo: 'LO3',
     question:
-      'You cast a creature this turn. It is untapped. Can it attack during your combat phase this turn?',
+      'You cast a creature this turn. It is untapped. The creature does not have haste. Can it attack during your combat phase this turn?',
     hasImage: true,
     imageKey: 'shadowmage-infiltrator',
     imageAlt: 'Shadowmage Infiltrator: Creature',

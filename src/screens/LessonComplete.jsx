@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
@@ -41,6 +41,7 @@ export default function LessonComplete({ session }) {
   } = session
   const completedAllPractice = scenariosAttempted >= PRACTICE_SCENARIO_COUNT
   const [saveWarning, setSaveWarning] = useState(null)
+  const screenTimeSaved = useRef(false)
 
   useEffect(() => {
     setLessonsCompleted(true)
@@ -55,6 +56,8 @@ export default function LessonComplete({ session }) {
   }, [sessionId, sessionSecret, scenariosAttempted, setLessonsCompleted])
 
   useEffect(() => {
+    if (screenTimeSaved.current) return
+    screenTimeSaved.current = true
     saveScreenTime(sessionId, sessionSecret, screenTimes).then((result) => {
       if (isParticipantUpdateBlocked(result)) {
         if (import.meta.env.DEV) {

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { linkGlossaryTerms } from '../lib/linkGlossaryTerms.js'
 import KeywordTooltip from './KeywordTooltip.jsx'
 
@@ -11,11 +12,14 @@ export default function GlossaryText({
 }) {
   const source = text ?? children
 
+  const segments = useMemo(
+    () => (enabled && typeof source === 'string' ? linkGlossaryTerms(source) : null),
+    [enabled, source],
+  )
+
   if (!enabled || typeof source !== 'string') {
     return typeof source === 'string' ? <Tag className={className}>{source}</Tag> : source ?? null
   }
-
-  const segments = linkGlossaryTerms(source)
 
   return (
     <Tag className={className}>

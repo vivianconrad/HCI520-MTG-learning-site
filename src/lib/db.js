@@ -50,7 +50,6 @@ async function patchParticipant(sessionId, sessionSecret, payload, logLabel) {
       apikey: supabaseAnonKey,
       Authorization: `Bearer ${supabaseAnonKey}`,
       'Content-Type': 'application/json',
-      'x-session-secret': sessionSecret,
       Prefer: 'return=minimal,count=exact',
     },
     body: JSON.stringify(payload),
@@ -66,7 +65,7 @@ async function patchParticipant(sessionId, sessionSecret, payload, logLabel) {
   let errorBody = null
   if (!res.ok) {
     errorBody = await res.text()
-    devError(`[db] ${logLabel}: HTTP ${res.status}`, errorBody)
+    console.error(`[db] ${logLabel}: HTTP ${res.status}`, errorBody)
   }
 
   const result = {
