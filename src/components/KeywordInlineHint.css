@@ -6,7 +6,7 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  max-width: min(320px, calc(100vw - 32px));
+  max-width: min(320px, calc(100% - 32px));
   margin: 0;
   padding: 10px 10px 10px 12px;
   font-family: var(--font-body);
@@ -53,9 +53,11 @@
 
 @media (max-width: 640px) {
   .keyword-inline-hint {
+    left: max(12px, env(safe-area-inset-left, 0px));
     right: max(12px, env(safe-area-inset-right, 0px));
     bottom: calc(128px + env(safe-area-inset-bottom, 0px));
-    max-width: min(280px, calc(100vw - 24px - env(safe-area-inset-right, 0px)));
+    max-width: none;
+    width: auto;
     font-size: 0.75rem;
   }
 }

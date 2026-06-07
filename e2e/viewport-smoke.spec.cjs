@@ -2,14 +2,14 @@ const { test, expect } = require('@playwright/test')
 const { assertNoHorizontalOverflow, seedSession } = require('./helpers/session.cjs')
 
 const LESSON_ROUTES = [
-  { path: '/lesson/1', heading: /how to read a card/i },
-  { path: '/lesson/2', heading: /seven card types/i },
-  { path: '/lesson/3', heading: /how a turn works/i },
+  { path: 'lesson/1', heading: /how to read a card/i },
+  { path: 'lesson/2', heading: /seven card types/i },
+  { path: 'lesson/3', heading: /how a turn works/i },
 ]
 
 test.describe('viewport smoke', () => {
   test('consent page loads without horizontal overflow', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('./')
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     await assertNoHorizontalOverflow(page)
   })
@@ -28,7 +28,7 @@ test.describe('viewport smoke', () => {
     test.skip(!isMobile, 'Overlay layout check is mobile-specific')
 
     await seedSession(page)
-    await page.goto('/lesson/2')
+    await page.goto('lesson/2')
     await page.getByRole('button', { name: /see creature cards and examples/i }).click()
     await expect(page.getByRole('dialog')).toBeVisible()
 
@@ -47,7 +47,7 @@ test.describe('viewport smoke', () => {
     test.skip(!isMobile, 'Touch target check is mobile-specific')
 
     await seedSession(page)
-    await page.goto('/lesson/1')
+    await page.goto('lesson/1')
 
     const trigger = page.getByRole('button', { name: /keyword guide/i })
     await expect(trigger).toBeVisible()

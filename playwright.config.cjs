@@ -11,7 +11,7 @@ module.exports = defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: `http://${previewHost}:${previewPort}${basePath}`,
+    baseURL: `http://${previewHost}:${previewPort}${basePath}/`,
     trace: 'on-first-retry',
   },
   webServer: {

@@ -58,10 +58,21 @@
     text-align: center;
   }
 
+  .turn-structure__frame {
+    overflow-x: clip;
+  }
+
   .turn-structure__timeline {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scroll-padding-inline: 12px;
+  }
+
+  .turn-structure__node {
+    font-size: 13px;
+    padding: 10px 12px;
+    min-height: var(--touch-target-min);
+    scroll-snap-align: center;
   }
 
   .card-types__overlay {
@@ -96,13 +107,6 @@
     min-height: var(--touch-target-min);
     padding: 10px 14px;
     flex: 1;
-  }
-
-  .turn-structure__node {
-    font-size: 13px;
-    padding: 10px 12px;
-    min-height: var(--touch-target-min);
-    scroll-snap-align: center;
   }
 
   .card-anatomy__card-wrap {

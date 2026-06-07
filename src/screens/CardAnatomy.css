@@ -47,6 +47,8 @@
   display: flex;
   justify-content: center;
   margin-bottom: 16px;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .card-anatomy__card-wrap {
