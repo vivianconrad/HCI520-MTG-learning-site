@@ -1,18 +1,12 @@
--- Hash session_secret at rest (SHA-256 hex). Clients still send the plaintext secret;
--- RPCs hash the provided value before compare/insert.
---
--- Run once in Supabase SQL Editor. Safe to re-run (skips if already applied).
+-- Move internal helpers out of public so PostgREST cannot expose them to anon.
+-- Run in Supabase SQL Editor when verify:db reports hash_session_secret or
+-- purge_expired_participants is callable by anon. Safe to re-run.
 
 create extension if not exists pgcrypto with schema extensions;
 
 create schema if not exists private;
 revoke all on schema private from public;
 grant usage on schema private to postgres, service_role;
-
-create table if not exists public.schema_migrations_applied (
-  name text primary key,
-  applied_at timestamptz not null default now()
-);
 
 create or replace function private.hash_session_secret(p_secret text)
 returns text
@@ -24,19 +18,6 @@ as $$
 $$;
 
 drop function if exists public.hash_session_secret(text);
-
-do $$
-begin
-  if exists (select 1 from public.schema_migrations_applied where name = 'hash-session-secret') then
-    raise notice 'hash-session-secret already applied; skipping backfill';
-  else
-    update public.participants
-    set session_secret = private.hash_session_secret(session_secret);
-
-    insert into public.schema_migrations_applied (name) values ('hash-session-secret');
-  end if;
-end;
-$$;
 
 create or replace function public.register_participant(
   p_participant_id    text,
@@ -163,3 +144,49 @@ grant execute on function public.update_participant(text, text, jsonb) to anon, 
 
 revoke all    on function public.get_participant_progress(text, text) from public;
 grant execute on function public.get_participant_progress(text, text) to anon, authenticated;
+
+do $$
+begin
+  if to_regprocedure('public.purge_expired_participants()') is not null then
+    execute $fn$
+      create or replace function private.purge_expired_participants()
+      returns integer
+      language plpgsql
+      security definer
+      set search_path = public, private
+      as $body$
+      declare
+        cfg record;
+        purge_after timestamptz;
+        deleted_count int;
+      begin
+        select study_end_date, retention_days_after_study_end
+        into cfg
+        from public.study_privacy_config
+        where id = 1;
+
+        if not found then
+          return 0;
+        end if;
+
+        purge_after := (cfg.study_end_date + cfg.retention_days_after_study_end * interval '1 day')::timestamptz;
+
+        if now() < purge_after then
+          return 0;
+        end if;
+
+        delete from public.participants;
+        get diagnostics deleted_count = row_count;
+        return deleted_count;
+      end;
+      $body$;
+    $fn$;
+
+    drop function public.purge_expired_participants();
+
+    comment on function private.purge_expired_participants() is
+      'Deletes all participant rows once current time is past study_end_date + retention_days. '
+      'Run in SQL editor: select private.purge_expired_participants();';
+  end if;
+end;
+$$;

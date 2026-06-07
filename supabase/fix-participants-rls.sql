@@ -52,11 +52,11 @@ create or replace function public.update_participant(
 ) returns boolean
 language plpgsql
 security definer
-set search_path = public, extensions
+set search_path = public, private, extensions
 as $$
 declare
   updated int;
-  secret_hash text := public.hash_session_secret(p_session_secret);
+  secret_hash text := private.hash_session_secret(p_session_secret);
 begin
   if p_session_id is null or length(trim(p_session_id)) = 0
      or p_session_secret is null or length(trim(p_session_secret)) = 0

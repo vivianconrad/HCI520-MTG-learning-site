@@ -26,11 +26,15 @@ create policy "Deny all on study_privacy_config"
 
 revoke all on table public.study_privacy_config from anon, authenticated;
 
-create or replace function public.purge_expired_participants()
+create schema if not exists private;
+revoke all on schema private from public;
+grant usage on schema private to postgres, service_role;
+
+create or replace function private.purge_expired_participants()
 returns integer
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, private
 as $$
 declare
   cfg record;
@@ -58,9 +62,9 @@ begin
 end;
 $$;
 
-revoke all on function public.purge_expired_participants() from public;
--- Run manually or via pg_cron with service role / SQL editor only.
+drop function if exists public.purge_expired_participants();
 
-comment on function public.purge_expired_participants() is
+comment on function private.purge_expired_participants() is
   'Deletes all participant rows once current time is past study_end_date + retention_days. '
+  'Run in SQL editor: select private.purge_expired_participants(); '
   'Include Supabase backups in your retention plan — enable PITR expiry or delete projects when done.';

@@ -346,3 +346,7 @@ $$;
 
 revoke all    on function public.get_participant_progress(text, text) from public;
 grant execute on function public.get_participant_progress(text, text) to anon, authenticated;
+
+-- After hash-session-secret / retention migrations, run
+-- supabase/revoke-internal-rpc-execute.sql if verify:db reports internal RPCs
+-- are still callable by anon (moves helpers to private schema).
