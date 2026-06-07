@@ -13,7 +13,7 @@ describe('describeSaveFailure', () => {
 
   it('explains a blocked update with zero rows updated', () => {
     expect(describeSaveFailure({ ok: false, rowsUpdated: 0 })).toContain(
-      'session may not be registered yet'
+      'session finishes preparing'
     )
   })
 

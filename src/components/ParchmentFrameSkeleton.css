@@ -1,0 +1,125 @@
+.parchment-skeleton-screen {
+  min-height: 100dvh;
+  background: var(--color-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.parchment-skeleton__frame {
+  max-width: 680px;
+  width: 100%;
+  background: var(--color-parchment);
+  border: 1.5px solid var(--color-gold-muted);
+  border-radius: 8px;
+  padding: 48px 40px;
+}
+
+.parchment-skeleton__frame--compact {
+  padding: 40px 32px;
+}
+
+.parchment-skeleton__line,
+.parchment-skeleton__block,
+.parchment-skeleton__button,
+.parchment-skeleton__rule {
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--color-parchment-dark) 0%,
+    color-mix(in srgb, var(--color-gold-muted) 35%, var(--color-parchment-dark)) 50%,
+    var(--color-parchment-dark) 100%
+  );
+  background-size: 200% 100%;
+  animation: parchment-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parchment-skeleton__line,
+  .parchment-skeleton__block,
+  .parchment-skeleton__button,
+  .parchment-skeleton__rule {
+    animation: none;
+    background: var(--color-parchment-dark);
+  }
+}
+
+@keyframes parchment-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.parchment-skeleton__line--breadcrumb {
+  width: 55%;
+  height: 14px;
+  margin: 0 auto 16px;
+}
+
+.parchment-skeleton__line--title {
+  width: 70%;
+  height: 32px;
+  margin: 0 auto 16px;
+}
+
+.parchment-skeleton__rule {
+  width: 60px;
+  height: 1px;
+  margin: 0 auto 24px;
+  border-radius: 0;
+}
+
+.parchment-skeleton__line--body {
+  width: 100%;
+  height: 16px;
+  margin-bottom: 12px;
+}
+
+.parchment-skeleton__line--body-short {
+  width: 82%;
+  height: 16px;
+  margin-bottom: 24px;
+}
+
+.parchment-skeleton__block--media {
+  width: 160px;
+  height: 224px;
+  margin: 0 auto 24px;
+  border-radius: 4px;
+}
+
+.parchment-skeleton__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.parchment-skeleton__button {
+  width: 140px;
+  height: var(--touch-target-min);
+}
+
+@media (max-width: 640px) {
+  .parchment-skeleton-screen {
+    align-items: flex-start;
+    padding-top: max(16px, env(safe-area-inset-top, 0px));
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .parchment-skeleton__frame {
+    padding: 32px 20px;
+  }
+
+  .parchment-skeleton__actions {
+    justify-content: stretch;
+  }
+
+  .parchment-skeleton__button {
+    width: 100%;
+  }
+}

@@ -1,5 +1,6 @@
 import KeywordDictionary from './KeywordDictionary.jsx'
 import KeywordInlineHint from './KeywordInlineHint.jsx'
+import GateNotice from './GateNotice.jsx'
 import { shouldShowKeywordDictionary } from '../lib/assessmentRoutes.js'
 import { usePageTitle } from '../hooks/usePageTitle.js'
 import { useLocation } from 'react-router-dom'
@@ -21,6 +22,7 @@ export default function PageLayout({ title, className, children, showKeywordDict
       </a>
       <div className={rootClassName}>
         <main id="main" tabIndex={-1}>
+          <GateNotice />
           {children}
         </main>
       </div>

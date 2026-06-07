@@ -58,6 +58,7 @@
   font-family: var(--font-display);
   font-size: 1rem;
   padding: 10px 20px;
+  min-height: var(--touch-target-min);
   cursor: pointer;
   border-radius: 0;
   transition:

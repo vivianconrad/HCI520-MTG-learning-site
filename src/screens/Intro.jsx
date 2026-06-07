@@ -7,6 +7,8 @@ import { PROGRESS } from '../components/progressConstants.js'
 import { describeSessionSetupError } from '../lib/sessionErrors.js'
 import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import './Intro.css'
+
+export default function Intro({ session }) {
   const navigate = useNavigate()
   const { sessionId, pretestCompleted } = session
   const { rowReady, rowError } = useParticipantBootstrap(session)

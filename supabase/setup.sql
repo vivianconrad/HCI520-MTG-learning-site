@@ -38,18 +38,18 @@ drop policy if exists "Allow update own row"              on public.participants
 drop policy if exists "Allow update for all"              on public.participants;
 drop policy if exists "Allow update with session secret"  on public.participants;
 drop policy if exists "Allow update by session id"        on public.participants;
+drop policy if exists "Deny update for anon"              on public.participants;
 drop policy if exists "Allow insert for all"              on public.participants;
 drop policy if exists "Deny select for all"               on public.participants;
 drop policy if exists "Allow select for instructor dashboard" on public.participants;
 
--- UPDATE via REST is blocked in practice: PostgreSQL requires rows to pass SELECT
--- policies before UPDATE, and SELECT is denied below. Participant saves use the
--- update_participant RPC (security definer) which validates session_secret server-side.
-create policy "Allow update by session id"
+-- Writes use security-definer RPCs (register_participant, update_participant).
+-- No anon UPDATE grant or permissive UPDATE policy — blocks REST PATCH even if
+-- SELECT policies change later.
+create policy "Deny update for anon"
   on public.participants for update
   to anon, authenticated
-  using (true)
-  with check (true);
+  using (false);
 
 -- SELECT: denied for all anon/authenticated clients (use service role via dashboard).
 create policy "Deny select for all"
@@ -57,10 +57,8 @@ create policy "Deny select for all"
   to anon, authenticated
   using (false);
 
--- Grants: anon may UPDATE rows (gated by RLS above). INSERT is via RPC only.
-grant usage  on schema public               to anon, authenticated;
-grant update on table public.participants   to anon, authenticated;
-revoke insert on table public.participants  from anon, authenticated;
+grant usage on schema public to anon, authenticated;
+revoke insert, update on table public.participants from anon, authenticated;
 
 -- ---------------------------------------------------------------------------
 -- Score helper — mirrors client-side calculateTestScore

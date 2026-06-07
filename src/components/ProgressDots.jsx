@@ -22,15 +22,14 @@ export default function ProgressDots({ activeIndex, stepLabel }) {
 
   return (
     <nav className="progress-dots" aria-label="Lesson progress">
-      <span className="progress-dots__label" aria-current="step">
-        {stepText}
-      </span>
+      <span className="progress-dots__label">{stepText}</span>
       <div className="progress-dots__track" role="list" aria-label="Progress steps">
         {Array.from({ length: PROGRESS_STEP_COUNT }, (_, index) => (
           <span
             key={index}
             role="listitem"
             aria-label={dotLabel(index, activeIndex)}
+            aria-current={index === activeIndex ? 'step' : undefined}
             className={`progress-dots__dot${
               index === activeIndex ? ' progress-dots__dot--active' : ''
             }${index < activeIndex ? ' progress-dots__dot--complete' : ''}`}

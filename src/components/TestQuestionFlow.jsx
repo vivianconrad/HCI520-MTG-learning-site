@@ -8,6 +8,7 @@ export default function TestQuestionFlow({
   testLabel,
   progressIndex,
   selectedQuestions,
+  answers = {},
   setAnswer,
   onComplete,
   introNote,
@@ -40,7 +41,6 @@ export default function TestQuestionFlow({
     }
 
     setCurrentIndex((prev) => prev + 1)
-    setSelectedIndex(null)
   }, [selectedIndex, question.id, setAnswer, isLast, onComplete])
 
   useEffect(() => {
@@ -50,13 +50,18 @@ export default function TestQuestionFlow({
   }, [question.options.length, currentIndex])
 
   useEffect(() => {
+    const stored = answers[question.id]
+    setSelectedIndex(stored !== undefined && stored !== null ? stored : null)
+  }, [answers, question.id, currentIndex])
+
+  useEffect(() => {
     if (!shouldFocusOptionRef.current) return
     shouldFocusOptionRef.current = false
     optionRefs.current[focusableOptionIndex]?.focus()
   }, [focusableOptionIndex, selectedIndex])
 
   function handleFrameKeyDown(event) {
-    if (event.target.closest('.pretest__actions')) return
+    if (saving || event.target.closest('.pretest__actions')) return
 
     const optionCount = question.options.length
     const keyNum = parseInt(event.key, 10)
@@ -105,9 +110,8 @@ export default function TestQuestionFlow({
   }
 
   function handleBack() {
-    if (isFirst) return
+    if (isFirst || saving) return
     setCurrentIndex((prev) => prev - 1)
-    setSelectedIndex(null)
   }
 
   return (
@@ -143,6 +147,7 @@ export default function TestQuestionFlow({
               aria-checked={isSelected}
               tabIndex={index === focusableOptionIndex ? 0 : -1}
               className={`pretest__option${isSelected ? ' pretest__option--selected' : ''}`}
+              disabled={saving}
               onClick={() => setSelectedIndex(index)}
             >
               {isSelected && (
@@ -163,6 +168,7 @@ export default function TestQuestionFlow({
       </p>
       <div
         className={`pretest__actions${isFirst ? '' : ' pretest__actions--split'}`}
+        aria-busy={saving || undefined}
       >
         {!isFirst ? (
           <button

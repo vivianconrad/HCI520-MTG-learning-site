@@ -65,3 +65,19 @@
   background: transparent;
   color: var(--color-disabled-text);
 }
+
+[class*='__button--next-blocked']:disabled,
+.lesson-complete__readiness-btn:disabled {
+  opacity: 1;
+  color: var(--color-disabled-text);
+  border-color: var(--color-gold-muted);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+[class*='__button--next-blocked']:disabled:hover,
+.lesson-complete__readiness-btn:disabled:hover {
+  background: transparent;
+  color: var(--color-disabled-text);
+  border-color: var(--color-gold-muted);
+}

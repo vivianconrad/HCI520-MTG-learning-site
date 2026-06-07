@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ConfirmProvider } from './context/ConfirmContext.jsx'
 import RequireSessionStep from './components/RequireSessionStep.jsx'
+import ParchmentFrameSkeleton from './components/ParchmentFrameSkeleton.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import useSessionStore from './store/useSessionStore.js'
 import Consent from './screens/Consent.jsx'
@@ -30,9 +31,7 @@ function RouteFallback() {
         Skip to main content
       </a>
       <main id="main" tabIndex={-1}>
-        <p className="route-fallback" aria-live="polite">
-          Loading…
-        </p>
+        <ParchmentFrameSkeleton label="Loading page…" />
       </main>
     </>
   )

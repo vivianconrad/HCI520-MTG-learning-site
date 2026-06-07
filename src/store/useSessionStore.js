@@ -55,6 +55,8 @@ export default function useSessionStore() {
     () => saved?.participantRowReady ?? false
   )
   const [selectedQuestions, setSelectedQuestions] = useState(() => saved?.selectedQuestions ?? null)
+  const [questionsLoading, setQuestionsLoading] = useState(false)
+  const [questionsError, setQuestionsError] = useState(null)
   const [pretestAnswers, setPretestAnswers] = useState(() => saved?.pretestAnswers ?? {})
   const [posttestAnswers, setPosttestAnswers] = useState(() => saved?.posttestAnswers ?? {})
   const [screenStartTimes, setScreenStartTimes] = useState(() => saved?.screenStartTimes ?? {})
@@ -139,9 +141,26 @@ export default function useSessionStore() {
   }, [sessionId, sessionSecret, participantRowReady])
 
   const selectQuestions = useCallback(async () => {
-    const selected = await pickQuestions()
-    setSelectedQuestions(selected)
-    return selected
+    setQuestionsLoading(true)
+    setQuestionsError(null)
+    try {
+      const selected = await pickQuestions()
+      if (!selected?.length) {
+        setQuestionsError('No questions could be loaded.')
+        setSelectedQuestions([])
+        return null
+      }
+      setSelectedQuestions(selected)
+      return selected
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.warn('[selectQuestions] failed:', error)
+      }
+      setQuestionsError('We could not load the test questions. Try again in a moment.')
+      return null
+    } finally {
+      setQuestionsLoading(false)
+    }
   }, [])
 
   const setPretestAnswer = useCallback((id, index) => {
@@ -236,6 +255,8 @@ export default function useSessionStore() {
     participantRowReady,
     markParticipantRowReady,
     selectedQuestions,
+    questionsLoading,
+    questionsError,
     selectQuestions,
     pretestAnswers,
     posttestAnswers,

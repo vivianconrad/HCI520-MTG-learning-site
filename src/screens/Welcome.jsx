@@ -44,7 +44,7 @@ const HERO_CARDS = [
 
 export default function Welcome({ session }) {
   const navigate = useNavigate()
-  const { selectedQuestions, selectQuestions } = session
+  const { selectedQuestions, selectQuestions, questionsLoading, questionsError } = session
 
   useEffect(() => {
     if (selectedQuestions === null) {
@@ -59,8 +59,10 @@ export default function Welcome({ session }) {
   if (!rowReady && !rowError) {
     if (verifying) {
       bootstrapStatus = 'Checking your saved session…'
-    } else if (!selectedQuestions?.length) {
+    } else if (questionsLoading || (selectedQuestions === null && !questionsError)) {
       bootstrapStatus = 'Drawing your assessment questions…'
+    } else if (!selectedQuestions?.length) {
+      bootstrapStatus = null
     } else {
       bootstrapStatus = 'Registering your study session…'
     }
@@ -101,6 +103,19 @@ export default function Welcome({ session }) {
               onClick={() => session.resetSession()}
             >
               Reset session
+            </button>
+          </div>
+        ) : null}
+        {questionsError ? (
+          <div className="welcome__error-block" role="alert">
+            <p className="welcome__error">{questionsError}</p>
+            <button
+              type="button"
+              className="welcome__button welcome__button--reset"
+              disabled={questionsLoading}
+              onClick={() => selectQuestions()}
+            >
+              Try again
             </button>
           </div>
         ) : null}

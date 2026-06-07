@@ -83,22 +83,20 @@ export default function LessonActions({
             </button>
           ) : null}
           {visibleGateHint ? (
-            <p
-              id={hintId}
-              className="lesson-nav__gate-hint"
-              role="status"
-              aria-live="polite"
-              onClick={handleGateHintActivate}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault()
-                  handleGateHintActivate()
-                }
-              }}
-              tabIndex={onGateBlocked ? 0 : undefined}
-            >
-              {visibleGateHint}
-            </p>
+            onGateBlocked ? (
+              <button
+                type="button"
+                id={hintId}
+                className="lesson-nav__gate-hint"
+                onClick={handleGateHintActivate}
+              >
+                {visibleGateHint}
+              </button>
+            ) : (
+              <p id={hintId} className="lesson-nav__gate-hint" role="status" aria-live="polite">
+                {visibleGateHint}
+              </p>
+            )
           ) : null}
           {visibleReadyMessage ? (
             <p id={readyId} className="lesson-nav__ready-hint" role="status" aria-live="polite">

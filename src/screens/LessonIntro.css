@@ -230,3 +230,20 @@
 .lesson-intro__actions--end {
   justify-content: flex-end;
 }
+
+.lesson-intro__save-warning {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 0;
+  text-align: center;
+}
+
+.lesson-intro__save-warning p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-error);
+  margin: 0;
+  line-height: 1.45;
+}

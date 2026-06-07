@@ -56,6 +56,7 @@ export default function LessonIntro({ session }) {
   const { sessionId, sessionSecret, curiosityFocus, setCuriosityFocus } = session
   const [selectedFocus, setSelectedFocus] = useState(curiosityFocus)
   const [saving, setSaving] = useState(false)
+  const [saveWarning, setSaveWarning] = useState(null)
 
   const selectedOption = CURIOSITY_OPTIONS.find((option) => option.id === selectedFocus)
 
@@ -63,8 +64,19 @@ export default function LessonIntro({ session }) {
     if (!selectedFocus) return
     setCuriosityFocus(selectedFocus)
     setSaving(true)
+    setSaveWarning(null)
     if (sessionId && sessionSecret) {
-      await saveCuriosityFocus(sessionId, sessionSecret, selectedFocus)
+      const result = await saveCuriosityFocus(sessionId, sessionSecret, selectedFocus)
+      if (!result?.ok) {
+        if (import.meta.env.DEV) {
+          console.warn('[LessonIntro] saveCuriosityFocus failed:', result)
+        }
+        setSaving(false)
+        setSaveWarning(
+          'We could not save your choice to the server. Your answer is saved on this device. You can continue, or try again.'
+        )
+        return
+      }
     }
     setSaving(false)
     navigate('/what-is-mtg', { replace: true })
@@ -158,6 +170,22 @@ export default function LessonIntro({ session }) {
         </ul>
 
         <p className="lesson-intro__closing">Work at your own pace.</p>
+
+        {saveWarning ? (
+          <div className="lesson-intro__save-warning" role="alert">
+            <p>{saveWarning}</p>
+            <button
+              type="button"
+              className="lesson-intro__button"
+              onClick={() => {
+                setSaveWarning(null)
+                navigate('/what-is-mtg', { replace: true })
+              }}
+            >
+              Continue without saving
+            </button>
+          </div>
+        ) : null}
 
         <div className="lesson-intro__actions lesson-intro__actions--end">
           <button

@@ -17,6 +17,7 @@ import {
 } from '../lib/scoring.js'
 import { REVIEW_TOPIC_CHOICES } from '../lib/learnerChoice.js'
 import { LESSON_4_PATH, PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
+import { getResultsEmptyContent } from '../lib/resultsEmptyState.js'
 import answerKeys from '../data/questionAnswerKeys.js'
 import { saveScreenTime } from '../lib/db.js'
 import { getQuestionExplanation } from '../lib/questionExplanations.js'
@@ -134,16 +135,43 @@ export default function Results({ session }) {
   }
 
   if (!hasTestData || !scores) {
+    const emptyContent = getResultsEmptyContent(session)
+
+    function handleEmptyPrimary() {
+      if (emptyContent.primary.path) {
+        navigate(emptyContent.primary.path)
+      }
+    }
+
+    function handleEmptySecondary() {
+      if (emptyContent.secondary?.action === 'reset') {
+        resetSession()
+        return
+      }
+      if (emptyContent.secondary?.path) {
+        navigate(emptyContent.secondary.path)
+      }
+    }
+
     return (
       <PageLayout title="Results · Learn to Play MTG" className="results">
         <div className="results__frame">
-          <h1 className="results__empty">Results unavailable</h1>
-          <p className="results__empty">
-            No test data found. Please complete the pre-test and post-test first.
-          </p>
-          <button type="button" className="results__empty-button" onClick={() => navigate('/welcome')}>
-            Return to Welcome
-          </button>
+          <h1 className="results__empty-heading">{emptyContent.heading}</h1>
+          <p className="results__empty">{emptyContent.message}</p>
+          <div className="results__empty-actions">
+            <button type="button" className="results__empty-button" onClick={handleEmptyPrimary}>
+              {emptyContent.primary.label}
+            </button>
+            {emptyContent.secondary ? (
+              <button
+                type="button"
+                className="results__empty-button results__empty-button--secondary"
+                onClick={handleEmptySecondary}
+              >
+                {emptyContent.secondary.label}
+              </button>
+            ) : null}
+          </div>
         </div>
       </PageLayout>
     )

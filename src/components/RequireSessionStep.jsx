@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import { getRedirectPath } from '../lib/sessionGate.js'
+import { getGateNotice, getRedirectInfo } from '../lib/sessionGate.js'
 
 export default function RequireSessionStep({
   session,
@@ -18,10 +18,16 @@ export default function RequireSessionStep({
     return <Navigate to="/results" replace />
   }
 
-  const redirect = getRedirectPath(requirements, session)
+  const redirectInfo = getRedirectInfo(requirements, session)
 
-  if (redirect) {
-    return <Navigate to={redirect} replace />
+  if (redirectInfo) {
+    return (
+      <Navigate
+        to={redirectInfo.path}
+        replace
+        state={{ gateNotice: getGateNotice(redirectInfo.failedKey) }}
+      />
+    )
   }
 
   return children

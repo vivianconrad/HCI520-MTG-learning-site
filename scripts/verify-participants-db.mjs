@@ -28,7 +28,7 @@ for (const entry of result.checks) {
 console.log('')
 if (!result.ok) {
   console.error(
-    'One or more checks failed. Run supabase/fix-participants-rls.sql for save RPC, or supabase/setup.sql for a full refresh (includes validation trigger).\n'
+    'One or more checks failed. Run supabase/revoke-anon-direct-update.sql for UPDATE policy tightening, supabase/fix-participants-rls.sql for save RPC, or supabase/setup.sql for a full refresh (includes validation trigger).\n'
   )
   process.exit(1)
 }

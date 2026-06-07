@@ -79,6 +79,29 @@ export async function verifySupabaseParticipantApi(client, options = {}) {
   }
   checks.push(check('register_participant', true, 'register_participant RPC succeeded'))
 
+  const directUpdate = await client
+    .from('participants')
+    .update({ pretest_score: 99 })
+    .eq('session_id', sessionId)
+
+  if (!directUpdate.error) {
+    checks.push(
+      check(
+        'direct_update_blocked',
+        false,
+        'Direct anon UPDATE was accepted by PostgREST. Run supabase/revoke-anon-direct-update.sql.'
+      )
+    )
+  } else {
+    checks.push(
+      check(
+        'direct_update_blocked',
+        true,
+        `Direct UPDATE blocked (${directUpdate.error.code ?? directUpdate.error.message})`
+      )
+    )
+  }
+
   const update = await client.rpc('update_participant', {
     p_session_id: sessionId,
     p_session_secret: sessionSecret,

@@ -23,6 +23,8 @@ export default function PreTest({ session }) {
     sessionId,
     sessionSecret,
     selectedQuestions,
+    questionsLoading,
+    questionsError,
     selectQuestions,
     setPretestAnswer,
     pretestAnswers,
@@ -88,7 +90,24 @@ export default function PreTest({ session }) {
     return null
   }
 
-  if (!selectedQuestions || selectedQuestions.length === 0) {
+  if (questionsLoading || (selectedQuestions === null && !questionsError)) {
+    return (
+      <PageLayout
+        title="Pre-Test · Learn to Play MTG"
+        className="pretest"
+        showKeywordDictionary={false}
+      >
+        <div className="pretest__frame">
+          <h1 className="pretest__empty">Pre-Test</h1>
+          <p className="pretest__empty" aria-live="polite">
+            Loading your questions…
+          </p>
+        </div>
+      </PageLayout>
+    )
+  }
+
+  if (questionsError || selectedQuestions?.length === 0) {
     return (
       <PageLayout
         title="Pre-Test · Learn to Play MTG"
@@ -97,11 +116,22 @@ export default function PreTest({ session }) {
       >
         <div className="pretest__frame">
           <h1 className="pretest__empty">Pre-Test unavailable</h1>
-          <p className="pretest__empty">No questions loaded. Return to the start and try again.</p>
-          <div className="pretest__actions">
+          <p className="pretest__empty" role="alert">
+            {questionsError ??
+              'Your test questions did not load. Go to Welcome to reload them, or try again here.'}
+          </p>
+          <div className="pretest__actions pretest__actions--empty">
             <button
               type="button"
               className="pretest__button"
+              disabled={questionsLoading}
+              onClick={() => selectQuestions()}
+            >
+              {questionsLoading ? 'Loading questions…' : 'Try loading questions again'}
+            </button>
+            <button
+              type="button"
+              className="pretest__button pretest__button--back"
               onClick={async () => {
                 if (
                   !(await confirm(PRETEST_LEAVE_CONFIRM_MESSAGE, {
@@ -113,7 +143,7 @@ export default function PreTest({ session }) {
                 navigate('/welcome')
               }}
             >
-              Return to Welcome
+              Go to Welcome
             </button>
           </div>
         </div>
@@ -147,7 +177,10 @@ export default function PreTest({ session }) {
           <button
             type="button"
             className="pretest__button"
-            onClick={() => navigate('/pretest-complete', { replace: true })}
+            onClick={() => {
+              markPretestCompleted()
+              navigate('/pretest-complete', { replace: true })
+            }}
           >
             Continue without saving
           </button>
@@ -158,6 +191,7 @@ export default function PreTest({ session }) {
         testLabel="Pre-Test"
         progressIndex={PROGRESS.PRETEST}
         selectedQuestions={selectedQuestions}
+        answers={pretestAnswers}
         setAnswer={setPretestAnswer}
         onComplete={handleComplete}
         saving={saving}

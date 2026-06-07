@@ -108,6 +108,15 @@
   line-height: 1.45;
 }
 
+.lesson-complete__readiness-warning {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-error);
+  text-align: center;
+  margin: 12px 0 0;
+  line-height: 1.45;
+}
+
 .lesson-complete__review-strip {
   display: flex;
   justify-content: center;
@@ -151,6 +160,7 @@
   align-items: center;
   gap: 4px;
   padding: 10px 6px;
+  min-height: var(--touch-target-min);
   border: 1.5px solid var(--color-gold-muted);
   background: rgb(255 255 255 / 35%);
   cursor: pointer;
@@ -166,7 +176,6 @@
 }
 
 .lesson-complete__readiness-btn:disabled {
-  opacity: 0.55;
   cursor: not-allowed;
 }
 

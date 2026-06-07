@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getLessonsResumePath, getRedirectPath } from './sessionGate.js'
+import { getLessonsResumePath, getRedirectInfo, getRedirectPath, getGateNotice } from './sessionGate.js'
 
 const baseSession = {
   consentGiven: false,
@@ -110,5 +110,23 @@ describe('getRedirectPath', () => {
         lessonsCompleted: true,
       })
     ).toBe('/posttest')
+  })
+})
+
+describe('getRedirectInfo', () => {
+  it('returns the failed gate key with the redirect path', () => {
+    expect(
+      getRedirectInfo(['consent', 'pretest'], {
+        ...baseSession,
+        consentGiven: true,
+      })
+    ).toEqual({ path: '/pretest', failedKey: 'pretest' })
+  })
+})
+
+describe('getGateNotice', () => {
+  it('returns learner-friendly copy for each gate', () => {
+    expect(getGateNotice('pretest')).toMatch(/pre-test/i)
+    expect(getGateNotice('posttest')).toMatch(/post-test/i)
   })
 })

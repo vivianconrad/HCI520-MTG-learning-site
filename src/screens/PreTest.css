@@ -149,6 +149,12 @@
   justify-content: space-between;
 }
 
+.pretest__actions--empty {
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .pretest__button--back {
   border: 1.5px solid var(--color-gold-muted);
 }

@@ -53,6 +53,7 @@ export default function LessonComplete({ session }) {
   const [saving, setSaving] = useState(true)
   const [readiness, setReadiness] = useState(posttestReadiness)
   const [readinessSaving, setReadinessSaving] = useState(false)
+  const [readinessWarning, setReadinessWarning] = useState(null)
   const saveStarted = useRef(false)
 
   const persistLessonComplete = useCallback(async () => {
@@ -100,8 +101,17 @@ export default function LessonComplete({ session }) {
     setReadiness(value)
     setPosttestReadiness(value)
     setReadinessSaving(true)
+    setReadinessWarning(null)
     if (sessionId && sessionSecret) {
-      await savePosttestReadiness(sessionId, sessionSecret, value)
+      const result = await savePosttestReadiness(sessionId, sessionSecret, value)
+      if (!result?.ok) {
+        if (import.meta.env.DEV) {
+          console.warn('[LessonComplete] savePosttestReadiness failed:', result)
+        }
+        setReadinessWarning(
+          'We could not save your readiness rating to the server. Your choice is saved on this device.'
+        )
+      }
     }
     setReadinessSaving(false)
   }
@@ -191,6 +201,11 @@ export default function LessonComplete({ session }) {
           {readinessSaving ? (
             <p className="lesson-complete__readiness-status" role="status">
               Saving your response…
+            </p>
+          ) : null}
+          {readinessWarning ? (
+            <p className="lesson-complete__readiness-warning" role="alert">
+              {readinessWarning}
             </p>
           ) : null}
           {readiness != null && readiness <= 2 && completedAllPractice ? (

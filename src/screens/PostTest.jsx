@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import PageLayout from '../components/PageLayout.jsx'
@@ -23,6 +23,9 @@ export default function PostTest({ session }) {
     sessionId,
     sessionSecret,
     selectedQuestions,
+    selectQuestions,
+    questionsLoading,
+    questionsError,
     screenTimes,
     setPosttestAnswer,
     posttestAnswers,
@@ -37,6 +40,12 @@ export default function PostTest({ session }) {
   useRedirectIfTestComplete(posttestCompleted, '/results')
   useScreenTime(session, 'PostTest')
   useBlockBrowserBack(!posttestCompleted)
+
+  useEffect(() => {
+    if (selectedQuestions === null && !questionsError) {
+      selectQuestions()
+    }
+  }, [selectedQuestions, questionsError, selectQuestions])
 
   const handleComplete = useCallback(
     async (lastAnswer) => {
@@ -84,7 +93,24 @@ export default function PostTest({ session }) {
     return null
   }
 
-  if (!selectedQuestions || selectedQuestions.length === 0) {
+  if (questionsLoading || (selectedQuestions === null && !questionsError)) {
+    return (
+      <PageLayout
+        title="Post-Test · Learn to Play MTG"
+        className="pretest"
+        showKeywordDictionary={false}
+      >
+        <div className="pretest__frame">
+          <h1 className="pretest__empty">Post-Test</h1>
+          <p className="pretest__empty" aria-live="polite">
+            Loading your questions…
+          </p>
+        </div>
+      </PageLayout>
+    )
+  }
+
+  if (questionsError || selectedQuestions.length === 0) {
     return (
       <PageLayout
         title="Post-Test · Learn to Play MTG"
@@ -93,11 +119,22 @@ export default function PostTest({ session }) {
       >
         <div className="pretest__frame">
           <h1 className="pretest__empty">Post-Test unavailable</h1>
-          <p className="pretest__empty">No questions loaded. Return to the start and try again.</p>
-          <div className="pretest__actions">
+          <p className="pretest__empty" role="alert">
+            {questionsError ??
+              'Your test questions did not load. Go to Welcome to reload them, or try again here.'}
+          </p>
+          <div className="pretest__actions pretest__actions--empty">
             <button
               type="button"
               className="pretest__button"
+              disabled={questionsLoading}
+              onClick={() => selectQuestions()}
+            >
+              {questionsLoading ? 'Loading questions…' : 'Try loading questions again'}
+            </button>
+            <button
+              type="button"
+              className="pretest__button pretest__button--back"
               onClick={async () => {
                 if (
                   !(await confirm(POSTTEST_LEAVE_CONFIRM_MESSAGE, {
@@ -109,7 +146,7 @@ export default function PostTest({ session }) {
                 navigate('/welcome')
               }}
             >
-              Return to Welcome
+              Go to Welcome
             </button>
           </div>
         </div>
@@ -143,7 +180,10 @@ export default function PostTest({ session }) {
           <button
             type="button"
             className="pretest__button"
-            onClick={() => navigate('/calculating', { replace: true })}
+            onClick={() => {
+              markPosttestCompleted()
+              navigate('/calculating', { replace: true })
+            }}
           >
             Continue without saving
           </button>
@@ -154,6 +194,7 @@ export default function PostTest({ session }) {
         testLabel="Post-Test"
         progressIndex={PROGRESS.POSTTEST}
         selectedQuestions={selectedQuestions}
+        answers={posttestAnswers}
         setAnswer={setPosttestAnswer}
         onComplete={handleComplete}
         saving={saving}

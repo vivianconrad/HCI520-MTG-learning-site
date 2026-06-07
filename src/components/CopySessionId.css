@@ -52,3 +52,12 @@
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
 }
+
+.copy-session-id__error {
+  flex-basis: 100%;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-error);
+  margin: 0;
+  line-height: 1.45;
+}

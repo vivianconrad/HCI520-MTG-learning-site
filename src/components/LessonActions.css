@@ -8,6 +8,14 @@
   border: 1px solid rgba(139, 105, 20, 0.22);
   border-radius: 4px;
   cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+}
+
+button.lesson-nav__gate-hint {
+  display: block;
+  appearance: none;
 }
 
 .lesson-nav__gate-hint:focus-visible {
@@ -26,13 +34,19 @@
   border-radius: 4px;
 }
 
-[class*='__button--next-blocked'] {
-  opacity: 0.55;
+[class*='__button--next-blocked']:disabled {
+  opacity: 1;
+  color: var(--color-disabled-text);
+  border-color: var(--color-gold-muted);
+  background: transparent;
   cursor: not-allowed;
 }
 
 [class*='__button--next-blocked']:disabled:hover {
-  opacity: 0.55;
+  opacity: 1;
+  color: var(--color-disabled-text);
+  border-color: var(--color-gold-muted);
+  background: transparent;
 }
 
 [class*='__button--stacked'] {
