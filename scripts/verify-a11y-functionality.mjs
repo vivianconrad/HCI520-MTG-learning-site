@@ -24,8 +24,9 @@ const MOCK_QUESTIONS = [
 
 function baseSession(overrides = {}) {
   return {
-    sessionId: 'FUNCHECKSESSION',
-    sessionSecret: 'funchecksecret0000000000000000',
+    sessionId: 'A11YAUDITSESSION',
+    sessionSecret: 'a11yauditsecret0000000000000000',
+    participantId: null,
     participantRowReady: true,
     selectedQuestions: MOCK_QUESTIONS,
     pretestAnswers: {},
@@ -71,10 +72,11 @@ async function main() {
     await seedSession(context, baseSession())
     const page = await context.newPage()
     await page.goto(`${BASE}/pretest`, { waitUntil: 'networkidle' })
+    await page.waitForSelector('h1.pretest__title', { timeout: 15000 })
 
     const h1 = await page.locator('h1.pretest__title').textContent()
     const h2 = await page.locator('h2.pretest__question').textContent()
-    const intro = await page.locator('.pretest__intro-note').textContent()
+    const intro = await page.locator('.pretest__frame .pretest__intro-note').textContent()
     const breadcrumb = await page.locator('.pretest__breadcrumb').textContent()
     const keyboardHint = await page.locator('.pretest__keyboard-hint').textContent()
     const optionCount = await page.locator('[role="radio"]').count()
@@ -129,6 +131,7 @@ async function main() {
     await seedSession(context, baseSession())
     const page = await context.newPage()
     await page.goto(`${BASE}/pretest`, { waitUntil: 'networkidle' })
+    await page.waitForSelector('h1.pretest__title', { timeout: 15000 })
     await page.keyboard.press('Tab')
     const skipVisible = await page.evaluate(() => {
       const link = document.querySelector('.skip-link')
@@ -148,6 +151,7 @@ async function main() {
     await seedSession(context, baseSession({ pretestCompleted: true }))
     const page = await context.newPage()
     await page.goto(`${BASE}/lesson/3`, { waitUntil: 'networkidle' })
+    await page.waitForSelector('h1.turn-structure__heading', { timeout: 15000 })
 
     const hintVisible = await page.locator('#turn-structure-timeline-hint').isVisible()
     const hintText = await page.locator('#turn-structure-timeline-hint').textContent()

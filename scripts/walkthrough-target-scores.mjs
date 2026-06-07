@@ -116,15 +116,17 @@ async function main() {
   await page.getByRole('button', { name: 'Continue to What Is Magic?' }).click()
 
   console.log('What Is Magic — overview')
-  await page.waitForURL(/\/what-is-mtg/)
+  await page.waitForURL((url) => url.pathname.endsWith('/what-is-mtg'))
   await clickPrimary(page, /Continue to card anatomy/)
 
-  await page.waitForURL(/\/lesson\/1/)
+  await page.waitForURL((url) => url.pathname.endsWith('/lesson/1'))
   console.log('Lesson 1 — card anatomy markers')
-  const anatomyMarkers = page.locator('.card-anatomy__callout-marker')
+  const anatomyMarkers = page.getByRole('button', { name: /part \d+ of 6/i })
+  await anatomyMarkers.first().waitFor({ state: 'visible', timeout: 30_000 })
   const markerCount = await anatomyMarkers.count()
   for (let i = 0; i < markerCount; i += 1) {
     await anatomyMarkers.nth(i).click()
+    await page.waitForTimeout(100)
   }
   await page.getByText(/All six parts explored/i).waitFor({ timeout: 15_000 })
   await clickLessonContinue(page)
