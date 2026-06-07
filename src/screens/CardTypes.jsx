@@ -76,6 +76,14 @@ const CARD_TYPES = [
         ],
       },
       'Most creatures you cast have summoning sickness: until your next turn begins, they cannot attack or use activated abilities with a tap symbol in the cost. Llanowar Elves is a common example. It cannot tap for green mana the turn it enters, but it can on later turns. Activating that ability is not casting a spell.',
+      {
+        heading: 'Legendary vs. non-legendary',
+        list: [
+          'A non-legendary creature has a type line like "Creature — Elf Druid." It fights and blocks like any other creature. You can control as many copies as your format allows (often up to four with the same name in your deck).',
+          'A legendary creature says "Legendary Creature" on the type line before the dash. Legendary marks a unique character or place. It is still a creature for combat, timing, and summoning sickness.',
+          'Legend rule: if you control two or more permanents with the same name and at least one is legendary, you choose one to keep and sacrifice the rest. So you cannot keep two copies of Grothama, All-Devouring on the battlefield, but you can keep four Llanowar Elves because that card is not legendary.',
+        ],
+      },
     ],
     examples: [
       {
@@ -138,7 +146,7 @@ const CARD_TYPES = [
       },
       {
         heading: 'What is mana?',
-        text: 'Mana is the magical energy you use to cast spells and activate abilities. It is not a physical card or token on the table. You produce it during your turn, spend it when you cast something, and any left over fades away when the step or phase ends. Every non-land spell shows a mana cost in the top-right corner (you saw this in Lesson 1). Coloured symbols mean you need that specific colour of mana; a number in a grey circle means you can pay with mana of any colour. Lands are the main way to produce that mana.',
+        text: 'Mana is the magical energy you use to cast spells and activate abilities. It is not a physical card or token on the table. You produce it during your turn, spend it when you cast something, and any left over fades away when the step or phase ends. Every non-land spell shows a mana cost in the top-right corner (you saw this in Lesson 1). Colored symbols mean you need that specific color of mana; a number in a gray circle means you can pay with mana of any color. Lands are the main way to produce that mana.',
       },
       {
         heading: 'How to pay for a spell',
@@ -241,7 +249,7 @@ const CARD_TYPES = [
     details: [
       'Priority is your window to play cards, activate abilities, or pass and let the game move on. When you have priority, you can act; when you pass, your opponent gets a chance.',
       'When you cast an instant, it goes on the stack like any other spell. The difference is when you are allowed to cast it: instants can be cast any time you have priority, even when the stack is not empty.',
-      'That lets you respond to your opponent. If they cast a spell, you can cast an instant while their spell is still on the stack, before it resolves. Counterspell is a classic example: it counters another spell that is waiting on the stack.',
+      'That lets you respond to your opponent. If they cast a spell, you can cast an instant while their spell is still on the stack, before it resolves. Counterspell does exactly that: it counters another spell waiting on the stack.',
       'Instants also work during your main phase, combat, or on your opponent’s turn. Shock can deal damage during combat; Giant Growth can save a creature from dying after damage is assigned.',
     ],
     examples: [
@@ -287,7 +295,7 @@ const CARD_TYPES = [
     id: 'sorcery',
     name: 'Sorcery',
     description:
-      'Powerful one-shot spells. Cast only during your main phase when the stack is empty.',
+      'One-shot spells that go to the graveyard after they resolve. Cast only during your main phase when the stack is empty.',
     tag: 'Main phase · stack empty',
     wide: false,
     details: [
@@ -318,16 +326,16 @@ const CARD_TYPES = [
     id: 'artifact',
     name: 'Artifact',
     description:
-      'Permanent objects: relics, devices, and gear. Most are colourless; many produce mana or protect your creatures.',
+      'Permanent objects: relics, devices, and gear. Most are colorless; many produce mana or protect your creatures.',
     tag: 'Main phase · stack empty',
     wide: false,
     details: [
       'Artifacts are magical objects you cast and keep on the battlefield, like creatures or enchantments. They are not lands. You cast them during your main phase when the stack is empty, paying their mana cost like any other spell. Once in play, their rules text tells you what they do.',
-      'Most artifacts are colourless (their mana cost uses grey symbols only), so they can fit into decks of any colour. Some artifacts are coloured and need specific mana to cast, check the mana cost in the corner.',
+      'Most artifacts are colorless (their mana cost uses gray symbols only), so they can fit into decks of any color. Some artifacts are colored and need specific mana to cast, check the mana cost in the corner.',
       {
         heading: 'What artifacts can do',
         list: [
-          'Produce mana: tap the artifact to add mana to your pool, similar to a land. Sol Ring adds two colourless mana; Commander’s Sphere adds one mana of any colour.',
+          'Produce mana: tap the artifact to add mana to your pool, similar to a land. Sol Ring adds two colorless mana; Commander’s Sphere adds one mana of any color.',
           'Equip creatures: Equipment artifacts attach to a creature you control to give it power, toughness, or abilities (for example, +2/+2 or “can’t be blocked”). You pay an equip cost to move the Equipment onto a creature.',
           'Protect or strengthen your board: some artifacts grant hexproof, prevent damage, or make your creatures harder to block. Others affect the whole game, like drawing extra cards or searching your library.',
           'Utility effects: anything else the card says: sacrifice for a benefit, pay mana to activate an ability, or trigger when something happens. Always read the rules text.',
@@ -366,7 +374,7 @@ const CARD_TYPES = [
   {
     id: 'enchantment',
     name: 'Enchantment',
-    description: 'Ongoing effects that linger on the battlefield.',
+    description: 'Effects that stay on the battlefield until removed.',
     tag: 'Main phase · stack empty',
     wide: false,
     details: [
@@ -420,7 +428,8 @@ const CARD_TYPES = [
   {
     id: 'planeswalker',
     name: 'Planeswalker',
-    description: 'Powerful allies with loyalty abilities you activate each turn.',
+    description:
+      'Allies with loyalty abilities you activate each turn. Cast during your main phase when the stack is empty.',
     tag: 'Main phase · stack empty',
     wide: true,
     details: [
@@ -706,7 +715,7 @@ export default function CardTypes({ session }) {
         <hr className="card-types__rule" aria-hidden="true" />
 
         <p className="card-types__intro">
-          <GlossaryText text="Magic has a few other card types too, but these seven are the main ones you will see in most games. Each type determines what the card does and, more importantly, when you can play or cast it." />
+          <GlossaryText text="Magic has a few other card types too, but these seven are the main ones you will see in most games. Each type determines what the card does and when you can play or cast it." />
         </p>
 
         <CastVsPlayExplainer variant="brief" />
@@ -736,7 +745,7 @@ export default function CardTypes({ session }) {
         <hr className="card-types__divider" aria-hidden="true" />
 
         <p className="card-types__closing">
-          <GlossaryText text="Notice that only instants can be cast at any time you have priority. Creatures, sorceries, enchantments, artifacts, and planeswalkers are cast during your main phase when the stack is empty. Lands are different: they are played (not cast) during your first or second main phase, one per turn total, and never use the stack." />
+          <GlossaryText text="Only instants can be cast at any time you have priority. Creatures, sorceries, enchantments, artifacts, and planeswalkers are cast during your main phase when the stack is empty. Lands are different: they are played (not cast) during your first or second main phase, one per turn total, and never use the stack." />
         </p>
 
         <p className="card-types__timing-footnote">

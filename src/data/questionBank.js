@@ -126,13 +126,13 @@ const questionBank = [
     id: 'lo1_q2',
     lo: 'LO1',
     question:
-      'What do the numbers and coloured symbols in the top right corner of a card represent?',
+      'What do the numbers and colored symbols in the top right corner of a card represent?',
     hasImage: true,
     imageKey: 'shadowmage-infiltrator',
     imageAlt: 'Shadowmage Infiltrator showing mana cost symbols in the top right corner',
     options: [
       'Power',
-      'Mana cost (how much mana and which colours you need to cast it)',
+      'Mana cost (how much mana and which colors you need to cast it)',
       'Toughness',
       'Loyalty',
     ],
@@ -156,7 +156,7 @@ const questionBank = [
     options: [
       'Mana cost and loyalty',
       'Power and toughness',
-      'Attack and defence',
+      'Attack and defense',
       'Cost and ability',
     ],
   },

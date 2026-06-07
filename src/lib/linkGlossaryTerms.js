@@ -6,6 +6,8 @@ import { getKeywordDefinition, isOfficialKeyword } from '../data/keywordDictiona
  */
 const GLOSSARY_MATCHES = [
   { pattern: /\bsummoning sickness\b/gi, term: 'Summoning sickness' },
+  { pattern: /\blegend(?:ary)?\s+rule\b/gi, term: 'Legendary' },
+  { pattern: /\blegendary\b/gi, term: 'Legendary' },
   { pattern: /\bhand size limit\b/gi, term: 'Hand size limit' },
   { pattern: /\bdiscard down to seven\b/gi, term: 'Hand size limit' },
   { pattern: /\bmore than seven cards in hand\b/gi, term: 'Hand size limit' },

@@ -121,8 +121,8 @@ export default function LessonIntro({ session }) {
         {selectedOption ? (
           <p className="lesson-intro__curiosity-ack" role="status">
             {selectedOption.lessonNum
-              ? `Got it — we will emphasize ${selectedOption.label.toLowerCase()} when we reach Lesson ${selectedOption.lessonNum}.`
-              : 'Got it — we will walk through every lesson in the guide order.'}
+              ? `Got it. We will emphasize ${selectedOption.label.toLowerCase()} when we reach Lesson ${selectedOption.lessonNum}.`
+              : 'Got it. We will walk through every lesson in the guide order.'}
           </p>
         ) : null}
 

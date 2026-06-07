@@ -8,7 +8,7 @@ const BRIEF = [
 ]
 
 const FULL = [
-  'Magic uses two different words on purpose. Mixing them up is a common beginner mistake, but the rules are straightforward once you know which cards use which action.',
+  'Magic uses two different words on purpose. Mixing them up is a common beginner mistake. Lands are played; everything else with a mana cost is cast.',
   'Priority is your window to play cards, activate abilities, or pass and let the game move on. When you have priority, you can act; when you pass, your opponent gets a chance.',
   {
     heading: 'Playing a land',

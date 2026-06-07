@@ -3,7 +3,7 @@ const QUESTION_EXPLANATIONS = {
   lo0_q1:
     'Magic is a two-player (or more) collectible card game. Each player uses a deck of cards to cast spells, play lands, and attack until an opponent reaches 0 life.',
   lo0_q2:
-    'Commander decks are exactly 100 cards with no duplicates except basic lands, plus a legendary commander that defines your deck’s colour identity.',
+    'Commander decks are exactly 100 cards with no duplicates except basic lands, plus a legendary commander that defines your deck’s color identity.',
   lo0_q3:
     'Most Standard-style constructed decks require at least 60 cards. Limited formats like Draft use 40-card minimum decks.',
   lo0_q4:
@@ -26,7 +26,7 @@ const QUESTION_EXPLANATIONS = {
   lo1_q1:
     'The type line says “Creature.” Creatures stay on the battlefield and can attack and block in combat.',
   lo1_q2:
-    'The mana cost in the top right shows how much mana and which colours you need to cast the spell.',
+    'The mana cost in the top right shows how much mana and which colors you need to cast the spell.',
   lo1_q3:
     'The text box lists the card’s abilities and rules text: what the card actually does in the game.',
   lo1_q4:

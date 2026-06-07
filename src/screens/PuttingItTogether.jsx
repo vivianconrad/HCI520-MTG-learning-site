@@ -97,7 +97,7 @@ const SCENARIOS = [
     cardImageAlt: 'Counterspell: Instant',
     correctAnswer: true,
     explanation:
-      "Yes. Counterspell is an instant, so you can cast it when you have priority, including in response to your opponent's spell while it is on the stack. This is one of the most powerful things instants can do.",
+      "Yes. Counterspell is an instant, so you can cast it when you have priority, including in response to your opponent's spell while it is on the stack. That is a common use for instants.",
   },
   {
     id: 's9',

@@ -75,7 +75,7 @@ export default function WhatIsMtg({ session }) {
 
           <h2 className="what-is-mtg__subheading">Formats</h2>
           <p className="what-is-mtg__paragraph">
-            Magic has many <strong>formats</strong>—rule sets that define which cards you can use,
+            Magic has many <strong>formats</strong>, rule sets that define which cards you can use,
             deck size, starting life, and other details. Whether you play one-on-one or multiplayer,
             Standard, Commander, or something else, the lessons teach core rules that apply in every
             format.

@@ -16,7 +16,7 @@ const FULL = [
       'Stack not empty: something is waiting to resolve (for example, your opponent just cast a spell). You cannot cast a sorcery now, but you can cast an instant in response, such as Counterspell to cancel their spell.',
     ],
   },
-  'Spells resolve last in, first out: the most recently added spell resolves first, like stacking plates. That back-and-forth is often called the stack, and it is why instants feel faster and more interactive than sorceries.',
+  'Spells resolve last in, first out: the most recently added spell resolves first, like stacking plates. That back-and-forth is the stack, and it is why you can answer a sorcery with an instant but not the other way around.',
 ]
 
 function renderBlock(block, index) {
