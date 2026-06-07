@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
+import SessionRecoveryGuide from '../components/SessionRecoveryGuide.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
@@ -83,11 +84,12 @@ export default function Welcome({ session }) {
           what to do when you sit down for your first game. A friend at the table can help with the
           rest.
         </p>
-        <div className="welcome__hero-cards" aria-label="Sample Magic cards">
+        <div className="welcome__hero-cards" role="group" aria-label="Sample Magic cards">
           {HERO_CARDS.map((card) => (
             <img key={card.alt} className="welcome__hero-card" src={card.src} alt={card.alt} />
           ))}
         </div>
+        <SessionRecoveryGuide />
         {rowError ? (
           <div className="welcome__error-block" role="alert">
             <p className="welcome__error">

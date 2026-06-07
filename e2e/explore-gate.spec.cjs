@@ -19,14 +19,20 @@ test.describe('explore gate discoverability', () => {
     await expect(gateHint).toHaveText(CARD_ANATOMY_GATE)
   })
 
-  test('keeps the gate hint visible after a blocked Next click', async ({ page }) => {
+  test('disables Next until the explore gate is satisfied', async ({ page }) => {
     const gateHint = page.locator('.lesson-nav__gate-hint')
     const nextButton = page.getByRole('button', { name: /continue to card types/i })
 
-    await nextButton.click()
+    await expect(nextButton).toBeDisabled()
     await expect(gateHint).toBeVisible()
     await expect(gateHint).toHaveText(CARD_ANATOMY_GATE)
     await expect(page).toHaveURL(/lesson\/1/)
+  })
+
+  test('scrolls to a missing marker when the gate hint is activated', async ({ page }) => {
+    const gateHint = page.locator('.lesson-nav__gate-hint')
+    await gateHint.click()
+    await expect(page.locator('.card-anatomy__marker--missing').first()).toBeVisible()
   })
 
   test('shows a ready message after all markers are explored', async ({ page }) => {

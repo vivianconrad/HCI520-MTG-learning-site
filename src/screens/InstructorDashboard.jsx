@@ -204,6 +204,9 @@ export default function InstructorDashboard() {
             <section className="instructor__lo" aria-label="Mean score by topic">
               <h2 className="instructor__subheading">Mean score by topic (of 2 questions each)</h2>
               <table className="instructor__table">
+                <caption className="visually-hidden">
+                  Mean pre-test, post-test, and gain by learning topic
+                </caption>
                 <thead>
                   <tr>
                     <th scope="col">Topic</th>
@@ -230,6 +233,9 @@ export default function InstructorDashboard() {
               {sessions.length > 0 && (
                 <div className="instructor__table-wrap">
                   <table className="instructor__table instructor__table--compact">
+                    <caption className="visually-hidden">
+                      Participant session scores and submission times
+                    </caption>
                     <thead>
                       <tr>
                         <th scope="col">Session ID</th>

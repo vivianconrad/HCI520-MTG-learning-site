@@ -59,6 +59,23 @@
   line-height: 1.4;
 }
 
+.card-types__more {
+  margin: 0 0 16px;
+}
+
+.card-types__more-summary {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  cursor: pointer;
+}
+
+.card-types__more-summary:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
 .card-types__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -483,7 +500,7 @@
 }
 
 .card-types__overlay-close:hover {
-  color: var(--color-gold);
+  color: var(--color-text-secondary);
 }
 
 .card-types__overlay-image {
@@ -521,6 +538,7 @@
   font-size: 16px;
   color: var(--color-text-dark);
   margin: 0;
+  padding-right: 40px;
 }
 
 .card-types__overlay-description {
@@ -605,7 +623,7 @@
 }
 
 .card-types__overlay-nav:hover {
-  color: var(--color-gold);
+  color: var(--color-text-secondary);
   border-color: var(--color-gold);
 }
 

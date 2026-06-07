@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getRedirectPath } from './sessionGate.js'
+import { getLessonsResumePath, getRedirectPath } from './sessionGate.js'
 
 const baseSession = {
   consentGiven: false,
@@ -8,7 +8,32 @@ const baseSession = {
   pretestCompleted: false,
   lessonsCompleted: false,
   posttestCompleted: false,
+  screenTimes: {},
 }
+
+describe('getLessonsResumePath', () => {
+  it('returns lesson intro when no lesson screens were visited', () => {
+    expect(getLessonsResumePath({})).toBe('/lesson/intro')
+  })
+
+  it('returns the most recently visited lesson screen with dwell time', () => {
+    expect(
+      getLessonsResumePath({
+        WhatIsMtg: 1000,
+        CardAnatomy: 2000,
+      })
+    ).toBe('/lesson/1')
+  })
+
+  it('returns putting it together when that is the latest visited lesson', () => {
+    expect(
+      getLessonsResumePath({
+        CardTypes: 500,
+        PuttingItTogether: 1200,
+      })
+    ).toBe('/lesson/4')
+  })
+})
 
 describe('getRedirectPath', () => {
   it('returns null when every required step is satisfied', () => {
@@ -55,14 +80,25 @@ describe('getRedirectPath', () => {
     ).toBe('/pretest')
   })
 
-  it('redirects to what-is-mtg when post-test requires completed lessons', () => {
+  it('redirects to lesson intro when lessons are incomplete and none were visited', () => {
     expect(
       getRedirectPath(['consent', 'pretest', 'lessons'], {
         ...baseSession,
         consentGiven: true,
         pretestCompleted: true,
       })
-    ).toBe('/what-is-mtg')
+    ).toBe('/lesson/intro')
+  })
+
+  it('resumes the latest visited lesson when lessons are incomplete', () => {
+    expect(
+      getRedirectPath(['consent', 'pretest', 'lessons'], {
+        ...baseSession,
+        consentGiven: true,
+        pretestCompleted: true,
+        screenTimes: { TurnStructure: 3000 },
+      })
+    ).toBe('/lesson/3')
   })
 
   it('redirects to posttest when results require a finished post-test', () => {

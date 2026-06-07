@@ -132,7 +132,7 @@ export default function LessonComplete({ session }) {
             overthink it. Just go with what you know.
           </p>
         </div>
-        <div className="lesson-complete__review-strip" aria-label="Cards covered in lessons">
+        <div className="lesson-complete__review-strip" role="group" aria-label="Cards covered in lessons">
           {REVIEW_CARDS.map((src, index) => (
             <img
               key={src}

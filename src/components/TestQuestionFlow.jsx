@@ -81,6 +81,18 @@ export default function TestQuestionFlow({
       return
     }
 
+    if (event.key === ' ' && event.target.closest('[role="radiogroup"]')) {
+      event.preventDefault()
+      const focusedRadio = event.target.closest('[role="radio"]')
+      const focusedIndex = focusedRadio
+        ? optionRefs.current.findIndex((option) => option === focusedRadio)
+        : -1
+      const indexToSelect = focusedIndex >= 0 ? focusedIndex : focusableOptionIndex
+      shouldFocusOptionRef.current = true
+      setSelectedIndex(indexToSelect)
+      return
+    }
+
     if (
       event.key === 'Enter' &&
       selectedIndex !== null &&
@@ -146,7 +158,7 @@ export default function TestQuestionFlow({
         })}
       </div>
       <p className="pretest__keyboard-hint">
-        Press 1–{question.options.length} or arrow keys to select, Enter to continue
+        Press 1–{question.options.length}, arrow keys, or Space to select, Enter to continue
       </p>
       <div
         className={`pretest__actions${isFirst ? '' : ' pretest__actions--split'}`}

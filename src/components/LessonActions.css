@@ -7,6 +7,12 @@
   background: rgba(139, 105, 20, 0.08);
   border: 1px solid rgba(139, 105, 20, 0.22);
   border-radius: 4px;
+  cursor: pointer;
+}
+
+.lesson-nav__gate-hint:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }
 
 .lesson-nav__ready-hint {
@@ -21,12 +27,12 @@
 }
 
 [class*='__button--next-blocked'] {
-  opacity: 0.72;
-  cursor: pointer;
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
-[class*='__button--next-blocked']:hover {
-  opacity: 0.85;
+[class*='__button--next-blocked']:disabled:hover {
+  opacity: 0.55;
 }
 
 [class*='__button--stacked'] {

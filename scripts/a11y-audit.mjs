@@ -1,5 +1,6 @@
 /**
- * Run axe-core WCAG checks on key learner flows (pre-test, turn structure).
+ * Run axe-core WCAG checks on learner flows (consent through results).
+ * See docs/a11y-manual-checks.md for manual verification steps.
  * Usage: node scripts/a11y-audit.mjs [baseUrl]
  * Default baseUrl: http://127.0.0.1:5173/HCI520-MTG-learning-site
  */
@@ -25,6 +26,16 @@ const MOCK_QUESTIONS = [
   },
 ]
 
+const MOCK_PRETEST_ANSWERS = {
+  lo0_q1: 0,
+  lo0_q2: 2,
+}
+
+const MOCK_POSTTEST_ANSWERS = {
+  lo0_q1: 1,
+  lo0_q2: 2,
+}
+
 function baseSession(overrides = {}) {
   return {
     sessionId: 'A11YAUDITSESSION',
@@ -49,6 +60,18 @@ function baseSession(overrides = {}) {
 
 const PAGES = [
   {
+    name: 'Consent (desktop)',
+    path: '/',
+    session: baseSession({ consentGiven: false }),
+    waitFor: 'h1.consent__heading',
+  },
+  {
+    name: 'Welcome (desktop)',
+    path: '/welcome',
+    session: baseSession({ consentGiven: true }),
+    waitFor: 'h1.welcome__heading',
+  },
+  {
     name: 'Pre-test (desktop)',
     path: '/pretest',
     session: baseSession(),
@@ -62,6 +85,18 @@ const PAGES = [
     device: devices['iPhone 13'],
   },
   {
+    name: 'Card anatomy (desktop)',
+    path: '/lesson/1',
+    session: baseSession({ pretestCompleted: true }),
+    waitFor: 'h1.card-anatomy__heading',
+  },
+  {
+    name: 'Card types (desktop)',
+    path: '/lesson/2',
+    session: baseSession({ pretestCompleted: true }),
+    waitFor: 'h1.card-types__heading',
+  },
+  {
     name: 'Turn structure (desktop)',
     path: '/lesson/3',
     session: baseSession({ pretestCompleted: true }),
@@ -73,6 +108,23 @@ const PAGES = [
     session: baseSession({ pretestCompleted: true }),
     waitFor: 'h1.turn-structure__heading',
     device: devices['iPhone 13'],
+  },
+  {
+    name: 'Putting it together (desktop)',
+    path: '/lesson/4',
+    session: baseSession({ pretestCompleted: true }),
+    waitFor: 'h1.putting-together__heading',
+  },
+  {
+    name: 'Results (desktop)',
+    path: '/results',
+    session: baseSession({
+      pretestCompleted: true,
+      posttestCompleted: true,
+      pretestAnswers: MOCK_PRETEST_ANSWERS,
+      posttestAnswers: MOCK_POSTTEST_ANSWERS,
+    }),
+    waitFor: 'h1.results__heading',
   },
 ]
 

@@ -4,7 +4,9 @@ import CastVsPlayExplainer from '../components/CastVsPlayExplainer.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import StackExplainer from '../components/StackExplainer.jsx'
 import { useNavigate } from 'react-router-dom'
+import CuriosityNote from '../components/CuriosityNote.jsx'
 import LessonActions from '../components/LessonActions.jsx'
+import { getCuriosityLessonNote } from '../lib/learnerChoice.js'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import GlossaryText from '../components/GlossaryText.jsx'
@@ -78,6 +80,7 @@ export default function TurnStructure({ session }) {
   const panelId = 'turn-phase-panel'
   const selectedIndex = PHASES.findIndex((phase) => phase.id === selectedId)
   const allPhasesExplored = visitedIds.size === PHASES.length
+  const curiosityNote = getCuriosityLessonNote(session.curiosityFocus, 'lesson3')
   const isFirstPhase = selectedIndex <= 0
   const isLastPhase = selectedIndex >= PHASES.length - 1
 
@@ -130,6 +133,8 @@ export default function TurnStructure({ session }) {
         <p className="turn-structure__breadcrumb">Lesson 03 · Turn Structure</p>
         <h1 className="turn-structure__heading">How a Turn Works</h1>
         <hr className="turn-structure__rule" aria-hidden="true" />
+
+        <CuriosityNote text={curiosityNote} />
 
         <p className="turn-structure__intro">
           Every Magic turn follows the same five phases in order. Click a phase on the timeline, or

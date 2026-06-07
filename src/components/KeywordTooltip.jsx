@@ -119,7 +119,7 @@ export default function KeywordTooltip({ term, definition, children }) {
         type="button"
         className="keyword-tooltip__trigger mtg-rules-term"
         aria-expanded={open}
-        aria-controls={tooltipId}
+        aria-controls={open ? tooltipId : undefined}
         aria-describedby={open ? tooltipId : undefined}
         onMouseEnter={() => {
           if (prefersHover()) setHovered(true)

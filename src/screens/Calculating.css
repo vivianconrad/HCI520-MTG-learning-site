@@ -92,7 +92,7 @@
 .calculating__subtext {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-gold-muted);
+  color: var(--color-text-secondary);
   margin: 0 0 16px;
 }
 

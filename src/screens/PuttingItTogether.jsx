@@ -353,15 +353,6 @@ export default function PuttingItTogether({ session }) {
           >
             Back to turn structure
           </button>
-          {phase === 'question' && hasCompletedRequiredScenario && (
-            <button
-              type="button"
-              className="putting-together__button putting-together__button--next"
-              onClick={handleComplete}
-            >
-              Finish lesson
-            </button>
-          )}
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_4} />
       </div>

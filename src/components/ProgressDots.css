@@ -28,6 +28,11 @@
   flex-shrink: 0;
 }
 
+.progress-dots__dot--complete {
+  background: var(--color-gold-muted);
+  opacity: 1;
+}
+
 .progress-dots__dot--active {
   width: 8px;
   height: 8px;

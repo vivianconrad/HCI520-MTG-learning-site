@@ -46,7 +46,7 @@ export default function PostTestPrep() {
             Begin post-test
           </button>
         </div>
-        <ProgressDots activeIndex={PROGRESS.LESSON_COMPLETE} />
+        <ProgressDots activeIndex={PROGRESS.POSTTEST_PREP} stepLabel="Post-test prep" />
       </div>
     </PageLayout>
   )

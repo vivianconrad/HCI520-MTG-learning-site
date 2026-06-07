@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFocusTrap } from '../hooks/useFocusTrap.js'
 import { useNavigate } from 'react-router-dom'
+import CuriosityNote from '../components/CuriosityNote.jsx'
 import LessonActions from '../components/LessonActions.jsx'
+import { getCuriosityLessonNote } from '../lib/learnerChoice.js'
 import CastVsPlayExplainer from '../components/CastVsPlayExplainer.jsx'
 import GlossaryText from '../components/GlossaryText.jsx'
 import PageLayout from '../components/PageLayout.jsx'
@@ -590,7 +592,7 @@ function CardTypeItem({ type, examples, hasBeenViewed, highlightMissing, onSeeCa
       <CardTypeDetails description={type.description} />
       <CardTypeTimingTag timing={type.tag} />
       <div className="card-types__preview">
-        <div className="card-types__examples" aria-label={`${type.name} sample cards`}>
+        <div className="card-types__examples" role="group" aria-label={`${type.name} sample cards`}>
           {examples.map((example) => (
             <button
               key={example.label}
@@ -641,6 +643,7 @@ export default function CardTypes({ session }) {
 
   useFocusTrap(overlayPanelRef, overlayOpen)
   const allViewed = seenIds.size === CARD_TYPES.length
+  const curiosityNote = getCuriosityLessonNote(session.curiosityFocus, 'lesson2')
 
   const openOverlay = useCallback((id, triggerEl) => {
     const type = CARD_TYPES.find((entry) => entry.id === id)
@@ -731,6 +734,8 @@ export default function CardTypes({ session }) {
         <h1 className="card-types__heading">The Seven Card Types</h1>
         <hr className="card-types__rule" aria-hidden="true" />
 
+        <CuriosityNote text={curiosityNote} />
+
         <p className="card-types__intro">
           <GlossaryText text="Magic has a few other card types too, but these seven are the main ones you will see in most games. Each type determines what the card does and when you can play or cast it." />
         </p>
@@ -765,15 +770,17 @@ export default function CardTypes({ session }) {
           <GlossaryText text="Only instants can be cast at any time you have priority. Creatures, sorceries, enchantments, artifacts, and planeswalkers are cast during your main phase when the stack is empty. Lands are different: they are played (not cast) during your first or second main phase, one per turn total, and never use the stack." />
         </p>
 
-        <p className="card-types__timing-footnote">
-          <GlossaryText text='On the tags above, "Main phase · stack empty" means your turn, your first or second main phase, and nothing waiting on the stack, the usual timing for casting creatures, sorceries, artifacts, enchantments, and planeswalkers. Lands use "Main phase · one per turn": one land total, played in either main phase. Some cards break these rules; read the card if you are unsure.' />
-        </p>
-
-        <p className="card-types__note">
-          There are exceptions to every rule in Magic, and many cards use keywords that change how
-          they work. What you saw here is a basic introduction: enough to get started, not every
-          special case you will meet in a real game.
-        </p>
+        <details className="card-types__more">
+          <summary className="card-types__more-summary">More on timing rules and exceptions</summary>
+          <p className="card-types__timing-footnote">
+            <GlossaryText text='On the tags above, "Main phase · stack empty" means your turn, your first or second main phase, and nothing waiting on the stack, the usual timing for casting creatures, sorceries, artifacts, enchantments, and planeswalkers. Lands use "Main phase · one per turn": one land total, played in either main phase. Some cards break these rules; read the card if you are unsure.' />
+          </p>
+          <p className="card-types__note">
+            There are exceptions to every rule in Magic, and many cards use keywords that change how
+            they work. What you saw here is a basic introduction: enough to get started, not every
+            special case you will meet in a real game.
+          </p>
+        </details>
 
         <LessonActions
           classPrefix="card-types"
@@ -823,6 +830,9 @@ export default function CardTypes({ session }) {
 
               return (
                 <>
+                  <h3 id="card-types-overlay-title" className="card-types__overlay-name">
+                    {activeType.name}
+                  </h3>
                   <button
                     type="button"
                     className="card-types__overlay-close"
@@ -903,9 +913,6 @@ export default function CardTypes({ session }) {
                       </button>
                     </div>
                   )}
-                  <h3 id="card-types-overlay-title" className="card-types__overlay-name">
-                    {activeType.name}
-                  </h3>
                   <CardTypeDetails
                     description={activeType.description}
                     details={activeType.details}

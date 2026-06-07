@@ -141,7 +141,7 @@ export default function Results({ session }) {
           <p className="results__empty">
             No test data found. Please complete the pre-test and post-test first.
           </p>
-          <button type="button" className="results__empty-button" onClick={() => navigate('/')}>
+          <button type="button" className="results__empty-button" onClick={() => navigate('/welcome')}>
             Return to Welcome
           </button>
         </div>
@@ -289,7 +289,9 @@ export default function Results({ session }) {
                 <th
                   scope="col"
                   className="results__question-header-cell results__question-header-cell--num"
-                />
+                >
+                  <span className="visually-hidden">Question number</span>
+                </th>
                 <th
                   scope="col"
                   className="results__question-header-cell results__question-header-cell--question"

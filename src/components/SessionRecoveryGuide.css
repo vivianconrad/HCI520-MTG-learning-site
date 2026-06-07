@@ -1,0 +1,36 @@
+.session-recovery-guide {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border: 1px solid rgb(139 105 20 / 22%);
+  border-radius: 4px;
+  background: rgb(139 105 20 / 5%);
+}
+
+.session-recovery-guide__summary {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  cursor: pointer;
+}
+
+.session-recovery-guide__summary:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.session-recovery-guide__body {
+  margin-top: 10px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.session-recovery-guide__body p {
+  margin: 0 0 8px;
+}
+
+.session-recovery-guide__body p:last-child {
+  margin-bottom: 0;
+}

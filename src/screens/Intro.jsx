@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
+import SessionRecoveryGuide from '../components/SessionRecoveryGuide.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
@@ -37,6 +38,7 @@ export default function Intro({ session }) {
           </p>
         </div>
         <CopySessionId sessionId={sessionId} className="intro__session" />
+        <SessionRecoveryGuide />
         {rowError ? (
           <p className="intro__error" role="alert">
             {rowError}

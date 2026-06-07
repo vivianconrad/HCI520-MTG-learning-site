@@ -5,7 +5,9 @@ import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import CardAnatomyMobileHint from '../components/CardAnatomyMobileHint.jsx'
+import CuriosityNote from '../components/CuriosityNote.jsx'
 import GlossaryText from '../components/GlossaryText.jsx'
+import { getCuriosityLessonNote } from '../lib/learnerChoice.js'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { cardImage } from '../assets/cards/index.js'
 import './CardAnatomy.css'
@@ -141,6 +143,7 @@ export default function CardAnatomy({ session }) {
   const [highlightMissing, setHighlightMissing] = useState(false)
 
   const allExplored = seenIds.size === CALLOUTS.length
+  const curiosityNote = getCuriosityLessonNote(session.curiosityFocus, 'lesson1')
 
   const handleGateBlocked = useCallback(() => {
     setHighlightMissing(true)
@@ -169,6 +172,8 @@ export default function CardAnatomy({ session }) {
         <p className="card-anatomy__breadcrumb">Lesson 01 · Card Anatomy</p>
         <h1 className="card-anatomy__heading">How to Read a Card</h1>
         <hr className="card-anatomy__rule" aria-hidden="true" />
+
+        <CuriosityNote text={curiosityNote} />
 
         <CardAnatomyMobileHint />
 

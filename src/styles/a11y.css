@@ -9,7 +9,16 @@
   }
 }
 
-/* Secondary text on parchment — breadcrumbs, hints, progress (≥4.5:1 on #f5e6c8) */
+/* Readable text on parchment — use secondary/dark tokens, not gold or gold-muted */
+.browser-back-notice,
+.consent__breadcrumb,
+.welcome__breadcrumb,
+.intro__breadcrumb,
+.lesson-intro__breadcrumb,
+.what-is-mtg__breadcrumb,
+.putting-together__breadcrumb,
+.lesson-complete__breadcrumb,
+.results__breadcrumb,
 .pretest__breadcrumb,
 .pretest__intro-note,
 .pretest__keyboard-hint,
@@ -18,13 +27,19 @@
 .turn-structure__hint,
 .turn-structure__timeline-hint,
 .turn-structure__progress,
+.card-anatomy__breadcrumb,
 .card-anatomy__hint,
 .card-anatomy__info-placeholder,
 .card-anatomy__progress,
 .card-types__breadcrumb,
 .card-types__hint,
 .card-types__progress,
-.lesson-nav__gate-hint {
+.card-types__overlay-count,
+.card-types__overlay-caption-role,
+.card-types__thumbnail-placeholder,
+.card-types__item--pending .card-types__type-name::after,
+.lesson-nav__gate-hint,
+.calculating__subtext {
   color: var(--color-text-secondary);
 }
 

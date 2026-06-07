@@ -36,10 +36,13 @@ export default function LessonActions({
 
   function handleNext() {
     if (!canProceed) {
-      onGateBlocked?.()
       return
     }
     onNext()
+  }
+
+  function handleGateHintActivate() {
+    onGateBlocked?.()
   }
 
   function handleReview() {
@@ -80,12 +83,25 @@ export default function LessonActions({
             </button>
           ) : null}
           {visibleGateHint ? (
-            <p id={hintId} className="lesson-nav__gate-hint" role="status">
+            <p
+              id={hintId}
+              className="lesson-nav__gate-hint"
+              role="status"
+              aria-live="polite"
+              onClick={handleGateHintActivate}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  handleGateHintActivate()
+                }
+              }}
+              tabIndex={onGateBlocked ? 0 : undefined}
+            >
               {visibleGateHint}
             </p>
           ) : null}
           {visibleReadyMessage ? (
-            <p id={readyId} className="lesson-nav__ready-hint" role="status">
+            <p id={readyId} className="lesson-nav__ready-hint" role="status" aria-live="polite">
               {visibleReadyMessage}
             </p>
           ) : null}
@@ -95,6 +111,7 @@ export default function LessonActions({
               !canProceed ? ` ${classPrefix}__button--next-blocked` : ''
             }${onReview ? ` ${classPrefix}__button--stacked` : ''}`}
             onClick={handleNext}
+            disabled={!canProceed}
             aria-describedby={
               visibleGateHint ? hintId : visibleReadyMessage ? readyId : undefined
             }

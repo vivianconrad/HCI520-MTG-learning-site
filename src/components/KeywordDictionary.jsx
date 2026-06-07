@@ -59,7 +59,7 @@ export default function KeywordDictionary() {
         className="keyword-dictionary__trigger"
         aria-haspopup="dialog"
         aria-expanded={open}
-        aria-controls="keyword-dictionary-panel"
+        aria-controls={open ? 'keyword-dictionary-panel' : undefined}
         title="Open the full keyword guide, including informal terms like summoning sickness."
         onClick={() => {
           setQuery('')
