@@ -1,2 +1,0 @@
--- Superseded by validate-participant-data.sql (score recomputation, progress rules, RPC).
--- Run validate-participant-data.sql instead of this file on new setups.
