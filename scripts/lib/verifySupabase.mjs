@@ -83,16 +83,10 @@ export async function verifySupabaseParticipantApi(client, options = {}) {
     .from('participants')
     .update({ pretest_score: 99 })
     .eq('session_id', sessionId)
+    .select('pretest_score')
 
-  if (!directUpdate.error) {
-    checks.push(
-      check(
-        'direct_update_blocked',
-        false,
-        'Direct anon UPDATE was accepted by PostgREST. Run supabase/revoke-anon-direct-update.sql.'
-      )
-    )
-  } else {
+  const directUpdateRows = directUpdate.data ?? []
+  if (directUpdate.error) {
     checks.push(
       check(
         'direct_update_blocked',
@@ -100,6 +94,31 @@ export async function verifySupabaseParticipantApi(client, options = {}) {
         `Direct UPDATE blocked (${directUpdate.error.code ?? directUpdate.error.message})`
       )
     )
+  } else if (directUpdateRows.length > 0) {
+    checks.push(
+      check(
+        'direct_update_blocked',
+        false,
+        'Direct anon UPDATE modified participant row(s). Run supabase/revoke-anon-direct-update.sql.'
+      )
+    )
+  } else {
+    // PostgREST often returns HTTP 200 with zero rows when RLS denies UPDATE.
+    const progressAfterDirectUpdate = await client.rpc('get_participant_progress', {
+      p_session_id: sessionId,
+      p_session_secret: sessionSecret,
+    })
+    if (progressAfterDirectUpdate.data?.pretest_score === 99) {
+      checks.push(
+        check(
+          'direct_update_blocked',
+          false,
+          'Direct anon UPDATE changed pretest_score via REST. Run supabase/revoke-anon-direct-update.sql.'
+        )
+      )
+    } else {
+      checks.push(check('direct_update_blocked', true, 'Direct UPDATE blocked (0 rows affected)'))
+    }
   }
 
   const update = await client.rpc('update_participant', {
