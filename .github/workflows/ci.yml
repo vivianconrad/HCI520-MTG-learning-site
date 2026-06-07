@@ -26,6 +26,12 @@ jobs:
       - name: Unit tests
         run: npm test
 
+      - name: Apply Supabase internal RPC hardening
+        if: ${{ secrets.SUPABASE_DB_URL != '' }}
+        run: npm run apply:db-security
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+
       - name: Supabase integration tests
         run: npm run test:supabase
         env:
