@@ -1,8 +1,8 @@
 /**
  * Verifies production RLS + hardened participant API.
  * Run: node scripts/verify-participants-db.mjs
- * Requires supabase/setup.sql applied in Supabase (or fix-update-rls-after-security.sql
- * plus the trigger/RPC sections from setup.sql if this is a partial migration).
+ * Requires supabase/setup.sql applied in Supabase (or fix-participants-rls.sql for
+ * UPDATE-only fix, plus setup.sql for triggers and RPCs if missing).
  */
 import { createClient } from '@supabase/supabase-js'
 import { readFileSync } from 'fs'
@@ -85,12 +85,12 @@ const rpc = await sb.rpc('register_participant', {
 
 if (rpc.error) {
   fail(`register_participant RPC: ${rpc.error.message}`)
-  console.error('\n Re-run supabase/setup.sql in the Supabase SQL Editor.\n')
+  console.error('\nRe-run supabase/setup.sql in the Supabase SQL Editor.\n')
   process.exit(1)
 }
 pass('register_participant RPC')
 
-// 4) UPDATE with session secret
+// 4) UPDATE by session_id (RLS must not require x-session-secret on Supabase Cloud)
 const patch = await fetch(
   `${url}/rest/v1/participants?session_id=eq.${encodeURIComponent(sessionId)}`,
   {
@@ -109,10 +109,10 @@ const range = patch.headers.get('content-range')
 const rowsUpdated = range?.includes('/') ? range.split('/')[1] : '?'
 if (rowsUpdated === '0') {
   fail(
-    'UPDATE affected 0 rows. Run supabase/migrations/fix-update-rls-after-security.sql or re-run supabase/setup.sql.'
+    'UPDATE affected 0 rows. Run supabase/fix-participants-rls.sql (or re-run supabase/setup.sql) in the Supabase SQL Editor.'
   )
 } else {
-  pass(`UPDATE with x-session-secret (${rowsUpdated} row)`)
+  pass(`UPDATE by session_id (${rowsUpdated} row)`)
 }
 
 // 5) Score validation — mismatched score rejected
@@ -134,7 +134,9 @@ const badScore = await fetch(
   }
 )
 if (badScore.ok) {
-  fail('Server accepted pretest_score=99 that does not match answers (validation trigger missing?)')
+  fail(
+    'Server accepted pretest_score=99 that does not match answers. Re-run supabase/setup.sql for the validation trigger.'
+  )
 } else {
   pass(`Mismatched pretest_score rejected (HTTP ${badScore.status})`)
 }
@@ -154,7 +156,9 @@ if (progress.error) {
 
 console.log('')
 if (failed) {
-  console.error('One or more checks failed. Re-run supabase/setup.sql in Supabase SQL Editor.\n')
+  console.error(
+    'One or more checks failed. Run supabase/fix-participants-rls.sql for save failures, or supabase/setup.sql for a full refresh.\n'
+  )
   process.exit(1)
 }
 console.log('All participant security checks passed.\n')

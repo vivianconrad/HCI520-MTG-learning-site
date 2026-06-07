@@ -9,9 +9,6 @@ export function isParticipantUpdateBlocked(result) {
 
 export const SESSION_CONFLICT_CODE = 'session_conflict'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
 function devLog(...args) {
   if (import.meta.env.DEV) console.log(...args)
 }
@@ -25,8 +22,8 @@ function devError(...args) {
 }
 
 /**
- * PATCH participants by session_id and log how many rows were updated.
- * Uses Prefer: count=exact because SELECT is denied by RLS on this table.
+ * Save participant fields via update_participant RPC (REST PATCH cannot work when
+ * SELECT is denied by RLS — PostgreSQL requires row visibility for UPDATE).
  */
 async function patchParticipant(sessionId, sessionSecret, payload, logLabel) {
   devLog(`[db] ${logLabel}: sessionId=`, sessionId, 'payload=', payload)
@@ -41,49 +38,25 @@ async function patchParticipant(sessionId, sessionSecret, payload, logLabel) {
     return { ok: false, rowsUpdated: 0, error: 'missing sessionSecret' }
   }
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    devError(`[db] ${logLabel}: missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY`)
-    return { ok: false, rowsUpdated: 0, error: 'missing env' }
-  }
-
-  const filter = `session_id=eq.${encodeURIComponent(sessionId)}`
-  const res = await fetch(`${supabaseUrl}/rest/v1/participants?${filter}`, {
-    method: 'PATCH',
-    headers: {
-      apikey: supabaseAnonKey,
-      Authorization: `Bearer ${supabaseAnonKey}`,
-      'Content-Type': 'application/json',
-      'x-session-secret': sessionSecret,
-      Prefer: 'return=minimal,count=exact',
-    },
-    body: JSON.stringify(payload),
+  const { data, error } = await supabase.rpc('update_participant', {
+    p_session_id: sessionId,
+    p_session_secret: sessionSecret,
+    p_patch: payload,
   })
 
-  const range = res.headers.get('content-range')
-  let rowsUpdated = 0
-  if (range?.includes('/')) {
-    const countPart = range.split('/')[1]
-    rowsUpdated = countPart === '*' ? 0 : Number.parseInt(countPart, 10)
+  if (error) {
+    devError(`[db] ${logLabel}: rpc failed`, error)
+    return { ok: false, rowsUpdated: 0, error: error.message }
   }
 
-  let errorBody = null
-  if (!res.ok) {
-    errorBody = await res.text()
-    devError(`[db] ${logLabel}: HTTP ${res.status}`, errorBody)
-  }
-
-  const result = {
-    ok: res.ok && rowsUpdated > 0,
-    status: res.status,
-    rowsUpdated,
-    error: errorBody,
-  }
+  const rowsUpdated = data ? 1 : 0
+  const result = { ok: rowsUpdated > 0, rowsUpdated, error: null }
   devLog(`[db] ${logLabel}: response`, result)
 
-  if (res.ok && rowsUpdated === 0) {
+  if (rowsUpdated === 0) {
     devWarn(
-      `[db] ${logLabel}: 0 rows updated: participant row missing or UPDATE blocked by RLS. ` +
-        'Re-run supabase/setup.sql in the Supabase SQL Editor.'
+      `[db] ${logLabel}: 0 rows updated: wrong session secret, missing row, or ` +
+        'update_participant RPC not deployed. Re-run supabase/setup.sql in Supabase SQL Editor.'
     )
   }
 

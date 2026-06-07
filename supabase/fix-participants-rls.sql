@@ -1,12 +1,15 @@
--- Apply after the security hardening that used x-session-secret in RLS.
--- Supabase Cloud strips custom headers before PostgREST, so header-based UPDATE
--- policies always match zero rows (PATCH returns HTTP 200 with 0 rows updated).
+-- Fix participant PATCH saves after security hardening (header-based UPDATE RLS).
 --
--- README alias (same SQL): supabase/fix-participants-rls.sql
+-- Symptom: app shows "We could not save your answers to the server" even though
+-- register_participant RPC succeeds. PATCH returns HTTP 204 with 0 rows updated.
 --
--- Safe to run on an existing project. For a full refresh (RPCs, triggers, grants),
--- re-run supabase/setup.sql instead.
+-- Cause: Supabase Cloud strips custom headers (e.g. x-session-secret) before
+-- PostgREST, so header-based UPDATE policies never match.
 --
+-- This file is the README entry point. Same content as:
+--   supabase/migrations/fix-update-rls-after-security.sql
+--
+-- For RPCs, score validation triggers, and grants, re-run supabase/setup.sql instead.
 -- Verify: node scripts/verify-participants-db.mjs
 
 -- ---------------------------------------------------------------------------

@@ -40,13 +40,9 @@ drop policy if exists "Allow insert for all"              on public.participants
 drop policy if exists "Deny select for all"               on public.participants;
 drop policy if exists "Allow select for instructor dashboard" on public.participants;
 
--- UPDATE: allow any anon client to update a row they can identify by session_id.
--- Row isolation comes from the PATCH filter (session_id=eq.<id>); session_ids are
--- 12-char random strings (~59 trillion combinations) so enumeration is impractical.
--- Note: Supabase Cloud's API gateway strips arbitrary custom headers before they
--- reach PostgREST, so current_setting('request.headers') cannot be used for
--- session_secret validation in RLS on hosted Supabase. Session secret is validated
--- server-side inside the register_participant and get_participant_progress RPCs.
+-- UPDATE via REST is blocked in practice: PostgreSQL requires rows to pass SELECT
+-- policies before UPDATE, and SELECT is denied below. Participant saves use the
+-- update_participant RPC (security definer) which validates session_secret server-side.
 create policy "Allow update by session id"
   on public.participants for update
   to anon, authenticated
@@ -253,6 +249,56 @@ $$;
 
 revoke all    on function public.register_participant(text, text, text, jsonb) from public;
 grant execute on function public.register_participant(text, text, text, jsonb) to anon, authenticated;
+
+-- ---------------------------------------------------------------------------
+-- RPC: update_participant
+-- Security definer UPDATE bypassing deny-SELECT RLS; validates session_secret.
+-- ---------------------------------------------------------------------------
+create or replace function public.update_participant(
+  p_session_id     text,
+  p_session_secret text,
+  p_patch          jsonb
+) returns boolean
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  updated int;
+begin
+  if p_session_id is null or length(trim(p_session_id)) = 0
+     or p_session_secret is null or length(trim(p_session_secret)) = 0
+     or p_patch is null or p_patch = '{}'::jsonb then
+    return false;
+  end if;
+
+  update public.participants
+  set
+    pretest_answers = case when p_patch ? 'pretest_answers'
+      then p_patch->'pretest_answers' else pretest_answers end,
+    pretest_score = case when p_patch ? 'pretest_score'
+      then (p_patch->>'pretest_score')::integer else pretest_score end,
+    posttest_answers = case when p_patch ? 'posttest_answers'
+      then p_patch->'posttest_answers' else posttest_answers end,
+    posttest_score = case when p_patch ? 'posttest_score'
+      then (p_patch->>'posttest_score')::integer else posttest_score end,
+    screens_time = case when p_patch ? 'screens_time'
+      then p_patch->'screens_time' else screens_time end,
+    lessons_completed = case when p_patch ? 'lessons_completed'
+      then (p_patch->>'lessons_completed')::boolean else lessons_completed end,
+    scenarios_attempted = case when p_patch ? 'scenarios_attempted'
+      then (p_patch->>'scenarios_attempted')::integer else scenarios_attempted end,
+    completed_at = case when p_patch ? 'completed_at'
+      then (p_patch->>'completed_at')::timestamptz else completed_at end
+  where session_id = p_session_id and session_secret = p_session_secret;
+
+  get diagnostics updated = row_count;
+  return updated > 0;
+end;
+$$;
+
+revoke all    on function public.update_participant(text, text, jsonb) from public;
+grant execute on function public.update_participant(text, text, jsonb) to anon, authenticated;
 
 -- ---------------------------------------------------------------------------
 -- RPC: get_participant_progress

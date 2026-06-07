@@ -41,24 +41,15 @@ console.log('[simulate] register_participant', {
   error: rpc.error?.message ?? null,
 })
 
-const patch = await fetch(
-  `${url}/rest/v1/participants?session_id=eq.${encodeURIComponent(sessionId)}`,
-  {
-    method: 'PATCH',
-    headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-      'x-session-secret': sessionSecret,
-      Prefer: 'return=minimal,count=exact',
-    },
-    body: JSON.stringify({
-      pretest_answers: { sim_q1: 0 },
-      pretest_score: 1,
-    }),
-  }
-)
+const patch = await sb.rpc('update_participant', {
+  p_session_id: sessionId,
+  p_session_secret: sessionSecret,
+  p_patch: {
+    pretest_answers: { sim_q1: 0 },
+    pretest_score: 1,
+  },
+})
 console.log('[simulate] savePretest', {
-  status: patch.status,
-  contentRange: patch.headers.get('content-range'),
+  data: patch.data,
+  error: patch.error?.message ?? null,
 })
