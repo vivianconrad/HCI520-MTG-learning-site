@@ -13,10 +13,13 @@ export default function GateNotice() {
   }
 
   return (
-    <div className="gate-notice" role="status">
-      <p className="gate-notice__text">{notice}</p>
+    <div className="gate-notice" role="status" aria-live="polite">
+      <div className="gate-notice__content">
+        <p className="gate-notice__title">Study path reminder</p>
+        <p className="gate-notice__text">{notice}</p>
+      </div>
       <button type="button" className="gate-notice__dismiss" onClick={dismiss}>
-        Dismiss
+        Got it
       </button>
     </div>
   )

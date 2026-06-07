@@ -23,6 +23,33 @@ button.lesson-nav__gate-hint {
   outline-offset: 2px;
 }
 
+.lesson-nav__gate-hint--attention {
+  border-color: var(--color-gold);
+  background: rgb(201 168 76 / 16%);
+  animation: lesson-gate-attention 0.45s ease-in-out 2;
+}
+
+@keyframes lesson-gate-attention {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lesson-nav__gate-hint--attention {
+    animation: none;
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
 .lesson-nav__ready-hint {
   margin: 0;
   padding: 0.65rem 0.85rem;

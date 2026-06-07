@@ -142,7 +142,12 @@ export default function TestQuestionFlow({
           layout={question.imageLayout}
         />
       )}
-      <div className="pretest__options" role="radiogroup" aria-labelledby={questionHeadingId}>
+      <div
+        className="pretest__options"
+        role="radiogroup"
+        aria-labelledby={questionHeadingId}
+        aria-required="true"
+      >
         {question.options.map((option, index) => {
           const isSelected = selectedIndex === index
           return (

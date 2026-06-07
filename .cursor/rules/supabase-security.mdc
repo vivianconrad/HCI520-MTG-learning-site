@@ -1,0 +1,45 @@
+---
+description: Supabase RLS, RPC-only writes, session_secret, and answer-key boundaries
+globs: src/lib/db.js,src/lib/supabase.js,src/lib/questionKeys.js,src/data/**,supabase/**
+alwaysApply: false
+---
+
+# Supabase Security
+
+## Participant data
+
+- Table: `participants` — research rows keyed by `session_id` + `session_secret`
+- **Deny SELECT** for anon in production — browser must not read cohort rows
+- **No open anon INSERT** — create via `register_participant` RPC only
+- **No REST PATCH** — PostgreSQL UPDATE needs row visibility; use `update_participant` RPC
+
+## Client write pattern (`src/lib/db.js`)
+
+```js
+// ✅ RPC with session credentials
+await supabase.rpc('update_participant', {
+  p_session_id: sessionId,
+  p_session_secret: sessionSecret,
+  p_patch: { pretest_score: score },
+})
+
+// ❌ Direct table insert/update
+await supabase.from('participants').insert(...)
+await supabase.from('participants').update(...).eq('session_id', id)
+```
+
+- Every save function requires both `sessionId` and `sessionSecret`
+- `attachAnswerKeys()` adds `correctIndex` only when registering questions server-side
+- On 0 rows updated: check RPC deployment (`supabase/setup.sql`) and matching `session_secret`
+
+## Answer keys
+
+- `questionBank.js` — shown during tests; **no** `correctIndex`
+- `questionAnswerKeys.js` — lazy-loaded via `questionKeys.js` for save/results only
+- Do not import answer keys into PreTest/PostTest screens or test UI components
+
+## Secrets & instructor
+
+- Never commit `.env.local`; use `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+- Do not add permissive anon SELECT for `/instructor` — use Supabase Table Editor for exports
+- Verify with `npm run verify:db` after RLS/RPC changes

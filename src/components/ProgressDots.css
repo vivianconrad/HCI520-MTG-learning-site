@@ -6,6 +6,49 @@
   margin-top: 16px;
 }
 
+.progress-dots__phases {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.progress-dots__phase {
+  flex: 1 1 auto;
+  min-width: 3.5rem;
+  padding: 4px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--color-gold-muted);
+  opacity: 0.55;
+  text-align: center;
+}
+
+.progress-dots__phase--complete {
+  opacity: 0.85;
+  background: rgb(201 168 76 / 12%);
+}
+
+.progress-dots__phase--active {
+  opacity: 1;
+  border-color: var(--color-gold);
+  background: rgb(201 168 76 / 18%);
+}
+
+.progress-dots__phase-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.progress-dots__phase--active .progress-dots__phase-label {
+  color: var(--color-text-dark);
+  font-weight: 600;
+}
+
 .progress-dots__label {
   font-family: var(--font-body);
   font-size: 13px;

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useConfirm } from '../context/useConfirm.js'
 import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import './LessonActions.css'
@@ -19,6 +20,7 @@ export default function LessonActions({
   onGateBlocked,
 }) {
   const confirm = useConfirm()
+  const [gateAttention, setGateAttention] = useState(false)
   const hintId = `${classPrefix}-gate-hint`
   const readyId = `${classPrefix}-ready-hint`
   const visibleGateHint = !canProceed && gateMessage ? gateMessage : ''
@@ -36,6 +38,9 @@ export default function LessonActions({
 
   function handleNext() {
     if (!canProceed) {
+      setGateAttention(true)
+      onGateBlocked?.()
+      window.setTimeout(() => setGateAttention(false), 1200)
       return
     }
     onNext()
@@ -87,13 +92,18 @@ export default function LessonActions({
               <button
                 type="button"
                 id={hintId}
-                className="lesson-nav__gate-hint"
+                className={`lesson-nav__gate-hint${gateAttention ? ' lesson-nav__gate-hint--attention' : ''}`}
                 onClick={handleGateHintActivate}
               >
                 {visibleGateHint}
               </button>
             ) : (
-              <p id={hintId} className="lesson-nav__gate-hint" role="status" aria-live="polite">
+              <p
+                id={hintId}
+                className={`lesson-nav__gate-hint${gateAttention ? ' lesson-nav__gate-hint--attention' : ''}`}
+                role="status"
+                aria-live="polite"
+              >
                 {visibleGateHint}
               </p>
             )
@@ -109,7 +119,7 @@ export default function LessonActions({
               !canProceed ? ` ${classPrefix}__button--next-blocked` : ''
             }${onReview ? ` ${classPrefix}__button--stacked` : ''}`}
             onClick={handleNext}
-            disabled={!canProceed}
+            aria-disabled={!canProceed}
             aria-describedby={
               visibleGateHint ? hintId : visibleReadyMessage ? readyId : undefined
             }

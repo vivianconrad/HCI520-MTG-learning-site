@@ -100,6 +100,16 @@
   top: 0.35em;
 }
 
+.consent__link {
+  color: var(--color-navy);
+  font-weight: 600;
+  text-underline-offset: 2px;
+}
+
+.consent__link:hover {
+  color: var(--color-gold-on-parchment);
+}
+
 .consent__closing {
   font-family: var(--font-body);
   font-size: 14px;

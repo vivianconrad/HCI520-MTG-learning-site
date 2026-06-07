@@ -25,11 +25,12 @@ export default function ConfirmDialog({
   }, [onCancel])
 
   return (
-    <div className="confirm-dialog" role="presentation">
+    <div className="confirm-dialog">
       <button
         type="button"
         className="confirm-dialog__backdrop"
         aria-label="Close dialog"
+        tabIndex={-1}
         onClick={onCancel}
       />
       <div

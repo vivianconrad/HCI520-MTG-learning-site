@@ -16,6 +16,14 @@ export function getProgressPhaseLabel(activeIndex) {
   return phase?.label ?? 'Progress'
 }
 
+/** Which phase segment (0–4) is active for the compact progress bar. */
+export function getProgressPhaseIndex(activeIndex) {
+  const index = PROGRESS_PHASE_RANGES.findIndex(
+    ({ from, to }) => activeIndex >= from && activeIndex <= to
+  )
+  return index >= 0 ? index : 0
+}
+
 export const PROGRESS = {
   CONSENT: 0,
   WELCOME: 1,
@@ -33,4 +41,14 @@ export const PROGRESS = {
   POSTTEST: 13,
   CALCULATING: 14,
   RESULTS: 15,
+}
+
+/** Step within the Learn phase (lesson intro through lesson complete), or null outside Learn. */
+export function getLearnPhaseStep(activeIndex) {
+  const { LESSON_INTRO, LESSON_COMPLETE } = PROGRESS
+  if (activeIndex < LESSON_INTRO || activeIndex > LESSON_COMPLETE) return null
+  return {
+    step: activeIndex - LESSON_INTRO + 1,
+    total: LESSON_COMPLETE - LESSON_INTRO + 1,
+  }
 }

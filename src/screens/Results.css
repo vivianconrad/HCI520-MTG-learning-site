@@ -424,7 +424,18 @@
   font-size: 16px;
   color: var(--color-text-dark);
   text-align: center;
+  margin: 0 0 12px;
+}
+
+.results__empty-hint {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  text-align: center;
   margin: 0 0 24px;
+  max-width: 32rem;
+  margin-inline: auto;
 }
 
 .results__empty-actions {

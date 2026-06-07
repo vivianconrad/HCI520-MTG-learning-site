@@ -31,7 +31,7 @@ const selectedQuestions = Array.from({ length: 10 }, (_, index) => ({
 }))
 
 const rpc = await sb.rpc('register_participant', {
-  p_participant_id: nanoid(10),
+  p_participant_id: sessionId,
   p_session_id: sessionId,
   p_session_secret: sessionSecret,
   p_selected_questions: selectedQuestions,

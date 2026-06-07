@@ -22,6 +22,7 @@ import { LESSON_4_PATH, PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.j
 import { getResultsEmptyContent } from '../lib/resultsEmptyState.js'
 import answerKeys from '../data/questionAnswerKeys.js'
 import { saveScreenTime } from '../lib/db.js'
+import { downloadParticipantExport } from '../lib/participantExport.js'
 import { getQuestionExplanation } from '../lib/questionExplanations.js'
 import { useConfirm } from '../context/useConfirm.js'
 import { START_OVER_CONFIRM_MESSAGE, START_OVER_CONFIRM_TITLE } from '../lib/lessonNav.js'
@@ -139,6 +140,10 @@ export default function Results({ session }) {
     window.setTimeout(() => setCopiedSummary(false), 2000)
   }
 
+  function handleDownloadExport() {
+    downloadParticipantExport(session)
+  }
+
   async function handleStartOver() {
     if (
       !(await confirm(START_OVER_CONFIRM_MESSAGE, {
@@ -152,6 +157,13 @@ export default function Results({ session }) {
 
   if (!hasTestData || !scores) {
     const emptyContent = getResultsEmptyContent(session)
+    const progressIndex = session.posttestCompleted
+      ? PROGRESS.RESULTS
+      : session.lessonsCompleted
+        ? PROGRESS.POSTTEST_PREP
+        : session.pretestCompleted
+          ? PROGRESS.LESSON_INTRO
+          : PROGRESS.WELCOME
 
     function handleEmptyPrimary() {
       if (emptyContent.primary.path) {
@@ -174,6 +186,9 @@ export default function Results({ session }) {
         <div className="results__frame">
           <h1 className="results__empty-heading">{emptyContent.heading}</h1>
           <p className="results__empty">{emptyContent.message}</p>
+          {emptyContent.hint ? (
+            <p className="results__empty-hint">{emptyContent.hint}</p>
+          ) : null}
           <div className="results__empty-actions">
             <button type="button" className="results__empty-button" onClick={handleEmptyPrimary}>
               {emptyContent.primary.label}
@@ -188,6 +203,8 @@ export default function Results({ session }) {
               </button>
             ) : null}
           </div>
+          <SessionRecoveryGuide className="results__recovery" />
+          <ProgressDots activeIndex={progressIndex} stepLabel="Results pending" />
         </div>
       </PageLayout>
     )
@@ -480,6 +497,9 @@ export default function Results({ session }) {
         <div className="results__actions">
           <button type="button" className="results__action-button" onClick={handleCopySummary}>
             <span aria-live="polite">{copiedSummary ? 'Summary copied!' : 'Copy results summary'}</span>
+          </button>
+          <button type="button" className="results__action-button" onClick={handleDownloadExport}>
+            Download my data (JSON)
           </button>
           <button
             type="button"
