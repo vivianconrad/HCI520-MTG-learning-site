@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFocusTrap } from '../hooks/useFocusTrap.js'
 import { useNavigate } from 'react-router-dom'
 import LessonActions from '../components/LessonActions.jsx'
@@ -10,6 +10,52 @@ import { PROGRESS } from '../components/progressConstants.js'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { cardImage } from '../assets/cards/index.js'
 import './CardTypes.css'
+
+const EXAMPLE_COUNT_MIN = 3
+const EXAMPLE_COUNT_MAX = 4
+
+function isExplanationExample(example) {
+  return example.src.includes('-explanation')
+}
+
+function shuffleArray(array) {
+  const copy = [...array]
+  for (let i = copy.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[copy[i], copy[j]] = [copy[j], copy[i]]
+  }
+  return copy
+}
+
+function pickRandomExamples(allExamples) {
+  const fixedExamples = allExamples.filter(isExplanationExample)
+  const randomPool = allExamples.filter((example) => !isExplanationExample(example))
+  const targetTotal =
+    EXAMPLE_COUNT_MIN +
+    Math.floor(Math.random() * (EXAMPLE_COUNT_MAX - EXAMPLE_COUNT_MIN + 1))
+  const randomCount = Math.max(0, targetTotal - fixedExamples.length)
+  const randomPicks = shuffleArray(randomPool).slice(0, randomCount)
+
+  return [...fixedExamples, ...randomPicks]
+}
+
+function buildOverlaySlides(examples) {
+  const fixedExamples = examples.filter(isExplanationExample)
+  const otherExamples = examples.filter((example) => !isExplanationExample(example))
+  const slides = []
+
+  if (fixedExamples.length > 1) {
+    slides.push({ type: 'group', examples: fixedExamples })
+  } else if (fixedExamples.length === 1) {
+    slides.push({ type: 'single', example: fixedExamples[0] })
+  }
+
+  for (const example of otherExamples) {
+    slides.push({ type: 'single', example })
+  }
+
+  return slides
+}
 
 const CARD_TYPES = [
   {
@@ -441,6 +487,12 @@ const CARD_TYPES = [
   },
 ]
 
+function createDisplayExamplesMap() {
+  return Object.fromEntries(
+    CARD_TYPES.map((type) => [type.id, pickRandomExamples(type.examples)])
+  )
+}
+
 function CardTypeTimingTag({ timing }) {
   return (
     <span className="card-types__tag">
@@ -507,7 +559,7 @@ function CardTypeDetails({ description, details, variant = 'grid' }) {
   )
 }
 
-function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
+function CardTypeItem({ type, examples, hasBeenViewed, onSeeCard }) {
   return (
     <article
       className={[
@@ -520,7 +572,7 @@ function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
     >
       <h3 className="card-types__type-name">{type.name}</h3>
       <div className="card-types__examples" aria-label={`${type.name} examples`}>
-        {type.examples.map((example) => (
+        {examples.map((example) => (
           <button
             key={example.label}
             type="button"
@@ -552,18 +604,28 @@ export default function CardTypes({ session }) {
   const [isClosing, setIsClosing] = useState(false)
   const [seenIds, setSeenIds] = useState(() => new Set())
   const [activeExampleIndex, setActiveExampleIndex] = useState(0)
+  const [displayExamplesByType, setDisplayExamplesByType] = useState(createDisplayExamplesMap)
   const overlayPanelRef = useRef(null)
 
   const activeType = CARD_TYPES.find((t) => t.id === overlayId)
+  const activeExamples = overlayId ? displayExamplesByType[overlayId] ?? [] : []
+  const overlaySlides = useMemo(() => buildOverlaySlides(activeExamples), [activeExamples])
   const overlayOpen = Boolean(activeType)
 
   useFocusTrap(overlayPanelRef, overlayOpen)
   const allViewed = seenIds.size === CARD_TYPES.length
 
   const openOverlay = useCallback((id) => {
+    const type = CARD_TYPES.find((entry) => entry.id === id)
+    if (!type) return
+
     setIsClosing(false)
     setOverlayId(id)
     setActiveExampleIndex(0)
+    setDisplayExamplesByType((prev) => ({
+      ...prev,
+      [id]: pickRandomExamples(type.examples),
+    }))
     setSeenIds((prev) => {
       if (prev.has(id)) return prev
       const next = new Set(prev)
@@ -597,22 +659,20 @@ export default function CardTypes({ session }) {
         return
       }
 
-      if (!activeType || activeType.examples.length <= 1) return
+      if (!activeType || overlaySlides.length <= 1) return
 
       if (event.key === 'ArrowRight') {
-        setActiveExampleIndex((prev) => (prev + 1) % activeType.examples.length)
+        setActiveExampleIndex((prev) => (prev + 1) % overlaySlides.length)
       }
 
       if (event.key === 'ArrowLeft') {
-        setActiveExampleIndex(
-          (prev) => (prev - 1 + activeType.examples.length) % activeType.examples.length
-        )
+        setActiveExampleIndex((prev) => (prev - 1 + overlaySlides.length) % overlaySlides.length)
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [overlayId, closeOverlay, activeType])
+  }, [overlayId, closeOverlay, activeType, overlaySlides.length])
 
   return (
     <PageLayout title="Lesson 2 · Card Types" className="card-types" showKeywordDictionary>
@@ -637,6 +697,7 @@ export default function CardTypes({ session }) {
             <CardTypeItem
               key={type.id}
               type={type}
+              examples={displayExamplesByType[type.id] ?? type.examples}
               hasBeenViewed={seenIds.has(type.id)}
               onSeeCard={openOverlay}
             />
@@ -688,22 +749,23 @@ export default function CardTypes({ session }) {
           <div
             ref={overlayPanelRef}
             className={`card-types__overlay-card${
-              activeType.examples.length === 1 ? ' card-types__overlay-card--single' : ''
+              overlaySlides.length === 1 ? ' card-types__overlay-card--single' : ''
             }${activeType.details?.length ? ' card-types__overlay-card--detailed' : ''}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="card-types-overlay-title"
           >
             {(() => {
-              const activeExample =
-                activeType.examples[activeExampleIndex] ?? activeType.examples[0]
-              const canCycle = activeType.examples.length > 1
+              const activeSlide = overlaySlides[activeExampleIndex] ?? overlaySlides[0]
+              const canCycle = overlaySlides.length > 1
               const goToNext = () =>
-                setActiveExampleIndex((prev) => (prev + 1) % activeType.examples.length)
+                setActiveExampleIndex((prev) => (prev + 1) % overlaySlides.length)
               const goToPrevious = () =>
-                setActiveExampleIndex(
-                  (prev) => (prev - 1 + activeType.examples.length) % activeType.examples.length
-                )
+                setActiveExampleIndex((prev) => (prev - 1 + overlaySlides.length) % overlaySlides.length)
+              const slideKey =
+                activeSlide?.type === 'group'
+                  ? activeSlide.examples.map((example) => example.label).join('|')
+                  : activeSlide?.example.label
 
               return (
                 <>
@@ -716,25 +778,53 @@ export default function CardTypes({ session }) {
                     ×
                   </button>
                   <div className="card-types__overlay-gallery">
-                    <figure key={activeExample.label} className="card-types__overlay-figure">
-                      <div className="card-types__overlay-image">
-                        <CardThumbnail
-                          src={activeExample.src}
-                          alt={`${activeExample.label}, ${activeType.name} card`}
-                          className="card-types__thumbnail-image"
-                        />
-                      </div>
-                      <figcaption className="card-types__overlay-caption">
-                        <span className="card-types__overlay-caption-name">
-                          {activeExample.label}
-                        </span>
-                        {activeExample.role && (
-                          <span className="card-types__overlay-caption-role">
-                            {activeExample.role}
-                          </span>
-                        )}
-                      </figcaption>
-                    </figure>
+                    {activeSlide?.type === 'group' ? (
+                      <figure
+                        key={slideKey}
+                        className="card-types__overlay-figure card-types__overlay-figure--group"
+                      >
+                        <div className="card-types__overlay-image-group">
+                          {activeSlide.examples.map((example) => (
+                            <div key={example.label} className="card-types__overlay-image">
+                              <CardThumbnail
+                                src={example.src}
+                                alt={`${example.label}, ${activeType.name} card`}
+                                className="card-types__thumbnail-image"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        <figcaption className="card-types__overlay-caption">
+                          {activeSlide.examples.map((example) => (
+                            <span key={example.label} className="card-types__overlay-caption-name">
+                              {example.label}
+                            </span>
+                          ))}
+                        </figcaption>
+                      </figure>
+                    ) : (
+                      activeSlide?.type === 'single' && (
+                        <figure key={slideKey} className="card-types__overlay-figure">
+                          <div className="card-types__overlay-image">
+                            <CardThumbnail
+                              src={activeSlide.example.src}
+                              alt={`${activeSlide.example.label}, ${activeType.name} card`}
+                              className="card-types__thumbnail-image"
+                            />
+                          </div>
+                          <figcaption className="card-types__overlay-caption">
+                            <span className="card-types__overlay-caption-name">
+                              {activeSlide.example.label}
+                            </span>
+                            {activeSlide.example.role && (
+                              <span className="card-types__overlay-caption-role">
+                                {activeSlide.example.role}
+                              </span>
+                            )}
+                          </figcaption>
+                        </figure>
+                      )
+                    )}
                   </div>
                   {canCycle && (
                     <div className="card-types__overlay-controls">
@@ -747,7 +837,7 @@ export default function CardTypes({ session }) {
                         Previous
                       </button>
                       <span className="card-types__overlay-count" aria-live="polite">
-                        {activeExampleIndex + 1} / {activeType.examples.length}
+                        {activeExampleIndex + 1} / {overlaySlides.length}
                       </span>
                       <button
                         type="button"

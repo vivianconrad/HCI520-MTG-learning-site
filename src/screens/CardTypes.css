@@ -380,6 +380,28 @@
   gap: 8px;
 }
 
+.card-types__overlay-image-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.card-types__overlay-figure--group .card-types__overlay-image {
+  width: min(36vw, 220px);
+  height: min(50vw, 308px);
+}
+
+.card-types__overlay-figure--group .card-types__overlay-caption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 16px;
+  max-width: min(70vw, 480px);
+}
+
 .card-types__overlay-caption {
   display: flex;
   flex-direction: column;
