@@ -171,13 +171,13 @@
 
 @media (max-width: 640px) {
   .keyword-dictionary__trigger {
-    bottom: 88px;
-    right: 12px;
+    bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+    right: max(12px, env(safe-area-inset-right, 0px));
     font-size: 0.875rem;
     padding: 8px 12px;
   }
 
   .page-layout--with-keywords .page-layout__content-frame {
-    padding-bottom: 88px;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
   }
 }

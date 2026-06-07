@@ -18,8 +18,7 @@
 
 .turn-structure__breadcrumb {
   font-family: var(--font-display);
-  font-size: 13px;
-  color: var(--color-gold-on-parchment);
+  font-size: 14px;
   letter-spacing: 0.08em;
   margin: 0 0 16px;
   text-align: center;
@@ -60,15 +59,14 @@
   flex-wrap: wrap;
 }
 
-.turn-structure__phase-nav .turn-structure__button:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+.turn-structure__phase-nav .turn-structure__button {
+  min-height: var(--touch-target-min);
+  padding: 12px 24px;
 }
 
 .turn-structure__hint {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-gold-on-parchment);
   text-align: center;
   margin: -8px 0 16px;
   line-height: 1.4;
@@ -81,6 +79,23 @@
   margin-bottom: 24px;
   overflow-x: auto;
   padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.turn-structure__timeline-hint {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .turn-structure__timeline-hint {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--color-gold-on-parchment);
+    text-align: center;
+    margin: -8px 0 12px;
+    line-height: 1.35;
+  }
 }
 
 .turn-structure__connector {

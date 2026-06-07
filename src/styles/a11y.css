@@ -8,3 +8,45 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Secondary text on parchment — breadcrumbs, hints, progress (≥4.5:1 on #f5e6c8) */
+.pretest__breadcrumb,
+.pretest__intro-note,
+.pretest__keyboard-hint,
+.pretest__option-key,
+.turn-structure__breadcrumb,
+.turn-structure__hint,
+.turn-structure__timeline-hint,
+.turn-structure__progress,
+.card-anatomy__hint,
+.card-anatomy__info-placeholder,
+.card-anatomy__progress,
+.card-types__progress,
+.card-types__hint,
+.lesson-nav__gate-hint {
+  color: var(--color-text-secondary);
+}
+
+/* Disabled lesson controls — explicit colors instead of opacity (preserves contrast) */
+.pretest__button:disabled,
+.turn-structure__phase-nav .turn-structure__button:disabled,
+.card-anatomy__button--next:disabled,
+.card-types__button--next:disabled,
+.welcome__button:disabled,
+.lesson-intro__button:disabled {
+  opacity: 1;
+  color: var(--color-disabled-text);
+  border-color: var(--color-gold-muted);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+.pretest__button:disabled:hover,
+.turn-structure__phase-nav .turn-structure__button:disabled:hover,
+.card-anatomy__button--next:disabled:hover,
+.card-types__button--next:disabled:hover,
+.welcome__button:disabled:hover,
+.lesson-intro__button:disabled:hover {
+  background: transparent;
+  color: var(--color-disabled-text);
+}

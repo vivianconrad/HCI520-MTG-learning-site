@@ -1,11 +1,22 @@
 .calculating {
   min-height: 100vh;
-  height: 100vh;
+  min-height: 100dvh;
   background: var(--color-navy);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
+}
+
+@media (max-width: 640px) {
+  .calculating {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-top: max(16px, env(safe-area-inset-top, 0px));
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
 }
 
 .calculating__frame {

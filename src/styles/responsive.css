@@ -1,4 +1,26 @@
 @media (max-width: 640px) {
+  /* Long lesson pages: start at top instead of vertically centering in the viewport */
+  .turn-structure,
+  .card-anatomy,
+  .card-types,
+  .consent,
+  .intro,
+  .lesson-complete,
+  .lesson-intro,
+  .pretest,
+  .putting-together,
+  .results,
+  .welcome,
+  .what-is-mtg {
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 100dvh;
+    padding-top: max(16px, env(safe-area-inset-top, 0px));
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
   [class*='__frame'] {
     padding: 32px 20px !important;
   }
@@ -16,6 +38,36 @@
   [class*='__actions'] [class*='__button'] {
     width: 100%;
     text-align: center;
+    min-height: var(--touch-target-min);
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .pretest__option {
+    min-height: var(--touch-target-min);
+  }
+
+  .turn-structure__phase-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .turn-structure__phase-nav .turn-structure__button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .turn-structure__timeline {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .turn-structure__node {
+    font-size: 13px;
+    padding: 10px 12px;
+    min-height: var(--touch-target-min);
+    scroll-snap-align: center;
   }
 
   .card-anatomy__card-wrap {
@@ -29,13 +81,28 @@
     font-size: 14px;
   }
 
-  .card-anatomy__marker--active .card-anatomy__marker-tooltip {
-    opacity: 1;
+  .card-anatomy__marker--active .card-anatomy__marker-tooltip,
+  .card-anatomy__marker:hover .card-anatomy__marker-tooltip {
+    opacity: 0;
   }
 
-  .turn-structure__node {
-    font-size: 11px;
-    padding: 8px 10px;
+  /* Side tooltips clip on narrow screens; info panel carries the label */
+  .card-anatomy__marker--tip-left .card-anatomy__marker-tooltip,
+  .card-anatomy__marker--tip-right .card-anatomy__marker-tooltip {
+    display: none;
+  }
+
+  .card-anatomy__marker--tip-above .card-anatomy__marker-tooltip,
+  .card-anatomy__marker--tip-below .card-anatomy__marker-tooltip {
+    white-space: normal;
+    max-width: min(140px, 42vw);
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  .card-anatomy__marker--active.card-anatomy__marker--tip-above .card-anatomy__marker-tooltip,
+  .card-anatomy__marker--active.card-anatomy__marker--tip-below .card-anatomy__marker-tooltip {
+    opacity: 1;
   }
 }
 

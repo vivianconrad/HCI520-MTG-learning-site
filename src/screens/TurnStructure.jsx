@@ -165,6 +165,8 @@ export default function TurnStructure({ session }) {
           ))}
         </div>
 
+        <p className="turn-structure__timeline-hint">Swipe the timeline to see all five phases.</p>
+
         <p className="turn-structure__progress" aria-live="polite">
           {allPhasesExplored
             ? 'All five phases explored.'

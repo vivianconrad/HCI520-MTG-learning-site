@@ -3,6 +3,9 @@
   --color-gold: #c9a84c;
   --color-gold-muted: #a89060;
   --color-gold-on-parchment: #645319;
+  --color-text-secondary: #524010;
+  --color-disabled-text: #4a4540;
+  --touch-target-min: 44px;
   --color-parchment: #f5e6c8;
   --color-parchment-dark: #e8d5a3;
   --color-text-dark: #1a1a2e;

@@ -14,7 +14,7 @@
   text-decoration: none;
 }
 
-.skip-link:focus {
+.skip-link:focus-visible {
   left: 16px;
   outline: 2px solid var(--color-text-light);
   outline-offset: 2px;

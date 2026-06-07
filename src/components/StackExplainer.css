@@ -11,6 +11,18 @@
   margin-top: 16px;
 }
 
+@media (max-width: 640px) {
+  .stack-explainer {
+    margin-top: 16px;
+    padding: 16px;
+  }
+
+  .stack-explainer__paragraph,
+  .stack-explainer__list {
+    font-size: 14px;
+  }
+}
+
 .stack-explainer--brief {
   margin-top: 0;
   margin-bottom: 16px;

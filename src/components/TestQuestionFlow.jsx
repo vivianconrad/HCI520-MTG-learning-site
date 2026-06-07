@@ -31,7 +31,7 @@ export default function TestQuestionFlow({
   const isLast = currentIndex === total - 1
   const isFirst = currentIndex === 0
   const questionHeadingId = `test-question-${question.id}`
-  const progressAnnouncement = `${testLabel} · Question ${currentIndex + 1} of ${total}`
+  const progressAnnouncement = `Question ${currentIndex + 1} of ${total}`
   const focusableOptionIndex = selectedIndex ?? 0
 
   const handleNext = useCallback(() => {
@@ -113,14 +113,15 @@ export default function TestQuestionFlow({
 
   return (
     <div ref={frameRef} className="pretest__frame" tabIndex={-1} onKeyDown={handleFrameKeyDown}>
+      <h1 className="pretest__title">{testLabel}</h1>
       <p className="pretest__breadcrumb" aria-live="polite" aria-atomic="true">
         {progressAnnouncement}
       </p>
       {introNote && <p className="pretest__intro-note">{introNote}</p>}
       {/* Plain text only; no inline keyword highlights during assessment. */}
-      <p id={questionHeadingId} className="pretest__question">
+      <h2 id={questionHeadingId} className="pretest__question">
         {question.question}
-      </p>
+      </h2>
       {question.hasImage && (
         <QuestionCardImage
           src={getQuestionImage(question.imageKey)}
