@@ -1,1 +1,0 @@
-import{a as e}from"./rolldown-runtime-Cyuzqnbw.js";import{d as t}from"./vendor-react-dVMwrdUK.js";var n=e(t(),1);function r(e,t){let{recordScreenEnter:r,recordScreenExit:i}=e;(0,n.useEffect)(()=>(r(t),()=>i(t)),[t,r,i])}export{r as t};
