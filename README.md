@@ -99,7 +99,7 @@ Research data is saved incrementally to the `participants` table:
 **Setup**
 
 1. Run **`supabase/setup.sql`** in the [Supabase SQL editor](https://supabase.com/dashboard) for a new project (table, RLS, RPCs, validation triggers).
-2. If participant rows are created but saves fail with “stored in this browser only”, run **`supabase/fix-participants-rls.sql`** — header-based UPDATE RLS does not work on Supabase Cloud (same script as `supabase/migrations/fix-update-rls-after-security.sql`).
+2. If participant rows are created but saves fail with “stored in this browser only”, run **`supabase/fix-participants-rls.sql`** (deploys `update_participant` RPC and fixes UPDATE RLS). Same RLS section lives in `supabase/migrations/fix-update-rls-after-security.sql`.
 3. Verify with `node scripts/verify-participants-db.mjs` — it should print `All participant security checks passed.`
 4. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
 5. Rebuild (`npm run build`) before deploying so env vars are embedded for GitHub Pages.
@@ -124,7 +124,7 @@ For existing Supabase projects that already have a `participants` table without 
 ## Security
 
 - The Supabase **anon key** is public by design; row-level security (RLS) protects participant data.
-- Participant **updates** are scoped by `session_id` in the PATCH filter; `session_secret` is verified server-side in RPCs (`register_participant`, `get_participant_progress`), not via custom headers (Supabase Cloud strips those).
+- Participant **updates** use the `update_participant` RPC (security definer), which validates `session_secret` server-side and bypasses deny-SELECT RLS. REST PATCH is not used.
 - Run **`supabase/setup.sql`** in production so scores are recomputed from answers, progress flags are validated, and participant rows are created via RPC (not open INSERT).
 - Verify production with **`node scripts/verify-participants-db.mjs`** (deny SELECT, deny direct INSERT, RPC + PATCH + score rejection).
 - Test questions in the client bundle omit answer keys; keys are loaded only when saving scores or viewing results.
