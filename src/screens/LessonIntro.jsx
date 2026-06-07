@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import KeywordTooltip from '../components/KeywordTooltip.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
@@ -76,6 +77,7 @@ export default function LessonIntro({ session }) {
       showKeywordDictionary
     >
       <div className="lesson-intro__frame page-layout__content-frame">
+        <BrowserBackNotice />
         <p className="lesson-intro__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="lesson-intro__heading">What comes next</h1>
         <hr className="lesson-intro__rule" aria-hidden="true" />
@@ -96,9 +98,11 @@ export default function LessonIntro({ session }) {
         </div>
 
         <fieldset className="lesson-intro__curiosity">
-          <legend className="lesson-intro__curiosity-legend">What are you most curious about?</legend>
+          <legend className="lesson-intro__curiosity-legend">
+            What are you most curious about? (for the study)
+          </legend>
           <p className="lesson-intro__curiosity-note">
-            Pick one to personalize your path.
+            Pick one so we know your interests. You will still complete every lesson in order.
           </p>
           <div className="lesson-intro__curiosity-options">
             {CURIOSITY_OPTIONS.map((option) => (
@@ -121,8 +125,8 @@ export default function LessonIntro({ session }) {
         {selectedOption ? (
           <p className="lesson-intro__curiosity-ack" role="status">
             {selectedOption.lessonNum
-              ? `Got it. We will emphasize ${selectedOption.label.toLowerCase()} when we reach Lesson ${selectedOption.lessonNum}.`
-              : 'Got it. We will walk through every lesson in the guide order.'}
+              ? `Got it. We noted your interest in ${selectedOption.label.toLowerCase()}. Lesson ${selectedOption.lessonNum} covers that topic, and you will still go through every lesson.`
+              : 'Got it. We noted that you prefer the full guide. You will walk through every lesson in order.'}
           </p>
         ) : null}
 

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
@@ -13,6 +14,7 @@ export default function PretestComplete({ session }) {
   return (
     <PageLayout title="Pre-Test Complete · Learn to Play MTG" className="lesson-intro">
       <div className="lesson-intro__frame">
+        <BrowserBackNotice />
         <p className="lesson-intro__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="lesson-intro__heading">Pre-Test Complete</h1>
         <hr className="lesson-intro__rule" aria-hidden="true" />
@@ -23,8 +25,8 @@ export default function PretestComplete({ session }) {
             normal.
           </p>
           <p className="lesson-intro__paragraph">
-            Next up: pick what you are most curious about, a Magic overview, four lessons, and the
-            post-test with the same questions.
+            Next up: share what you are most curious about (for the study), a Magic overview, four
+            lessons in order, and the post-test with the same questions.
           </p>
         </div>
 

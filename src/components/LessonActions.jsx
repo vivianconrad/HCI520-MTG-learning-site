@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useConfirm } from '../context/useConfirm.js'
 import { LESSON_BACK_CONFIRM_MESSAGE, LESSON_BACK_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import './LessonActions.css'
@@ -19,9 +18,8 @@ export default function LessonActions({
   onGateBlocked,
 }) {
   const confirm = useConfirm()
-  const [gateHint, setGateHint] = useState('')
   const hintId = `${classPrefix}-gate-hint`
-  const visibleGateHint = canProceed ? '' : gateHint
+  const visibleGateHint = !canProceed && gateMessage ? gateMessage : ''
 
   async function handleBack() {
     if (
@@ -35,11 +33,9 @@ export default function LessonActions({
 
   function handleNext() {
     if (!canProceed) {
-      setGateHint(gateMessage)
       onGateBlocked?.()
       return
     }
-    setGateHint('')
     onNext()
   }
 
@@ -80,6 +76,11 @@ export default function LessonActions({
               <span className={`${classPrefix}__button-hint`}>{reviewHint}</span>
             </button>
           ) : null}
+          {visibleGateHint ? (
+            <p id={hintId} className="lesson-nav__gate-hint" role="status">
+              {visibleGateHint}
+            </p>
+          ) : null}
           <button
             type="button"
             className={`${classPrefix}__button ${classPrefix}__button--next${
@@ -99,11 +100,6 @@ export default function LessonActions({
           </button>
         </div>
       </div>
-      {visibleGateHint && (
-        <p id={hintId} className="lesson-nav__gate-hint" role="status">
-          {visibleGateHint}
-        </p>
-      )}
     </>
   )
 }

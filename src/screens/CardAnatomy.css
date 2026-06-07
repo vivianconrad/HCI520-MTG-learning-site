@@ -140,6 +140,26 @@
     0 2px 6px rgb(0 0 0 / 35%);
 }
 
+.card-anatomy__marker--missing .card-anatomy__callout-marker {
+  animation: card-anatomy-missing-pulse 1.4s ease-in-out infinite;
+  box-shadow:
+    0 0 0 3px rgb(184 150 78 / 0.45),
+    0 2px 8px rgb(0 0 0 / 45%);
+}
+
+@keyframes card-anatomy-missing-pulse {
+  0%,
+  100% {
+    border-color: var(--color-gold);
+    transform: scale(1);
+  }
+
+  50% {
+    border-color: var(--color-gold-on-parchment);
+    transform: scale(1.08);
+  }
+}
+
 .card-anatomy__marker-tooltip {
   position: absolute;
   padding: 4px 10px;

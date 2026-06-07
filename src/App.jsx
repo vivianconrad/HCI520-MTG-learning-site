@@ -17,6 +17,7 @@ const CardTypes = lazy(() => import('./screens/CardTypes.jsx'))
 const TurnStructure = lazy(() => import('./screens/TurnStructure.jsx'))
 const PuttingItTogether = lazy(() => import('./screens/PuttingItTogether.jsx'))
 const LessonComplete = lazy(() => import('./screens/LessonComplete.jsx'))
+const PostTestPrep = lazy(() => import('./screens/PostTestPrep.jsx'))
 const PostTest = lazy(() => import('./screens/PostTest.jsx'))
 const Calculating = lazy(() => import('./screens/Calculating.jsx'))
 const Results = lazy(() => import('./screens/Results.jsx'))
@@ -176,6 +177,17 @@ function App() {
                   require={['consent', 'rowReady', 'pretest']}
                   redirectIfPosttestComplete
                   element={<LessonComplete session={session} />}
+                />
+              }
+            />
+            <Route
+              path="/posttest-prep"
+              element={
+                <GuardedRoute
+                  session={session}
+                  require={['consent', 'rowReady', 'lessons']}
+                  redirectIfPosttestComplete
+                  element={<PostTestPrep />}
                 />
               }
             />

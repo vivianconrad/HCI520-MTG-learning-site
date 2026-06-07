@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
@@ -106,6 +107,10 @@ export default function PostTest({ session }) {
       {saveWarning ? (
         <div className="pretest__save-warning-block" role="alert">
           <p className="pretest__save-warning">{saveWarning}</p>
+          <p className="pretest__save-warning-detail">
+            If you continue without saving, your post-test answers will not be included in the
+            study data, but you can still view your results screen and review lesson content.
+          </p>
           <button
             type="button"
             className="pretest__button"
@@ -115,6 +120,7 @@ export default function PostTest({ session }) {
           </button>
         </div>
       ) : null}
+      <BrowserBackNotice />
       <TestQuestionFlow
         testLabel="Post-Test"
         progressIndex={PROGRESS.POSTTEST}

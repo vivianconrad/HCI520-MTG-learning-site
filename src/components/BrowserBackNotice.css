@@ -1,0 +1,22 @@
+.browser-back-notice {
+  margin: 0 0 1rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+  background: rgba(139, 105, 20, 0.06);
+  border: 1px solid rgba(139, 105, 20, 0.18);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.pretest .browser-back-notice {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lesson-intro .browser-back-notice,
+.calculating .browser-back-notice {
+  margin-bottom: 1.25rem;
+}

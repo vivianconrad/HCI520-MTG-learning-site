@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import LessonActions from '../components/LessonActions.jsx'
 import PageLayout from '../components/PageLayout.jsx'
@@ -96,7 +96,7 @@ function getMarkerModifier(position) {
 
 const INFO_PANEL_ID = 'card-anatomy-info-panel'
 
-function CardMarker({ callout, isActive, isSeen, onToggle }) {
+function CardMarker({ callout, isActive, isSeen, highlightMissing, onToggle }) {
   const { id, label, number, position, tipDir } = callout
 
   return (
@@ -105,8 +105,9 @@ function CardMarker({ callout, isActive, isSeen, onToggle }) {
         'card-anatomy__marker',
         getMarkerModifier(position),
         tipDir ? `card-anatomy__marker--tip-${tipDir}` : '',
-        isSeen ? 'card-anatomy__marker--seen' : '',
+        isSeen ? 'card-anatomy__marker--seen' : 'card-anatomy__marker--pending',
         isActive ? 'card-anatomy__marker--active' : '',
+        highlightMissing && !isSeen ? 'card-anatomy__marker--missing' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -114,6 +115,7 @@ function CardMarker({ callout, isActive, isSeen, onToggle }) {
     >
       <button
         type="button"
+        id={`card-anatomy-marker-${id}`}
         className="card-anatomy__callout-marker"
         aria-label={`${label}, part ${number} of ${CALLOUTS.length}`}
         aria-expanded={isActive}
@@ -135,8 +137,19 @@ export default function CardAnatomy({ session }) {
   useScreenTime(session, 'CardAnatomy')
   const [activeCallout, setActiveCallout] = useState(null)
   const [seenIds, setSeenIds] = useState(() => new Set())
+  const [highlightMissing, setHighlightMissing] = useState(false)
 
   const allExplored = seenIds.size === CALLOUTS.length
+
+  const handleGateBlocked = useCallback(() => {
+    setHighlightMissing(true)
+    const firstMissing = CALLOUTS.find((callout) => !seenIds.has(callout.id))
+    if (firstMissing) {
+      document
+        .getElementById(`card-anatomy-marker-${firstMissing.id}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [seenIds])
   const activeCalloutData = CALLOUTS.find((c) => c.id === activeCallout)
 
   function toggleCallout(id) {
@@ -187,6 +200,7 @@ export default function CardAnatomy({ session }) {
                 callout={callout}
                 isActive={activeCallout === callout.id}
                 isSeen={seenIds.has(callout.id)}
+                highlightMissing={highlightMissing}
                 onToggle={toggleCallout}
               />
             ))}
@@ -236,6 +250,7 @@ export default function CardAnatomy({ session }) {
           nextLabel="Continue to card types"
           canProceed={allExplored}
           gateMessage="Explore all six numbered markers on the card before continuing."
+          onGateBlocked={handleGateBlocked}
         />
 
         <ProgressDots activeIndex={PROGRESS.LESSON_1} />

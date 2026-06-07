@@ -11,6 +11,7 @@ export default function TestQuestionFlow({
   setAnswer,
   onComplete,
   introNote,
+  assessmentNote,
   lastButtonLabel,
 }) {
   const frameRef = useRef(null)
@@ -103,6 +104,7 @@ export default function TestQuestionFlow({
         {progressAnnouncement}
       </p>
       {introNote && <p className="pretest__intro-note">{introNote}</p>}
+      {assessmentNote && <p className="pretest__intro-note pretest__assessment-note">{assessmentNote}</p>}
       {/* Plain text only; no inline keyword highlights during assessment. */}
       <h2 id={questionHeadingId} className="pretest__question">
         {question.question}

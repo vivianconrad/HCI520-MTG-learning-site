@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import CopySessionId from '../components/CopySessionId.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
@@ -149,6 +150,7 @@ export default function Results({ session }) {
   return (
     <PageLayout title="Your Results · Learn to Play MTG" className="results">
       <div className="results__frame">
+        <BrowserBackNotice />
         <p className="results__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="results__heading">Your Results</h1>
         <hr className="results__rule" aria-hidden="true" />

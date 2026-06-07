@@ -212,3 +212,16 @@
   margin: 0;
   line-height: 1.45;
 }
+
+.pretest__save-warning-detail {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.pretest__assessment-note {
+  margin-top: 0;
+}

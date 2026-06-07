@@ -214,7 +214,7 @@ export default function LessonComplete({ session }) {
               <button
                 type="button"
                 className="lesson-complete__choice lesson-complete__choice--finish"
-                onClick={() => navigate(posttestCompleted ? '/results' : '/posttest')}
+                onClick={() => navigate(posttestCompleted ? '/results' : '/posttest-prep')}
               >
                 <span className="lesson-complete__choice-label">
                   {posttestCompleted ? 'View results' : 'Start post-test'}
@@ -222,7 +222,7 @@ export default function LessonComplete({ session }) {
                 <span className="lesson-complete__choice-hint">
                   {posttestCompleted
                     ? 'See how you did on the pre-test and post-test'
-                    : 'Answer the same questions again with what you learned'}
+                    : 'Review what to expect, then answer the same questions again'}
                 </span>
               </button>
             </div>

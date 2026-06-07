@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
@@ -135,6 +136,10 @@ export default function PreTest({ session }) {
       {saveWarning ? (
         <div className="pretest__save-warning-block" role="alert">
           <p className="pretest__save-warning">{saveWarning}</p>
+          <p className="pretest__save-warning-detail">
+            If you continue without saving, your answers will not be included in the study data, but
+            you can still finish the lessons and post-test.
+          </p>
           <button
             type="button"
             className="pretest__button"
@@ -144,6 +149,7 @@ export default function PreTest({ session }) {
           </button>
         </div>
       ) : null}
+      <BrowserBackNotice />
       <TestQuestionFlow
         testLabel="Pre-Test"
         progressIndex={PROGRESS.PRETEST}
@@ -152,6 +158,7 @@ export default function PreTest({ session }) {
         onComplete={handleComplete}
         lastButtonLabel="Continue"
         introNote="You have not been taught these topics yet. Answer with your best guess. Wrong answers are expected and help show what the lessons should cover."
+        assessmentNote="Gold-highlighted term definitions from the lessons are not available during the test."
       />
     </PageLayout>
   )

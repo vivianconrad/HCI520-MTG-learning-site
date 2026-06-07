@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
@@ -35,6 +36,7 @@ export default function Calculating() {
   return (
     <PageLayout title="Calculating Results · Learn to Play MTG" className="calculating">
       <div className="calculating__frame">
+        <BrowserBackNotice />
         <h1 className="calculating__heading">Calculating your results...</h1>
         <hr className="calculating__rule" aria-hidden="true" />
         <div className="calculating__dots" aria-hidden="true">
