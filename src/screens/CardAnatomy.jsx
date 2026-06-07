@@ -99,6 +99,47 @@ function getMarkerModifier(position) {
 
 const INFO_PANEL_ID = 'card-anatomy-info-panel'
 
+function CardAnatomyPartsList({ callouts, activeCallout, seenIds, highlightMissing, onSelect }) {
+  return (
+    <nav className="card-anatomy__parts-list" aria-label="Card parts list">
+      <p className="card-anatomy__parts-lede">On small screens, use this list if the markers are hard to tap.</p>
+      <ol className="card-anatomy__parts-items">
+        {callouts.map((callout) => {
+          const isActive = activeCallout === callout.id
+          const isSeen = seenIds.has(callout.id)
+          return (
+            <li key={callout.id} className="card-anatomy__parts-item">
+              <button
+                type="button"
+                className={[
+                  'card-anatomy__parts-button',
+                  isActive ? 'card-anatomy__parts-button--active' : '',
+                  isSeen ? 'card-anatomy__parts-button--seen' : '',
+                  highlightMissing && !isSeen ? 'card-anatomy__parts-button--missing' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                aria-current={isActive ? 'true' : undefined}
+                onClick={() => onSelect(callout.id)}
+              >
+                <span className="card-anatomy__parts-number" aria-hidden="true">
+                  {callout.number}
+                </span>
+                <span className="card-anatomy__parts-label">{callout.label}</span>
+                {isSeen ? (
+                  <span className="card-anatomy__parts-status" aria-hidden="true">
+                    Viewed
+                  </span>
+                ) : null}
+              </button>
+            </li>
+          )
+        })}
+      </ol>
+    </nav>
+  )
+}
+
 function CardMarker({ callout, isActive, isSeen, highlightMissing, onToggle }) {
   const { id, label, number, position, tipDir } = callout
 
@@ -156,14 +197,27 @@ export default function CardAnatomy({ session }) {
   }, [seenIds])
   const activeCalloutData = CALLOUTS.find((c) => c.id === activeCallout)
 
-  function toggleCallout(id) {
+  function markCalloutSeen(id) {
     setSeenIds((prev) => {
       if (prev.has(id)) return prev
       const next = new Set(prev)
       next.add(id)
       return next
     })
+  }
+
+  function toggleCallout(id) {
+    markCalloutSeen(id)
     setActiveCallout((prev) => (prev === id ? null : id))
+  }
+
+  function selectCallout(id) {
+    markCalloutSeen(id)
+    setActiveCallout(id)
+    document
+      .getElementById(`card-anatomy-marker-${id}`)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    document.getElementById(INFO_PANEL_ID)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   }
 
   return (

@@ -14,41 +14,13 @@ const mtgOpeningImg = new URL('../assets/cards/Magic_ The Gathering-opening.png'
   .href
 
 const HERO_CARDS = [
-  {
-    label: 'Creature',
-    src: cardImage('creature-llanowar-elves.jpg'),
-    alt: 'Llanowar Elves creature card',
-  },
-  {
-    label: 'Instant',
-    src: cardImage('instant-shock.jpg'),
-    alt: 'Shock instant card',
-  },
-  {
-    label: 'Sorcery',
-    src: cardImage('sorcery-cultivate.jpg'),
-    alt: 'Cultivate sorcery card',
-  },
-  {
-    label: 'Artifact',
-    src: cardImage('artifact-sol-ring.jpg'),
-    alt: 'Sol Ring artifact card',
-  },
-  {
-    label: 'Enchantment',
-    src: cardImage('enchantment-sylvan-library.webp'),
-    alt: 'Sylvan Library enchantment card',
-  },
-  {
-    label: 'Planeswalker',
-    src: cardImage('planeswalker-ajani.webp'),
-    alt: 'Ajani planeswalker card',
-  },
-  {
-    label: 'Land',
-    src: cardImage('land-forest.jpg'),
-    alt: 'Forest land card',
-  },
+  { src: cardImage('creature-llanowar-elves.jpg'), alt: 'Sample Magic card' },
+  { src: cardImage('instant-shock.jpg'), alt: 'Sample Magic card' },
+  { src: cardImage('sorcery-cultivate.jpg'), alt: 'Sample Magic card' },
+  { src: cardImage('artifact-sol-ring.jpg'), alt: 'Sample Magic card' },
+  { src: cardImage('enchantment-sylvan-library.webp'), alt: 'Sample Magic card' },
+  { src: cardImage('planeswalker-ajani.webp'), alt: 'Sample Magic card' },
+  { src: cardImage('land-forest.jpg'), alt: 'Sample Magic card' },
 ]
 
 export default function Welcome({ session }) {
@@ -85,33 +57,28 @@ export default function Welcome({ session }) {
         <h1 className="welcome__heading">Learn to Play</h1>
         <hr className="welcome__rule" aria-hidden="true" />
         <img src={mtgOpeningImg} alt="Magic: The Gathering" className="welcome__opening-image" />
-        <p className="welcome__pitch">
-          In Magic, two players use custom decks of cards to cast spells and creatures until one
-          player reaches zero life.
-        </p>
         <p className="welcome__subheading">
-          A quick guide to reading cards, understanding card types, and taking your first turn.
+          A beginner&apos;s guide to Magic: The Gathering. Lessons and teaching content start after
+          a short pre-test.
         </p>
         <p className="welcome__flow">
-          Pre-test → overview → four lessons → post-test → your results
+          Pre-test first (before any lessons) → overview → four lessons → post-test → your results
         </p>
         <p className="welcome__duration">
-          Plan for about 18–22 minutes. You&apos;ll pick up rules vocabulary, how a turn works, and
-          what to do when you sit down for your first game. A friend at the table can help with the
-          rest.
+          Plan for about 18–22 minutes. The pre-test records what you already know; everything after
+          that is where the teaching begins.
         </p>
-        <div className="welcome__hero-cards" role="list" aria-label="Sample Magic card types">
-          {HERO_CARDS.map((card) => (
-            <figure key={card.label} className="welcome__hero-card-wrap" role="listitem">
-              <img
-                className="welcome__hero-card"
-                src={card.src}
-                alt={card.alt}
-                loading="lazy"
-                decoding="async"
-              />
-              <figcaption className="welcome__hero-card-label">{card.label}</figcaption>
-            </figure>
+        <div className="welcome__hero-cards" role="group" aria-label="Decorative sample cards">
+          {HERO_CARDS.map((card, index) => (
+            <img
+              key={card.src}
+              className="welcome__hero-card"
+              src={card.src}
+              alt={card.alt}
+              loading="lazy"
+              decoding="async"
+              aria-hidden={index > 0}
+            />
           ))}
         </div>
         <SessionRecoveryGuide />

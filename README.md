@@ -75,20 +75,35 @@ Instructor dashboard: `/instructor`
 - `src/assets/` – MTG card images and static assets
 - `src/styles/` – shared styling and tokens
 
-## GitHub Pages Deployment (main/docs)
+## CI/CD and GitHub Pages
 
-This project is configured to publish from the `main` branch using the `/docs` folder.
+GitHub Actions handles verification and deployment. You do not need to commit built files under `docs/` for production deploys.
 
-1. Run:
-   ```bash
-   npm run build
-   ```
-   This outputs the production site to `docs/`.
-2. Commit and push both source changes and updated `docs/`.
-3. In GitHub repo settings, confirm:
-   - **Pages → Deploy from a branch**
-   - **Branch: `main`**
-   - **Folder: `/docs`**
+### Pull requests
+
+Workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every PR to `main`:
+
+1. ESLint (`npm run lint`)
+2. Unit tests (`npm test`)
+3. Supabase integration tests (`npm run test:supabase`)
+4. Production build (`npm run build`)
+
+Fix any failing checks before merging.
+
+### Production deploy
+
+Workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) runs the same checks on every push to `main`, then publishes the built site to GitHub Pages. You can also trigger it manually from the **Actions** tab (**Run workflow**).
+
+**One-time repo setup**
+
+1. In GitHub **Settings → Secrets and variables → Actions**, add:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+2. In **Settings → Pages**, set **Source** to **GitHub Actions** (not “Deploy from a branch”).
+
+**Local build (optional)**
+
+`npm run build` still writes to `docs/` for local preview (`npm run preview`) or debugging. CI rebuilds on deploy; committing `docs/` is optional and not required for the live site.
 
 ## Participant data (Supabase)
 
@@ -107,7 +122,7 @@ Research data is saved incrementally to the `participants` table:
 2. If participant rows are created but saves fail with “stored in this browser only”, run **`supabase/fix-participants-rls.sql`** (deploys `update_participant` RPC and fixes UPDATE RLS). Same RLS section lives in `supabase/migrations/fix-update-rls-after-security.sql`.
 3. Verify with `node scripts/verify-participants-db.mjs` — it should print `All participant security checks passed.`
 4. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-5. Rebuild (`npm run build`) before deploying so env vars are embedded for GitHub Pages.
+5. For GitHub Pages, the deploy workflow embeds those values at build time via repository secrets (see **CI/CD and GitHub Pages** above).
 
 **Instructor analysis**
 

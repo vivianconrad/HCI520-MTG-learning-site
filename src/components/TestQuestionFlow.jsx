@@ -15,15 +15,24 @@ export default function TestQuestionFlow({
   assessmentNote,
   lastButtonLabel,
   saving = false,
+  onLeave,
+  leaveLabel = 'Exit test',
 }) {
   const frameRef = useRef(null)
   const optionRefs = useRef([])
   const shouldFocusOptionRef = useRef(false)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [selectedIndex, setSelectedIndex] = useState(null)
+  const [pendingSelection, setPendingSelection] = useState(null)
 
   const total = selectedQuestions.length
   const question = selectedQuestions[currentIndex]
+  const storedAnswer = answers[question.id]
+  const selectedIndex =
+    pendingSelection !== null
+      ? pendingSelection
+      : storedAnswer !== undefined && storedAnswer !== null
+        ? storedAnswer
+        : null
   const isLast = currentIndex === total - 1
   const isFirst = currentIndex === 0
   const questionHeadingId = `test-question-${question.id}`
@@ -40,6 +49,7 @@ export default function TestQuestionFlow({
       return
     }
 
+    setPendingSelection(null)
     setCurrentIndex((prev) => prev + 1)
   }, [saving, selectedIndex, question.id, setAnswer, isLast, onComplete])
 
@@ -48,11 +58,6 @@ export default function TestQuestionFlow({
     optionRefs.current = optionRefs.current.slice(0, question.options.length)
     frameRef.current?.focus({ preventScroll: true })
   }, [question.options.length, currentIndex])
-
-  useEffect(() => {
-    const stored = answers[question.id]
-    setSelectedIndex(stored !== undefined && stored !== null ? stored : null)
-  }, [answers, question.id, currentIndex])
 
   useEffect(() => {
     if (!shouldFocusOptionRef.current) return
@@ -67,23 +72,23 @@ export default function TestQuestionFlow({
     const keyNum = parseInt(event.key, 10)
     if (keyNum >= 1 && keyNum <= optionCount) {
       shouldFocusOptionRef.current = true
-      setSelectedIndex(keyNum - 1)
+      setPendingSelection(keyNum - 1)
       return
     }
 
     if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
       event.preventDefault()
       shouldFocusOptionRef.current = true
-      setSelectedIndex((prev) => (prev === null ? 0 : (prev + 1) % optionCount))
+      const base = selectedIndex ?? 0
+      setPendingSelection((base + 1) % optionCount)
       return
     }
 
     if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
       event.preventDefault()
       shouldFocusOptionRef.current = true
-      setSelectedIndex((prev) =>
-        prev === null ? optionCount - 1 : (prev - 1 + optionCount) % optionCount
-      )
+      const base = selectedIndex ?? optionCount - 1
+      setPendingSelection((base - 1 + optionCount) % optionCount)
       return
     }
 
@@ -95,7 +100,7 @@ export default function TestQuestionFlow({
         : -1
       const indexToSelect = focusedIndex >= 0 ? focusedIndex : focusableOptionIndex
       shouldFocusOptionRef.current = true
-      setSelectedIndex(indexToSelect)
+      setPendingSelection(indexToSelect)
       return
     }
 
@@ -111,6 +116,7 @@ export default function TestQuestionFlow({
 
   function handleBack() {
     if (isFirst || saving) return
+    setPendingSelection(null)
     setCurrentIndex((prev) => prev - 1)
   }
 
@@ -151,7 +157,7 @@ export default function TestQuestionFlow({
               tabIndex={index === focusableOptionIndex ? 0 : -1}
               className={`pretest__option${isSelected ? ' pretest__option--selected' : ''}`}
               disabled={saving}
-              onClick={() => setSelectedIndex(index)}
+              onClick={() => setPendingSelection(index)}
             >
               {isSelected && (
                 <span className="pretest__option-marker" aria-hidden="true">
@@ -169,8 +175,11 @@ export default function TestQuestionFlow({
       <p className="pretest__keyboard-hint">
         Press 1–{question.options.length}, arrow keys, or Space to select, Enter to continue
       </p>
+      <p className="pretest__touch-hint">
+        Tap an answer, then tap Next to continue.
+      </p>
       <div
-        className={`pretest__actions${isFirst ? '' : ' pretest__actions--split'}`}
+        className={`pretest__actions${isFirst && !onLeave ? '' : ' pretest__actions--split'}`}
         aria-busy={saving || undefined}
       >
         {!isFirst ? (
@@ -181,6 +190,15 @@ export default function TestQuestionFlow({
             onClick={handleBack}
           >
             Back
+          </button>
+        ) : onLeave ? (
+          <button
+            type="button"
+            className="pretest__button pretest__button--back"
+            disabled={saving}
+            onClick={onLeave}
+          >
+            {leaveLabel}
           </button>
         ) : null}
         <button

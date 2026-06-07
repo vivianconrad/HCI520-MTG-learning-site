@@ -248,12 +248,8 @@
   font-size: 14px;
 }
 
-.card-anatomy__hint {
-  font-family: var(--font-body);
-  font-size: 14px;
-  text-align: center;
-  margin: 0 0 16px;
-  line-height: 1.4;
+.card-anatomy__parts-list {
+  display: none;
 }
 
 .card-anatomy__info-panel-title {

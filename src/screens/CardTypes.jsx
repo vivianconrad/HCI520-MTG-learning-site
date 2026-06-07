@@ -803,7 +803,7 @@ export default function CardTypes({ session }) {
           onNext={() => navigate('/lesson/3')}
           nextLabel="Continue to turn structure"
           canProceed={allViewed}
-          gateMessage="Open See cards & examples on each of the seven card types before continuing."
+          gateMessage="Open “See cards & examples” on all seven card types before continuing."
           readyMessage="You've explored every card type — ready to continue."
           onGateBlocked={handleGateBlocked}
         />

@@ -15,7 +15,7 @@ const questionBank = [
     lo: 'LO0',
     question: 'Which deck size is typical for a Commander game?',
     context:
-      'Commander is a popular multiplayer format. Each player builds a 100-card deck around one legendary commander card.',
+      'Commander is a popular multiplayer format with its own deck-building rules, separate from typical 60-card constructed decks.',
     options: ['40 cards minimum', '60 cards minimum', '100 cards', 'No limit'],
   },
   {

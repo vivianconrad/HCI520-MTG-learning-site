@@ -178,7 +178,17 @@
     padding: 10px 12px;
   }
 
+  .page-layout--lesson-keywords .keyword-dictionary__trigger {
+    bottom: calc(156px + env(safe-area-inset-bottom, 0px));
+    left: max(12px, env(safe-area-inset-left, 0px));
+    right: auto;
+  }
+
   .page-layout--with-keywords .page-layout__content-frame {
     padding-bottom: calc(148px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .page-layout--lesson-keywords.page-layout--with-keywords .page-layout__content-frame {
+    padding-bottom: calc(232px + env(safe-area-inset-bottom, 0px));
   }
 }

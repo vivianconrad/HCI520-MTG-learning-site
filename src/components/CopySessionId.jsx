@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import './CopySessionId.css'
 
-export default function CopySessionId({ sessionId, className = '', description = null }) {
+export default function CopySessionId({
+  sessionId,
+  className = '',
+  description = null,
+  onCopied = null,
+}) {
   const [copied, setCopied] = useState(false)
   const [copyFailed, setCopyFailed] = useState(false)
 
@@ -10,6 +15,7 @@ export default function CopySessionId({ sessionId, className = '', description =
     try {
       await navigator.clipboard.writeText(sessionId)
       setCopied(true)
+      onCopied?.()
       window.setTimeout(() => setCopied(false), 2000)
     } catch {
       try {
@@ -23,6 +29,7 @@ export default function CopySessionId({ sessionId, className = '', description =
         document.execCommand('copy')
         document.body.removeChild(textarea)
         setCopied(true)
+        onCopied?.()
         window.setTimeout(() => setCopied(false), 2000)
       } catch {
         setCopyFailed(true)

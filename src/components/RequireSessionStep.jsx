@@ -25,7 +25,7 @@ export default function RequireSessionStep({
       <Navigate
         to={redirectInfo.path}
         replace
-        state={{ gateNotice: getGateNotice(redirectInfo.failedKey) }}
+        state={{ gateNotice: getGateNotice(redirectInfo.failedKey, redirectInfo.path) }}
       />
     )
   }

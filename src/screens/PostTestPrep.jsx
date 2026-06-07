@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import './LessonIntro.css'
 
@@ -9,6 +10,7 @@ const PREP_POINTS = [
   'These are the same 10 questions you answered before the lessons.',
   'Answer from what you learned. There is no glossary or gold-term helper during the test.',
   'You will not see whether each answer is correct until the results screen at the end.',
+  'Plan for about 2 minutes — the same length as the pre-test.',
 ]
 
 export default function PostTestPrep() {
@@ -37,7 +39,14 @@ export default function PostTestPrep() {
 
         <p className="lesson-intro__closing">Take a breath if you need one, then begin when ready.</p>
 
-        <div className="lesson-intro__actions lesson-intro__actions--end">
+        <div className="lesson-intro__actions">
+          <button
+            type="button"
+            className="lesson-intro__button lesson-intro__button--back"
+            onClick={() => navigate('/lesson/complete')}
+          >
+            Review lessons first
+          </button>
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--next"

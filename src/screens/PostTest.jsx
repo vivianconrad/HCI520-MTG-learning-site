@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
+import SessionRecoveryGuide from '../components/SessionRecoveryGuide.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ParchmentFrameSkeleton from '../components/ParchmentFrameSkeleton.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
@@ -189,6 +190,7 @@ export default function PostTest({ session }) {
         </div>
       ) : null}
       <BrowserBackNotice />
+      <SessionRecoveryGuide className="pretest__recovery" />
       <TestQuestionFlow
         testLabel="Post-Test"
         progressIndex={PROGRESS.POSTTEST}
@@ -199,6 +201,17 @@ export default function PostTest({ session }) {
         saving={saving}
         lastButtonLabel="Submit post-test"
         introNote="These are the same questions as the pre-test. Answer from what you learned in the lessons."
+        leaveLabel="Exit post-test"
+        onLeave={async () => {
+          if (
+            !(await confirm(POSTTEST_LEAVE_CONFIRM_MESSAGE, {
+              title: POSTTEST_LEAVE_CONFIRM_TITLE,
+            }))
+          ) {
+            return
+          }
+          navigate('/posttest-prep')
+        }}
       />
     </PageLayout>
   )

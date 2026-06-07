@@ -248,11 +248,35 @@ export default function LessonComplete({ session }) {
             </div>
           </div>
         ) : (
-          <p className="lesson-complete__fork-hint" role="status">
-            {!saveOk
-              ? 'Lesson progress must save before you can continue.'
-              : 'Choose how ready you feel above to unlock your next step.'}
-          </p>
+          <div className="lesson-complete__fork-hint-block" role="status">
+            {saving ? (
+              <p className="lesson-complete__fork-hint">Saving your lesson progress…</p>
+            ) : !saveOk ? (
+              <>
+                <p className="lesson-complete__fork-hint">
+                  Your lesson progress did not save yet. Use Retry save above, then choose how ready
+                  you feel.
+                </p>
+                <p className="lesson-complete__fork-hint-detail">
+                  You need a successful save and a readiness choice before the post-test options
+                  appear.
+                </p>
+              </>
+            ) : readiness == null ? (
+              <>
+                <p className="lesson-complete__fork-hint">
+                  Lesson progress saved. Choose how ready you feel above to continue.
+                </p>
+                <p className="lesson-complete__fork-hint-detail">
+                  This is only for you — it does not affect your score.
+                </p>
+              </>
+            ) : readinessSaving ? (
+              <p className="lesson-complete__fork-hint">Saving your readiness response…</p>
+            ) : (
+              <p className="lesson-complete__fork-hint">Almost there — finishing up your response.</p>
+            )}
+          </div>
         )}
 
         <ProgressDots activeIndex={PROGRESS.LESSON_COMPLETE} />

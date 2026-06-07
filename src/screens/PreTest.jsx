@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
+import SessionRecoveryGuide from '../components/SessionRecoveryGuide.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ParchmentFrameSkeleton from '../components/ParchmentFrameSkeleton.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
@@ -184,6 +185,7 @@ export default function PreTest({ session }) {
         </div>
       ) : null}
       <BrowserBackNotice />
+      <SessionRecoveryGuide className="pretest__recovery" />
       <TestQuestionFlow
         testLabel="Pre-Test"
         progressIndex={PROGRESS.PRETEST}
@@ -193,8 +195,19 @@ export default function PreTest({ session }) {
         onComplete={handleComplete}
         saving={saving}
         lastButtonLabel="Finish pre-test"
-        introNote="You have not been taught these topics yet. Answer with your best guess. Wrong answers are expected and help show what the lessons should cover."
+        introNote="This is not a test of you — we compare your answers before and after the lessons to see how well the guide teaches Magic. You have not been taught these topics yet; answer with your best guess. Wrong answers are normal."
         assessmentNote="Gold-highlighted term definitions from the lessons are not available during the test."
+        leaveLabel="Exit pre-test"
+        onLeave={async () => {
+          if (
+            !(await confirm(PRETEST_LEAVE_CONFIRM_MESSAGE, {
+              title: PRETEST_LEAVE_CONFIRM_TITLE,
+            }))
+          ) {
+            return
+          }
+          navigate('/intro')
+        }}
       />
     </PageLayout>
   )

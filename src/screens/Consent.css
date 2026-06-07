@@ -112,8 +112,20 @@
 
 .consent__actions {
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
   margin-top: 8px;
+}
+
+.consent__decline-note {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 12px 0 0;
+  line-height: 1.45;
+  text-align: left;
 }
 
 .consent__button {
@@ -136,4 +148,15 @@
   background: var(--color-gold);
   color: var(--color-navy);
   border-color: var(--color-gold);
+}
+
+.consent__button--decline {
+  border-color: var(--color-gold-muted);
+  font-size: 0.9375rem;
+}
+
+.consent__button--decline:hover {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-color: var(--color-gold-on-parchment);
 }

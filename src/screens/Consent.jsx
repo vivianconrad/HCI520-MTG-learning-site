@@ -69,7 +69,16 @@ export default function Consent({ session }) {
         <div className="consent__actions">
           <button
             type="button"
-            className="consent__button"
+            className="consent__button consent__button--decline"
+            onClick={() => {
+              window.close()
+            }}
+          >
+            I do not wish to participate
+          </button>
+          <button
+            type="button"
+            className="consent__button consent__button--agree"
             onClick={() => {
               markConsentGiven()
               navigate('/welcome')
@@ -78,6 +87,10 @@ export default function Consent({ session }) {
             I Agree and Continue →
           </button>
         </div>
+        <p className="consent__decline-note">
+          If the window does not close, you can leave this page — no data is collected until you
+          agree.
+        </p>
 
         <ProgressDots activeIndex={PROGRESS.CONSENT} />
       </div>

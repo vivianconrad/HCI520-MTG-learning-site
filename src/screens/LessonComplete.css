@@ -280,13 +280,26 @@
   background: var(--color-parchment-dark);
 }
 
+.lesson-complete__fork-hint-block {
+  margin: 0 0 8px;
+  text-align: center;
+}
+
 .lesson-complete__fork-hint {
   font-family: var(--font-body);
   font-size: 14px;
+  color: var(--color-text-dark);
+  margin: 0 0 6px;
+  line-height: 1.45;
+}
+
+.lesson-complete__fork-hint-detail {
+  font-family: var(--font-body);
+  font-size: 13px;
   font-style: italic;
   color: var(--color-gold-on-parchment);
-  text-align: center;
-  margin: 0 0 8px;
+  margin: 0;
+  line-height: 1.45;
 }
 
 .lesson-complete__actions {

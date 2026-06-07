@@ -8,17 +8,36 @@ export const REDIRECTS = {
   posttest: '/posttest',
 }
 
-const GATE_NOTICES = {
-  consent: 'Please agree to participate before continuing.',
-  questions: 'We still need to load your test questions. Start from Welcome when Start is enabled.',
-  rowReady: 'Your session is still preparing. Wait on Welcome until Start is enabled.',
-  pretest: 'Complete the pre-test before opening the lessons.',
-  lessons: 'Finish the four lessons before the post-test.',
-  posttest: 'Complete the post-test before viewing your results.',
+const LESSON_PATH_LABELS = {
+  '/lesson/intro': 'the lesson overview',
+  '/what-is-mtg': 'the Magic overview',
+  '/lesson/1': 'Lesson 1 (card anatomy)',
+  '/lesson/2': 'Lesson 2 (card types)',
+  '/lesson/3': 'Lesson 3 (turn structure)',
+  '/lesson/4': 'Lesson 4 (putting it together)',
 }
 
-export function getGateNotice(failedKey) {
-  return GATE_NOTICES[failedKey] ?? 'That step is not available yet. Continue from where you left off.'
+const GATE_NOTICES = {
+  consent: 'Please agree to participate before continuing. We sent you back to the consent screen.',
+  questions:
+    'Your test questions are still loading. We sent you back to Welcome — start when the Start button is enabled.',
+  rowReady:
+    'Your session is still preparing. We sent you back to Welcome — wait until Start is enabled.',
+  pretest: 'Complete the pre-test before opening the lessons. We sent you to the pre-test.',
+  lessons: 'Finish the four lessons before the post-test.',
+  posttest: 'Complete the post-test before viewing your results. We sent you to the post-test.',
+}
+
+export function getGateNotice(failedKey, redirectPath) {
+  if (failedKey === 'lessons' && redirectPath) {
+    const destination = LESSON_PATH_LABELS[redirectPath] ?? 'where you left off in the lessons'
+    return `Finish the four lessons before the post-test. We sent you to ${destination}.`
+  }
+
+  return (
+    GATE_NOTICES[failedKey] ??
+    'That step is not available yet. We sent you back to where you can continue.'
+  )
 }
 
 const LESSON_RESUME_SCREENS = [

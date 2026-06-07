@@ -127,6 +127,8 @@ describe('getRedirectInfo', () => {
 describe('getGateNotice', () => {
   it('returns learner-friendly copy for each gate', () => {
     expect(getGateNotice('pretest')).toMatch(/pre-test/i)
+    expect(getGateNotice('pretest')).toMatch(/sent you/i)
     expect(getGateNotice('posttest')).toMatch(/post-test/i)
+    expect(getGateNotice('lessons', '/lesson/3')).toMatch(/turn structure/i)
   })
 })

@@ -1,8 +1,6 @@
 import './ProgressDots.css'
 import { PROGRESS_STEP_COUNT, getProgressPhaseLabel } from './progressConstants.js'
 
-export { PROGRESS, PROGRESS_STEP_COUNT, getProgressPhaseLabel } from './progressConstants.js'
-
 function dotLabel(index, activeIndex, phaseLabel) {
   const stepNumber = index + 1
   const stepOf = `Step ${stepNumber} of ${PROGRESS_STEP_COUNT}`

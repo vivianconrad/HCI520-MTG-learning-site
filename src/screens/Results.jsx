@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
+import SessionRecoveryGuide from '../components/SessionRecoveryGuide.jsx'
 import CopySessionId from '../components/CopySessionId.jsx'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import ProgressDots from '../components/ProgressDots.jsx'
+import { PROGRESS } from '../components/progressConstants.js'
 import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import {
   TOPIC_LABELS,
@@ -201,6 +203,7 @@ export default function Results({ session }) {
     <PageLayout title="Your Results · Learn to Play MTG" className="results">
       <div className="results__frame">
         <BrowserBackNotice />
+        <SessionRecoveryGuide className="results__recovery" />
         <p className="results__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="results__heading">Your Results</h1>
         <hr className="results__rule" aria-hidden="true" />
@@ -320,8 +323,14 @@ export default function Results({ session }) {
 
         <hr className="results__divider" aria-hidden="true" />
 
-        <section className="results__questions-section">
-          <h2 className="results__subheading">Question by Question</h2>
+        <details className="results__questions-details">
+          <summary className="results__questions-summary">
+            <span className="results__questions-summary-text">Question by question</span>
+            <span className="results__questions-summary-hint">
+              Expand to compare every pre-test and post-test answer
+            </span>
+          </summary>
+          <section className="results__questions-section">
           <table className="results__question-table results__question-table--desktop">
             <caption className="visually-hidden">
               Pre-test and post-test answers for each question
@@ -459,12 +468,13 @@ export default function Results({ session }) {
               )
             })}
           </div>
-        </section>
+          </section>
+        </details>
 
         <hr className="results__divider" aria-hidden="true" />
 
         <p className="results__footer">
-          Thank you for completing this lesson. Copy your session ID if you need it for reference.
+          Thank you for completing this lesson. Copy your save code if you need it for reference.
         </p>
 
         <div className="results__actions">
@@ -480,7 +490,7 @@ export default function Results({ session }) {
           </button>
         </div>
 
-        <ProgressDots activeIndex={PROGRESS.RESULTS} />
+        <ProgressDots activeIndex={PROGRESS.RESULTS} stepLabel="Study complete" />
       </div>
     </PageLayout>
   )

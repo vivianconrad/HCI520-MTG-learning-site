@@ -59,8 +59,48 @@
   text-align: left;
 }
 
+.intro__purpose-note {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text-dark);
+  margin: 0;
+  padding: 12px 14px;
+  background: rgb(139 105 20 / 8%);
+  border-left: 3px solid var(--color-gold);
+  line-height: 1.45;
+  text-align: left;
+}
+
 .intro__session {
   margin: 0 0 8px;
+}
+
+.intro__save-code-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 8px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--color-text-dark);
+  cursor: pointer;
+}
+
+.intro__save-code-check input {
+  margin-top: 3px;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-gold-on-parchment);
+}
+
+.intro__save-code-note {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-gold-on-parchment);
+  margin: 0 0 12px;
+  line-height: 1.45;
 }
 
 .intro__status {

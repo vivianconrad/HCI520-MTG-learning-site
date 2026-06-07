@@ -6,9 +6,24 @@ import { PROGRESS } from '../components/progressConstants.js'
 import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { getCuriosityWhatIsMtgNote } from '../lib/learnerChoice.js'
+import { cardImage } from '../assets/cards/index.js'
 import './WhatIsMtg.css'
 
 const battlefieldSimpleImg = new URL('../assets/batrlefield-simple.jpg', import.meta.url).href
+
+const CARD_TYPE_SAMPLES = [
+  { label: 'Creature', src: cardImage('creature-llanowar-elves.jpg'), alt: 'Llanowar Elves creature card' },
+  { label: 'Instant', src: cardImage('instant-shock.jpg'), alt: 'Shock instant card' },
+  { label: 'Sorcery', src: cardImage('sorcery-cultivate.jpg'), alt: 'Cultivate sorcery card' },
+  { label: 'Artifact', src: cardImage('artifact-sol-ring.jpg'), alt: 'Sol Ring artifact card' },
+  {
+    label: 'Enchantment',
+    src: cardImage('enchantment-sylvan-library.webp'),
+    alt: 'Sylvan Library enchantment card',
+  },
+  { label: 'Planeswalker', src: cardImage('planeswalker-ajani.webp'), alt: 'Ajani planeswalker card' },
+  { label: 'Land', src: cardImage('land-forest.jpg'), alt: 'Forest land card' },
+]
 
 const SETUP_ITEMS = [
   'Each player shuffles their deck face-down. That deck becomes their library during the game.',
@@ -67,11 +82,34 @@ export default function WhatIsMtg({ session }) {
         ) : null}
 
         <div className="what-is-mtg__body">
+          <p className="what-is-mtg__pitch">
+            In Magic, two players use custom decks of cards to cast spells and creatures until one
+            player reaches zero life.
+          </p>
           <p className="what-is-mtg__paragraph">
             <strong>Magic: The Gathering</strong> is a collectible card game.{' '}
             <GlossaryText text="Each player brings a deck of cards and takes turns playing lands, casting spells, and attacking with creatures." />{' '}
             Most games end when a player&apos;s life total reaches 0.
           </p>
+
+          <h2 className="what-is-mtg__subheading">Card types</h2>
+          <p className="what-is-mtg__paragraph">
+            Cards come in several types. Lesson 2 goes deeper; for now, here are examples of each:
+          </p>
+          <div className="what-is-mtg__card-types" role="list" aria-label="Sample Magic card types">
+            {CARD_TYPE_SAMPLES.map((card) => (
+              <figure key={card.label} className="what-is-mtg__card-type" role="listitem">
+                <img
+                  className="what-is-mtg__card-type-img"
+                  src={card.src}
+                  alt={card.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption className="what-is-mtg__card-type-label">{card.label}</figcaption>
+              </figure>
+            ))}
+          </div>
 
           <h2 className="what-is-mtg__subheading">Formats</h2>
           <p className="what-is-mtg__paragraph">

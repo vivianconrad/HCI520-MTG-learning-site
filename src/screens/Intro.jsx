@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import SessionRecoveryGuide from '../components/SessionRecoveryGuide.jsx'
@@ -12,6 +13,10 @@ export default function Intro({ session }) {
   const navigate = useNavigate()
   const { sessionId, pretestCompleted } = session
   const { rowReady, rowError } = useParticipantBootstrap(session)
+  const [saveCodeCopied, setSaveCodeCopied] = useState(false)
+  const [saveCodeAcknowledged, setSaveCodeAcknowledged] = useState(false)
+  const saveCodeReady = saveCodeCopied || saveCodeAcknowledged
+  const canContinue = rowReady && saveCodeReady
 
   return (
     <PageLayout title="Study Overview · Learn to Play MTG" className="intro">
@@ -22,17 +27,17 @@ export default function Intro({ session }) {
         <div className="intro__body">
           <p className="intro__paragraph">
             We&apos;ll start with a short pre-test about Magic: The Gathering. You have not been
-            taught these topics yet, so guessing is fine and wrong answers are normal. The pre-test
-            only records what you know before the lessons start.
+            taught these topics yet, so guessing is fine and wrong answers are expected.
+          </p>
+          <p className="intro__purpose-note" role="note">
+            The pre-test and post-test are not grades. We use them to see how well these lessons
+            convey the material — not to judge your competence or intelligence. There is no pass or
+            fail.
           </p>
           <p className="intro__paragraph">
             After the pre-test, you&apos;ll read a short overview, then work through four lessons on
             reading a card, card types, turn structure (including a sample turn walkthrough), and
             putting it all together.
-          </p>
-          <p className="intro__paragraph">
-            Some questions may ask about ideas the lessons cover later. Answer with your best guess;
-            the lessons will explain the rest.
           </p>
           <p className="intro__paragraph">
             If you might close this tab before finishing, copy your save code below. We use it to
@@ -43,7 +48,21 @@ export default function Intro({ session }) {
           sessionId={sessionId}
           className="intro__session"
           description="Optional now; you can also copy this code on the results screen at the end."
+          onCopied={() => setSaveCodeCopied(true)}
         />
+        <label className="intro__save-code-check">
+          <input
+            type="checkbox"
+            checked={saveCodeAcknowledged}
+            onChange={(event) => setSaveCodeAcknowledged(event.target.checked)}
+          />
+          <span>I saved my save code, or I don&apos;t need it right now (optional)</span>
+        </label>
+        {!saveCodeReady ? (
+          <p className="intro__save-code-note" role="note">
+            Copy your save code or check the box above before continuing.
+          </p>
+        ) : null}
         <SessionRecoveryGuide />
         {rowError ? (
           <p className="intro__error" role="alert">
@@ -66,7 +85,7 @@ export default function Intro({ session }) {
           <button
             type="button"
             className="intro__button"
-            disabled={!rowReady}
+            disabled={!canContinue}
             onClick={() => navigate(pretestCompleted ? '/pretest-complete' : '/pretest')}
           >
             {pretestCompleted ? 'Continue' : "I'm Ready"}

@@ -30,7 +30,7 @@ export default function Calculating() {
 
     const timer = window.setTimeout(() => {
       navigate('/results', { replace: true })
-    }, 2500)
+    }, 900)
 
     return () => window.clearTimeout(timer)
   }, [navigate, reducedMotion])
@@ -69,7 +69,7 @@ export default function Calculating() {
             Redirecting shortly.
           </p>
         )}
-        <ProgressDots activeIndex={PROGRESS.CALCULATING} />
+        <ProgressDots activeIndex={PROGRESS.CALCULATING} stepLabel="Calculating" />
       </div>
     </PageLayout>
   )

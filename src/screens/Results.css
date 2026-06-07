@@ -220,6 +220,52 @@
   color: var(--color-gold-on-parchment);
 }
 
+.results__recovery {
+  margin: 0 0 16px;
+}
+
+.results__questions-details {
+  margin-bottom: 32px;
+  border: 1px solid rgb(139 105 20 / 22%);
+  border-radius: 4px;
+  background: rgb(255 255 255 / 25%);
+}
+
+.results__questions-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.results__questions-summary::-webkit-details-marker {
+  display: none;
+}
+
+.results__questions-summary-text {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  color: var(--color-text-dark);
+}
+
+.results__questions-summary-hint {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-gold-on-parchment);
+  line-height: 1.4;
+}
+
+.results__questions-details[open] .results__questions-summary {
+  border-bottom: 1px solid rgb(139 105 20 / 18%);
+}
+
+.results__questions-details .results__questions-section {
+  padding: 16px;
+  margin-bottom: 0;
+}
+
 .results__questions-section {
   margin-bottom: 32px;
 }
