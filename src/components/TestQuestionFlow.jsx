@@ -42,6 +42,7 @@ export default function TestQuestionFlow({
   }, [selectedIndex, question.id, setAnswer, isLast, onComplete])
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
     optionRefs.current = optionRefs.current.slice(0, question.options.length)
     frameRef.current?.focus({ preventScroll: true })
   }, [question.options.length, currentIndex])

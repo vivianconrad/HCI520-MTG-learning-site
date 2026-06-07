@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Design tokens `--color-text-secondary`, `--color-disabled-text`, and `--touch-target-min` (44px) for accessible secondary copy and controls (`7402b78`).
 - Global disabled-button styling in `a11y.css` using explicit colors instead of lowered opacity (preserves contrast on parchment).
 - Mobile layout pass: safe-area padding, top-aligned lesson frames, full-width action buttons, horizontal phase timeline with scroll-snap, and larger card-anatomy callout markers (`7402b78`).
+- Playwright E2E coverage for keyword tooltips: tap-to-pin on mobile, hover on desktop, and viewport clamping (`e2e/keyword-tooltip.spec.cjs`).
+- Desktop Firefox project in Playwright config for cross-browser checks.
 
 ### Changed
 
@@ -25,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pre-test, Results, Calculating, Instructor Dashboard, and Stack Explainer styles updated for small screens and readability.
 - Rebuilt `docs/` GitHub Pages bundle after source changes (`7402b78`).
 - E2E walkthrough script defaults: pre-test target 5 / post-test target 9 correct (override with `PRETEST_TARGET` / `POSTTEST_TARGET` env vars).
+- Keyword tooltips use fixed viewport positioning with scroll/resize tracking so definitions stay on screen near page edges; hover handlers moved to the trigger button for cleaner touch behavior. Keyboard focus always opens the tooltip; mouse hover remains gated to fine-pointer devices.
 
 ## [1.2.0] - 2026-06-06
 

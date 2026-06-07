@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ConfirmProvider } from './context/ConfirmContext.jsx'
 import RequireSessionStep from './components/RequireSessionStep.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 import useSessionStore from './store/useSessionStore.js'
 import Consent from './screens/Consent.jsx'
 
@@ -61,6 +62,7 @@ function App() {
   return (
     <BrowserRouter basename="/HCI520-MTG-learning-site">
       <ConfirmProvider>
+        <ScrollToTop />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
             <Route path="/" element={<Consent session={session} />} />
