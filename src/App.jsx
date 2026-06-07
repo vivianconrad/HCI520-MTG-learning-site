@@ -195,7 +195,7 @@ function App() {
                   session={session}
                   require={['consent', 'posttest']}
                   redirectIfPosttestComplete
-                  element={<Calculating session={session} />}
+                  element={<Calculating />}
                 />
               }
             />

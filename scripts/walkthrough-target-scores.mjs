@@ -126,15 +126,12 @@ async function main() {
   await page.getByText(/All card types explored/i).waitFor({ timeout: 15_000 })
   await clickLessonContinue(page)
 
-  console.log('Lesson 3 — sample turn and turn phases')
+  console.log('Lesson 3 — turn phases')
   await page.waitForURL(/\/lesson\/3/)
-  for (let step = 0; step < 5; step += 1) {
-    await clickPrimary(page, /Next step/)
-  }
   for (const phaseId of ['beginning', 'first-main', 'combat', 'second-main', 'end']) {
     await page.locator(`#turn-tab-${phaseId}`).click()
   }
-  await page.getByText(/Explored 5 of 5 phases/i).waitFor({ timeout: 15_000 })
+  await page.getByText(/All five phases explored/i).waitFor({ timeout: 15_000 })
   await clickLessonContinue(page)
 
   console.log('Lesson 4 — one scenario then finish')

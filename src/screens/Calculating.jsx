@@ -50,7 +50,7 @@ export default function Calculating() {
             <button
               type="button"
               className="calculating__continue"
-              onClick={() => navigate('/results')}
+              onClick={() => navigate('/results', { replace: true })}
             >
               View results
             </button>
