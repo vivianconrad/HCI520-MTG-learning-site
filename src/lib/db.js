@@ -2,10 +2,7 @@ import { nanoid } from 'nanoid'
 import { attachAnswerKeys } from './questionKeys.js'
 import { supabase } from './supabase'
 
-/** True when PATCH succeeded at HTTP level but RLS blocked the update (wrong session secret or missing row). */
-export function isParticipantUpdateBlocked(result) {
-  return Boolean(result && result.ok === false && result.rowsUpdated === 0)
-}
+export { isParticipantUpdateBlocked } from './participantUpdate.js'
 
 export const SESSION_CONFLICT_CODE = 'session_conflict'
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isParticipantUpdateBlocked } from './db.js'
+import { isParticipantUpdateBlocked } from './participantUpdate.js'
 
 describe('isParticipantUpdateBlocked', () => {
   it('returns true when the patch succeeded at HTTP level but updated zero rows', () => {
