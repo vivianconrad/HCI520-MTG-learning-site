@@ -36,6 +36,13 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+@media (hover: none), (pointer: coarse) {
+  .keyword-tooltip__trigger {
+    min-height: var(--touch-target-min);
+    padding: 0.1em 0.35em 0.15em;
+  }
+}
+
 .keyword-tooltip__trigger:hover,
 .keyword-tooltip__trigger:focus-visible,
 .keyword-tooltip--open .keyword-tooltip__trigger {

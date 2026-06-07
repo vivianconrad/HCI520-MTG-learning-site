@@ -87,3 +87,13 @@
   background: var(--color-gold);
   color: var(--color-navy);
 }
+
+.confirm-dialog__button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.confirm-dialog__backdrop:focus-visible {
+  outline: 2px solid var(--color-text-light);
+  outline-offset: -4px;
+}

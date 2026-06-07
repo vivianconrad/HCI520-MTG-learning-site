@@ -15,6 +15,7 @@ describe('getResultsEmptyContent', () => {
   it('guides users who have not finished the pre-test', () => {
     const content = getResultsEmptyContent(baseSession)
     expect(content.heading).toMatch(/not ready yet/i)
+    expect(content.hint).toMatch(/pre-test/i)
     expect(content.primary.path).toBe('/welcome')
   })
 
@@ -25,6 +26,7 @@ describe('getResultsEmptyContent', () => {
       screenTimes: { CardTypes: 1000 },
     })
     expect(content.primary.path).toBe('/lesson/2')
+    expect(content.hint).toMatch(/most recently/i)
   })
 
   it('prompts for the post-test when lessons are done', () => {
@@ -34,6 +36,7 @@ describe('getResultsEmptyContent', () => {
       lessonsCompleted: true,
     })
     expect(content.primary.path).toBe('/posttest-prep')
+    expect(content.hint).toMatch(/prep screen/i)
   })
 
   it('treats missing answer data as a corrupt session', () => {
@@ -47,6 +50,7 @@ describe('getResultsEmptyContent', () => {
       posttestAnswers: {},
     })
     expect(content.heading).toMatch(/could not load/i)
+    expect(content.hint).toMatch(/reset/i)
     expect(content.secondary?.action).toBe('reset')
   })
 })

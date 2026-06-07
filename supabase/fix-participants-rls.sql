@@ -52,10 +52,11 @@ create or replace function public.update_participant(
 ) returns boolean
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   updated int;
+  secret_hash text := public.hash_session_secret(p_session_secret);
 begin
   if p_session_id is null or length(trim(p_session_id)) = 0
      or p_session_secret is null or length(trim(p_session_secret)) = 0
@@ -80,8 +81,12 @@ begin
     scenarios_attempted = case when p_patch ? 'scenarios_attempted'
       then (p_patch->>'scenarios_attempted')::integer else scenarios_attempted end,
     completed_at = case when p_patch ? 'completed_at'
-      then (p_patch->>'completed_at')::timestamptz else completed_at end
-  where session_id = p_session_id and session_secret = p_session_secret;
+      then (p_patch->>'completed_at')::timestamptz else completed_at end,
+    curiosity_focus = case when p_patch ? 'curiosity_focus'
+      then p_patch->>'curiosity_focus' else curiosity_focus end,
+    posttest_readiness = case when p_patch ? 'posttest_readiness'
+      then (p_patch->>'posttest_readiness')::integer else posttest_readiness end
+  where session_id = p_session_id and session_secret = secret_hash;
 
   get diagnostics updated = row_count;
   return updated > 0;

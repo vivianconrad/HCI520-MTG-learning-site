@@ -14,7 +14,9 @@ import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import { useConfirm } from '../context/useConfirm.js'
 import { PRETEST_LEAVE_CONFIRM_MESSAGE, PRETEST_LEAVE_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import { calculateTestScoreAsync } from '../lib/testScore.js'
-import useRedirectIfTestComplete from '../hooks/useRedirectIfTestComplete.js'
+import useRedirectIfTestComplete, {
+  getRedirectStatusMessage,
+} from '../hooks/useRedirectIfTestComplete.js'
 
 export default function PreTest({ session }) {
   const navigate = useNavigate()
@@ -38,7 +40,7 @@ export default function PreTest({ session }) {
   const { rowReady, rowError } = useParticipantBootstrap(session)
   const canSave = participantRowReady && rowReady
 
-  useRedirectIfTestComplete(pretestCompleted, '/pretest-complete')
+  const redirecting = useRedirectIfTestComplete(pretestCompleted, '/pretest-complete')
   useScreenTime(session, 'PreTest')
   useBlockBrowserBack(!pretestCompleted)
 
@@ -88,8 +90,20 @@ export default function PreTest({ session }) {
     ]
   )
 
-  if (pretestCompleted) {
-    return null
+  if (pretestCompleted || redirecting) {
+    return (
+      <PageLayout
+        title="Pre-Test · Learn to Play MTG"
+        className="pretest"
+        showKeywordDictionary={false}
+      >
+        <ParchmentFrameSkeleton
+          className="pretest"
+          label={getRedirectStatusMessage('/pretest-complete')}
+          compact
+        />
+      </PageLayout>
+    )
   }
 
   if (questionsLoading || (selectedQuestions === null && !questionsError)) {

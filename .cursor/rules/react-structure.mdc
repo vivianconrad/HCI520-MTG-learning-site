@@ -1,0 +1,36 @@
+---
+description: Screens vs components vs store — React app organization
+globs: src/screens/**,src/components/**,src/store/**,src/App.jsx
+alwaysApply: false
+---
+
+# React Structure
+
+## Directory roles
+
+| Directory | Use for |
+|-----------|---------|
+| `src/screens/` | Full-page route targets — one screen per learner step |
+| `src/components/` | Reusable UI shared across screens (frames, quiz widgets, nav) |
+| `src/store/` | Session hook + browser persistence (`useSessionStore`, `sessionStorage`) |
+| `src/context/` | Cross-cutting providers (e.g. `ConfirmContext`) |
+| `src/lib/` | Pure logic — scoring, DB, gates (no JSX) |
+
+## Screens
+
+- Lazy-import in `App.jsx`; register path in `<Routes>`
+- Accept `session` prop from `useSessionStore()` — do not instantiate a second store
+- Call DB helpers from `src/lib/db.js` on milestone completion (pre/post test, lesson complete)
+- Use `recordScreenEnter` / `recordScreenExit` for timed screens
+
+## Components
+
+- Presentational or lightly stateful — no route definitions
+- Session gating lives in `RequireSessionStep`, not individual screens
+- Prefer existing parchment/frame/skeleton components before new layout primitives
+
+## Patterns
+
+- Functional components + hooks only (React 19)
+- ESM imports with `.js` extensions where the repo already uses them
+- GitHub Pages base path: link with React Router, not hardcoded absolute paths without basename

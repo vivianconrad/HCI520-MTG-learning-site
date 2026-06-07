@@ -62,7 +62,7 @@ export async function verifySupabaseParticipantApi(client, options = {}) {
   }
 
   const register = await client.rpc('register_participant', {
-    p_participant_id: 'verify1',
+    p_participant_id: sessionId,
     p_session_id: sessionId,
     p_session_secret: sessionSecret,
     p_selected_questions: selectedQuestions,
@@ -144,6 +144,69 @@ export async function verifySupabaseParticipantApi(client, options = {}) {
     )
   } else {
     checks.push(check('update_participant', true, 'update_participant RPC succeeded'))
+  }
+
+  const wrongSecret = await client.rpc('update_participant', {
+    p_session_id: sessionId,
+    p_session_secret: `${sessionSecret}WRONG`,
+    p_patch: { screens_time: { tamper: 1 } },
+  })
+  if (wrongSecret.error) {
+    checks.push(
+      check(
+        'wrong_secret_rejected',
+        true,
+        `Wrong session secret rejected (${wrongSecret.error.code ?? wrongSecret.error.message})`
+      )
+    )
+  } else if (wrongSecret.data === true) {
+    checks.push(
+      check(
+        'wrong_secret_rejected',
+        false,
+        'update_participant accepted a wrong session_secret (IDOR risk)'
+      )
+    )
+  } else {
+    checks.push(check('wrong_secret_rejected', true, 'Wrong session secret returned false'))
+  }
+
+  const hashRpc = await client.rpc('hash_session_secret', { p_secret: sessionSecret })
+  if (!hashRpc.error) {
+    checks.push(
+      check(
+        'hash_session_secret_not_public',
+        false,
+        'hash_session_secret is callable by anon; revoke execute in setup.sql'
+      )
+    )
+  } else {
+    checks.push(
+      check(
+        'hash_session_secret_not_public',
+        true,
+        `hash_session_secret not callable by anon (${hashRpc.error.code ?? hashRpc.error.message})`
+      )
+    )
+  }
+
+  const purgeRpc = await client.rpc('purge_expired_participants')
+  if (!purgeRpc.error) {
+    checks.push(
+      check(
+        'purge_not_public',
+        false,
+        'purge_expired_participants is callable by anon; revoke execute in setup.sql'
+      )
+    )
+  } else {
+    checks.push(
+      check(
+        'purge_not_public',
+        true,
+        `purge_expired_participants not callable by anon (${purgeRpc.error.code ?? purgeRpc.error.message})`
+      )
+    )
   }
 
   if (update.error && /could not find the function/i.test(update.error.message)) {

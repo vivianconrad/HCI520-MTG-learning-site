@@ -171,9 +171,16 @@ export default function useSessionStore() {
     setPosttestAnswers((prev) => ({ ...prev, [id]: index }))
   }, [])
 
-  const setParticipantId = useCallback((id) => {
-    setParticipantIdState(id)
-  }, [])
+  const setParticipantId = useCallback(
+    (id) => {
+      if (id == null) {
+        setParticipantIdState(null)
+        return
+      }
+      setParticipantIdState(id === sessionId ? id : sessionId)
+    },
+    [sessionId]
+  )
 
   const markParticipantRowReady = useCallback(() => {
     setParticipantRowReady(true)

@@ -14,7 +14,9 @@ import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import { useConfirm } from '../context/useConfirm.js'
 import { POSTTEST_LEAVE_CONFIRM_MESSAGE, POSTTEST_LEAVE_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import { calculateTestScoreAsync } from '../lib/testScore.js'
-import useRedirectIfTestComplete from '../hooks/useRedirectIfTestComplete.js'
+import useRedirectIfTestComplete, {
+  getRedirectStatusMessage,
+} from '../hooks/useRedirectIfTestComplete.js'
 
 export default function PostTest({ session }) {
   const navigate = useNavigate()
@@ -39,7 +41,7 @@ export default function PostTest({ session }) {
   const { rowReady, rowError } = useParticipantBootstrap(session)
   const canSave = participantRowReady && rowReady
 
-  useRedirectIfTestComplete(posttestCompleted, '/results')
+  const redirecting = useRedirectIfTestComplete(posttestCompleted, '/results')
   useScreenTime(session, 'PostTest')
   useBlockBrowserBack(!posttestCompleted)
 
@@ -94,8 +96,20 @@ export default function PostTest({ session }) {
     ]
   )
 
-  if (posttestCompleted) {
-    return null
+  if (posttestCompleted || redirecting) {
+    return (
+      <PageLayout
+        title="Post-Test · Learn to Play MTG"
+        className="pretest"
+        showKeywordDictionary={false}
+      >
+        <ParchmentFrameSkeleton
+          className="pretest"
+          label={getRedirectStatusMessage('/results')}
+          compact
+        />
+      </PageLayout>
+    )
   }
 
   if (questionsLoading || (selectedQuestions === null && !questionsError)) {
