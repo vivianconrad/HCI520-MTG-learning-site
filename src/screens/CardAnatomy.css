@@ -229,7 +229,6 @@
 .card-anatomy__hint {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-gold-on-parchment);
   text-align: center;
   margin: 0 0 16px;
   line-height: 1.4;
@@ -258,27 +257,19 @@
   border-radius: 4px;
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-gold-on-parchment);
   text-align: center;
   line-height: 1.5;
 }
 
 .card-anatomy__progress {
   font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--color-gold-on-parchment);
+  font-size: 14px;
   text-align: center;
   margin: 0 0 16px;
 }
 
-.card-anatomy__button--next:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
 .card-anatomy__button--next:disabled:hover {
   background: transparent;
-  color: var(--color-text-dark);
 }
 
 .card-anatomy__info-panel {
@@ -360,7 +351,8 @@
   color: var(--color-text-dark);
   background: transparent;
   border-radius: 0;
-  padding: 10px 24px;
+  padding: 12px 24px;
+  min-height: var(--touch-target-min);
   cursor: pointer;
   transition:
     background var(--transition-fast),

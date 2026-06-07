@@ -155,7 +155,8 @@
   background: transparent;
   border: 1.5px solid var(--color-gold);
   border-radius: 0;
-  padding: 10px 24px;
+  padding: 12px 24px;
+  min-height: var(--touch-target-min);
   cursor: pointer;
   transition:
     background var(--transition-fast),
@@ -165,9 +166,4 @@
 .welcome__button:hover:not(:disabled) {
   background: var(--color-gold);
   color: var(--color-navy);
-}
-
-.welcome__button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
 }

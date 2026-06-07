@@ -7,11 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Lesson navigation feedback: Card Types and Turn Structure pulse-highlight items still required before Continue when the gate is blocked (`f52478c`).
+- Glossary entry for **Legendary** and expanded Card Types copy on legendary vs. non-legendary creatures and the legend rule (`814bca9`).
+- Design tokens `--color-text-secondary`, `--color-disabled-text`, and `--touch-target-min` (44px) for accessible secondary copy and controls (`7402b78`).
+- Global disabled-button styling in `a11y.css` using explicit colors instead of lowered opacity (preserves contrast on parchment).
+- Mobile layout pass: safe-area padding, top-aligned lesson frames, full-width action buttons, horizontal phase timeline with scroll-snap, and larger card-anatomy callout markers (`7402b78`).
+
 ### Changed
 
 - Lesson intro lists the “What Is Magic?” overview with time estimate and preview image.
 - Card Types, Turn Structure, and Putting It Together add clearer progress hints (optional practice scenarios, “See Cards” gate copy).
 - Lesson Complete separates the completion headline from the flavor tagline.
+- Terminology and explanations aligned to American English spelling and clearer stack/cast wording across glossary, question bank, and explainers (`814bca9`).
+- Secondary text on lesson screens (breadcrumbs, hints, progress) uses `--color-text-secondary` instead of `--color-gold-on-parchment` for WCAG contrast on parchment.
+- Pre-test, Results, Calculating, Instructor Dashboard, and Stack Explainer styles updated for small screens and readability.
+- Rebuilt `docs/` GitHub Pages bundle after source changes (`7402b78`).
+- E2E walkthrough script defaults: pre-test target 5 / post-test target 9 correct (override with `PRETEST_TARGET` / `POSTTEST_TARGET` env vars).
 
 ## [1.2.0] - 2026-06-06
 

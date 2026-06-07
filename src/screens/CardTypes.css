@@ -18,8 +18,7 @@
 
 .card-types__breadcrumb {
   font-family: var(--font-display);
-  font-size: 13px;
-  color: var(--color-gold-on-parchment);
+  font-size: 14px;
   letter-spacing: 0.08em;
   margin: 0 0 16px;
   text-align: center;
@@ -55,7 +54,6 @@
 .card-types__hint {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-gold-on-parchment);
   text-align: center;
   margin: 0 0 16px;
   line-height: 1.4;
@@ -78,6 +76,7 @@
   border: 1.5px solid var(--color-gold);
   border-radius: 0;
   padding: 12px 16px;
+  min-height: var(--touch-target-min);
   cursor: pointer;
   transition:
     background var(--transition-fast),
@@ -154,8 +153,7 @@
 
 .card-types__progress {
   font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--color-gold-on-parchment);
+  font-size: 14px;
   text-align: center;
   margin: 0 0 24px;
 }
@@ -322,7 +320,8 @@
   color: var(--color-text-dark);
   background: transparent;
   border-radius: 0;
-  padding: 10px 24px;
+  padding: 12px 24px;
+  min-height: var(--touch-target-min);
   cursor: pointer;
   transition:
     background var(--transition-fast),
@@ -345,16 +344,6 @@
 .card-types__button--next:hover:not(:disabled) {
   background: var(--color-gold);
   color: var(--color-navy);
-}
-
-.card-types__button--next:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.card-types__button--next:disabled:hover {
-  background: transparent;
-  color: var(--color-text-dark);
 }
 
 .card-types__overlay {

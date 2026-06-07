@@ -21,8 +21,9 @@
 .card-anatomy__hint,
 .card-anatomy__info-placeholder,
 .card-anatomy__progress,
-.card-types__progress,
+.card-types__breadcrumb,
 .card-types__hint,
+.card-types__progress,
 .lesson-nav__gate-hint {
   color: var(--color-text-secondary);
 }
