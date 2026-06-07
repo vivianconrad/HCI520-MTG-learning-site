@@ -1,7 +1,8 @@
 /**
  * Verifies production RLS + hardened participant API.
  * Run: node scripts/verify-participants-db.mjs
- * Requires validate-participant-data.sql applied in Supabase.
+ * Requires supabase/setup.sql applied in Supabase (or fix-update-rls-after-security.sql
+ * plus the trigger/RPC sections from setup.sql if this is a partial migration).
  */
 import { createClient } from '@supabase/supabase-js'
 import { readFileSync } from 'fs'
