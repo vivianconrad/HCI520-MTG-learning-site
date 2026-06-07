@@ -85,7 +85,7 @@ const rpc = await sb.rpc('register_participant', {
 
 if (rpc.error) {
   fail(`register_participant RPC: ${rpc.error.message}`)
-  console.error('\nApply supabase/validate-participant-data.sql in Supabase SQL Editor.\n')
+  console.error('\n Re-run supabase/setup.sql in the Supabase SQL Editor.\n')
   process.exit(1)
 }
 pass('register_participant RPC')
@@ -108,7 +108,9 @@ const patch = await fetch(
 const range = patch.headers.get('content-range')
 const rowsUpdated = range?.includes('/') ? range.split('/')[1] : '?'
 if (rowsUpdated === '0') {
-  fail('UPDATE affected 0 rows. Run supabase/fix-participants-rls.sql.')
+  fail(
+    'UPDATE affected 0 rows. Run supabase/migrations/fix-update-rls-after-security.sql or re-run supabase/setup.sql.'
+  )
 } else {
   pass(`UPDATE with x-session-secret (${rowsUpdated} row)`)
 }
@@ -152,7 +154,7 @@ if (progress.error) {
 
 console.log('')
 if (failed) {
-  console.error('One or more checks failed. See docs/SECURITY.md for remediation.\n')
+  console.error('One or more checks failed. Re-run supabase/setup.sql in Supabase SQL Editor.\n')
   process.exit(1)
 }
 console.log('All participant security checks passed.\n')
