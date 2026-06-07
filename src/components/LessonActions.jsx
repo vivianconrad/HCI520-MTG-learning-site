@@ -16,6 +16,7 @@ export default function LessonActions({
   nextLabel = 'Next',
   canProceed = true,
   gateMessage,
+  onGateBlocked,
 }) {
   const confirm = useConfirm()
   const [gateHint, setGateHint] = useState('')
@@ -35,6 +36,7 @@ export default function LessonActions({
   function handleNext() {
     if (!canProceed) {
       setGateHint(gateMessage)
+      onGateBlocked?.()
       return
     }
     setGateHint('')

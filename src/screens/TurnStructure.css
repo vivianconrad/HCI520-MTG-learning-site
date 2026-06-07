@@ -121,6 +121,28 @@
   opacity: 0.85;
 }
 
+.turn-structure__node--missing {
+  border: 2px solid var(--color-gold);
+  color: var(--color-gold-on-parchment);
+  animation: turn-structure-missing-pulse 1.4s ease-in-out infinite;
+  box-shadow: 0 0 0 2px rgb(184 150 78 / 0.35);
+}
+
+.turn-structure__node--missing.turn-structure__node--active {
+  box-shadow: 0 0 0 3px rgb(184 150 78 / 0.45);
+}
+
+@keyframes turn-structure-missing-pulse {
+  0%,
+  100% {
+    background: var(--color-parchment);
+  }
+
+  50% {
+    background: rgb(184 150 78 / 0.22);
+  }
+}
+
 .turn-structure__progress {
   font-family: var(--font-body);
   font-size: 13px;

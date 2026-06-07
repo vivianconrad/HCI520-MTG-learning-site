@@ -559,14 +559,16 @@ function CardTypeDetails({ description, details, variant = 'grid' }) {
   )
 }
 
-function CardTypeItem({ type, examples, hasBeenViewed, onSeeCard }) {
+function CardTypeItem({ type, examples, hasBeenViewed, highlightMissing, onSeeCard }) {
   return (
     <article
+      id={`card-type-${type.id}`}
       className={[
         'card-types__item',
         type.wide ? 'card-types__item--wide' : '',
         type.id === 'instant' ? 'card-types__item--any-time' : '',
         hasBeenViewed ? '' : 'card-types__item--pending',
+        highlightMissing && !hasBeenViewed ? 'card-types__item--highlight-missing' : '',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -613,6 +615,7 @@ export default function CardTypes({ session }) {
   const [seenIds, setSeenIds] = useState(() => new Set())
   const [activeExampleIndex, setActiveExampleIndex] = useState(0)
   const [displayExamplesByType, setDisplayExamplesByType] = useState(createDisplayExamplesMap)
+  const [highlightMissing, setHighlightMissing] = useState(false)
   const overlayPanelRef = useRef(null)
 
   const activeType = CARD_TYPES.find((t) => t.id === overlayId)
@@ -648,6 +651,17 @@ export default function CardTypes({ session }) {
     if (!overlayId || isClosing) return
     setIsClosing(true)
   }, [overlayId, isClosing])
+
+  const handleGateBlocked = useCallback(() => {
+    setHighlightMissing(true)
+    const firstMissing = CARD_TYPES.find((type) => !seenIds.has(type.id))
+    if (firstMissing) {
+      document.getElementById(`card-type-${firstMissing.id}`)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }
+  }, [seenIds])
 
   useEffect(() => {
     if (!isClosing) return undefined
@@ -709,6 +723,7 @@ export default function CardTypes({ session }) {
               type={type}
               examples={displayExamplesByType[type.id] ?? type.examples}
               hasBeenViewed={seenIds.has(type.id)}
+              highlightMissing={highlightMissing}
               onSeeCard={openOverlay}
             />
           ))}
@@ -742,6 +757,7 @@ export default function CardTypes({ session }) {
           nextLabel="Continue to turn structure"
           canProceed={allViewed}
           gateMessage="Open See cards & examples on each of the seven card types before continuing."
+          onGateBlocked={handleGateBlocked}
         />
         <ProgressDots activeIndex={PROGRESS.LESSON_2} />
       </div>

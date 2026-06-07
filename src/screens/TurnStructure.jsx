@@ -72,6 +72,7 @@ export default function TurnStructure({ session }) {
   useScreenTime(session, 'TurnStructure')
   const [selectedId, setSelectedId] = useState('beginning')
   const [visitedIds, setVisitedIds] = useState(() => new Set(['beginning']))
+  const [highlightMissing, setHighlightMissing] = useState(false)
 
   const selected = PHASES.find((p) => p.id === selectedId) ?? PHASES[0]
   const panelId = 'turn-phase-panel'
@@ -92,6 +93,17 @@ export default function TurnStructure({ session }) {
       document.getElementById(`turn-tab-${id}`)?.focus()
     }, 0)
   }, [])
+
+  const handleGateBlocked = useCallback(() => {
+    setHighlightMissing(true)
+    const firstMissing = PHASES.find((phase) => !visitedIds.has(phase.id))
+    if (firstMissing) {
+      document.getElementById(`turn-tab-${firstMissing.id}`)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }
+  }, [visitedIds])
 
   function handleTabListKeyDown(event) {
     const currentIndex = PHASES.findIndex((phase) => phase.id === selectedId)
@@ -144,7 +156,7 @@ export default function TurnStructure({ session }) {
                 aria-selected={selectedId === phase.id}
                 aria-controls={panelId}
                 tabIndex={selectedId === phase.id ? 0 : -1}
-                className={`turn-structure__node${selectedId === phase.id ? ' turn-structure__node--active' : ''}${visitedIds.has(phase.id) ? ' turn-structure__node--visited' : ''}`}
+                className={`turn-structure__node${selectedId === phase.id ? ' turn-structure__node--active' : ''}${visitedIds.has(phase.id) ? ' turn-structure__node--visited' : ''}${highlightMissing && !visitedIds.has(phase.id) ? ' turn-structure__node--missing' : ''}`}
                 onClick={() => selectPhase(phase.id)}
               >
                 {phase.label}
@@ -236,6 +248,7 @@ export default function TurnStructure({ session }) {
           nextLabel="Continue to practice"
           canProceed={allPhasesExplored}
           gateMessage="Open all five phases on the timeline before continuing."
+          onGateBlocked={handleGateBlocked}
         />
         <ProgressDots activeIndex={PROGRESS.LESSON_3} />
       </div>
