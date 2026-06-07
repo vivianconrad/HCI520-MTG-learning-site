@@ -1,13 +1,15 @@
 /**
- * Full app walkthrough: pre-test 3/10 correct, post-test 7/10 correct.
- * Usage: npm run dev (separate terminal), then node scripts/walkthrough-target-scores.mjs
+ * Full app walkthrough with configurable pre/post test scores.
+ * Usage: npm run dev (separate terminal), then:
+ *   node scripts/walkthrough-target-scores.mjs
+ *   PRETEST_TARGET=2 POSTTEST_TARGET=9 node scripts/walkthrough-target-scores.mjs
  */
 import { chromium } from 'playwright'
 import answerKeys from '../src/data/questionAnswerKeys.js'
 
 const BASE = process.env.APP_URL ?? 'http://localhost:5173/HCI520-MTG-learning-site/'
-const PRETEST_TARGET = 3
-const POSTTEST_TARGET = 7
+const PRETEST_TARGET = Number(process.env.PRETEST_TARGET ?? 3)
+const POSTTEST_TARGET = Number(process.env.POSTTEST_TARGET ?? 7)
 
 async function waitForProgress(page, textPattern) {
   await page.locator('.card-anatomy__progress, .card-types__progress, .turn-structure__progress').filter({
@@ -86,14 +88,28 @@ async function main() {
   await page.waitForURL(/\/pretest-complete/)
   await clickPrimary(page, /Continue/)
 
+  console.log('Lesson intro — curiosity focus')
   await page.waitForURL(/\/lesson\/intro/)
+  await page.getByRole('button', { name: "I'll follow the guide" }).click()
   await clickPrimary(page, /Continue to What Is Magic/)
 
+  console.log('What Is Magic — explore zones')
   await page.waitForURL(/\/what-is-mtg/)
+  for (const zone of ['Library', 'Hand', 'Battlefield', 'Graveyard', 'Exile']) {
+    await page.getByRole('button', { name: `${zone} zone` }).click()
+  }
+  await page.getByText(/All five zones explored/i).waitFor({ timeout: 15_000 })
+  await clickPrimary(page, /Continue to First Turn Walkthrough/)
+
+  console.log('First turn walkthrough')
+  await page.waitForURL(/\/first-game/)
+  for (let step = 0; step < 5; step += 1) {
+    await clickPrimary(page, /Next step/)
+  }
   await clickPrimary(page, /Continue to Lesson 1/)
 
-  console.log('Lesson 1 — card anatomy markers')
   await page.waitForURL(/\/lesson\/1/)
+  console.log('Lesson 1 — card anatomy markers')
   const anatomyLabels = ['Name', 'Mana Cost', 'Type Line', 'Text Box', 'Power', 'Toughness']
   for (const label of anatomyLabels) {
     await page.getByRole('button', { name: `${label} callout` }).click()
@@ -126,20 +142,22 @@ async function main() {
   await page.getByRole('button', { name: 'Yes' }).click()
   await page.getByRole('button', { name: 'Finish Lesson' }).first().click()
 
-  console.log('Lesson complete → save → post-test')
+  console.log('Lesson complete → save → readiness → post-test')
   await page.waitForURL(/\/lesson\/complete/)
-  const postTestBtn = page.getByRole('button', { name: 'Start Post-Test' })
-  await postTestBtn.waitFor({ state: 'visible', timeout: 60_000 })
+  await page.getByText(/Saving your lesson progress/i).waitFor({ state: 'hidden', timeout: 60_000 }).catch(() => {})
   await page.waitForFunction(
     () => {
-      const btn = [...document.querySelectorAll('button')].find((b) =>
-        b.textContent?.includes('Start Post-Test')
+      const disabled = [...document.querySelectorAll('.lesson-complete__readiness-btn')].some(
+        (btn) => !btn.disabled
       )
-      return btn && !btn.disabled
+      return disabled
     },
     { timeout: 60_000 }
   )
-  await postTestBtn.click()
+  await page.getByRole('button', { name: /Somewhat ready/i }).click()
+  await page.getByText(/Saving your response/i).waitFor({ state: 'hidden', timeout: 30_000 }).catch(() => {})
+  await page.getByRole('button', { name: /Start post-test/i }).waitFor({ state: 'visible', timeout: 30_000 })
+  await page.getByRole('button', { name: /Start post-test/i }).click()
 
   console.log(`Post-test (target ${POSTTEST_TARGET}/10)`)
   await page.waitForURL(/\/posttest/)

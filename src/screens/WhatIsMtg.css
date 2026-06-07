@@ -68,6 +68,17 @@
   text-align: left;
 }
 
+.what-is-mtg__curiosity-note {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text-dark);
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  background: rgb(139 105 20 / 8%);
+  border-left: 3px solid var(--color-gold);
+  line-height: 1.45;
+}
+
 .what-is-mtg__figure {
   margin: 12px 0 4px;
   padding: 0;

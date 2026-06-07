@@ -64,7 +64,7 @@ export default function Welcome({ session }) {
           A quick guide to reading cards, understanding card types, and taking your first turn.
         </p>
         <p className="welcome__flow">
-          Pre-test → overview → four lessons → post-test → your results
+          Pre-test → overview → first turn walkthrough → four lessons → post-test → your results
         </p>
         <p className="welcome__duration">
           Plan for about 18–22 minutes. You&apos;ll pick up rules vocabulary, how a turn works, and

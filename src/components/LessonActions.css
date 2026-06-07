@@ -39,3 +39,20 @@
   font-weight: 400;
   opacity: 0.85;
 }
+
+[class*='__actions--with-review'] {
+  align-items: flex-start;
+}
+
+[class*='__actions-forward'] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  max-width: min(100%, 280px);
+}
+
+[class*='__button--review'] {
+  border: 1.5px solid var(--color-gold-muted);
+  text-align: left;
+}

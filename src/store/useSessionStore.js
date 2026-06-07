@@ -78,6 +78,10 @@ export default function useSessionStore() {
   const [posttestCompleted, setPosttestCompletedState] = useState(
     () => saved?.posttestCompleted ?? false
   )
+  const [curiosityFocus, setCuriosityFocusState] = useState(() => saved?.curiosityFocus ?? null)
+  const [posttestReadiness, setPosttestReadinessState] = useState(
+    () => saved?.posttestReadiness ?? null
+  )
 
   useEffect(() => {
     persistSession({
@@ -95,6 +99,8 @@ export default function useSessionStore() {
       lessonsCompleted,
       pretestCompleted,
       posttestCompleted,
+      curiosityFocus,
+      posttestReadiness,
     })
   }, [
     sessionId,
@@ -111,6 +117,8 @@ export default function useSessionStore() {
     lessonsCompleted,
     pretestCompleted,
     posttestCompleted,
+    curiosityFocus,
+    posttestReadiness,
   ])
 
   useEffect(() => {
@@ -199,6 +207,14 @@ export default function useSessionStore() {
     setPosttestCompletedState(true)
   }, [])
 
+  const setCuriosityFocus = useCallback((value) => {
+    setCuriosityFocusState(value)
+  }, [])
+
+  const setPosttestReadiness = useCallback((value) => {
+    setPosttestReadinessState(value)
+  }, [])
+
   const resetSession = useCallback(() => {
     // Clear storage and reload immediately. Do not call setState here: the persist
     // effect would write the old sessionId back into sessionStorage before navigation.
@@ -241,6 +257,10 @@ export default function useSessionStore() {
     setLessonsCompleted,
     markPretestCompleted,
     markPosttestCompleted,
+    curiosityFocus,
+    setCuriosityFocus,
+    posttestReadiness,
+    setPosttestReadiness,
     resetSession,
     rotateSessionCredentials,
   }

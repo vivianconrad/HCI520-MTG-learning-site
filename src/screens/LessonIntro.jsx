@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import KeywordTooltip from '../components/KeywordTooltip.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
+import { saveCuriosityFocus } from '../lib/db.js'
+import { CURIOSITY_OPTIONS } from '../lib/learnerChoice.js'
 import { cardImage } from '../assets/cards/index.js'
 import './LessonIntro.css'
 
@@ -45,8 +48,24 @@ const LESSONS = [
   },
 ]
 
-export default function LessonIntro() {
+export default function LessonIntro({ session }) {
   const navigate = useNavigate()
+  const { sessionId, sessionSecret, curiosityFocus, setCuriosityFocus } = session
+  const [selectedFocus, setSelectedFocus] = useState(curiosityFocus)
+  const [saving, setSaving] = useState(false)
+
+  const selectedOption = CURIOSITY_OPTIONS.find((option) => option.id === selectedFocus)
+
+  async function handleContinue() {
+    if (!selectedFocus) return
+    setCuriosityFocus(selectedFocus)
+    setSaving(true)
+    if (sessionId && sessionSecret) {
+      await saveCuriosityFocus(sessionId, sessionSecret, selectedFocus)
+    }
+    setSaving(false)
+    navigate('/what-is-mtg')
+  }
 
   return (
     <PageLayout
@@ -61,25 +80,49 @@ export default function LessonIntro() {
 
         <div className="lesson-intro__body">
           <p className="lesson-intro__paragraph">
-            You finished the pre-test. Next you&apos;ll see a short overview of Magic, then four
-            lessons before the post-test.
+            You finished the pre-test. Next you&apos;ll see a short overview of Magic, a sample
+            first-turn walkthrough, then four lessons before the post-test.
           </p>
           <p className="lesson-intro__paragraph">
             Throughout the lessons, official rules terms{' '}
             <KeywordTooltip term={GOLD_TERMS_HELP.term} definition={GOLD_TERMS_HELP.definition}>
               appear in gold
             </KeywordTooltip>
-            . For a searchable list of every term used in this course, including
-            informal ones like summoning sickness, open the Keyword guide button in the corner of
-            the page.
-          </p>
-          <p className="lesson-intro__paragraph">
-            Magic has a large vocabulary of keywords and shorthand, and even experienced players
-            look things up. This course is not meant to make you memorize all of them. The guide is
-            there when you need it—use it as a reference whenever a word is unfamiliar, and focus on
-            the ideas in each lesson instead.
+            . For a searchable list of every term used in this course, including informal ones like
+            summoning sickness, open the Keyword guide button in the corner of the page.
           </p>
         </div>
+
+        <fieldset className="lesson-intro__curiosity">
+          <legend className="lesson-intro__curiosity-legend">What are you most curious about?</legend>
+          <p className="lesson-intro__curiosity-note">
+            Pick one to personalize your path.
+          </p>
+          <div className="lesson-intro__curiosity-options">
+            {CURIOSITY_OPTIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className={`lesson-intro__curiosity-card${
+                  selectedFocus === option.id ? ' lesson-intro__curiosity-card--selected' : ''
+                }`}
+                aria-pressed={selectedFocus === option.id}
+                onClick={() => setSelectedFocus(option.id)}
+              >
+                <span className="lesson-intro__curiosity-label">{option.label}</span>
+                <span className="lesson-intro__curiosity-hint">{option.hint}</span>
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        {selectedOption ? (
+          <p className="lesson-intro__curiosity-ack" role="status">
+            {selectedOption.lessonNum
+              ? `Got it — we will emphasize ${selectedOption.label.toLowerCase()} when we reach Lesson ${selectedOption.lessonNum}.`
+              : 'Got it — we will walk through every lesson in the guide order.'}
+          </p>
+        ) : null}
 
         <ul className="lesson-intro__list">
           <li>
@@ -121,9 +164,10 @@ export default function LessonIntro() {
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--next"
-            onClick={() => navigate('/what-is-mtg')}
+            disabled={!selectedFocus || saving}
+            onClick={handleContinue}
           >
-            Continue to What Is Magic?
+            {saving ? 'Saving…' : 'Continue to What Is Magic?'}
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.LESSON_INTRO} />

@@ -190,16 +190,34 @@ export async function saveLessonComplete(
   sessionId,
   sessionSecret,
   scenariosAttempted,
-  screenTimes
+  screenTimes,
+  posttestReadiness = null
 ) {
+  const payload = {
+    lessons_completed: true,
+    scenarios_attempted: scenariosAttempted,
+    screens_time: screenTimes,
+  }
+  if (posttestReadiness != null) {
+    payload.posttest_readiness = posttestReadiness
+  }
+  return patchParticipant(sessionId, sessionSecret, payload, 'saveLessonComplete')
+}
+
+export async function saveCuriosityFocus(sessionId, sessionSecret, curiosityFocus) {
   return patchParticipant(
     sessionId,
     sessionSecret,
-    {
-      lessons_completed: true,
-      scenarios_attempted: scenariosAttempted,
-      screens_time: screenTimes,
-    },
-    'saveLessonComplete'
+    { curiosity_focus: curiosityFocus },
+    'saveCuriosityFocus'
+  )
+}
+
+export async function savePosttestReadiness(sessionId, sessionSecret, posttestReadiness) {
+  return patchParticipant(
+    sessionId,
+    sessionSecret,
+    { posttest_readiness: posttestReadiness },
+    'savePosttestReadiness'
   )
 }

@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom'
+import LessonActions from '../components/LessonActions.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
+import { getCuriosityWhatIsMtgNote } from '../lib/learnerChoice.js'
 import './WhatIsMtg.css'
 
 const battlefieldSimpleImg = new URL('../assets/batrlefield-simple.jpg', import.meta.url).href
@@ -45,6 +47,7 @@ const ZONES = [
 export default function WhatIsMtg({ session }) {
   const navigate = useNavigate()
   useScreenTime(session, 'WhatIsMtg')
+  const curiosityNote = getCuriosityWhatIsMtgNote(session.curiosityFocus)
 
   return (
     <PageLayout
@@ -56,6 +59,12 @@ export default function WhatIsMtg({ session }) {
         <p className="what-is-mtg__breadcrumb">Overview · What Is Magic?</p>
         <h1 className="what-is-mtg__heading">What Is Magic?</h1>
         <hr className="what-is-mtg__rule" aria-hidden="true" />
+
+        {curiosityNote ? (
+          <p className="what-is-mtg__curiosity-note" role="status">
+            {curiosityNote}
+          </p>
+        ) : null}
 
         <div className="what-is-mtg__body">
           <p className="what-is-mtg__paragraph">
@@ -111,22 +120,12 @@ export default function WhatIsMtg({ session }) {
           </dl>
         </div>
 
-        <div className="what-is-mtg__actions what-is-mtg__actions--split">
-          <button
-            type="button"
-            className="what-is-mtg__button what-is-mtg__button--back"
-            onClick={() => navigate('/lesson/intro')}
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            className="what-is-mtg__button"
-            onClick={() => navigate('/lesson/1')}
-          >
-            Continue to Lesson 1
-          </button>
-        </div>
+        <LessonActions
+          classPrefix="what-is-mtg"
+          onBack={() => navigate('/lesson/intro')}
+          onNext={() => navigate('/first-game')}
+          nextLabel="Continue to First Turn Walkthrough"
+        />
         <ProgressDots activeIndex={PROGRESS.WHAT_IS_MTG} />
       </div>
     </PageLayout>

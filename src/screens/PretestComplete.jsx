@@ -21,8 +21,8 @@ export default function PretestComplete({ session }) {
             normal.
           </p>
           <p className="lesson-intro__paragraph">
-            Next up: a preview of the path, a Magic overview, a first-turn walkthrough, four
-            lessons, and the post-test with the same questions.
+            Next up: pick what you are most curious about, a Magic overview, a step-through first
+            turn, four lessons, and the post-test with the same questions.
           </p>
         </div>
 

@@ -210,9 +210,11 @@ export default function CardAnatomy({ session }) {
 
         <LessonActions
           classPrefix="card-anatomy"
-          backHint="Return to What Is Magic?"
-          onBack={() => navigate('/what-is-mtg')}
+          backHint="Return to First Turn Walkthrough"
+          onBack={() => navigate('/first-game')}
+          onReview={() => {}}
           onNext={() => navigate('/lesson/2')}
+          nextLabel="Continue"
           canProceed={allExplored}
           gateMessage="Explore all six numbered markers on the card before continuing."
         />

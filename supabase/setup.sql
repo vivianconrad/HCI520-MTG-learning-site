@@ -23,6 +23,8 @@ create table if not exists public.participants (
   screens_time     jsonb,
   lessons_completed boolean   default false,
   scenarios_attempted integer default 0,
+  curiosity_focus    text,
+  posttest_readiness integer,
   completed_at     timestamptz,
   created_at       timestamptz default now()
 );
@@ -183,6 +185,16 @@ begin
     raise exception 'scenarios_attempted cannot decrease';
   end if;
 
+  if new.curiosity_focus is not null
+     and new.curiosity_focus not in ('reading_cards', 'card_types', 'turns', 'guide') then
+    raise exception 'invalid curiosity_focus';
+  end if;
+
+  if new.posttest_readiness is not null
+     and (new.posttest_readiness < 1 or new.posttest_readiness > 5) then
+    raise exception 'posttest_readiness must be between 1 and 5';
+  end if;
+
   -- Progress ordering (Lesson 4 practice is optional; lessons_completed means all four lessons viewed)
   if new.posttest_answers is not null then
     if coalesce(new.lessons_completed, false) is not true then
@@ -285,7 +297,11 @@ begin
     scenarios_attempted = case when p_patch ? 'scenarios_attempted'
       then (p_patch->>'scenarios_attempted')::integer else scenarios_attempted end,
     completed_at = case when p_patch ? 'completed_at'
-      then (p_patch->>'completed_at')::timestamptz else completed_at end
+      then (p_patch->>'completed_at')::timestamptz else completed_at end,
+    curiosity_focus = case when p_patch ? 'curiosity_focus'
+      then p_patch->>'curiosity_focus' else curiosity_focus end,
+    posttest_readiness = case when p_patch ? 'posttest_readiness'
+      then (p_patch->>'posttest_readiness')::integer else posttest_readiness end
   where session_id = p_session_id and session_secret = p_session_secret;
 
   get diagnostics updated = row_count;

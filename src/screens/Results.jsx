@@ -13,6 +13,7 @@ import {
   getLoTag,
   getReviewLessonPath,
 } from '../lib/scoring.js'
+import { REVIEW_TOPIC_CHOICES } from '../lib/learnerChoice.js'
 import { LESSON_4_PATH, PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import answerKeys from '../data/questionAnswerKeys.js'
 import { saveScreenTime } from '../lib/db.js'
@@ -233,6 +234,28 @@ export default function Results({ session }) {
             </section>
           </>
         )}
+
+        <hr className="results__divider" aria-hidden="true" />
+
+        <section className="results__review-pick" aria-label="Choose a topic to review">
+          <h2 className="results__subheading">Which topic do you want to revisit first?</h2>
+          <p className="results__review-pick-note">
+            Pick where to start reviewing. You can visit any lesson from the breakdown below
+            afterward.
+          </p>
+          <div className="results__review-pick-options">
+            {REVIEW_TOPIC_CHOICES.map((topic) => (
+              <button
+                key={topic.id}
+                type="button"
+                className="results__review-pick-btn"
+                onClick={() => navigate(topic.path)}
+              >
+                {topic.label}
+              </button>
+            ))}
+          </div>
+        </section>
 
         <hr className="results__divider" aria-hidden="true" />
 

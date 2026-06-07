@@ -10,6 +10,7 @@ const Intro = lazy(() => import('./screens/Intro.jsx'))
 const PreTest = lazy(() => import('./screens/PreTest.jsx'))
 const PretestComplete = lazy(() => import('./screens/PretestComplete.jsx'))
 const WhatIsMtg = lazy(() => import('./screens/WhatIsMtg.jsx'))
+const FirstGame = lazy(() => import('./screens/FirstGame.jsx'))
 const LessonIntro = lazy(() => import('./screens/LessonIntro.jsx'))
 const CardAnatomy = lazy(() => import('./screens/CardAnatomy.jsx'))
 const CardTypes = lazy(() => import('./screens/CardTypes.jsx'))
@@ -110,6 +111,16 @@ function App() {
                   session={session}
                   require={['consent', 'pretest']}
                   element={<LessonIntro session={session} />}
+                />
+              }
+            />
+            <Route
+              path="/first-game"
+              element={
+                <GuardedRoute
+                  session={session}
+                  require={['consent', 'pretest']}
+                  element={<FirstGame session={session} />}
                 />
               }
             />
