@@ -28,7 +28,7 @@ for (const entry of result.checks) {
 console.log('')
 if (!result.ok) {
   console.error(
-    'One or more checks failed. Run supabase/revoke-internal-rpc-execute.sql in the Supabase SQL Editor, or set SUPABASE_DB_URL and run npm run apply:db-security. For CI, add the SUPABASE_DB_URL repository secret (Database URI). Also see supabase/revoke-anon-direct-update.sql, supabase/fix-participants-rls.sql, and supabase/setup.sql.\n'
+    'One or more checks failed. Run supabase/setup.sql in the Supabase SQL Editor, or set SUPABASE_DB_URL and run npm run apply:db-security. For CI, add the SUPABASE_DB_URL repository secret (Database URI). Also see supabase/fix-participants-rls.sql.\n'
   )
   process.exit(1)
 }

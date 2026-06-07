@@ -17,7 +17,13 @@ as $$
   select encode(extensions.digest(p_secret, 'sha256'), 'hex');
 $$;
 
-drop function if exists public.hash_session_secret(text);
+do $$
+begin
+  if to_regprocedure('public.hash_session_secret(text)') is not null then
+    execute 'revoke all on function public.hash_session_secret(text) from public, anon, authenticated';
+    execute 'drop function public.hash_session_secret(text)';
+  end if;
+end $$;
 
 create or replace function public.register_participant(
   p_participant_id    text,

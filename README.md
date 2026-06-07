@@ -129,6 +129,7 @@ Research data is saved incrementally to the `participants` table. See **[docs/pr
 4. Verify with `npm run verify:db` — it should print `All participant security checks passed.`
 5. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
 6. For GitHub Pages, the deploy workflow embeds those values at build time via repository secrets (see **CI/CD and GitHub Pages** above).
+7. **CI / deploy:** add repository secret **`SUPABASE_DB_URL`** (Supabase → Settings → Database → connection URI). Each CI run applies `supabase/setup.sql` via `npm run apply:db-security` before integration tests so the live project matches the repo (including removal of public `hash_session_secret`).
 
 **Instructor analysis**
 

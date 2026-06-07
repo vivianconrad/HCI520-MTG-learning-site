@@ -177,7 +177,7 @@ export async function verifySupabaseParticipantApi(client, options = {}) {
       check(
         'hash_session_secret_not_public',
         false,
-        'hash_session_secret is callable by anon; run supabase/revoke-internal-rpc-execute.sql (moves helpers to private schema)'
+        'hash_session_secret is callable by anon; run supabase/setup.sql or npm run apply:db-security'
       )
     )
   } else {
@@ -196,7 +196,7 @@ export async function verifySupabaseParticipantApi(client, options = {}) {
       check(
         'purge_not_public',
         false,
-        'purge_expired_participants is callable by anon; run supabase/revoke-internal-rpc-execute.sql (moves helpers to private schema)'
+        'purge_expired_participants is callable by anon; run supabase/setup.sql or npm run apply:db-security'
       )
     )
   } else {
