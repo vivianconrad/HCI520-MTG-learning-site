@@ -228,8 +228,7 @@ export default function Results({ session }) {
           {showReadinessEncouragement ? (
             <p className="results__reflection-note" role="note">
               Before the post-test you felt less than ready, but you still worked through every
-              practice scenario. That effort counts — use the review links below for anything that
-              still feels fuzzy. This is only for you; no one else sees your readiness score.
+              practice scenario. Use the review links below for anything that still feels unclear. This is only for you; no one else sees your readiness score.
             </p>
           ) : null}
         </section>

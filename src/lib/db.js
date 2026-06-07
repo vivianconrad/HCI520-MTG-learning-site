@@ -20,7 +20,7 @@ function devError(...args) {
 
 /**
  * Save participant fields via update_participant RPC (REST PATCH cannot work when
- * SELECT is denied by RLS — PostgreSQL requires row visibility for UPDATE).
+ * SELECT is denied by RLS. PostgreSQL requires row visibility for UPDATE).
  */
 async function patchParticipant(sessionId, sessionSecret, payload, logLabel) {
   devLog(`[db] ${logLabel}: sessionId=`, sessionId, 'payload=', payload)

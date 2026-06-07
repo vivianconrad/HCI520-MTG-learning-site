@@ -1,10 +1,10 @@
-# MTG Learning Site — Design System (Master)
+# MTG Learning Site: Design System (Master)
 
 Source of truth for the HCI520 study instrument UI. Page-specific overrides belong in `design-system/pages/<page>.md` when they intentionally diverge.
 
 ## Product pattern
 
-**Guided assessment flow** — linear steps with session guards, one primary action per screen, no global navigation. Participants move: consent → welcome → intro → pre-test → lessons → post-test → results.
+**Guided assessment flow**: linear steps with session guards, one primary action per screen, no global navigation. Participants move: consent → welcome → intro → pre-test → lessons → post-test → results.
 
 - Use on-screen Back / Continue; browser back is blocked on most study screens.
 - Deep links via React Router (`basename` for GitHub Pages).
@@ -12,7 +12,7 @@ Source of truth for the HCI520 study instrument UI. Page-specific overrides belo
 
 ## Visual style
 
-**Scholastic tabletop** — dark navy canvas, parchment content frames, gold accents. Evokes Magic: The Gathering without using Wizards brand assets incorrectly.
+**Scholastic tabletop**: dark navy canvas, parchment content frames, gold accents. Evokes Magic: The Gathering without using Wizards brand assets incorrectly.
 
 | Role | Token | Hex |
 |------|-------|-----|
@@ -64,7 +64,7 @@ Implementation: `src/styles/tokens.css`.
 | Rule | Standard |
 |------|----------|
 | Touch target | `--touch-target-min: 44px` |
-| Focus | `:focus-visible` — 2px gold outline, 2px offset |
+| Focus | `:focus-visible`: 2px gold outline, 2px offset |
 | Disabled | Explicit colors, not opacity-only (`a11y.css`) |
 | Primary CTA | One gold-bordered button per screen |
 | Cursor | `cursor: pointer` on clickable non-button controls |
@@ -103,18 +103,18 @@ Implementation: `src/styles/tokens.css`.
 - Opacity-only disabled states.
 - Placeholder-only form labels.
 - Hover-only critical information (provide panel/keyboard path).
-- Raw hex in component CSS — use tokens.
+- Raw hex in component CSS. Use tokens instead.
 - Mixing unrelated layout patterns (sidebar + bottom nav at same level).
 
 ## File map
 
 ```
-src/styles/tokens.css      — color, type, motion tokens
-src/styles/a11y.css        — contrast helpers, reduced motion, disabled states
-src/styles/responsive.css  — mobile breakpoint, safe areas, focus rings
-src/index.css              — global imports
-design-system/MASTER.md    — this file
-design-system/pages/       — optional per-page overrides
+src/styles/tokens.css      color, type, motion tokens
+src/styles/a11y.css        contrast helpers, reduced motion, disabled states
+src/styles/responsive.css  mobile breakpoint, safe areas, focus rings
+src/index.css              global imports
+design-system/MASTER.md    this file
+design-system/pages/       optional per-page overrides
 ```
 
 ## Pre-delivery checklist

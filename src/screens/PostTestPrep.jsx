@@ -10,7 +10,7 @@ const PREP_POINTS = [
   'These are the same 10 questions you answered before the lessons.',
   'Answer from what you learned. There is no glossary or gold-term helper during the test.',
   'You will not see whether each answer is correct until the results screen at the end.',
-  'Plan for about 2 minutes — the same length as the pre-test.',
+  'Plan for about 2 minutes, the same length as the pre-test.',
 ]
 
 export default function PostTestPrep() {

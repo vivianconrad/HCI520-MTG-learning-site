@@ -20,9 +20,9 @@ const LESSON_PATH_LABELS = {
 const GATE_NOTICES = {
   consent: 'Please agree to participate before continuing. We sent you back to the consent screen.',
   questions:
-    'Your test questions are still loading. We sent you back to Welcome — start when the Start button is enabled.',
+    'Your test questions are still loading. We sent you back to Welcome. Start when the Start button is enabled.',
   rowReady:
-    'Your session is still preparing. We sent you back to Welcome — wait until Start is enabled.',
+    'Your session is still preparing. We sent you back to Welcome. Wait until Start is enabled.',
   pretest: 'Complete the pre-test before opening the lessons. We sent you to the pre-test.',
   lessons: 'Finish the four lessons before the post-test.',
   posttest: 'Complete the post-test before viewing your results. We sent you to the post-test.',

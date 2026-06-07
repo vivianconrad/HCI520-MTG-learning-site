@@ -5,7 +5,7 @@ Inherits `design-system/MASTER.md` unless noted below.
 ## Layout
 
 - Reuses `pretest` screen class and `pretest__frame` for question UI (`TestQuestionFlow`).
-- Question loading: `ParchmentFrameSkeleton` with `compact` variant — no keyword dictionary on this screen.
+- Question loading: `ParchmentFrameSkeleton` with `compact` variant. No keyword dictionary on this screen.
 
 ## Interaction
 

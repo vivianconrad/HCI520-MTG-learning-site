@@ -4,7 +4,7 @@ const RECOVERY_STEPS = [
   'Use the on-screen Back and Continue buttons to move between steps. Your browser\u2019s back button is turned off on most study screens.',
   'Copy your save code on the Intro screen if you might close the tab before finishing. You can also find it on the results screen.',
   'If Welcome shows a session error, use Reset session there or finish the study and use Start over on the Results page.',
-  'Refreshing the page is safe — your answers and lesson progress are saved as you go.',
+  'Refreshing the page is safe. Your answers and lesson progress are saved as you go.',
 ]
 
 export default function SessionRecoveryGuide({ className = '' }) {

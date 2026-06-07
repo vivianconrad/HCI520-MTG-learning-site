@@ -195,7 +195,7 @@ export default function PreTest({ session }) {
         onComplete={handleComplete}
         saving={saving}
         lastButtonLabel="Finish pre-test"
-        introNote="This is not a test of you — we compare your answers before and after the lessons to see how well the guide teaches Magic. You have not been taught these topics yet; answer with your best guess. Wrong answers are normal."
+        introNote="This is not a test of you. We compare your answers before and after the lessons to see how well the guide teaches Magic. You have not been taught these topics yet; answer with your best guess. Wrong answers are normal."
         assessmentNote="Gold-highlighted term definitions from the lessons are not available during the test."
         leaveLabel="Exit pre-test"
         onLeave={async () => {

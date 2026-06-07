@@ -83,8 +83,8 @@ export default function WhatIsMtg({ session }) {
 
         <div className="what-is-mtg__body">
           <p className="what-is-mtg__pitch">
-            In Magic, two players use custom decks of cards to cast spells and creatures until one
-            player reaches zero life.
+            In Magic, you use custom decks of cards to cast spells and creatures until one player
+            reaches zero life.
           </p>
           <p className="what-is-mtg__paragraph">
             <strong>Magic: The Gathering</strong> is a collectible card game.{' '}

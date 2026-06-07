@@ -69,3 +69,25 @@
 .session-recovery-guide__list li:last-child {
   margin-bottom: 0;
 }
+
+/* Pre/post-test screens sit on navy; use light text like BrowserBackNotice */
+.pretest .session-recovery-guide {
+  background: rgb(201 168 76 / 10%);
+  border-color: var(--color-gold);
+}
+
+.pretest .session-recovery-guide__summary {
+  color: var(--color-text-light);
+}
+
+.pretest .session-recovery-guide__summary::before {
+  border-left-color: var(--color-gold);
+}
+
+.pretest .session-recovery-guide__body {
+  border-top-color: rgb(201 168 76 / 28%);
+}
+
+.pretest .session-recovery-guide__list {
+  color: var(--color-parchment);
+}

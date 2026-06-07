@@ -49,7 +49,7 @@ export function getCuriosityWhatIsMtgNote(focus) {
 const LESSON_CURIOSITY_NOTES = {
   lesson1: {
     [CURIOSITY_FOCUS.READING_CARDS]:
-      'This lesson is the one you picked — reading cards. Take your time on each numbered marker.',
+      'This lesson is the one you picked: reading cards. Take your time on each numbered marker.',
     [CURIOSITY_FOCUS.CARD_TYPES]:
       'You said card types interest you most. This lesson covers how to read a card first; Lesson 2 goes deeper on types.',
     [CURIOSITY_FOCUS.TURNS]:
@@ -57,7 +57,7 @@ const LESSON_CURIOSITY_NOTES = {
   },
   lesson2: {
     [CURIOSITY_FOCUS.CARD_TYPES]:
-      'You picked card types as your focus — this lesson is built for that. Open each type once; you do not need every example slide.',
+      'You picked card types as your focus. This lesson is built for that. Open each type once; you do not need every example slide.',
     [CURIOSITY_FOCUS.READING_CARDS]:
       'You focused on reading cards in Lesson 1. Here you will see how card types change what you can do and when.',
     [CURIOSITY_FOCUS.TURNS]:
@@ -65,7 +65,7 @@ const LESSON_CURIOSITY_NOTES = {
   },
   lesson3: {
     [CURIOSITY_FOCUS.TURNS]:
-      'This is your focus topic — how turns work. Visit each phase tab once to unlock Continue.',
+      'This is your focus topic: how turns work. Visit each phase tab once to enable Continue.',
     [CURIOSITY_FOCUS.READING_CARDS]:
       'You started with reading cards. This lesson shows where those parts of a card matter during a turn.',
     [CURIOSITY_FOCUS.CARD_TYPES]:

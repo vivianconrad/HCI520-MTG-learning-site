@@ -31,7 +31,7 @@ export default function Intro({ session }) {
           </p>
           <p className="intro__purpose-note" role="note">
             The pre-test and post-test are not grades. We use them to see how well these lessons
-            convey the material — not to judge your competence or intelligence. There is no pass or
+            convey the material. They are not a judgment of your competence or intelligence. There is no pass or
             fail.
           </p>
           <p className="intro__paragraph">
@@ -41,7 +41,7 @@ export default function Intro({ session }) {
           </p>
           <p className="intro__paragraph">
             If you might close this tab before finishing, copy your save code below. We use it to
-            match your results later — no account or password needed.
+            match your results later. No account or password needed.
           </p>
         </div>
         <CopySessionId

@@ -88,7 +88,7 @@ export default function Consent({ session }) {
           </button>
         </div>
         <p className="consent__decline-note">
-          If the window does not close, you can leave this page — no data is collected until you
+          If the window does not close, you can leave this page. No data is collected until you
           agree.
         </p>
 

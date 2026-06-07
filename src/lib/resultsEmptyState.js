@@ -29,8 +29,8 @@ export function getResultsEmptyContent(session) {
 
   if (pretestCompleted && !lessonsCompleted) {
     return {
-      heading: 'Keep going — you are not done yet',
-      message: 'Complete all four lessons, then take the post-test to unlock your results.',
+      heading: 'You still have lessons to finish',
+      message: 'Complete all four lessons, then take the post-test to see your results.',
       primary: { label: 'Resume lessons', path: getLessonsResumePath(screenTimes) },
       secondary: { label: 'Go to Welcome', path: '/welcome' },
     }

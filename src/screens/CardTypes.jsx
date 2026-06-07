@@ -81,7 +81,7 @@ const CARD_TYPES = [
       {
         heading: 'Legendary vs. non-legendary',
         list: [
-          'A non-legendary creature has a type line like "Creature — Elf Druid." It fights and blocks like any other creature. You can control as many copies as your format allows (often up to four with the same name in your deck).',
+          'A non-legendary creature has a type line like "Creature, Elf Druid." It fights and blocks like any other creature. You can control as many copies as your format allows (often up to four with the same name in your deck).',
           'A legendary creature says "Legendary Creature" on the type line before the dash. Legendary marks a unique character or place. It is still a creature for combat, timing, and summoning sickness.',
           'Legend rule: if you control two or more permanents with the same name and at least one is legendary, you choose one to keep and sacrifice the rest. So you cannot keep two copies of Grothama, All-Devouring on the battlefield, but you can keep four Llanowar Elves because that card is not legendary.',
         ],
@@ -804,7 +804,7 @@ export default function CardTypes({ session }) {
           nextLabel="Continue to turn structure"
           canProceed={allViewed}
           gateMessage="Open “See cards & examples” on all seven card types before continuing."
-          readyMessage="You've explored every card type — ready to continue."
+          readyMessage="You've explored every card type. Ready to continue."
           onGateBlocked={handleGateBlocked}
         />
         <ProgressDots activeIndex={PROGRESS.LESSON_2} />

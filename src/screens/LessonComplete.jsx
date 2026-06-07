@@ -209,7 +209,7 @@ export default function LessonComplete({ session }) {
           {readiness != null && readiness <= 2 && completedAllPractice ? (
             <p className="lesson-complete__reflection" role="note">
               You finished every practice scenario even though you feel less than ready. That work
-              matters — the post-test is just a check-in on what stuck, not a grade and not compared
+              matters. The post-test is just a check-in on what stuck, not a grade and not compared
               to anyone else.
             </p>
           ) : null}
@@ -268,13 +268,13 @@ export default function LessonComplete({ session }) {
                   Lesson progress saved. Choose how ready you feel above to continue.
                 </p>
                 <p className="lesson-complete__fork-hint-detail">
-                  This is only for you — it does not affect your score.
+                  This is only for you. It does not affect your score.
                 </p>
               </>
             ) : readinessSaving ? (
               <p className="lesson-complete__fork-hint">Saving your readiness response…</p>
             ) : (
-              <p className="lesson-complete__fork-hint">Almost there — finishing up your response.</p>
+              <p className="lesson-complete__fork-hint">Almost there. Finishing up your response.</p>
             )}
           </div>
         )}

@@ -53,14 +53,14 @@ Current learning path (15 progress steps; routes in parentheses):
 3. Intro (`/intro`)
 4. Pre-Test (`/pretest`)
 5. Pre-Test Complete (`/pretest-complete`)
-6. Lesson Intro — curiosity focus (`/lesson/intro`)
+6. Lesson Intro, curiosity focus (`/lesson/intro`)
 7. What Is MTG? (`/what-is-mtg`)
 8. Lesson 1: Card Anatomy (`/lesson/1`)
 9. Lesson 2: Card Types (`/lesson/2`)
 10. Lesson 3: Turn Structure (`/lesson/3`)
 11. Lesson 4: Putting It Together (`/lesson/4`)
 12. Lesson Complete (`/lesson/complete`)
-13. Post-Test Prep (`/posttest-prep`) — optional bridge before the post-test
+13. Post-Test Prep (`/posttest-prep`), optional bridge before the post-test
 14. Post-Test (`/posttest`)
 15. Calculating (`/calculating`) → Results (`/results`)
 
@@ -120,15 +120,15 @@ Research data is saved incrementally to the `participants` table:
 
 1. Run **`supabase/setup.sql`** in the [Supabase SQL editor](https://supabase.com/dashboard) for a new project (table, RLS, RPCs, validation triggers).
 2. If participant rows are created but saves fail with “stored in this browser only”, run **`supabase/fix-participants-rls.sql`** (deploys `update_participant` RPC and fixes UPDATE RLS). Same RLS section lives in `supabase/migrations/fix-update-rls-after-security.sql`.
-3. Verify with `node scripts/verify-participants-db.mjs` — it should print `All participant security checks passed.`
+3. Verify with `node scripts/verify-participants-db.mjs`. It should print `All participant security checks passed.`
 4. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
 5. For GitHub Pages, the deploy workflow embeds those values at build time via repository secrets (see **CI/CD and GitHub Pages** above).
 
 **Instructor analysis**
 
-- Browser route `/instructor` shows the dashboard UI and attempts to load cohort data. With deny-select RLS (the default from `setup.sql`), browser reads fail—this is expected.
+- Browser route `/instructor` shows the dashboard UI and attempts to load cohort data. With deny-select RLS (the default from `setup.sql`), browser reads fail. This is expected.
 - **Recommended:** use the Supabase **Table Editor** (→ `participants`) to view and export cohort data. The dashboard displays this guidance when RLS blocks reads.
-- Do **not** add a permissive anon SELECT policy for browser reads — participant rows must stay private to the service role / dashboard.
+- Do **not** add a permissive anon SELECT policy for browser reads. Participant rows must stay private to the service role / dashboard.
 
 See `docs/evaluation.md` for reporting metrics.
 

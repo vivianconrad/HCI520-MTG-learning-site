@@ -40,4 +40,27 @@ describe('linkGlossaryTerms', () => {
     expect(keywords[0].value).toBe('mulligan')
     expect(keywords[0].term).toBe('Mulligan')
   })
+
+  it('links graveyards in simplified table layout caption', () => {
+    const segments = linkGlossaryTerms(
+      'A simplified table layout: play areas (battlefield) in the middle, decks (libraries) and discard piles (graveyards) on each side.'
+    )
+    const keywords = segments.filter((segment) => segment.type === 'keyword').map((k) => k.term)
+
+    expect(keywords).toContain('Library')
+    expect(keywords).toContain('Graveyard')
+    expect(
+      segments.find((segment) => segment.type === 'keyword' && segment.term === 'Graveyard')?.value
+    ).toBe('graveyards')
+  })
+
+  it('links exile and graveyard in the exile zone description', () => {
+    const segments = linkGlossaryTerms(
+      'A separate zone for cards removed from the game. Exiled cards are not in your graveyard and usually cannot be used again unless a card says so.'
+    )
+    const keywords = segments.filter((segment) => segment.type === 'keyword')
+
+    expect(keywords.map((k) => k.term)).toEqual(['Exile', 'Graveyard'])
+    expect(keywords.find((k) => k.term === 'Exile')?.value).toBe('Exiled')
+  })
 })

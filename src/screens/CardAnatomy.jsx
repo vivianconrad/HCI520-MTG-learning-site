@@ -35,7 +35,7 @@ const CALLOUTS = [
     id: 'typeLine',
     label: 'Type Line',
     number: 3,
-    text: "The type line tells you what kind of card this is. This card is a Creature, which means it stays on the battlefield and can attack and block. Creatures you cast usually cannot attack or use tap abilities until your next turn (summoning sickness); Lesson 2 explains that in more detail. Some cards also say Legendary before Creature (for example, Legendary Creature — Dragon). That marks a unique character; Lesson 2 explains the legend rule and how that differs from a normal creature. After the dash you'll see the subtype, in this case Human Wizard. Subtypes don't change the rules but some cards care about them specifically. For example, a card might say 'whenever a Wizard enters the battlefield.'",
+    text: "The type line tells you what kind of card this is. This card is a Creature, which means it stays on the battlefield and can attack and block. Creatures you cast usually cannot attack or use tap abilities until your next turn (summoning sickness); Lesson 2 explains that in more detail. Some cards also say Legendary before Creature (for example, Legendary Creature, Dragon). That marks a unique character; Lesson 2 explains the legend rule and how that differs from a normal creature. The subtype comes next on the type line, in this case Human Wizard. Subtypes don't change the rules but some cards care about them specifically. For example, a card might say 'whenever a Wizard enters the battlefield.'",
     position: { top: '58%', left: '-0.5%' },
     tipDir: 'right',
   },
@@ -52,7 +52,7 @@ const CALLOUTS = [
     label: 'Power',
     number: 5,
     text: "The first number in the bottom right corner is the creature's power. Power is how much damage this creature deals when it attacks or blocks in combat. Shadowmage Infiltrator has a power of 1, so it deals 1 damage in combat.",
-    position: { bottom: '8.5%', left: '74%' },
+    position: { bottom: '8.5%', left: '71%' },
     tipDir: 'above',
   },
   {
@@ -60,7 +60,7 @@ const CALLOUTS = [
     label: 'Toughness',
     number: 6,
     text: "The second number in the bottom right corner is the creature's toughness. Toughness is how much damage a creature can take before it dies. Shadowmage Infiltrator has a toughness of 3, meaning it can survive up to 3 damage. At the end of each turn, damage on creatures is removed, so a creature that takes 2 damage out of 3 toughness survives the turn and heals back to full.",
-    position: { bottom: '8.5%', left: '98%' },
+    position: { bottom: '8.5%', left: '101%' },
     tipDir: 'above',
   },
 ]
@@ -316,7 +316,7 @@ export default function CardAnatomy({ session }) {
           nextLabel="Continue to card types"
           canProceed={allExplored}
           gateMessage="Explore all six numbered markers on the card before continuing."
-          readyMessage="You've explored everything on this card — ready to continue."
+          readyMessage="You've explored everything on this card. Ready to continue."
           onGateBlocked={handleGateBlocked}
         />
 

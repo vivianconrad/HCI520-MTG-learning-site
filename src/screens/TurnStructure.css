@@ -2,20 +2,9 @@
   min-height: var(--viewport-min-height);
   background: var(--color-navy);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-x: clip;
   padding: 24px;
-}
-
-.turn-structure > main {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
 }
 
 .turn-structure__frame {
@@ -23,6 +12,7 @@
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  overflow-x: clip;
   background: var(--color-parchment);
   border: 1.5px solid var(--color-gold);
   border-radius: 8px;

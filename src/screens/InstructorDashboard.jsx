@@ -133,7 +133,7 @@ export default function InstructorDashboard() {
           <p className="instructor__intro">
             Participant rows are private by design. With deny-select RLS (the default from{' '}
             <code>supabase/setup.sql</code>), this page cannot read cohort data from the browser.
-            That is expected — use Supabase for analysis, and treat the button below as an optional
+            That is expected. Use Supabase for analysis, and treat the button below as an optional
             check when you have changed policies.
           </p>
           <ol className="instructor__steps">
@@ -165,7 +165,7 @@ export default function InstructorDashboard() {
         {rlsBlocked && (
           <p className="instructor__callout" role="status">
             Browser reads are blocked. This is normal with deny-select RLS. Continue in Supabase
-            Table Editor — the empty tables below are not a bug.
+            Table Editor. The empty tables below are not a bug.
           </p>
         )}
 

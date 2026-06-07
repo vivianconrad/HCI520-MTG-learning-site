@@ -9,7 +9,7 @@
   }
 }
 
-/* Readable text on parchment — use secondary/dark tokens, not gold or gold-muted */
+/* Readable text on parchment: use secondary/dark tokens, not gold or gold-muted */
 .consent__breadcrumb,
 .welcome__breadcrumb,
 .intro__breadcrumb,
@@ -42,7 +42,7 @@
   color: var(--color-text-secondary);
 }
 
-/* Disabled lesson controls — explicit colors instead of opacity (preserves contrast) */
+/* Disabled lesson controls: explicit colors instead of opacity (preserves contrast) */
 .pretest__button:disabled,
 .turn-structure__phase-nav .turn-structure__button:disabled,
 .card-anatomy__button--next:disabled,

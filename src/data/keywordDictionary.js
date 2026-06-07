@@ -31,6 +31,16 @@ export const KEYWORD_TERMS = [
       'The number in a gray circle in a mana cost (for example, the “2” in {1}{R}). You can pay it with mana of any color, or with colorless mana.',
   },
   {
+    term: 'Exile',
+    definition:
+      'A separate zone for cards removed from the game. Exiled cards are not in the graveyard and usually cannot be used again unless a card says so.',
+  },
+  {
+    term: 'Graveyard',
+    definition:
+      'A face-up pile for cards that were used up, destroyed, or discarded. Creatures and most spells end up here.',
+  },
+  {
     term: 'Hand size limit',
     definition:
       'At the end of your turn, if you have more than seven cards in hand, you discard down to seven.',
@@ -38,7 +48,7 @@ export const KEYWORD_TERMS = [
   {
     term: 'Legendary',
     definition:
-      'A word that can appear before a card’s type on the type line (for example, Legendary Creature — Human Wizard). Legendary marks a unique character or place. It is not a separate card type; a legendary creature still fights and blocks like any creature. The legend rule: if you control two or more permanents with the same name and at least one is legendary, you keep one and sacrifice the rest.',
+      'A word that can appear before a card’s type on the type line (for example, Legendary Creature, Human Wizard). Legendary marks a unique character or place. It is not a separate card type; a legendary creature still fights and blocks like any creature. The legend rule: if you control two or more permanents with the same name and at least one is legendary, you keep one and sacrifice the rest.',
   },
   {
     term: 'Library',
