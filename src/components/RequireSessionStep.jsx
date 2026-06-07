@@ -40,7 +40,7 @@ export default function RequireSessionStep({
   const requirements = Array.isArray(require) ? require : [require]
 
   if (redirectIfPretestComplete && session.pretestCompleted) {
-    return <Navigate to="/lesson/intro" replace />
+    return <Navigate to="/pretest-complete" replace />
   }
 
   if (redirectIfPosttestComplete && session.posttestCompleted) {

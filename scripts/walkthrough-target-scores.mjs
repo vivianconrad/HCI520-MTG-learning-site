@@ -92,12 +92,14 @@ async function main() {
   await page.waitForURL(/\/pretest/)
   await answerTest(page, PRETEST_TARGET)
 
-  console.log('Post pre-test flow → lesson intro')
+  console.log('Post pre-test → pretest complete → lesson intro')
   const skipSave = page.getByRole('button', { name: /Continue without saving/i })
   if (await skipSave.isVisible().catch(() => false)) {
     console.log('Pre-test save failed — continuing without saving')
     await skipSave.click()
   }
+  await page.waitForURL(/\/pretest-complete/, { timeout: 60_000 })
+  await page.getByRole('button', { name: 'Continue' }).click()
   await page.waitForURL(/\/lesson\/intro/, { timeout: 60_000 })
 
   console.log('Lesson intro — curiosity focus')
