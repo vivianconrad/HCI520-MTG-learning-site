@@ -6,7 +6,8 @@ import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBrowserBackConfirm } from '../hooks/useBrowserBackConfirm.js'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { savePretest } from '../lib/db.js'
-import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
+import { describeSaveFailure } from '../lib/sessionErrors.js'
+import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import { useConfirm } from '../context/useConfirm.js'
 import { PRETEST_LEAVE_CONFIRM_MESSAGE, PRETEST_LEAVE_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import { calculateTestScoreAsync } from '../lib/testScore.js'
@@ -25,7 +26,11 @@ export default function PreTest({ session }) {
     pretestAnswers,
     pretestCompleted,
     markPretestCompleted,
+    participantRowReady,
   } = session
+
+  const { rowReady, rowError } = useParticipantBootstrap(session)
+  const canSave = participantRowReady && rowReady
 
   useRedirectIfTestComplete(pretestCompleted, '/pretest-complete')
   useScreenTime(session, 'PreTest')
@@ -43,6 +48,14 @@ export default function PreTest({ session }) {
 
   const handleComplete = useCallback(
     async (lastAnswer) => {
+      if (!canSave) {
+        setSaveWarning(
+          rowError ??
+            'Your session is still being registered. Wait a moment, or return to Welcome and try again.'
+        )
+        return
+      }
+
       const answers = { ...pretestAnswers, ...lastAnswer }
       const score = await calculateTestScoreAsync(selectedQuestions, answers)
       const result = await savePretest(sessionId, sessionSecret, answers, score)
@@ -56,9 +69,18 @@ export default function PreTest({ session }) {
       if (import.meta.env.DEV) {
         console.warn('[PreTest] savePretest failed:', result)
       }
-      setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
+      setSaveWarning(describeSaveFailure(result))
     },
-    [pretestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPretestCompleted]
+    [
+      canSave,
+      rowError,
+      pretestAnswers,
+      selectedQuestions,
+      sessionId,
+      sessionSecret,
+      navigate,
+      markPretestCompleted,
+    ]
   )
 
   if (pretestCompleted) {
@@ -104,6 +126,16 @@ export default function PreTest({ session }) {
       className="pretest"
       showKeywordDictionary={false}
     >
+      {rowError ? (
+        <div className="pretest__save-warning-block" role="alert">
+          <p className="pretest__save-warning">{rowError}</p>
+        </div>
+      ) : null}
+      {!canSave && !rowError ? (
+        <p className="pretest__intro-note" aria-live="polite">
+          Preparing your session…
+        </p>
+      ) : null}
       {saveWarning ? (
         <div className="pretest__save-warning-block" role="alert">
           <p className="pretest__save-warning">{saveWarning}</p>

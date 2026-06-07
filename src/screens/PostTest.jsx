@@ -5,8 +5,8 @@ import { PROGRESS } from '../components/progressConstants.js'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBrowserBackConfirm } from '../hooks/useBrowserBackConfirm.js'
 import useScreenTime from '../hooks/useScreenTime.js'
-import { savePosttest } from '../lib/db.js'
-import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
+import { savePosttest, saveScreenTime } from '../lib/db.js'
+import { describeSaveFailure } from '../lib/sessionErrors.js'
 import { useConfirm } from '../context/useConfirm.js'
 import { POSTTEST_LEAVE_CONFIRM_MESSAGE, POSTTEST_LEAVE_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import { calculateTestScoreAsync } from '../lib/testScore.js'
@@ -20,6 +20,7 @@ export default function PostTest({ session }) {
     sessionId,
     sessionSecret,
     selectedQuestions,
+    screenTimes,
     setPosttestAnswer,
     posttestAnswers,
     posttestCompleted,
@@ -41,6 +42,7 @@ export default function PostTest({ session }) {
       const result = await savePosttest(sessionId, sessionSecret, answers, score)
 
       if (result?.ok) {
+        await saveScreenTime(sessionId, sessionSecret, screenTimes)
         markPosttestCompleted()
         navigate('/calculating', { replace: true })
         return
@@ -49,9 +51,17 @@ export default function PostTest({ session }) {
       if (import.meta.env.DEV) {
         console.warn('[PostTest] savePosttest failed:', result)
       }
-      setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
+      setSaveWarning(describeSaveFailure(result))
     },
-    [posttestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPosttestCompleted]
+    [
+      posttestAnswers,
+      selectedQuestions,
+      sessionId,
+      sessionSecret,
+      screenTimes,
+      navigate,
+      markPosttestCompleted,
+    ]
   )
 
   if (posttestCompleted) {

@@ -78,7 +78,7 @@ function App() {
               element={
                 <GuardedRoute
                   session={session}
-                  require={['consent', 'questions']}
+                  require={['consent', 'questions', 'rowReady']}
                   element={<PreTest session={session} />}
                 />
               }
@@ -158,7 +158,7 @@ function App() {
               element={
                 <GuardedRoute
                   session={session}
-                  require={['consent', 'pretest']}
+                  require={['consent', 'rowReady', 'pretest']}
                   element={<LessonComplete session={session} />}
                 />
               }
@@ -168,7 +168,7 @@ function App() {
               element={
                 <GuardedRoute
                   session={session}
-                  require={['consent', 'lessons']}
+                  require={['consent', 'rowReady', 'lessons']}
                   element={<PostTest session={session} />}
                 />
               }

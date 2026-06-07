@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import PageLayout from '../components/PageLayout.jsx'
@@ -15,6 +15,7 @@ import {
 } from '../lib/scoring.js'
 import { LESSON_4_PATH, PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import answerKeys from '../data/questionAnswerKeys.js'
+import { saveScreenTime } from '../lib/db.js'
 import { getQuestionExplanation } from '../lib/questionExplanations.js'
 import './Results.css'
 
@@ -75,13 +76,22 @@ export default function Results({ session }) {
   const navigate = useNavigate()
   const {
     sessionId,
+    sessionSecret,
     selectedQuestions,
     pretestAnswers,
     posttestAnswers,
     scenariosAttempted,
+    screenTimes,
     resetSession,
   } = session
   const [copiedSummary, setCopiedSummary] = useState(false)
+  const screenTimeFlushed = useRef(false)
+
+  useEffect(() => {
+    if (screenTimeFlushed.current || !sessionId || !sessionSecret) return
+    screenTimeFlushed.current = true
+    saveScreenTime(sessionId, sessionSecret, screenTimes)
+  }, [sessionId, sessionSecret, screenTimes])
 
   const hasTestData =
     selectedQuestions &&

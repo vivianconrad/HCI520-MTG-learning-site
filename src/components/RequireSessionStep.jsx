@@ -1,10 +1,11 @@
 import { Navigate } from 'react-router-dom'
 
-const CHECK_ORDER = ['consent', 'questions', 'pretest', 'lessons', 'posttest']
+const CHECK_ORDER = ['consent', 'questions', 'rowReady', 'pretest', 'lessons', 'posttest']
 
 const REDIRECTS = {
   consent: '/',
   questions: '/welcome',
+  rowReady: '/welcome',
   pretest: '/pretest',
   lessons: '/what-is-mtg',
   posttest: '/posttest',
@@ -14,6 +15,7 @@ function getRedirectPath(requirements, session) {
   const checks = {
     consent: session.consentGiven,
     questions: session.selectedQuestions != null,
+    rowReady: session.participantRowReady,
     pretest: session.pretestCompleted,
     lessons: session.lessonsCompleted,
     posttest: session.posttestCompleted,

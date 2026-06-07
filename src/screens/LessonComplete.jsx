@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
-import { saveLessonProgress, saveScreenTime } from '../lib/db.js'
-import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
+import { saveLessonComplete } from '../lib/db.js'
+import { describeSaveFailure } from '../lib/sessionErrors.js'
 import { PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import { useConfirm } from '../context/useConfirm.js'
 import PageLayout from '../components/PageLayout.jsx'
@@ -42,32 +42,41 @@ export default function LessonComplete({ session }) {
   } = session
   const completedAllPractice = scenariosAttempted >= PRACTICE_SCENARIO_COUNT
   const [saveWarning, setSaveWarning] = useState(null)
-  const screenTimeSaved = useRef(false)
+  const [saveOk, setSaveOk] = useState(false)
+  const [saving, setSaving] = useState(true)
+  const saveStarted = useRef(false)
+
+  const persistLessonComplete = useCallback(async () => {
+    setSaving(true)
+    setSaveWarning(null)
+
+    const result = await saveLessonComplete(
+      sessionId,
+      sessionSecret,
+      scenariosAttempted,
+      screenTimes
+    )
+
+    if (result?.ok) {
+      setLessonsCompleted(true)
+      setSaveOk(true)
+      setSaveWarning(null)
+    } else {
+      if (import.meta.env.DEV) {
+        console.warn('[LessonComplete] saveLessonComplete failed:', result)
+      }
+      setSaveOk(false)
+      setSaveWarning(describeSaveFailure(result))
+    }
+
+    setSaving(false)
+  }, [sessionId, sessionSecret, scenariosAttempted, screenTimes, setLessonsCompleted])
 
   useEffect(() => {
-    saveLessonProgress(sessionId, sessionSecret, true, scenariosAttempted).then((result) => {
-      if (result?.ok) {
-        setLessonsCompleted(true)
-        return
-      }
-      if (import.meta.env.DEV) {
-        console.warn('[LessonComplete] saveLessonProgress failed:', result)
-      }
-      setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
-    })
-  }, [sessionId, sessionSecret, scenariosAttempted, setLessonsCompleted])
-
-  useEffect(() => {
-    if (screenTimeSaved.current) return
-    screenTimeSaved.current = true
-    saveScreenTime(sessionId, sessionSecret, screenTimes).then((result) => {
-      if (result?.ok) return
-      if (import.meta.env.DEV) {
-        console.warn('[LessonComplete] saveScreenTime failed:', result)
-      }
-      setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
-    })
-  }, [sessionId, sessionSecret, screenTimes])
+    if (saveStarted.current) return
+    saveStarted.current = true
+    persistLessonComplete()
+  }, [persistLessonComplete])
 
   return (
     <PageLayout title="Lessons Complete · Learn to Play MTG" className="lesson-complete">
@@ -106,10 +115,26 @@ export default function LessonComplete({ session }) {
 
         <CopySessionId sessionId={session.sessionId} className="lesson-complete__session" />
 
-        {saveWarning ? (
+        {saving ? (
           <p className="lesson-complete__save-warning" role="status">
-            {saveWarning}
+            Saving your lesson progress…
           </p>
+        ) : null}
+
+        {saveWarning ? (
+          <div className="lesson-complete__save-warning-block" role="alert">
+            <p className="lesson-complete__save-warning">{saveWarning}</p>
+            <button
+              type="button"
+              className="lesson-complete__button lesson-complete__button--next"
+              onClick={() => {
+                saveStarted.current = false
+                persistLessonComplete()
+              }}
+            >
+              Retry save
+            </button>
+          </div>
         ) : null}
 
         <div className="lesson-complete__actions">
@@ -132,6 +157,7 @@ export default function LessonComplete({ session }) {
           <button
             type="button"
             className="lesson-complete__button lesson-complete__button--next"
+            disabled={!saveOk}
             onClick={() => navigate(posttestCompleted ? '/results' : '/posttest')}
           >
             {posttestCompleted ? 'View results' : 'Start Post-Test'}

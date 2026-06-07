@@ -184,3 +184,22 @@ export async function saveLessonProgress(
     'saveLessonProgress'
   )
 }
+
+/** Persist lesson completion, scenario count, and screen times in one RPC (atomic). */
+export async function saveLessonComplete(
+  sessionId,
+  sessionSecret,
+  scenariosAttempted,
+  screenTimes
+) {
+  return patchParticipant(
+    sessionId,
+    sessionSecret,
+    {
+      lessons_completed: true,
+      scenarios_attempted: scenariosAttempted,
+      screens_time: screenTimes,
+    },
+    'saveLessonComplete'
+  )
+}

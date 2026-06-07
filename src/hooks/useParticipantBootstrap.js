@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { createParticipantRow } from '../lib/db.js'
+import { createParticipantRow, fetchParticipantProgress } from '../lib/db.js'
 import { SESSION_UPDATE_BLOCKED_MESSAGE } from '../lib/sessionErrors.js'
 
 /**
@@ -19,7 +19,40 @@ export default function useParticipantBootstrap(session) {
   } = session
 
   const [rowError, setRowError] = useState(null)
-  const rowReady = participantRowReady || Boolean(participantId)
+  const [verifying, setVerifying] = useState(false)
+  const rowReady = participantRowReady
+
+  // Reconcile a persisted participantId with the database before allowing saves.
+  useEffect(() => {
+    if (participantRowReady || !participantId || !sessionId || !sessionSecret) return undefined
+
+    let cancelled = false
+    setVerifying(true)
+
+    fetchParticipantProgress(sessionId, sessionSecret).then((progress) => {
+      if (cancelled) return
+      setVerifying(false)
+
+      if (progress) {
+        markParticipantRowReady()
+        setRowError(null)
+        return
+      }
+
+      setParticipantId(null)
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [
+    participantRowReady,
+    participantId,
+    sessionId,
+    sessionSecret,
+    markParticipantRowReady,
+    setParticipantId,
+  ])
 
   useEffect(() => {
     if (participantRowReady || participantId || !selectedQuestions?.length) return undefined
@@ -58,5 +91,5 @@ export default function useParticipantBootstrap(session) {
     rotateSessionCredentials,
   ])
 
-  return { rowReady, rowError }
+  return { rowReady, rowError, verifying: verifying && !participantRowReady }
 }

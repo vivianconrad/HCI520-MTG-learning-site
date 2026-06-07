@@ -9,6 +9,7 @@ export default function KeywordDictionary() {
   const panelRef = useRef(null)
   const triggerRef = useRef(null)
   const searchRef = useRef(null)
+  const listWrapRef = useRef(null)
 
   useFocusTrap(panelRef, open)
 
@@ -20,6 +21,11 @@ export default function KeywordDictionary() {
         term.toLowerCase().includes(normalized) || definition.toLowerCase().includes(normalized)
     )
   }, [query])
+
+  useEffect(() => {
+    if (!open) return undefined
+    listWrapRef.current?.scrollTo({ top: 0 })
+  }, [query, open])
 
   useEffect(() => {
     if (!open) return undefined
@@ -109,7 +115,7 @@ export default function KeywordDictionary() {
               autoComplete="off"
             />
 
-            <div className="keyword-dictionary__list-wrap">
+            <div ref={listWrapRef} className="keyword-dictionary__list-wrap">
               {filteredTerms.length === 0 ? (
                 <p className="keyword-dictionary__empty">No terms match your search.</p>
               ) : (

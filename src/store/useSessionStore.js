@@ -52,7 +52,7 @@ export default function useSessionStore() {
   )
   const [participantId, setParticipantIdState] = useState(() => saved?.participantId ?? null)
   const [participantRowReady, setParticipantRowReady] = useState(
-    () => saved?.participantRowReady ?? Boolean(saved?.participantId)
+    () => saved?.participantRowReady ?? false
   )
   const [selectedQuestions, setSelectedQuestions] = useState(() => saved?.selectedQuestions ?? null)
   const [pretestAnswers, setPretestAnswers] = useState(() => saved?.pretestAnswers ?? {})
