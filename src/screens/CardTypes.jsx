@@ -608,8 +608,10 @@ export default function CardTypes({ session }) {
   const overlayPanelRef = useRef(null)
 
   const activeType = CARD_TYPES.find((t) => t.id === overlayId)
-  const activeExamples = overlayId ? displayExamplesByType[overlayId] ?? [] : []
-  const overlaySlides = useMemo(() => buildOverlaySlides(activeExamples), [activeExamples])
+  const overlaySlides = useMemo(() => {
+    const activeExamples = overlayId ? displayExamplesByType[overlayId] ?? [] : []
+    return buildOverlaySlides(activeExamples)
+  }, [overlayId, displayExamplesByType])
   const overlayOpen = Boolean(activeType)
 
   useFocusTrap(overlayPanelRef, overlayOpen)

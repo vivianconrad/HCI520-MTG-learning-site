@@ -19,26 +19,28 @@ export default function useParticipantBootstrap(session) {
   } = session
 
   const [rowError, setRowError] = useState(null)
-  const [verifying, setVerifying] = useState(false)
+  const [verifiedParticipantId, setVerifiedParticipantId] = useState(null)
   const rowReady = participantRowReady
+  const shouldVerify = !participantRowReady && participantId && sessionId && sessionSecret
+  const verifying = Boolean(shouldVerify && verifiedParticipantId !== participantId)
 
   // Reconcile a persisted participantId with the database before allowing saves.
   useEffect(() => {
-    if (participantRowReady || !participantId || !sessionId || !sessionSecret) return undefined
+    if (!shouldVerify || verifiedParticipantId === participantId) return undefined
 
     let cancelled = false
-    setVerifying(true)
 
     fetchParticipantProgress(sessionId, sessionSecret).then((progress) => {
       if (cancelled) return
-      setVerifying(false)
 
       if (progress) {
+        setVerifiedParticipantId(participantId)
         markParticipantRowReady()
         setRowError(null)
         return
       }
 
+      setVerifiedParticipantId(null)
       setParticipantId(null)
     })
 
@@ -46,7 +48,8 @@ export default function useParticipantBootstrap(session) {
       cancelled = true
     }
   }, [
-    participantRowReady,
+    shouldVerify,
+    verifiedParticipantId,
     participantId,
     sessionId,
     sessionSecret,
@@ -91,5 +94,5 @@ export default function useParticipantBootstrap(session) {
     rotateSessionCredentials,
   ])
 
-  return { rowReady, rowError, verifying: verifying && !participantRowReady }
+  return { rowReady, rowError, verifying }
 }
