@@ -30,6 +30,7 @@ export default function useParticipantBootstrap(session) {
       if (cancelled) return
 
       if (result?.conflict) {
+        setRowError(null)
         rotateSessionCredentials()
         return
       }

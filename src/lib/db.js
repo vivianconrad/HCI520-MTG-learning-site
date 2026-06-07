@@ -83,7 +83,7 @@ async function patchParticipant(sessionId, sessionSecret, payload, logLabel) {
   if (res.ok && rowsUpdated === 0) {
     devWarn(
       `[db] ${logLabel}: 0 rows updated: participant row missing or UPDATE blocked by RLS. ` +
-        'Run supabase/fix-participants-rls.sql in the Supabase SQL Editor.'
+        'Re-run supabase/setup.sql in the Supabase SQL Editor.'
     )
   }
 
@@ -92,7 +92,11 @@ async function patchParticipant(sessionId, sessionSecret, payload, logLabel) {
 
 function isSessionConflictError(error) {
   if (!error) return false
-  return error.code === '23505' || /session_id already registered/i.test(error.message ?? '')
+  return (
+    error.code === '23505' ||
+    /session_id already registered/i.test(error.message ?? '') ||
+    /duplicate key/i.test(error.message ?? '')
+  )
 }
 
 /**
