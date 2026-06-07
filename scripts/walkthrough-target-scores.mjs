@@ -9,6 +9,18 @@ const BASE = process.env.APP_URL ?? 'http://localhost:5173/HCI520-MTG-learning-s
 const PRETEST_TARGET = 3
 const POSTTEST_TARGET = 7
 
+async function waitForProgress(page, textPattern) {
+  await page.locator('.card-anatomy__progress, .card-types__progress, .turn-structure__progress').filter({
+    hasText: textPattern,
+  }).waitFor({ timeout: 30_000 })
+}
+
+async function closeCardTypeOverlay(page) {
+  await page.locator('.card-types__overlay-close').click()
+  await page.waitForTimeout(250)
+  await page.locator('.card-types__overlay').waitFor({ state: 'hidden', timeout: 5_000 }).catch(() => {})
+}
+
 async function clickPrimary(page, pattern) {
   const btn = page.getByRole('button', { name: pattern })
   await btn.waitFor({ state: 'visible', timeout: 60_000 })
@@ -82,24 +94,31 @@ async function main() {
 
   console.log('Lesson 1 — card anatomy markers')
   await page.waitForURL(/\/lesson\/1/)
-  for (const marker of await page.locator('.card-anatomy__callout-marker').all()) {
-    await marker.click()
+  const anatomyLabels = ['Name', 'Mana Cost', 'Type Line', 'Text Box', 'Power', 'Toughness']
+  for (const label of anatomyLabels) {
+    await page.getByRole('button', { name: `${label} callout` }).click()
   }
+  await page.getByText(/All six parts explored/i).waitFor({ timeout: 15_000 })
   await clickPrimary(page, /^Next$/)
 
   console.log('Lesson 2 — card types')
   await page.waitForURL(/\/lesson\/2/)
-  for (const seeCard of await page.locator('.card-types__see-card').all()) {
+  for (let i = 0; i < 7; i++) {
+    const seeCard = page.locator('.card-types__see-card:not(.card-types__see-card--viewed)').first()
+    await seeCard.waitFor({ state: 'visible', timeout: 10_000 })
     await seeCard.click()
-    await page.locator('.card-types__overlay-close').click()
+    await page.locator('.card-types__overlay-close').waitFor({ state: 'visible', timeout: 5_000 })
+    await closeCardTypeOverlay(page)
   }
+  await page.getByText(/All card types explored/i).waitFor({ timeout: 15_000 })
   await clickPrimary(page, /^Next$/)
 
   console.log('Lesson 3 — turn phases')
   await page.waitForURL(/\/lesson\/3/)
-  for (const phase of await page.locator('.turn-structure__node').all()) {
-    await phase.click()
+  for (const phaseId of ['beginning', 'first-main', 'combat', 'second-main', 'end']) {
+    await page.locator(`#turn-tab-${phaseId}`).click()
   }
+  await page.getByText(/Explored 5 of 5 phases/i).waitFor({ timeout: 15_000 })
   await clickPrimary(page, /^Next$/)
 
   console.log('Lesson 4 — one scenario then finish')
@@ -127,20 +146,51 @@ async function main() {
   await answerTest(page, POSTTEST_TARGET)
 
   console.log('Results')
-  await page.waitForURL(/\/calculating|\/results/, { timeout: 30_000 })
-  if (page.url().includes('/calculating')) {
-    await page.waitForURL(/\/results/, { timeout: 15_000 })
+  await page.waitForURL(/\/calculating|\/posttest|\/results/, { timeout: 60_000 })
+
+  const continueWithoutSaving = page.getByRole('button', { name: /Continue without saving/i })
+  if (await continueWithoutSaving.isVisible().catch(() => false)) {
+    console.log('Post-test save failed — continuing without saving')
+    await continueWithoutSaving.click()
+    await page.waitForURL(/\/calculating/, { timeout: 15_000 })
   }
 
-  const body = await page.textContent('body')
-  const preMatch = body.match(/Pre-Test[\s\S]*?(\d+)\s*\/\s*10/i) ?? body.match(/(\d+)\s*\/\s*10/)
-  const scores = [...body.matchAll(/(\d+)\s*\/\s*10/g)].map((m) => Number(m[1]))
+  if (page.url().includes('/calculating')) {
+    await page.waitForURL(/\/results/, { timeout: 15_000 })
+  } else if (page.url().includes('/posttest')) {
+    await page.waitForURL(/\/calculating|\/results/, { timeout: 60_000 })
+    if (page.url().includes('/calculating')) {
+      await page.waitForURL(/\/results/, { timeout: 15_000 })
+    }
+  }
 
-  console.log('\n--- Results page scores (/10) ---')
-  console.log('Found scores:', scores)
+  await page
+    .locator('.results__heading, .results__empty')
+    .first()
+    .waitFor({ state: 'visible', timeout: 30_000 })
+
+  const empty = page.locator('.results__empty')
+  if (await empty.isVisible()) {
+    const emptyText = await empty.first().textContent()
+    console.error('Results empty state:', emptyText?.trim())
+    await page.screenshot({ path: 'walkthrough-results-fail.png', fullPage: true })
+    await browser.close()
+    process.exit(1)
+  }
+
+  const metricScores = page.locator('.results__metric-score')
+  await metricScores.first().waitFor({ state: 'visible', timeout: 10_000 })
+  const scoreTexts = await metricScores.allTextContents()
+  const scores = scoreTexts.map((t) => {
+    const m = t.match(/(\d+)\s*\/\s*(\d+)/)
+    return m ? Number(m[1]) : NaN
+  })
+
+  console.log('\n--- Results page scores ---')
+  console.log('Metric labels:', scoreTexts.map((t) => t.trim()))
 
   const preScore = scores[0]
-  const postScore = scores[1] ?? scores[scores.length - 1]
+  const postScore = scores[1]
 
   if (preScore !== PRETEST_TARGET || postScore !== POSTTEST_TARGET) {
     console.error(`Expected pre=${PRETEST_TARGET} post=${POSTTEST_TARGET}, got pre=${preScore} post=${postScore}`)

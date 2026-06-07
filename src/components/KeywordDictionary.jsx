@@ -16,9 +16,14 @@ export default function KeywordDictionary() {
   const filteredTerms = useMemo(() => {
     const normalized = query.trim().toLowerCase()
     if (!normalized) return KEYWORD_TERMS
-    return KEYWORD_TERMS.filter(
-      ({ term, definition }) =>
-        term.toLowerCase().includes(normalized) || definition.toLowerCase().includes(normalized)
+
+    const termMatches = KEYWORD_TERMS.filter(({ term }) =>
+      term.toLowerCase().includes(normalized)
+    )
+    if (termMatches.length > 0) return termMatches
+
+    return KEYWORD_TERMS.filter(({ definition }) =>
+      definition.toLowerCase().includes(normalized)
     )
   }, [query])
 
