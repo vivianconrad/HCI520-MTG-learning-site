@@ -19,7 +19,7 @@ const PHASES = [
     title: 'Beginning Phase',
     substeps: [
       'Untap: You untap all of your permanents. Turn every tapped card upright so it can be used again. Tapping means turning a card sideways to show it has been used; untapping reverses that at the start of each of your turns.',
-      'Upkeep: Triggered abilities that say \'at the beginning of your upkeep\' happen here. Most turns nothing happens during upkeep.',
+      "Upkeep: Triggered abilities that say 'at the beginning of your upkeep' happen here. Most turns nothing happens during upkeep.",
       'Draw: You draw one card from the top of your library. The first player to go skips this on their very first turn.',
     ],
     image: cardImage('land-island.png'),
@@ -29,7 +29,7 @@ const PHASES = [
     id: 'first-main',
     label: 'First Main Phase',
     title: 'First Main Phase',
-    body: 'This is your first window to cast spells when the stack is empty — creatures, sorceries, enchantments, artifacts, and planeswalkers. You may also play your one land for the turn here (lands are played, not cast), or save that land drop for your second main phase. Instants can be cast any time you have priority, including here. The example card, Llanowar Elves, can tap to add green mana — that is activating an ability, not casting a spell. If you cast it this turn, summoning sickness stops it from attacking or using that tap ability until your next turn begins.',
+    body: 'This is your first window to cast spells when the stack is empty: creatures, sorceries, enchantments, artifacts, and planeswalkers. You may also play your one land for the turn here (lands are played, not cast), or save that land drop for your second main phase. Instants can be cast any time you have priority, including here. The example card, Llanowar Elves, can tap to add green mana. That is activating an ability, not casting a spell. If you cast it this turn, summoning sickness stops it from attacking or using that tap ability until your next turn begins.',
     image: cardImage('creature-llanowar-elves.jpg'),
     imageAlt: 'Llanowar Elves creature card',
   },
@@ -51,7 +51,7 @@ const PHASES = [
     id: 'second-main',
     label: 'Second Main Phase',
     title: 'Second Main Phase',
-    body: 'After combat, you get a second main phase — mainly another window to cast spells when the stack is empty. Many players hold back creatures or sorceries until they see how combat went. If you have not played a land yet this turn, you may play it now; you still get only one land per turn total.',
+    body: 'After combat, you get a second main phase, mainly another window to cast spells when the stack is empty. Many players hold back creatures or sorceries until they see how combat went. If you have not played a land yet this turn, you may play it now; you still get only one land per turn total.',
     image: cardImage('artifact-sol-ring.jpg'),
     imageAlt: 'Sol Ring artifact card',
   },
@@ -59,7 +59,7 @@ const PHASES = [
     id: 'end',
     label: 'End Phase',
     title: 'End Phase',
-    body: 'The turn wraps up here. If you have more than seven cards in hand you must discard down to seven. Damage on creatures is removed and \'until end of turn\' effects expire.',
+    body: "The turn wraps up here. If you have more than seven cards in hand you must discard down to seven. Damage on creatures is removed and 'until end of turn' effects expire.",
     image: cardImage('enchantment-sylvan-library.webp'),
     imageAlt: 'Sylvan Library enchantment card',
   },
@@ -115,12 +115,13 @@ export default function TurnStructure({ session }) {
         <hr className="turn-structure__rule" aria-hidden="true" />
 
         <p className="turn-structure__intro">
-          Every Magic turn follows the same sequence of phases. Once you know this order, you&apos;ll
-          always know what you can do and when.
+          Every Magic turn follows the same sequence of phases. Once you know this order,
+          you&apos;ll always know what you can do and when.
         </p>
 
         <p className="turn-structure__hint">
-          Click each phase in the timeline below to read about it. Open all five before you continue.
+          Click each phase in the timeline below to read about it. Open all five before you
+          continue.
         </p>
 
         <div
@@ -159,7 +160,11 @@ export default function TurnStructure({ session }) {
           className="turn-structure__detail"
         >
           <h2 className="turn-structure__detail-title">{selected.title}</h2>
-          <img className="turn-structure__phase-image" src={selected.image} alt={selected.imageAlt} />
+          <img
+            className="turn-structure__phase-image"
+            src={selected.image}
+            alt={selected.imageAlt}
+          />
           {selected.substeps ? (
             <ul className="turn-structure__substeps">
               {selected.substeps.map((text) => (
@@ -187,7 +192,7 @@ export default function TurnStructure({ session }) {
         <hr className="turn-structure__divider" aria-hidden="true" />
 
         <p className="turn-structure__closing">
-          <GlossaryText text="The two main phases are what trips most new players up. You get two windows to cast spells (before and after combat), but only one land per turn — played in your first or second main phase, not one in each. Lands are played; spells are cast. Tapped cards untap at the start of your turn. Sorceries need an empty stack; instants can be cast any time you have priority, including in response to spells on the stack." />
+          <GlossaryText text="The two main phases are what trips most new players up. You get two windows to cast spells (before and after combat), but only one land per turn, played in your first or second main phase, not one in each. Lands are played; spells are cast. Tapped cards untap at the start of your turn. Sorceries need an empty stack; instants can be cast any time you have priority, including in response to spells on the stack." />
         </p>
 
         <LessonActions

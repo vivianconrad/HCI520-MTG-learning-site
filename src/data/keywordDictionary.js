@@ -3,17 +3,22 @@ export const KEYWORD_TERMS = [
   {
     term: 'Activate (ability)',
     definition:
-      'Use an ability printed on a permanent already on the battlefield — for example, tap Sol Ring to add mana, or use a planeswalker loyalty ability. Activating is not casting; it does not start from your hand and usually follows sorcery timing unless the card says otherwise.',
+      'Use an ability printed on a permanent already on the battlefield (for example, tap Sol Ring to add mana, or use a planeswalker loyalty ability). Activating is not casting; it does not start from your hand and usually follows sorcery timing unless the card says otherwise.',
   },
   {
     term: 'Cast',
     definition:
-      'Pay a spell’s mana cost and put it on the stack. Creatures, instants, sorceries, artifacts, enchantments, and planeswalkers are cast. Lands are never cast — they are played.',
+      'Pay a spell’s mana cost and put it on the stack. Creatures, instants, sorceries, artifacts, enchantments, and planeswalkers are cast. Lands are never cast; they are played.',
+  },
+  {
+    term: 'Spell',
+    definition:
+      'Any card you cast from your hand (except lands). While it waits on the stack to resolve, the rules call it a spell. If it resolves and stays on the battlefield, it becomes a permanent and is no longer called a spell. Instants and sorceries are spells that go to the graveyard after they resolve.',
   },
   {
     term: 'Colorless mana',
     definition:
-      'Mana with no color, shown as a diamond symbol in a mana cost (for example, the diamond in {C}{C} on some cards). Sol Ring’s {2} is generic mana, not colorless mana — you can pay it with any type of mana, including colorless.',
+      'Mana with no color, shown as a diamond symbol in a mana cost (for example, the diamond in {C}{C} on some cards). Sol Ring’s {2} is generic mana, not colorless mana. You can pay it with any type of mana, including colorless.',
   },
   {
     term: 'Counter (a spell)',
@@ -43,7 +48,7 @@ export const KEYWORD_TERMS = [
   {
     term: 'Permanent',
     definition:
-      'A card that stays on the battlefield: lands, creatures, artifacts, enchantments, and planeswalkers. Instants and sorceries are not permanents — they resolve and go to the graveyard.',
+      'A card that stays on the battlefield: lands, creatures, artifacts, enchantments, and planeswalkers. Lands are played directly; other permanents were spells on the stack until they resolved. Instants and sorceries are not permanents; they resolve and go to the graveyard.',
   },
   {
     term: 'Play (a land)',
@@ -53,7 +58,7 @@ export const KEYWORD_TERMS = [
   {
     term: 'Priority',
     definition:
-      'Your window to take an action — play a land, cast a spell, activate an ability, or pass. When both players pass in a row, the top item on the stack resolves (or the game moves to the next step).',
+      'Your window to take an action: play a land, cast a spell, activate an ability, or pass. When both players pass in a row, the top item on the stack resolves (or the game moves to the next step).',
   },
   {
     term: 'Resolve',
@@ -74,7 +79,7 @@ export const KEYWORD_TERMS = [
     term: 'Summoning sickness',
     official: false,
     definition:
-      'Informal shorthand (not an official rules term) for a creature that was not under your control at the start of your turn — usually one you just cast. Until your next turn begins, it cannot attack and cannot use activated abilities that include a tap symbol in the cost (for example, Llanowar Elves cannot tap for mana the turn it enters). It can still block if it is untapped. Creatures with haste ignore summoning sickness.',
+      'Informal shorthand (not an official rules term) for a creature that was not under your control at the start of your turn, usually one you just cast. Until your next turn begins, it cannot attack and cannot use activated abilities that include a tap symbol in the cost (for example, Llanowar Elves cannot tap for mana the turn it enters). It can still block if it is untapped. Creatures with haste ignore summoning sickness.',
   },
   {
     term: 'Tap / Untap',
@@ -84,11 +89,11 @@ export const KEYWORD_TERMS = [
 ]
 
 const KEYWORD_DEFINITION_BY_TERM = new Map(
-  KEYWORD_TERMS.map(({ term, definition }) => [term, definition]),
+  KEYWORD_TERMS.map(({ term, definition }) => [term, definition])
 )
 
 const KEYWORD_OFFICIAL_BY_TERM = new Map(
-  KEYWORD_TERMS.map(({ term, official = true }) => [term, official]),
+  KEYWORD_TERMS.map(({ term, official = true }) => [term, official])
 )
 
 /** Full definition for a canonical glossary term label. */
@@ -96,7 +101,7 @@ export function getKeywordDefinition(term) {
   return KEYWORD_DEFINITION_BY_TERM.get(term) ?? null
 }
 
-/** Official rules vocabulary — eligible for inline lesson highlights (not pre/post tests). */
+/** Official rules vocabulary, eligible for inline lesson highlights (not pre/post tests). */
 export function isOfficialKeyword(term) {
   return KEYWORD_OFFICIAL_BY_TERM.get(term) ?? false
 }

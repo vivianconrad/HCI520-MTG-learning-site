@@ -15,6 +15,7 @@ export default function useParticipantBootstrap(session) {
     participantRowReady,
     setParticipantId,
     markParticipantRowReady,
+    rotateSessionCredentials,
   } = session
 
   const [rowError, setRowError] = useState(null)
@@ -25,11 +26,18 @@ export default function useParticipantBootstrap(session) {
 
     let cancelled = false
 
-    createParticipantRow(sessionId, sessionSecret, selectedQuestions).then((id) => {
+    createParticipantRow(sessionId, sessionSecret, selectedQuestions).then((result) => {
       if (cancelled) return
-      if (id) {
-        setParticipantId(id)
+
+      if (result?.conflict) {
+        rotateSessionCredentials()
+        return
+      }
+
+      if (typeof result === 'string' && result) {
+        setParticipantId(result)
         markParticipantRowReady()
+        setRowError(null)
       } else {
         setRowError(SESSION_UPDATE_BLOCKED_MESSAGE)
       }
@@ -46,6 +54,7 @@ export default function useParticipantBootstrap(session) {
     sessionSecret,
     setParticipantId,
     markParticipantRowReady,
+    rotateSessionCredentials,
   ])
 
   return { rowReady, rowError }

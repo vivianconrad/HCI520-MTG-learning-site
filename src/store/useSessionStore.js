@@ -1,10 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { TOPIC_ORDER } from '../lib/scoring.js'
-import {
-  loadPersistedSession,
-  persistSession,
-  clearPersistedSession,
-} from './sessionStorage.js'
+import { fetchParticipantProgress } from '../lib/db.js'
+import { loadPersistedSession, persistSession, clearPersistedSession } from './sessionStorage.js'
 
 const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 
@@ -44,36 +41,21 @@ async function pickQuestions() {
   })
 }
 
-function isTestFullyAnswered(answers, questions) {
-  if (!questions?.length) return false
-  return questions.every((question) => answers[question.id] !== undefined)
-}
-
 const initialPersistedSession = loadPersistedSession()
 
 export default function useSessionStore() {
   const saved = initialPersistedSession
 
-  const [sessionId] = useState(() => saved?.sessionId ?? generateSessionId())
-  const [sessionSecret] = useState(
-    () => saved?.sessionSecret ?? generateSessionSecret(),
-  )
+  const [sessionId, setSessionId] = useState(() => saved?.sessionId ?? generateSessionId())
+  const [sessionSecret, setSessionSecret] = useState(() => saved?.sessionSecret ?? generateSessionSecret())
   const [participantId, setParticipantIdState] = useState(() => saved?.participantId ?? null)
   const [participantRowReady, setParticipantRowReady] = useState(
-    () => saved?.participantRowReady ?? Boolean(saved?.participantId),
+    () => saved?.participantRowReady ?? Boolean(saved?.participantId)
   )
-  const [selectedQuestions, setSelectedQuestions] = useState(
-    () => saved?.selectedQuestions ?? null,
-  )
-  const [pretestAnswers, setPretestAnswers] = useState(
-    () => saved?.pretestAnswers ?? {},
-  )
-  const [posttestAnswers, setPosttestAnswers] = useState(
-    () => saved?.posttestAnswers ?? {},
-  )
-  const [screenStartTimes, setScreenStartTimes] = useState(
-    () => saved?.screenStartTimes ?? {},
-  )
+  const [selectedQuestions, setSelectedQuestions] = useState(() => saved?.selectedQuestions ?? null)
+  const [pretestAnswers, setPretestAnswers] = useState(() => saved?.pretestAnswers ?? {})
+  const [posttestAnswers, setPosttestAnswers] = useState(() => saved?.posttestAnswers ?? {})
+  const [screenStartTimes, setScreenStartTimes] = useState(() => saved?.screenStartTimes ?? {})
   const [screenTimes, setScreenTimes] = useState(() => saved?.screenTimes ?? {})
   const [scenarioIdsAttempted, setScenarioIdsAttempted] = useState(() => {
     if (Array.isArray(saved?.scenarioIdsAttempted)) return saved.scenarioIdsAttempted
@@ -84,21 +66,15 @@ export default function useSessionStore() {
     }
     return []
   })
-  const [consentGiven, setConsentGivenState] = useState(
-    () => saved?.consentGiven ?? false,
-  )
+  const [consentGiven, setConsentGivenState] = useState(() => saved?.consentGiven ?? false)
   const [lessonsCompleted, setLessonsCompletedState] = useState(
-    () => saved?.lessonsCompleted ?? false,
+    () => saved?.lessonsCompleted ?? false
   )
   const [pretestCompleted, setPretestCompletedState] = useState(
-    () =>
-      saved?.pretestCompleted ??
-      isTestFullyAnswered(saved?.pretestAnswers ?? {}, saved?.selectedQuestions),
+    () => saved?.pretestCompleted ?? false
   )
   const [posttestCompleted, setPosttestCompletedState] = useState(
-    () =>
-      saved?.posttestCompleted ??
-      isTestFullyAnswered(saved?.posttestAnswers ?? {}, saved?.selectedQuestions),
+    () => saved?.posttestCompleted ?? false
   )
 
   useEffect(() => {
@@ -134,6 +110,23 @@ export default function useSessionStore() {
     pretestCompleted,
     posttestCompleted,
   ])
+
+  useEffect(() => {
+    if (!sessionId || !sessionSecret || !participantRowReady) return undefined
+
+    let cancelled = false
+
+    fetchParticipantProgress(sessionId, sessionSecret).then((progress) => {
+      if (cancelled || !progress) return
+      if (progress.pretest_completed) setPretestCompletedState(true)
+      if (progress.lessons_completed) setLessonsCompletedState(true)
+      if (progress.posttest_completed) setPosttestCompletedState(true)
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [sessionId, sessionSecret, participantRowReady])
 
   const selectQuestions = useCallback(async () => {
     const selected = await pickQuestions()
@@ -211,6 +204,13 @@ export default function useSessionStore() {
     window.location.replace(`${import.meta.env.BASE_URL}`)
   }, [])
 
+  const rotateSessionCredentials = useCallback(() => {
+    setSessionId(generateSessionId())
+    setSessionSecret(generateSessionSecret())
+    setParticipantIdState(null)
+    setParticipantRowReady(false)
+  }, [])
+
   return {
     sessionId,
     sessionSecret,
@@ -240,5 +240,6 @@ export default function useSessionStore() {
     markPretestCompleted,
     markPosttestCompleted,
     resetSession,
+    rotateSessionCredentials,
   }
 }

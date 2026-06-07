@@ -3,7 +3,9 @@
 @import './styles/responsive.css';
 @import './components/PageLayout.css';
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 

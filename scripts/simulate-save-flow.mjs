@@ -1,5 +1,5 @@
 /**
- * Simulates Intro insert + pretest save using the same REST paths as src/lib/db.js
+ * Simulates Intro register + pretest save using the same paths as src/lib/db.js
  */
 import { readFileSync } from 'fs'
 import { createClient } from '@supabase/supabase-js'
@@ -13,7 +13,7 @@ const env = Object.fromEntries(
     .map((l) => {
       const i = l.indexOf('=')
       return [l.slice(0, i), l.slice(i + 1)]
-    }),
+    })
 )
 
 const url = env.VITE_SUPABASE_URL
@@ -24,14 +24,22 @@ const sb = createClient(url, key)
 
 console.log('[simulate] sessionId=', sessionId)
 
-const participantId = nanoid(10)
-const ins = await sb.from('participants').insert({
-  participant_id: participantId,
-  session_id: sessionId,
-  session_secret: sessionSecret,
-  selected_questions: [{ id: 'q1', lo: 'LO1' }],
+const selectedQuestions = Array.from({ length: 10 }, (_, index) => ({
+  id: `sim_q${index + 1}`,
+  lo: 'LO0',
+  correctIndex: 0,
+}))
+
+const rpc = await sb.rpc('register_participant', {
+  p_participant_id: nanoid(10),
+  p_session_id: sessionId,
+  p_session_secret: sessionSecret,
+  p_selected_questions: selectedQuestions,
 })
-console.log('[simulate] createParticipantRow', { status: ins.status, error: ins.error?.message })
+console.log('[simulate] register_participant', {
+  data: rpc.data,
+  error: rpc.error?.message ?? null,
+})
 
 const patch = await fetch(
   `${url}/rest/v1/participants?session_id=eq.${encodeURIComponent(sessionId)}`,
@@ -44,8 +52,11 @@ const patch = await fetch(
       'x-session-secret': sessionSecret,
       Prefer: 'return=minimal,count=exact',
     },
-    body: JSON.stringify({ pretest_answers: { q1: 0 }, pretest_score: 1 }),
-  },
+    body: JSON.stringify({
+      pretest_answers: { sim_q1: 0 },
+      pretest_score: 1,
+    }),
+  }
 )
 console.log('[simulate] savePretest', {
   status: patch.status,

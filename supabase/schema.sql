@@ -18,11 +18,8 @@ create table if not exists public.learning_sessions (
 alter table public.learning_sessions enable row level security;
 
 drop policy if exists "learning_sessions_insert" on public.learning_sessions;
-create policy "learning_sessions_insert"
-  on public.learning_sessions
-  for insert
-  to anon
-  with check (true);
+-- Do not allow anon INSERT on deprecated table (spam vector).
+revoke insert on public.learning_sessions from anon;
 
 drop policy if exists "learning_sessions_update" on public.learning_sessions;
 drop policy if exists "learning_sessions_deny_update" on public.learning_sessions;

@@ -5,7 +5,7 @@ const FOCUSABLE_SELECTOR =
 
 function getFocusableElements(container) {
   return Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR)).filter(
-    (element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true',
+    (element) => !element.hasAttribute('disabled') && element.getAttribute('aria-hidden') !== 'true'
   )
 }
 

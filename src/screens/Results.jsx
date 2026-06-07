@@ -2,8 +2,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import PageLayout from '../components/PageLayout.jsx'
-import ProgressDots from '../components/ProgressDots.jsx'
-import { PROGRESS } from '../components/progressConstants.js'
+import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
 import {
   TOPIC_LABELS,
   TOPIC_LESSON_PATHS,
@@ -15,6 +14,7 @@ import {
   getReviewLessonPath,
 } from '../lib/scoring.js'
 import { LESSON_4_PATH, PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
+import answerKeys from '../data/questionAnswerKeys.js'
 import { getQuestionExplanation } from '../lib/questionExplanations.js'
 import './Results.css'
 
@@ -23,16 +23,29 @@ function getTopicReviewPath(topicKey, selectedQuestions, pretestAnswers, posttes
 
   const missedQuestion = selectedQuestions.find((question) => {
     if (question.lo !== topicKey) return false
-    const preIndex = pretestAnswers[question.id]
-    const postIndex = posttestAnswers[question.id]
-    return preIndex !== question.correctIndex || postIndex !== question.correctIndex
+    return questionResultMeta(question, pretestAnswers, posttestAnswers).eitherWrong
   })
 
   if (missedQuestion) return getReviewLessonPath(missedQuestion)
   return TOPIC_LESSON_PATHS[topicKey] ?? '/what-is-mtg'
 }
 
-function AnswerCell({ answerIndex, question }) {
+function questionResultMeta(question, pretestAnswers, posttestAnswers) {
+  const correctIndex = answerKeys[question.id] ?? question.correctIndex
+  const preIndex = pretestAnswers[question.id]
+  const postIndex = posttestAnswers[question.id]
+  const eitherWrong = preIndex !== correctIndex || postIndex !== correctIndex
+
+  return {
+    preIndex,
+    postIndex,
+    eitherWrong,
+    correctIndex,
+    explanation: eitherWrong ? getQuestionExplanation(question) : null,
+  }
+}
+
+function AnswerCell({ answerIndex, question, correctIndex }) {
   if (answerIndex === undefined || answerIndex === null) {
     return (
       <span className="results__answer results__answer--missing">
@@ -41,7 +54,7 @@ function AnswerCell({ answerIndex, question }) {
     )
   }
 
-  const isCorrect = answerIndex === question.correctIndex
+  const isCorrect = answerIndex === correctIndex
   const text = question.options[answerIndex]
   const status = isCorrect ? 'Correct' : 'Incorrect'
 
@@ -78,7 +91,7 @@ export default function Results({ session }) {
 
   const scores = useMemo(() => {
     if (!hasTestData) return null
-    return calculateScores(selectedQuestions, pretestAnswers, posttestAnswers)
+    return calculateScores(selectedQuestions, pretestAnswers, posttestAnswers, answerKeys)
   }, [hasTestData, selectedQuestions, pretestAnswers, posttestAnswers])
 
   async function handleCopySummary() {
@@ -177,8 +190,8 @@ export default function Results({ session }) {
                             topicKey,
                             selectedQuestions,
                             pretestAnswers,
-                            posttestAnswers,
-                          ),
+                            posttestAnswers
+                          )
                         )
                       }
                     >
@@ -247,11 +260,8 @@ export default function Results({ session }) {
             </thead>
             <tbody>
               {selectedQuestions.map((question, index) => {
-                const preIndex = pretestAnswers[question.id]
-                const postIndex = posttestAnswers[question.id]
-                const eitherWrong =
-                  preIndex !== question.correctIndex || postIndex !== question.correctIndex
-                const explanation = eitherWrong ? getQuestionExplanation(question) : null
+                const { preIndex, postIndex, eitherWrong, explanation, correctIndex } =
+                  questionResultMeta(question, pretestAnswers, posttestAnswers)
 
                 return (
                   <tr
@@ -268,16 +278,24 @@ export default function Results({ session }) {
                       ) : null}
                     </td>
                     <td>
-                      <AnswerCell answerIndex={preIndex} question={question} />
+                      <AnswerCell
+                        answerIndex={preIndex}
+                        question={question}
+                        correctIndex={correctIndex}
+                      />
                     </td>
                     <td>
-                      <AnswerCell answerIndex={postIndex} question={question} />
+                      <AnswerCell
+                        answerIndex={postIndex}
+                        question={question}
+                        correctIndex={correctIndex}
+                      />
                     </td>
                     <td>
                       {eitherWrong ? (
                         <span className="results__question-review-cell">
                           <span className="results__correct-tag">
-                            Correct: {question.options[question.correctIndex]}
+                            Correct: {question.options[correctIndex]}
                           </span>
                           <button
                             type="button"
@@ -288,9 +306,7 @@ export default function Results({ session }) {
                           </button>
                         </span>
                       ) : (
-                        <span className="results__correct-tag results__correct-tag--empty">
-                          -
-                        </span>
+                        <span className="results__correct-tag results__correct-tag--empty">-</span>
                       )}
                     </td>
                   </tr>
@@ -301,11 +317,8 @@ export default function Results({ session }) {
 
           <div className="results__question-cards results__question-cards--mobile">
             {selectedQuestions.map((question, index) => {
-              const preIndex = pretestAnswers[question.id]
-              const postIndex = posttestAnswers[question.id]
-              const eitherWrong =
-                preIndex !== question.correctIndex || postIndex !== question.correctIndex
-              const explanation = eitherWrong ? getQuestionExplanation(question) : null
+              const { preIndex, postIndex, eitherWrong, explanation, correctIndex } =
+                questionResultMeta(question, pretestAnswers, posttestAnswers)
 
               return (
                 <article key={question.id} className="results__question-card">
@@ -317,17 +330,25 @@ export default function Results({ session }) {
                   <div className="results__question-card-answers">
                     <div>
                       <span className="results__question-card-label">Pre-Test</span>
-                      <AnswerCell answerIndex={preIndex} question={question} />
+                      <AnswerCell
+                        answerIndex={preIndex}
+                        question={question}
+                        correctIndex={correctIndex}
+                      />
                     </div>
                     <div>
                       <span className="results__question-card-label">Post-Test</span>
-                      <AnswerCell answerIndex={postIndex} question={question} />
+                      <AnswerCell
+                        answerIndex={postIndex}
+                        question={question}
+                        correctIndex={correctIndex}
+                      />
                     </div>
                   </div>
                   {eitherWrong && (
                     <>
                       <p className="results__question-card-correct">
-                        Correct: {question.options[question.correctIndex]}
+                        Correct: {question.options[correctIndex]}
                       </p>
                       <button
                         type="button"
@@ -354,7 +375,11 @@ export default function Results({ session }) {
           <button type="button" className="results__action-button" onClick={handleCopySummary}>
             {copiedSummary ? 'Summary copied!' : 'Copy results summary'}
           </button>
-          <button type="button" className="results__action-button results__action-button--muted" onClick={resetSession}>
+          <button
+            type="button"
+            className="results__action-button results__action-button--muted"
+            onClick={resetSession}
+          >
             Start over
           </button>
         </div>

@@ -113,11 +113,7 @@ export default function InstructorDashboard() {
               onClick={loadSessions}
               disabled={loading}
             >
-              {loading
-                ? 'Loading…'
-                : loadAttempted
-                  ? 'Refresh'
-                  : 'Try loading cohort data'}
+              {loading ? 'Loading…' : loadAttempted ? 'Refresh' : 'Try loading cohort data'}
             </button>
             <button
               type="button"
@@ -133,7 +129,7 @@ export default function InstructorDashboard() {
         {!loadAttempted && (
           <p className="instructor__intro">
             Cohort summaries come from Supabase when browser access is allowed. Row-level security
-            often blocks SELECT on the <code>participants</code> table — use your Supabase project →
+            often blocks SELECT on the <code>participants</code> table. Use your Supabase project →
             Table Editor → <code>participants</code> to view and export submissions. Click{' '}
             <strong>Try loading cohort data</strong> when you want to attempt a dashboard load.
           </p>
@@ -240,9 +236,7 @@ export default function InstructorDashboard() {
                             </td>
                             <td>{gain >= 0 ? `+${gain}` : gain}</td>
                             <td>
-                              {row.completed_at
-                                ? new Date(row.completed_at).toLocaleString()
-                                : '-'}
+                              {row.completed_at ? new Date(row.completed_at).toLocaleString() : '-'}
                             </td>
                           </tr>
                         )

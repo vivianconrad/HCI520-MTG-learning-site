@@ -3,12 +3,12 @@ import { renderGlossaryListItem, renderGlossaryString } from './glossaryRender.j
 
 const BRIEF = [
   'When you cast a spell (not a land), it goes on the stack first. It is a waiting line where spells and abilities sit before they happen.',
-  'If nothing is waiting, the stack is empty. Sorceries and most other non-instant spells can only be cast during your main phase when the stack is empty. Instants can be cast any time you have priority — priority is your window to play cards or pass — even in response to something already on the stack.',
+  'If nothing is waiting, the stack is empty. Sorceries and most other non-instant spells can only be cast during your main phase when the stack is empty. Instants can be cast any time you have priority, even in response to something already on the stack.',
 ]
 
 const FULL = [
   'The stack is not a turn phase. It is a zone that exists throughout the game: a queue of spells and abilities waiting to resolve.',
-  'When you cast a spell, you pay its mana cost and put the spell on the stack. It does not happen yet. Both players get a chance to respond when they have priority — your window to play cards, activate abilities, or pass — by casting instants or activating abilities. When both players pass without adding anything, the spell on top of the stack resolves (its effect happens), then players get another chance to respond before the next item resolves.',
+  'When you cast a spell, you pay its mana cost and put the spell on the stack. It does not happen yet. Both players get a chance to respond when they have priority by casting instants or activating abilities. When both players pass without adding anything, the spell on top of the stack resolves (its effect happens), then players get another chance to respond before the next item resolves.',
   {
     heading: 'Stack empty vs. not empty',
     list: [
@@ -42,7 +42,10 @@ export default function StackExplainer({ variant = 'full' }) {
   const blocks = variant === 'brief' ? BRIEF : FULL
 
   return (
-    <aside className={`stack-explainer stack-explainer--${variant}`} aria-labelledby="stack-explainer-heading">
+    <aside
+      className={`stack-explainer stack-explainer--${variant}`}
+      aria-labelledby="stack-explainer-heading"
+    >
       <h2 id="stack-explainer-heading" className="stack-explainer__heading">
         What is the stack?
       </h2>

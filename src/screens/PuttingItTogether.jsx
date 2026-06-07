@@ -38,12 +38,12 @@ const SCENARIOS = [
   },
   {
     id: 's2',
-    text: "During combat on your opponent's turn, they attack you with a creature. You declare your untapped 2/2 creature as a blocker — blockers must be untapped and able to block that attacker under the normal rules. You have Giant Growth in your hand — an instant that gives a creature +3/+3 until end of turn. Can you cast Giant Growth now to boost your blocker?",
+    text: "During combat on your opponent's turn, they attack you with a creature. You declare your untapped 2/2 creature as a blocker. Blockers must be untapped and able to block that attacker under the normal rules. You have Giant Growth in your hand, an instant that gives a creature +3/+3 until end of turn. Can you cast Giant Growth now to boost your blocker?",
     cardImage: 'giant-growth.jpg',
     cardImageAlt: 'Giant Growth: Instant',
     correctAnswer: true,
     explanation:
-      "Yes. Giant Growth is an instant, so you can cast it when you have priority — including during combat on your opponent's turn. Target your blocking creature before damage is dealt to pump it up.",
+      "Yes. Giant Growth is an instant, so you can cast it when you have priority, including during combat on your opponent's turn. Target your blocking creature before damage is dealt to pump it up.",
   },
   {
     id: 's3',
@@ -83,7 +83,7 @@ const SCENARIOS = [
   },
   {
     id: 's7',
-    text: "It's your first main phase and the stack is empty. You have a Sol Ring in your hand — it costs {2} (two generic mana). You have two untapped lands that can produce at least two mana total. Can you tap them for mana and cast Sol Ring right now?",
+    text: "It's your first main phase and the stack is empty. You have a Sol Ring in your hand. It costs {2} (two generic mana). You have two untapped lands that can produce at least two mana total. Can you tap them for mana and cast Sol Ring right now?",
     cardImage: 'sol-ring.jpg',
     cardImageAlt: 'Sol Ring: Artifact',
     correctAnswer: true,
@@ -115,16 +115,16 @@ const SCENARIOS = [
     cardImageAlt: 'Creature (summoning sickness example)',
     correctAnswer: false,
     explanation:
-      'No. Summoning sickness applies to creatures you did not control at the start of your turn — they cannot attack or use tap abilities (including tap-for-mana) until your next turn begins. They can still block if they are untapped.',
+      'No. Summoning sickness applies to creatures you did not control at the start of your turn. They cannot attack or use tap abilities (including tap-for-mana) until your next turn begins. They can still block if they are untapped.',
   },
   {
     id: 's11',
-    text: "Your opponent attacks you with a 3/3 creature. You control an untapped 2/2 creature. Can you declare it as a blocker to stop the attack?",
+    text: 'Your opponent attacks you with a 3/3 creature. You control an untapped 2/2 creature. Can you declare it as a blocker to stop the attack?',
     cardImage: 'llanowar-elves.jpg',
     cardImageAlt: 'Creature blocking example',
     correctAnswer: true,
     explanation:
-      'Yes. Blockers must be untapped creatures you control. Your 2/2 can block the 3/3. Each creature deals damage equal to its power to the other — your 2/2 will die, but you prevent 3 damage to your life total.',
+      'Yes. Blockers must be untapped creatures you control. Your 2/2 can block the 3/3. Each creature deals damage equal to its power to the other. Your 2/2 will die, but you prevent 3 damage to your life total.',
   },
 ]
 
@@ -213,15 +213,19 @@ export default function PuttingItTogether({ session }) {
   }
 
   return (
-    <PageLayout title="Lesson 4 · Putting It Together" className="putting-together" showKeywordDictionary>
+    <PageLayout
+      title="Lesson 4 · Putting It Together"
+      className="putting-together"
+      showKeywordDictionary
+    >
       <div className="putting-together__frame page-layout__content-frame">
         <p className="putting-together__breadcrumb">Lesson 04 · Putting It Together</p>
         <h1 className="putting-together__heading">Putting It Together</h1>
         <hr className="putting-together__rule" aria-hidden="true" />
 
         <p className="putting-together__intro">
-          This lesson ties card types and turn structure together. Read each scenario and decide what
-          you would do. You can stop after the first scenario; the rest is optional practice.
+          This lesson ties card types and turn structure together. Read each scenario and decide
+          what you would do. You can stop after the first scenario; the rest is optional practice.
         </p>
 
         <p className="putting-together__intro">
@@ -248,7 +252,7 @@ export default function PuttingItTogether({ session }) {
             {(scenario.images ?? [{ key: scenario.cardImage, alt: scenario.cardImageAlt }]).map(
               ({ key, alt }) => (
                 <ScenarioCardImage key={key} src={CARD_IMAGES[key]} alt={alt} />
-              ),
+              )
             )}
           </div>
           <div className="putting-together__scenario-text-box">

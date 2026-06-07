@@ -16,7 +16,7 @@ const ZONES = [
   {
     name: 'Hand',
     description:
-      'Cards you are holding. You play or cast them when the rules allow — mostly on your turn, though instants can be cast on your opponent’s turn too.',
+      'Cards you are holding. You play or cast them when the rules allow, mostly on your turn, though instants can be cast on your opponent’s turn too.',
   },
   {
     name: 'Battlefield',
@@ -40,7 +40,11 @@ export default function WhatIsMtg({ session }) {
   useScreenTime(session, 'WhatIsMtg')
 
   return (
-    <PageLayout title="What Is Magic? · Learn to Play MTG" className="what-is-mtg" showKeywordDictionary>
+    <PageLayout
+      title="What Is Magic? · Learn to Play MTG"
+      className="what-is-mtg"
+      showKeywordDictionary
+    >
       <div className="what-is-mtg__frame page-layout__content-frame">
         <p className="what-is-mtg__breadcrumb">Overview · What Is Magic?</p>
         <h1 className="what-is-mtg__heading">What Is Magic?</h1>
@@ -55,10 +59,10 @@ export default function WhatIsMtg({ session }) {
 
           <h2 className="what-is-mtg__subheading">Formats</h2>
           <p className="what-is-mtg__paragraph">
-            Magic has many <strong>formats</strong> — rule sets that define which cards you can use.
-            <strong> Standard</strong> decks are usually at least 60 cards;{' '}
-            <strong>Commander</strong> uses 100-card singleton decks. The lessons teach core rules
-            that apply in every format.
+            Magic has many <strong>formats</strong>, which are rule sets that define which cards you
+            can use. <strong>Standard</strong> decks are usually at least 60 cards;{' '}
+            <strong>Commander</strong> uses 100-card singleton decks built around a legendary
+            commander. The lessons teach core rules that apply in every format.
           </p>
 
           <h2 className="what-is-mtg__subheading">Zones on the table</h2>

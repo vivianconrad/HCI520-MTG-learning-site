@@ -8,11 +8,8 @@ import useScreenTime from '../hooks/useScreenTime.js'
 import { savePretest } from '../lib/db.js'
 import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
 import { useConfirm } from '../context/useConfirm.js'
-import {
-  PRETEST_LEAVE_CONFIRM_MESSAGE,
-  PRETEST_LEAVE_CONFIRM_TITLE,
-} from '../lib/lessonNav.js'
-import { calculateTestScore } from '../lib/testScore.js'
+import { PRETEST_LEAVE_CONFIRM_MESSAGE, PRETEST_LEAVE_CONFIRM_TITLE } from '../lib/lessonNav.js'
+import { calculateTestScoreAsync } from '../lib/testScore.js'
 import useRedirectIfTestComplete from '../hooks/useRedirectIfTestComplete.js'
 
 export default function PreTest({ session }) {
@@ -35,7 +32,7 @@ export default function PreTest({ session }) {
   useBrowserBackConfirm(
     !pretestCompleted,
     PRETEST_LEAVE_CONFIRM_MESSAGE,
-    PRETEST_LEAVE_CONFIRM_TITLE,
+    PRETEST_LEAVE_CONFIRM_TITLE
   )
 
   useEffect(() => {
@@ -47,7 +44,7 @@ export default function PreTest({ session }) {
   const handleComplete = useCallback(
     async (lastAnswer) => {
       const answers = { ...pretestAnswers, ...lastAnswer }
-      const score = calculateTestScore(selectedQuestions, answers)
+      const score = await calculateTestScoreAsync(selectedQuestions, answers)
       const result = await savePretest(sessionId, sessionSecret, answers, score)
 
       if (result?.ok) {
@@ -61,7 +58,7 @@ export default function PreTest({ session }) {
       }
       setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
     },
-    [pretestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPretestCompleted],
+    [pretestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPretestCompleted]
   )
 
   if (pretestCompleted) {
@@ -129,7 +126,7 @@ export default function PreTest({ session }) {
         leaveConfirmMessage={PRETEST_LEAVE_CONFIRM_MESSAGE}
         leaveConfirmTitle={PRETEST_LEAVE_CONFIRM_TITLE}
         lastButtonLabel="Continue"
-        introNote="You have not been taught these topics yet. Answer with your best guess — wrong answers are expected and help show what the lessons should cover."
+        introNote="You have not been taught these topics yet. Answer with your best guess. Wrong answers are expected and help show what the lessons should cover."
       />
     </PageLayout>
   )

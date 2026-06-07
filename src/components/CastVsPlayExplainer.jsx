@@ -3,7 +3,7 @@ import { renderGlossaryListItem, renderGlossaryString } from './glossaryRender.j
 
 const BRIEF = [
   'In Magic, playing and casting are different actions. You play lands; you cast everything else that is a spell.',
-  'Playing a land puts it straight onto the battlefield with no stack and no waiting for your opponent to respond. Casting a spell means paying its mana cost and putting it on the stack first, where both players can respond before it resolves.',
+  'Playing a land puts it straight onto the battlefield with no stack and no waiting for your opponent to respond. Casting means paying mana and putting a spell on the stack first, where both players can respond before it resolves. On the stack it is a spell; if it stays on the battlefield after resolving, it becomes a permanent.',
   'Priority is your window to play cards, activate abilities, or pass and let the game move on.',
 ]
 
@@ -14,7 +14,7 @@ const FULL = [
     heading: 'Playing a land',
     list: [
       'Only land cards are played (not cast).',
-      'You may play one land per turn during your first or second main phase when you have priority — not one in each phase.',
+      'You may play one land per turn during your first or second main phase when you have priority, not one in each phase.',
       'The land goes directly onto the battlefield. It never goes on the stack.',
       'Your opponent cannot respond to you playing a land the way they can to a spell.',
     ],
@@ -46,7 +46,8 @@ function renderBlock(block, index) {
           ))}
         </ul>
       )}
-      {block.text && renderGlossaryString(block.text, `${index}-text`, 'stack-explainer__paragraph')}
+      {block.text &&
+        renderGlossaryString(block.text, `${index}-text`, 'stack-explainer__paragraph')}
     </div>
   )
 }

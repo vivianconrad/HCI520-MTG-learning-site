@@ -17,7 +17,7 @@ export default function KeywordDictionary() {
     if (!normalized) return KEYWORD_TERMS
     return KEYWORD_TERMS.filter(
       ({ term, definition }) =>
-        term.toLowerCase().includes(normalized) || definition.toLowerCase().includes(normalized),
+        term.toLowerCase().includes(normalized) || definition.toLowerCase().includes(normalized)
     )
   }, [query])
 
@@ -81,7 +81,7 @@ export default function KeywordDictionary() {
                 </h2>
                 <p className="keyword-dictionary__lede">
                   Search every term here, including informal ones like summoning sickness. Official
-                  rules terms in lessons also appear in gold — hover or tap them for the same quick
+                  rules terms in lessons also appear in gold. Hover or tap them for the same quick
                   definitions.
                 </p>
               </div>

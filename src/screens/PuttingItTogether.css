@@ -190,8 +190,12 @@
 /* ── Feedback (200ms fade-in) ─────────────────────────────── */
 
 @keyframes putting-together-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .putting-together__feedback {

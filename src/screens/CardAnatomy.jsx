@@ -105,7 +105,9 @@ function CardMarker({ callout, isActive, isSeen, onToggle }) {
         tipDir ? `card-anatomy__marker--tip-${tipDir}` : '',
         isSeen ? 'card-anatomy__marker--seen' : '',
         isActive ? 'card-anatomy__marker--active' : '',
-      ].filter(Boolean).join(' ')}
+      ]
+        .filter(Boolean)
+        .join(' ')}
       style={position}
     >
       <button
@@ -154,8 +156,8 @@ export default function CardAnatomy({ session }) {
 
         <p className="card-anatomy__intro">
           Each Magic: The Gathering card contains key information about what it does on the
-          battlefield.
-          Learning to read a card&apos;s anatomy is the first step to building and piloting any deck.
+          battlefield. Learning to read a card&apos;s anatomy is the first step to building and
+          piloting any deck.
         </p>
 
         <h2 className="card-anatomy__subheading">Card Anatomy at a Glance</h2>

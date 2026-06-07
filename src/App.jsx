@@ -56,11 +56,23 @@ function App() {
             <Route path="/" element={<Consent session={session} />} />
             <Route
               path="/welcome"
-              element={<GuardedRoute session={session} require="consent" element={<Welcome session={session} />} />}
+              element={
+                <GuardedRoute
+                  session={session}
+                  require="consent"
+                  element={<Welcome session={session} />}
+                />
+              }
             />
             <Route
               path="/intro"
-              element={<GuardedRoute session={session} require="consent" element={<Intro session={session} />} />}
+              element={
+                <GuardedRoute
+                  session={session}
+                  require="consent"
+                  element={<Intro session={session} />}
+                />
+              }
             />
             <Route
               path="/pretest"

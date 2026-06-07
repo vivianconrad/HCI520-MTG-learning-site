@@ -2,7 +2,9 @@ import { useEffect, useId, useRef, useState } from 'react'
 import './KeywordTooltip.css'
 
 function prefersHover() {
-  return typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  return (
+    typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  )
 }
 
 export default function KeywordTooltip({ term, definition, children }) {

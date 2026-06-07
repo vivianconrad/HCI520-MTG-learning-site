@@ -44,7 +44,8 @@ function renderBlock(block, index) {
           ))}
         </ul>
       )}
-      {block.text && renderGlossaryString(block.text, `${index}-text`, 'stack-explainer__paragraph')}
+      {block.text &&
+        renderGlossaryString(block.text, `${index}-text`, 'stack-explainer__paragraph')}
     </div>
   )
 }

@@ -21,6 +21,7 @@ const GLOSSARY_MATCHES = [
   { pattern: /\bactivat(?:e|es|ed|ing)\b/gi, term: 'Activate (ability)' },
   { pattern: /\bcounter(?:ing|ed|s)?\s+(?:a\s+)?spell\b/gi, term: 'Counter (a spell)' },
   { pattern: /\bcounters?\s+another spell\b/gi, term: 'Counter (a spell)' },
+  { pattern: /\bspells?\b/gi, term: 'Spell' },
   { pattern: /\buntap(?:ped|ping|s)?\b/gi, term: 'Tap / Untap' },
   { pattern: /\buntap step\b/gi, term: 'Tap / Untap' },
   { pattern: /\btap(?:ped|ping|s)?\b/gi, term: 'Tap / Untap' },
@@ -32,7 +33,11 @@ const GLOSSARY_MATCHES = [
   { pattern: /\bresolv(?:e|es|ed|ing)\b/gi, term: 'Resolve' },
   { pattern: /\brespond(?:ing|s)?\b/gi, term: 'Respond' },
   { pattern: /\bin response\b/gi, term: 'Respond' },
-  { pattern: /\bcast(?:ing|s)?\s+(?:a\s+)?(?:spell|creature|instant|sorcery|planeswalker|artifact)\b/gi, term: 'Cast' },
+  {
+    pattern:
+      /\bcast(?:ing|s)?\s+(?:a\s+)?(?:spell|creature|instant|sorcery|planeswalker|artifact)\b/gi,
+    term: 'Cast',
+  },
   { pattern: /\b(?:you|then|to|just|and)\s+cast(?:s|ing)?\b/gi, term: 'Cast' },
   { pattern: /\bcast(?:s|ing)?\s+it\b/gi, term: 'Cast' },
   { pattern: /\b(?:can|could)\s+(?:only\s+)?be\s+cast\b/gi, term: 'Cast' },

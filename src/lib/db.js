@@ -1,10 +1,13 @@
 import { nanoid } from 'nanoid'
+import { attachAnswerKeys } from './questionKeys.js'
 import { supabase } from './supabase'
 
 /** True when PATCH succeeded at HTTP level but RLS blocked the update (wrong session secret or missing row). */
 export function isParticipantUpdateBlocked(result) {
   return Boolean(result && result.ok === false && result.rowsUpdated === 0)
 }
+
+export const SESSION_CONFLICT_CODE = 'session_conflict'
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -80,19 +83,28 @@ async function patchParticipant(sessionId, sessionSecret, payload, logLabel) {
   if (res.ok && rowsUpdated === 0) {
     devWarn(
       `[db] ${logLabel}: 0 rows updated: participant row missing or UPDATE blocked by RLS. ` +
-        'Run supabase/fix-participants-rls.sql in the Supabase SQL Editor.',
+        'Run supabase/fix-participants-rls.sql in the Supabase SQL Editor.'
     )
   }
 
   return result
 }
 
+function isSessionConflictError(error) {
+  if (!error) return false
+  return error.code === '23505' || /session_id already registered/i.test(error.message ?? '')
+}
+
+/**
+ * Creates a participant row via register_participant RPC (no open anon INSERT).
+ * Returns participant id, or { conflict: true } if session_id is already taken.
+ */
 export async function createParticipantRow(sessionId, sessionSecret, selectedQuestions) {
   devLog(
     '[db] createParticipantRow: sessionId=',
     sessionId,
     'questionCount=',
-    selectedQuestions?.length ?? 0,
+    selectedQuestions?.length ?? 0
   )
 
   if (!sessionId) {
@@ -109,21 +121,24 @@ export async function createParticipantRow(sessionId, sessionSecret, selectedQue
   }
 
   const participantId = nanoid(10)
-  const { data, error, status } = await supabase.from('participants').upsert(
-    {
-      participant_id: participantId,
-      session_id: sessionId,
-      session_secret: sessionSecret,
-      selected_questions: selectedQuestions,
-      created_at: new Date().toISOString(),
-    },
-    { onConflict: 'session_id', ignoreDuplicates: true },
-  )
+  const questionsForServer = await attachAnswerKeys(selectedQuestions)
 
-  devLog('[db] createParticipantRow: response', { status, error, data })
+  const { data, error } = await supabase.rpc('register_participant', {
+    p_participant_id: participantId,
+    p_session_id: sessionId,
+    p_session_secret: sessionSecret,
+    p_selected_questions: questionsForServer,
+  })
+
+  devLog('[db] createParticipantRow: rpc response', { data, error })
+
+  if (isSessionConflictError(error)) {
+    devWarn('[db] createParticipantRow: session_id conflict')
+    return { conflict: true, code: SESSION_CONFLICT_CODE }
+  }
 
   if (error) {
-    devError('[db] createParticipantRow: upsert failed', error)
+    devError('[db] createParticipantRow: rpc failed', error)
     return null
   }
 
@@ -131,12 +146,12 @@ export async function createParticipantRow(sessionId, sessionSecret, selectedQue
     sessionId,
     sessionSecret,
     { screens_time: {} },
-    'createParticipantRow:verifyAccess',
+    'createParticipantRow:verifyAccess'
   )
 
   if (isParticipantUpdateBlocked(verify)) {
     devWarn(
-      '[db] createParticipantRow: verify PATCH blocked — session secret likely mismatches DB row',
+      '[db] createParticipantRow: verify PATCH blocked: session secret likely mismatches DB row'
     )
     return null
   }
@@ -149,6 +164,23 @@ export async function createParticipantRow(sessionId, sessionSecret, selectedQue
   return participantId
 }
 
+/** Fetch server-side progress flags for the current session (requires RPC in Supabase). */
+export async function fetchParticipantProgress(sessionId, sessionSecret) {
+  if (!sessionId || !sessionSecret) return null
+
+  const { data, error } = await supabase.rpc('get_participant_progress', {
+    p_session_id: sessionId,
+    p_session_secret: sessionSecret,
+  })
+
+  if (error) {
+    devWarn('[db] fetchParticipantProgress:', error.message)
+    return null
+  }
+
+  return data
+}
+
 export async function savePretest(sessionId, sessionSecret, answers, score) {
   return patchParticipant(
     sessionId,
@@ -157,7 +189,7 @@ export async function savePretest(sessionId, sessionSecret, answers, score) {
       pretest_answers: answers,
       pretest_score: score,
     },
-    'savePretest',
+    'savePretest'
   )
 }
 
@@ -170,7 +202,7 @@ export async function savePosttest(sessionId, sessionSecret, answers, score) {
       posttest_score: score,
       completed_at: new Date().toISOString(),
     },
-    'savePosttest',
+    'savePosttest'
   )
 }
 
@@ -182,7 +214,7 @@ export async function saveLessonProgress(
   sessionId,
   sessionSecret,
   lessonsCompleted,
-  scenariosAttempted,
+  scenariosAttempted
 ) {
   return patchParticipant(
     sessionId,
@@ -191,6 +223,6 @@ export async function saveLessonProgress(
       lessons_completed: lessonsCompleted,
       scenarios_attempted: scenariosAttempted,
     },
-    'saveLessonProgress',
+    'saveLessonProgress'
   )
 }

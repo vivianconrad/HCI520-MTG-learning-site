@@ -48,7 +48,11 @@ export default function LessonIntro() {
   const navigate = useNavigate()
 
   return (
-    <PageLayout title="Lessons Overview · Learn to Play MTG" className="lesson-intro" showKeywordDictionary>
+    <PageLayout
+      title="Lessons Overview · Learn to Play MTG"
+      className="lesson-intro"
+      showKeywordDictionary
+    >
       <div className="lesson-intro__frame page-layout__content-frame">
         <p className="lesson-intro__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="lesson-intro__heading">What comes next</h1>
@@ -60,9 +64,9 @@ export default function LessonIntro() {
             starting a game and your first turn, then four lessons before the post-test.
           </p>
           <p className="lesson-intro__paragraph">
-            Official rules terms appear in gold. Hover or tap one for a short definition, or open the
-            Keyword guide in the corner for the full list, including informal terms like summoning
-            sickness.
+            Official rules terms appear in gold. Hover or tap one for a short definition, or open
+            the Keyword guide in the corner for the full list, including informal terms like
+            summoning sickness.
           </p>
         </div>
 
@@ -91,7 +95,11 @@ export default function LessonIntro() {
           </li>
           {LESSONS.map((lesson) => (
             <li key={lesson.num}>
-              <img className="lesson-intro__lesson-image" src={lesson.image} alt={`Lesson ${lesson.num} card preview`} />
+              <img
+                className="lesson-intro__lesson-image"
+                src={lesson.image}
+                alt={`Lesson ${lesson.num} card preview`}
+              />
               <span className="lesson-intro__lesson-num">Lesson {lesson.num}</span>
               {': '}
               {lesson.title}

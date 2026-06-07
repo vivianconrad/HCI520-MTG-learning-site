@@ -45,8 +45,11 @@ export default function LessonComplete({ session }) {
   const screenTimeSaved = useRef(false)
 
   useEffect(() => {
-    setLessonsCompleted(true)
     saveLessonProgress(sessionId, sessionSecret, true, scenariosAttempted).then((result) => {
+      if (result?.ok) {
+        setLessonsCompleted(true)
+        return
+      }
       if (isParticipantUpdateBlocked(result)) {
         if (import.meta.env.DEV) {
           console.warn('[LessonComplete] saveLessonProgress blocked:', result)
@@ -72,9 +75,7 @@ export default function LessonComplete({ session }) {
   return (
     <PageLayout title="Lessons Complete · Learn to Play MTG" className="lesson-complete">
       <div className="lesson-complete__frame">
-        <p className="lesson-complete__breadcrumb">
-          Magic: The Gathering · Beginner&apos;s Guide
-        </p>
+        <p className="lesson-complete__breadcrumb">Magic: The Gathering · Beginner&apos;s Guide</p>
         <h1 className="lesson-complete__heading">You&apos;ve finished all four lessons.</h1>
         <p className="lesson-complete__tagline">Your mana is tapped, your hand is ready.</p>
         <hr className="lesson-complete__rule" aria-hidden="true" />
@@ -97,7 +98,12 @@ export default function LessonComplete({ session }) {
         </div>
         <div className="lesson-complete__review-strip" aria-label="Cards covered in lessons">
           {REVIEW_CARDS.map((src, index) => (
-            <img key={src} className="lesson-complete__review-card" src={src} alt={`Lesson review card ${index + 1}`} />
+            <img
+              key={src}
+              className="lesson-complete__review-card"
+              src={src}
+              alt={`Lesson review card ${index + 1}`}
+            />
           ))}
         </div>
 

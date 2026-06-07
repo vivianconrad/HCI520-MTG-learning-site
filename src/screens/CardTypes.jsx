@@ -29,7 +29,7 @@ const CARD_TYPES = [
           'At end of turn, damage on creatures is cleared. A creature that survived with 1 toughness left is back at full health next turn.',
         ],
       },
-      'Most creatures you cast have summoning sickness: until your next turn begins, they cannot attack or use activated abilities with a tap symbol in the cost. Llanowar Elves is a common example — it cannot tap for green mana the turn it enters, but it can on later turns. Activating that ability is not casting a spell.',
+      'Most creatures you cast have summoning sickness: until your next turn begins, they cannot attack or use activated abilities with a tap symbol in the cost. Llanowar Elves is a common example. It cannot tap for green mana the turn it enters, but it can on later turns. Activating that ability is not casting a spell.',
     ],
     examples: [
       {
@@ -88,7 +88,7 @@ const CARD_TYPES = [
     details: [
       {
         heading: 'Playing vs. casting',
-        text: 'Lands are played, not cast. You may play one land per turn during your first main phase or your second main phase — not both. Playing a land puts it directly onto the battlefield and does not use the stack. Every other card type in this lesson (with a mana cost in the corner) is cast: you pay mana, the spell goes on the stack, and your opponent can respond before it resolves.',
+        text: 'Lands are played, not cast. You may play one land per turn during your first main phase or your second main phase, not both. Playing a land puts it directly onto the battlefield and does not use the stack. Every other card type in this lesson (with a mana cost in the corner) is cast: you pay mana, the spell goes on the stack, and your opponent can respond before it resolves. When that spell resolves and stays on the battlefield, it becomes a permanent.',
       },
       {
         heading: 'What is mana?',
@@ -100,7 +100,8 @@ const CARD_TYPES = [
           'Tap lands (or other mana sources) to add mana to your mana pool.',
           'Cast the spell and pay its mana cost from that pool.',
           'The spell goes on the stack; your opponent can respond before it resolves.',
-          'Any mana left in your pool when the step or phase ends disappears — spend it or lose it.',
+          'If it resolves and stays on the battlefield, it becomes a permanent. If it is a one-shot instant or sorcery, it goes to the graveyard instead.',
+          'Any mana left in your pool when the step or phase ends disappears. Spend it or lose it.',
         ],
       },
       'Most decks need plenty of lands, often about 24 in a 60-card deck, though faster or slower decks adjust that number.',
@@ -127,12 +128,12 @@ const CARD_TYPES = [
         src: cardImage('land-basic-explanation.png'),
         label: 'Basic Land',
         role: 'Basic land',
-      }, 
+      },
       {
         src: cardImage('land-nonbasic-explanation.png'),
         label: 'Non-basic land',
         role: 'Non-basic land',
-      }, 
+      },
       {
         src: cardImage('land-plains.webp'),
         label: 'Plains',
@@ -188,8 +189,7 @@ const CARD_TYPES = [
   {
     id: 'instant',
     name: 'Instant',
-    description:
-      'Fast spells you can cast any time, including in response to spells on the stack.',
+    description: 'Fast spells you can cast any time, including in response to spells on the stack.',
     tag: 'Any time · you have priority',
     wide: false,
     details: [
@@ -291,7 +291,7 @@ const CARD_TYPES = [
           'Utility effects: anything else the card says: sacrifice for a benefit, pay mana to activate an ability, or trigger when something happens. Always read the rules text.',
         ],
       },
-      'Many artifact abilities use the tap symbol (turn the card sideways) and sometimes a mana cost. You activate those abilities — you do not cast them. Tapping Sol Ring for mana is activating an ability, not casting a spell. You can usually activate only when you could cast a sorcery (your main phase, stack empty), unless the card says otherwise.',
+      'Many artifact abilities use the tap symbol (turn the card sideways) and sometimes a mana cost. You activate those abilities; you do not cast them. Tapping Sol Ring for mana is activating an ability, not casting a spell. You can usually activate only when you could cast a sorcery (your main phase, stack empty), unless the card says otherwise.',
       'Commander’s Sphere also shows a second use: you can sacrifice it (send it to the graveyard) to draw a card. Not every artifact produces mana; some exist purely for protection, card advantage, or combat tricks.',
     ],
     examples: [
@@ -332,7 +332,7 @@ const CARD_TYPES = [
       {
         heading: 'Auras vs. other enchantments',
         list: [
-          'Non-aura enchantments (like Sylvan Library or Goblin Oriflamme) sit on the battlefield and affect the game broadly — your draws, your creatures, the whole table, and so on.',
+          'Non-aura enchantments (like Sylvan Library or Goblin Oriflamme) sit on the battlefield and affect the game broadly: your draws, your creatures, the whole table, and so on.',
           'Aura enchantments target something specific, usually a creature, land, or player, and attach to it. Alien Symbiosis and Hyena Umbra are auras that attach to a creature. If the thing they are attached to leaves the battlefield, the aura goes to the graveyard.',
         ],
         text: 'Read the rules text to see exactly what each enchantment changes. They leave play if destroyed or if an effect exiles them.',
@@ -382,7 +382,7 @@ const CARD_TYPES = [
     tag: 'Main phase · stack empty',
     wide: true,
     details: [
-      'Planeswalkers are permanent allies you cast during your main phase when the stack is empty. They enter the battlefield with loyalty counters (shown in the bottom-right corner). After a planeswalker is in play, you activate its loyalty abilities — you do not cast those abilities from your hand.',
+      'Planeswalkers are permanent allies you cast during your main phase when the stack is empty. They enter the battlefield with loyalty counters (shown in the bottom-right corner). After a planeswalker is in play, you activate its loyalty abilities. You do not cast those abilities from your hand.',
       {
         heading: 'What is loyalty?',
         text: 'Loyalty counters track how much life your planeswalker has left in the game and how much power they can spend on abilities. The number in the corner is not mana, and planeswalkers do not have power or toughness like creatures. Loyalty belongs only to that planeswalker card.',
@@ -463,19 +463,11 @@ function CardThumbnail({ src, alt, className }) {
     return <span className="card-types__thumbnail-placeholder">img</span>
   }
 
-  return (
-    <img
-      className={className}
-      src={src}
-      alt={alt}
-      onError={() => setHasImage(false)}
-    />
-  )
+  return <img className={className} src={src} alt={alt} onError={() => setHasImage(false)} />
 }
 
 function CardTypeDetails({ description, details, variant = 'grid' }) {
-  const copyClass =
-    variant === 'overlay' ? 'card-types__overlay-copy' : 'card-types__type-copy'
+  const copyClass = variant === 'overlay' ? 'card-types__overlay-copy' : 'card-types__type-copy'
 
   return (
     <div className={copyClass}>
@@ -521,11 +513,15 @@ function CardTypeDetails({ description, details, variant = 'grid' }) {
 
 function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
   return (
-    <article className={[
-      'card-types__item',
-      type.wide ? 'card-types__item--wide' : '',
-      type.id === 'instant' ? 'card-types__item--any-time' : '',
-    ].filter(Boolean).join(' ')}>
+    <article
+      className={[
+        'card-types__item',
+        type.wide ? 'card-types__item--wide' : '',
+        type.id === 'instant' ? 'card-types__item--any-time' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       <h3 className="card-types__type-name">{type.name}</h3>
       <div className="card-types__examples" aria-label={`${type.name} examples`}>
         {type.examples.map((example) => (
@@ -536,11 +532,7 @@ function CardTypeItem({ type, hasBeenViewed, onSeeCard }) {
             aria-label={`View ${example.label}`}
             onClick={() => onSeeCard(type.id)}
           >
-            <CardThumbnail
-              src={example.src}
-              alt=""
-              className="card-types__thumbnail-image"
-            />
+            <CardThumbnail src={example.src} alt="" className="card-types__thumbnail-image" />
           </button>
         ))}
       </div>
@@ -617,7 +609,7 @@ export default function CardTypes({ session }) {
 
       if (event.key === 'ArrowLeft') {
         setActiveExampleIndex(
-          (prev) => (prev - 1 + activeType.examples.length) % activeType.examples.length,
+          (prev) => (prev - 1 + activeType.examples.length) % activeType.examples.length
         )
       }
     }
@@ -666,7 +658,7 @@ export default function CardTypes({ session }) {
         </p>
 
         <p className="card-types__timing-footnote">
-          <GlossaryText text='On the tags above, "Main phase · stack empty" means your turn, your first or second main phase, and nothing waiting on the stack — the usual timing for casting creatures, sorceries, artifacts, enchantments, and planeswalkers. Lands use "Main phase · one per turn": one land total, played in either main phase. Some cards break these rules; read the card if you are unsure.' />
+          <GlossaryText text='On the tags above, "Main phase · stack empty" means your turn, your first or second main phase, and nothing waiting on the stack, the usual timing for casting creatures, sorceries, artifacts, enchantments, and planeswalkers. Lands use "Main phase · one per turn": one land total, played in either main phase. Some cards break these rules; read the card if you are unsure.' />
         </p>
 
         <p className="card-types__note">
@@ -707,74 +699,79 @@ export default function CardTypes({ session }) {
             aria-labelledby="card-types-overlay-title"
           >
             {(() => {
-              const activeExample = activeType.examples[activeExampleIndex] ?? activeType.examples[0]
+              const activeExample =
+                activeType.examples[activeExampleIndex] ?? activeType.examples[0]
               const canCycle = activeType.examples.length > 1
               const goToNext = () =>
                 setActiveExampleIndex((prev) => (prev + 1) % activeType.examples.length)
               const goToPrevious = () =>
                 setActiveExampleIndex(
-                  (prev) => (prev - 1 + activeType.examples.length) % activeType.examples.length,
+                  (prev) => (prev - 1 + activeType.examples.length) % activeType.examples.length
                 )
 
               return (
                 <>
-            <button
-              type="button"
-              className="card-types__overlay-close"
-              aria-label="Close"
-              onClick={closeOverlay}
-            >
-              ×
-            </button>
-            <div className="card-types__overlay-gallery">
-              <figure key={activeExample.label} className="card-types__overlay-figure">
-                <div className="card-types__overlay-image">
-                  <CardThumbnail
-                    src={activeExample.src}
-                    alt={`${activeExample.label}, ${activeType.name} card`}
-                    className="card-types__thumbnail-image"
-                  />
-                </div>
-                <figcaption className="card-types__overlay-caption">
-                  <span className="card-types__overlay-caption-name">{activeExample.label}</span>
-                  {activeExample.role && (
-                    <span className="card-types__overlay-caption-role">{activeExample.role}</span>
+                  <button
+                    type="button"
+                    className="card-types__overlay-close"
+                    aria-label="Close"
+                    onClick={closeOverlay}
+                  >
+                    ×
+                  </button>
+                  <div className="card-types__overlay-gallery">
+                    <figure key={activeExample.label} className="card-types__overlay-figure">
+                      <div className="card-types__overlay-image">
+                        <CardThumbnail
+                          src={activeExample.src}
+                          alt={`${activeExample.label}, ${activeType.name} card`}
+                          className="card-types__thumbnail-image"
+                        />
+                      </div>
+                      <figcaption className="card-types__overlay-caption">
+                        <span className="card-types__overlay-caption-name">
+                          {activeExample.label}
+                        </span>
+                        {activeExample.role && (
+                          <span className="card-types__overlay-caption-role">
+                            {activeExample.role}
+                          </span>
+                        )}
+                      </figcaption>
+                    </figure>
+                  </div>
+                  {canCycle && (
+                    <div className="card-types__overlay-controls">
+                      <button
+                        type="button"
+                        className="card-types__overlay-nav"
+                        onClick={goToPrevious}
+                        aria-label={`Previous ${activeType.name} example`}
+                      >
+                        Previous
+                      </button>
+                      <span className="card-types__overlay-count" aria-live="polite">
+                        {activeExampleIndex + 1} / {activeType.examples.length}
+                      </span>
+                      <button
+                        type="button"
+                        className="card-types__overlay-nav"
+                        onClick={goToNext}
+                        aria-label={`Next ${activeType.name} example`}
+                      >
+                        Next
+                      </button>
+                    </div>
                   )}
-                </figcaption>
-              </figure>
-            </div>
-            {canCycle && (
-              <div className="card-types__overlay-controls">
-                <button
-                  type="button"
-                  className="card-types__overlay-nav"
-                  onClick={goToPrevious}
-                  aria-label={`Previous ${activeType.name} example`}
-                >
-                  Previous
-                </button>
-                <span className="card-types__overlay-count" aria-live="polite">
-                  {activeExampleIndex + 1} / {activeType.examples.length}
-                </span>
-                <button
-                  type="button"
-                  className="card-types__overlay-nav"
-                  onClick={goToNext}
-                  aria-label={`Next ${activeType.name} example`}
-                >
-                  Next
-                </button>
-              </div>
-            )}
-            <h3 id="card-types-overlay-title" className="card-types__overlay-name">
-              {activeType.name}
-            </h3>
-            <CardTypeDetails
-              description={activeType.description}
-              details={activeType.details}
-              variant="overlay"
-            />
-            <CardTypeTimingTag timing={activeType.tag} />
+                  <h3 id="card-types-overlay-title" className="card-types__overlay-name">
+                    {activeType.name}
+                  </h3>
+                  <CardTypeDetails
+                    description={activeType.description}
+                    details={activeType.details}
+                    variant="overlay"
+                  />
+                  <CardTypeTimingTag timing={activeType.tag} />
                 </>
               )
             })()}

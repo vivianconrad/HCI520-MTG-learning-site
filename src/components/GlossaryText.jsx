@@ -14,11 +14,11 @@ export default function GlossaryText({
 
   const segments = useMemo(
     () => (enabled && typeof source === 'string' ? linkGlossaryTerms(source) : null),
-    [enabled, source],
+    [enabled, source]
   )
 
   if (!enabled || typeof source !== 'string') {
-    return typeof source === 'string' ? <Tag className={className}>{source}</Tag> : source ?? null
+    return typeof source === 'string' ? <Tag className={className}>{source}</Tag> : (source ?? null)
   }
 
   return (

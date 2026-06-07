@@ -79,12 +79,16 @@ export default function TestQuestionFlow({
       event.preventDefault()
       shouldFocusOptionRef.current = true
       setSelectedIndex((prev) =>
-        prev === null ? optionCount - 1 : (prev - 1 + optionCount) % optionCount,
+        prev === null ? optionCount - 1 : (prev - 1 + optionCount) % optionCount
       )
       return
     }
 
-    if (event.key === 'Enter' && selectedIndex !== null && event.target.closest('[role="radiogroup"]')) {
+    if (
+      event.key === 'Enter' &&
+      selectedIndex !== null &&
+      event.target.closest('[role="radiogroup"]')
+    ) {
       event.preventDefault()
       handleNext()
     }
@@ -111,7 +115,7 @@ export default function TestQuestionFlow({
         {progressAnnouncement}
       </p>
       {introNote && <p className="pretest__intro-note">{introNote}</p>}
-      {/* Plain text only — no inline keyword highlights during assessment. */}
+      {/* Plain text only; no inline keyword highlights during assessment. */}
       <p id={questionHeadingId} className="pretest__question">
         {question.question}
       </p>
@@ -122,11 +126,7 @@ export default function TestQuestionFlow({
           layout={question.imageLayout}
         />
       )}
-      <div
-        className="pretest__options"
-        role="radiogroup"
-        aria-labelledby={questionHeadingId}
-      >
+      <div className="pretest__options" role="radiogroup" aria-labelledby={questionHeadingId}>
         {question.options.map((option, index) => {
           const isSelected = selectedIndex === index
           return (

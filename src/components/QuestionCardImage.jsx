@@ -6,9 +6,7 @@ function QuestionCardImageContent({ src, alt, layout }) {
   if (!src || error) {
     return (
       <div
-        className={`pretest__image-slot${
-          layout === 'wide' ? ' pretest__image-slot--wide' : ''
-        }`}
+        className={`pretest__image-slot${layout === 'wide' ? ' pretest__image-slot--wide' : ''}`}
       >
         Card image
       </div>
@@ -16,15 +14,9 @@ function QuestionCardImageContent({ src, alt, layout }) {
   }
 
   return (
-    <div
-      className={`pretest__image-slot${
-        layout === 'wide' ? ' pretest__image-slot--wide' : ''
-      }`}
-    >
+    <div className={`pretest__image-slot${layout === 'wide' ? ' pretest__image-slot--wide' : ''}`}>
       <img
-        className={`pretest__card-image${
-          layout === 'wide' ? ' pretest__card-image--wide' : ''
-        }`}
+        className={`pretest__card-image${layout === 'wide' ? ' pretest__card-image--wide' : ''}`}
         src={src}
         alt={alt}
         onError={() => setError(true)}

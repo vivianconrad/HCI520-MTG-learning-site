@@ -15,7 +15,7 @@ const QUESTION_EXPLANATIONS = {
   lo0_q7:
     'Your deck sits face-down as your library. You draw from the top of your library during the game.',
   lo0_q8:
-    'When a creature dies, it goes to its owner’s graveyard — a face-up discard pile — unless a card says to exile it or put it somewhere else.',
+    'When a creature dies, it goes to its owner’s graveyard (a face-up discard pile) unless a card says to exile it or put it somewhere else.',
   lo0_q9:
     'Exile is a separate zone for cards removed from the game. Exiled cards are not in the graveyard and usually cannot be used again unless a card allows it.',
   lo0_q10:
@@ -28,7 +28,7 @@ const QUESTION_EXPLANATIONS = {
   lo1_q2:
     'The mana cost in the top right shows how much mana and which colours you need to cast the spell.',
   lo1_q3:
-    'The text box lists the card’s abilities and rules text — what the card actually does in the game.',
+    'The text box lists the card’s abilities and rules text: what the card actually does in the game.',
   lo1_q4:
     'On creatures, the first number is power (damage dealt in combat) and the second is toughness (damage needed to destroy it).',
   lo1_q5:
@@ -37,35 +37,29 @@ const QUESTION_EXPLANATIONS = {
     'Planeswalkers have their own type line and a loyalty counter in the bottom right, not power/toughness.',
   lo1_q7:
     'Enchantments stay on the battlefield and provide ongoing effects. “Aura” is an enchantment subtype.',
-  lo1_q8:
-    'This card’s type line identifies it as a planeswalker, not a creature or sorcery.',
-  lo1_q9:
-    'Instants can be cast any time you have priority, including during an opponent’s turn.',
+  lo1_q8: 'This card’s type line identifies it as a planeswalker, not a creature or sorcery.',
+  lo1_q9: 'Instants can be cast any time you have priority, including during an opponent’s turn.',
   lo1_q10:
     'Sorceries are non-permanent spells. They can only be cast at sorcery speed unless a card says otherwise.',
   lo1_q11:
     'Artifacts are permanents that stay on the battlefield. Sol Ring is an artifact, not an enchantment.',
   lo1_q12:
-    'Counterspell is an instant — note the word “Instant” on the type line and its flash timing.',
+    'Counterspell is an instant. Note the word “Instant” on the type line and its flash timing.',
   lo1_q13:
     'Duress is a sorcery. Sorceries resolve and then go to the graveyard; they do not stay on the battlefield.',
-  lo1_q14:
-    'Islands are lands. The card type is “Land”; “Island” is a basic land subtype.',
-  lo1_q15:
-    'Llanowar Elves is a creature — it has power and toughness and can attack and block.',
-  lo1_q16:
-    'Hyena Umbra is an enchantment. Auras are enchantments that attach to other permanents.',
+  lo1_q14: 'Islands are lands. The card type is “Land”; “Island” is a basic land subtype.',
+  lo1_q15: 'Llanowar Elves is a creature. It has power and toughness and can attack and block.',
+  lo1_q16: 'Hyena Umbra is an enchantment. Auras are enchantments that attach to other permanents.',
   lo1_q17:
     'Nahiri is a planeswalker card, identified by the planeswalker type and loyalty abilities.',
-  lo1_q18:
-    'Mountains are basic lands. The card type is “Land,” not “Mountain.”',
+  lo1_q18: 'Mountains are basic lands. The card type is “Land,” not “Mountain.”',
 
   lo2_q1:
     'A turn has five phases in order: Beginning (untap, upkeep, draw), First Main, Combat, Second Main, End.',
   lo2_q2:
-    'After the draw step in the beginning phase comes your first main phase — when you usually play a land and cast sorcery-speed spells.',
+    'After the draw step in the beginning phase comes your first main phase, when you usually play a land and cast sorcery-speed spells.',
   lo2_q3:
-    'The stack is a zone where spells wait to resolve — it is not one of the five turn phases.',
+    'The stack is a zone where spells wait to resolve. It is not one of the five turn phases.',
   lo2_q4:
     'The player who takes the first turn of the game skips their draw step on that turn only.',
   lo2_q5:
@@ -74,30 +68,26 @@ const QUESTION_EXPLANATIONS = {
     'The stack holds spells and abilities that are waiting to resolve. Players can respond before each item resolves.',
   lo2_q7:
     'Priority is the right to cast spells or activate abilities before your opponent at a given moment in the turn.',
-  lo2_q8:
-    'On your turn, you (the active player) receive priority first in each step and phase.',
+  lo2_q8: 'On your turn, you (the active player) receive priority first in each step and phase.',
   lo2_q9:
-    'Lands are normally played during a main phase — your first or second main phase on your turn.',
+    'Lands are normally played during a main phase: your first or second main phase on your turn.',
   lo2_q10:
     'After a spell resolves, players get priority again and may cast more spells or pass until the stack is empty.',
 
   lo3_q1:
     'You draw one card during the draw step, which is part of the beginning phase (after upkeep).',
   lo3_q2:
-    'During the untap step, all of your permanents untap — they turn upright so you can use them again.',
+    'During the untap step, all of your permanents untap. They turn upright so you can use them again.',
   lo3_q3:
     'The upkeep step is when “at the beginning of your upkeep” triggers resolve, before you draw.',
-  lo3_q4:
-    'You declare attackers during the combat phase, not during a main phase or upkeep.',
+  lo3_q4: 'You declare attackers during the combat phase, not during a main phase or upkeep.',
   lo3_q5:
     'Summoning sickness prevents a creature from attacking the turn you cast it unless it has haste.',
   lo3_q6:
     'A land that entered the battlefield tapped cannot be tapped for mana until it untaps on a later turn.',
-  lo3_q7:
-    'Blockers must be untapped creatures you control. They do not tap when they block.',
+  lo3_q7: 'Blockers must be untapped creatures you control. They do not tap when they block.',
 
-  lo4_q1:
-    'Instants can be cast any time you have priority — on your turn or your opponent’s turn.',
+  lo4_q1: 'Instants can be cast any time you have priority, on your turn or your opponent’s turn.',
   lo4_q2:
     'Sorceries can only be cast during your main phase when the stack is empty (sorcery speed).',
   lo4_q3:

@@ -1,6 +1,7 @@
 # HCI520 MTG Learning Site
 
 Interactive learning site for beginners to learn core **Magic: The Gathering** concepts:
+
 - Card anatomy
 - Card types
 - Turn structure
@@ -88,19 +89,22 @@ This project is configured to publish from the `main` branch using the `/docs` f
 
 Research data is saved incrementally to the `participants` table:
 
-| When | What is saved |
-|------|----------------|
-| Intro screen | New row with session ID, question set, participant ID |
-| Pre-test complete | Answers and score |
-| Lesson complete | Screen times, lessons completed, scenarios attempted |
-| Post-test complete | Answers, score, completion timestamp |
+| When               | What is saved                                         |
+| ------------------ | ----------------------------------------------------- |
+| Intro screen       | New row with session ID, question set, participant ID |
+| Pre-test complete  | Answers and score                                     |
+| Lesson complete    | Screen times, lessons completed, scenarios attempted  |
+| Post-test complete | Answers, score, completion timestamp                  |
 
 **Setup**
 
 1. Run `supabase/participants.sql` in the [Supabase SQL editor](https://supabase.com/dashboard). If rows insert but later columns stay null, also run `supabase/fix-participants-rls.sql` (anon `UPDATE` was blocked).
-2. Verify with `node scripts/verify-participants-db.mjs` — it should print `OK: anon INSERT + UPDATE works`.
-3. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-4. Rebuild (`npm run build`) before deploying so env vars are embedded for GitHub Pages.
+2. Run `supabase/validate-participant-data.sql` for score validation, RPC registration, and progress RPC.
+3. Verify with `node scripts/verify-participants-db.mjs` — it should print `All participant security checks passed.`
+4. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+5. Rebuild (`npm run build`) before deploying so env vars are embedded for GitHub Pages.
+
+See `docs/SECURITY.md` for RLS checklist, answer-key exposure, and rate limits.
 
 **Instructor analysis**
 
@@ -117,12 +121,15 @@ For existing Supabase projects that already have a `participants` table without 
 1. Deploy the updated app (with `session_secret` handling in `src/lib/db.js`) **before** running `supabase/migrations/add-session-secret.sql`.
 2. After the migration, participants who started a session before the update must reset: clear session storage (or start a new session) so the app generates and stores a matching `session_secret`.
 3. If participant saves return 0 rows updated, run `supabase/fix-participants-rls.sql` in the Supabase SQL editor.
-4. Optional: run `supabase/validate-participant-scores.sql` to add score bounds validation on insert/update.
+4. Optional: run `supabase/validate-participant-data.sql` for server-side score validation, progress rules, `register_participant` RPC (closes open INSERT), and `get_participant_progress` RPC.
 
 ## Security
 
 - The Supabase **anon key** is public by design; row-level security (RLS) protects participant data.
 - Participant **updates** require a per-session `session_secret` header enforced by RLS.
+- Run **`supabase/validate-participant-data.sql`** in production so scores are recomputed from answers, progress flags are validated, and participant rows are created via RPC (not open INSERT).
+- Verify production with **`node scripts/verify-participants-db.mjs`** (deny SELECT, deny direct INSERT, RPC + PATCH + score rejection).
+- Test questions in the client bundle omit answer keys; keys are loaded only when saving scores or viewing results. See **`docs/SECURITY.md`** for the exposure decision and residual risk.
 - **Instructor** participant reads are not available from the browser when deny-select RLS is applied.
 - Do **not** commit `.env.local` or other files containing secrets.
 

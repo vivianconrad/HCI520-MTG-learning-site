@@ -1,0 +1,1 @@
+var e=`Your saved session no longer matches our records (often after a site update). Use Reset session on the results page or clear site data and start again.`,t=`We could not save your answers to the server. Your progress is stored in this browser only.`;export{e as n,t};

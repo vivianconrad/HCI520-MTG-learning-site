@@ -10,7 +10,7 @@ const STACK_DEFINITION = getKeywordDefinition('Stack')
 
 export default function KeywordInlineHint() {
   const [dismissed, setDismissed] = useState(
-    () => typeof window !== 'undefined' && window.localStorage.getItem(HINT_DISMISSED_KEY) === '1',
+    () => typeof window !== 'undefined' && window.localStorage.getItem(HINT_DISMISSED_KEY) === '1'
   )
 
   if (dismissed) {
@@ -32,8 +32,7 @@ export default function KeywordInlineHint() {
           </KeywordTooltip>
         ) : (
           <span className="mtg-rules-term keyword-inline-hint__sample">stack</span>
-        )}
-        {' '}
+        )}{' '}
         here, or tap any highlighted word in the lesson.
       </p>
       <button

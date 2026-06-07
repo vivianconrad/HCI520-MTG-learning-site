@@ -18,16 +18,15 @@ export default function PretestComplete({ session }) {
         <div className="lesson-intro__body">
           <p className="lesson-intro__paragraph">
             Thank you. Your pre-test answers are saved. If many questions felt unfamiliar, that is
-            expected. The pre-test measures what you know before the lessons, not whether you are
-            already an expert.
+            normal.
           </p>
           <p className="lesson-intro__paragraph">
-            Next comes a preview of the path, a Magic overview, a first-turn walkthrough, four
+            Next up: a preview of the path, a Magic overview, a first-turn walkthrough, four
             lessons, and the post-test with the same questions.
           </p>
         </div>
 
-        <p className="lesson-intro__closing">Continue when you&apos;re ready.</p>
+        <p className="lesson-intro__closing">Take a breath if you need one, then continue.</p>
 
         <div className="lesson-intro__actions lesson-intro__actions--end">
           <button

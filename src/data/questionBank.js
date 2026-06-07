@@ -1,5 +1,4 @@
 const questionBank = [
-  // LO0: MTG basics (formats, zones, tap, play vs cast)
   {
     id: 'lo0_q1',
     lo: 'LO0',
@@ -10,21 +9,19 @@ const questionBank = [
       'A video game series with no physical cards',
       'A single-player puzzle game with no opponents',
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo0_q2',
     lo: 'LO0',
     question: 'Which deck size is typical for a Commander game?',
     options: ['40 cards minimum', '60 cards minimum', '100 cards (singleton)', 'No limit'],
-    correctIndex: 2,
   },
   {
     id: 'lo0_q3',
     lo: 'LO0',
-    question: 'In most Standard-style constructed formats, a deck must contain at least how many cards?',
+    question:
+      'In most Standard-style constructed formats, a deck must contain at least how many cards?',
     options: ['40', '60', '75', '100'],
-    correctIndex: 1,
   },
   {
     id: 'lo0_q4',
@@ -33,8 +30,12 @@ const questionBank = [
     hasImage: true,
     imageKey: 'plains',
     imageAlt: 'Plains: Land',
-    options: ['Cast it like a spell', 'Play it during a main phase', 'Discard it to the graveyard', 'Exile it from your hand'],
-    correctIndex: 1,
+    options: [
+      'Cast it like a spell',
+      'Play it during a main phase',
+      'Discard it to the graveyard',
+      'Exile it from your hand',
+    ],
   },
   {
     id: 'lo0_q5',
@@ -46,7 +47,6 @@ const questionBank = [
       'Lands are cast; spells are played',
       'Only instants can be played',
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo0_q6',
@@ -58,21 +58,18 @@ const questionBank = [
       'Move it to the graveyard',
       'Flip it face down permanently',
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo0_q7',
     lo: 'LO0',
     question: 'Where is your deck during the game?',
     options: ['Hand', 'Library', 'Graveyard', 'Exile'],
-    correctIndex: 1,
   },
   {
     id: 'lo0_q8',
     lo: 'LO0',
     question: 'Where do most creatures go when they die?',
     options: ['Exile', 'Library', 'Graveyard', 'Hand'],
-    correctIndex: 2,
   },
   {
     id: 'lo0_q9',
@@ -89,7 +86,6 @@ const questionBank = [
       'Where you draw cards from each turn',
       'The same as the battlefield',
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo0_q10',
@@ -101,7 +97,6 @@ const questionBank = [
       'They go to the graveyard',
       'You draw an extra card for each one',
     ],
-    correctIndex: 1,
   },
   {
     id: 'lo0_q11',
@@ -110,12 +105,13 @@ const questionBank = [
     hasImage: true,
     imageKey: 'forest',
     imageAlt: 'Forest: Land',
-    options: ['One', 'Two (one in each main phase)', 'As many as you want', 'Only if the stack is empty'],
-    correctIndex: 0,
+    options: [
+      'One',
+      'Two (one in each main phase)',
+      'As many as you want',
+      'Only if the stack is empty',
+    ],
   },
-
-  // LO1: Card anatomy
-  // Distractors: other card types learners might confuse with creatures
   {
     id: 'lo1_q1',
     lo: 'LO1',
@@ -125,9 +121,7 @@ const questionBank = [
     imageKey: 'shadowmage-infiltrator',
     imageAlt: 'Shadowmage Infiltrator: Creature',
     options: ['Creature', 'Instant', 'Land', 'Sorcery'],
-    correctIndex: 0,
   },
-  // Distractors: conflate mana cost with combat stats or loyalty
   {
     id: 'lo1_q2',
     lo: 'LO1',
@@ -142,9 +136,7 @@ const questionBank = [
       'Toughness',
       'Loyalty',
     ],
-    correctIndex: 1,
   },
-  // Distractors: confuse type line or mana cost with rules text location
   {
     id: 'lo1_q3',
     lo: 'LO1',
@@ -153,9 +145,7 @@ const questionBank = [
     imageKey: 'alien-symbiosis',
     imageAlt: 'Alien Symbiosis: Enchantment',
     options: ['Mana cost', 'Text box', 'Type line', 'Power/Toughness'],
-    correctIndex: 1,
   },
-  // Distractors: mix up P/T with mana cost, loyalty, or generic combat terms
   {
     id: 'lo1_q4',
     lo: 'LO1',
@@ -163,8 +153,12 @@ const questionBank = [
     hasImage: true,
     imageKey: 'shadowmage-infiltrator',
     imageAlt: 'Shadowmage Infiltrator: Creature',
-    options: ['Mana cost and loyalty', 'Power and toughness', 'Attack and defence', 'Cost and ability'],
-    correctIndex: 1,
+    options: [
+      'Mana cost and loyalty',
+      'Power and toughness',
+      'Attack and defence',
+      'Cost and ability',
+    ],
   },
   {
     id: 'lo1_q5',
@@ -175,7 +169,6 @@ const questionBank = [
     imageKey: 'plains',
     imageAlt: 'Plains: Land',
     options: ['Land', 'Plains', 'Creature', 'Enchantment'],
-    correctIndex: 0,
   },
   {
     id: 'lo1_q6',
@@ -186,7 +179,6 @@ const questionBank = [
     imageKey: 'ajani',
     imageAlt: 'Ajani, Mentor of Heroes: Planeswalker',
     options: ['Creature', 'Planeswalker', 'Enchantment', 'Artifact'],
-    correctIndex: 1,
   },
   {
     id: 'lo1_q7',
@@ -197,7 +189,6 @@ const questionBank = [
     imageKey: 'alien-symbiosis',
     imageAlt: 'Alien Symbiosis: Enchantment',
     options: ['Instant', 'Aura', 'Enchantment', 'Artifact'],
-    correctIndex: 2,
   },
   {
     id: 'lo1_q8',
@@ -208,7 +199,6 @@ const questionBank = [
     imageKey: 'liliana',
     imageAlt: 'Liliana of the Veil: Planeswalker',
     options: ['Sorcery', 'Creature', 'Planeswalker', 'Land'],
-    correctIndex: 2,
   },
   {
     id: 'lo1_q9',
@@ -219,7 +209,6 @@ const questionBank = [
     imageKey: 'shock',
     imageAlt: 'Shock: Instant',
     options: ['Instant', 'Sorcery', 'Enchantment', 'Land'],
-    correctIndex: 0,
   },
   {
     id: 'lo1_q10',
@@ -230,7 +219,6 @@ const questionBank = [
     imageKey: 'cultivate',
     imageAlt: 'Cultivate: Sorcery',
     options: ['Instant', 'Sorcery', 'Creature', 'Land'],
-    correctIndex: 1,
   },
   {
     id: 'lo1_q11',
@@ -241,7 +229,6 @@ const questionBank = [
     imageKey: 'sol-ring',
     imageAlt: 'Sol Ring: Artifact',
     options: ['Artifact', 'Enchantment', 'Creature', 'Land'],
-    correctIndex: 0,
   },
   {
     id: 'lo1_q12',
@@ -252,7 +239,6 @@ const questionBank = [
     imageKey: 'counterspell',
     imageAlt: 'Counterspell: Instant',
     options: ['Instant', 'Sorcery', 'Planeswalker', 'Artifact'],
-    correctIndex: 0,
   },
   {
     id: 'lo1_q13',
@@ -263,7 +249,6 @@ const questionBank = [
     imageKey: 'duress',
     imageAlt: 'Duress: Sorcery',
     options: ['Sorcery', 'Instant', 'Enchantment', 'Creature'],
-    correctIndex: 0,
   },
   {
     id: 'lo1_q14',
@@ -274,7 +259,6 @@ const questionBank = [
     imageKey: 'island',
     imageAlt: 'Island: Land',
     options: ['Land', 'Island', 'Instant', 'Sorcery'],
-    correctIndex: 0,
   },
   {
     id: 'lo1_q15',
@@ -285,7 +269,6 @@ const questionBank = [
     imageKey: 'llanowar-elves',
     imageAlt: 'Llanowar Elves: Creature',
     options: ['Creature', 'Instant', 'Land', 'Sorcery'],
-    correctIndex: 0,
   },
   {
     id: 'lo1_q16',
@@ -296,7 +279,6 @@ const questionBank = [
     imageKey: 'hyena-umbra',
     imageAlt: 'Hyena Umbra: Enchantment',
     options: ['Instant', 'Aura', 'Enchantment', 'Artifact'],
-    correctIndex: 2,
   },
   {
     id: 'lo1_q17',
@@ -307,7 +289,6 @@ const questionBank = [
     imageKey: 'nahiri',
     imageAlt: 'Nahiri, the Lithomancer: Planeswalker',
     options: ['Creature', 'Planeswalker', 'Sorcery', 'Artifact'],
-    correctIndex: 1,
   },
   {
     id: 'lo1_q18',
@@ -318,11 +299,7 @@ const questionBank = [
     imageKey: 'mountain',
     imageAlt: 'Mountain: Land',
     options: ['Land', 'Mountain', 'Artifact', 'Instant'],
-    correctIndex: 0,
   },
-
-  // LO2: Turn structure
-  // Distractors: reorder phases or swap main/combat order
   {
     id: 'lo2_q1',
     lo: 'LO2',
@@ -333,23 +310,18 @@ const questionBank = [
       'Beginning, Combat, First Main, Second Main, End',
       'Beginning, First Main, Second Main, Combat, End',
     ],
-    correctIndex: 0,
   },
-  // Distractors: adjacent phases that learners commonly mix up
   {
     id: 'lo2_q2',
     lo: 'LO2',
     question: 'Which phase comes immediately after the draw step?',
     options: ['Combat', 'Second main phase', 'First main phase', 'Upkeep'],
-    correctIndex: 2,
   },
-  // Distractors: "Stack phase" is not a turn phase: tests phase vs. zone confusion
   {
     id: 'lo2_q3',
     lo: 'LO2',
     question: 'Which of the following is NOT one of the five phases of an MTG turn?',
     options: ['Combat phase', 'Stack phase', 'Main phase', 'End phase'],
-    correctIndex: 1,
   },
   {
     id: 'lo2_q4',
@@ -361,14 +333,12 @@ const questionBank = [
       'Both players skip it',
       'Neither player skips it',
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo2_q5',
     lo: 'LO2',
     question: 'Which phase contains the untap, upkeep, and draw steps?',
     options: ['Beginning phase', 'First main phase', 'Combat phase', 'End phase'],
-    correctIndex: 0,
   },
   {
     id: 'lo2_q6',
@@ -380,7 +350,6 @@ const questionBank = [
       'It is another name for the combat phase',
       'It is where lands go after you play them',
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo2_q7',
@@ -392,7 +361,6 @@ const questionBank = [
       'Which player attacks first in combat',
       'The number of lands you can play',
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo2_q8',
@@ -404,14 +372,12 @@ const questionBank = [
       'Whoever has more cards in hand',
       'It alternates randomly',
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo2_q9',
     lo: 'LO2',
     question: 'During which part of your turn can you normally play a land (by default)?',
     options: ['A main phase', 'The untap step', 'The combat phase only', 'The end step only'],
-    correctIndex: 0,
   },
   {
     id: 'lo2_q10',
@@ -423,19 +389,13 @@ const questionBank = [
       'All players draw a card',
       'Combat begins automatically',
     ],
-    correctIndex: 0,
   },
-
-  // LO3: Turn steps in detail
-  // Distractors: other steps where drawing might be incorrectly associated
   {
     id: 'lo3_q1',
     lo: 'LO3',
     question: 'During which step do you draw a card?',
     options: ['Untap', 'Upkeep', 'Draw', 'Main phase'],
-    correctIndex: 2,
   },
-  // Distractors: confuse untap with tap, draw, or combat actions
   {
     id: 'lo3_q2',
     lo: 'LO3',
@@ -446,9 +406,7 @@ const questionBank = [
       'You untap all your permanents',
       'You declare attackers',
     ],
-    correctIndex: 2,
   },
-  // Distractors: other steps where triggered abilities might seem to occur
   {
     id: 'lo3_q3',
     lo: 'LO3',
@@ -459,15 +417,12 @@ const questionBank = [
       'Resolving triggered abilities that say "at the beginning of your upkeep"',
       'Untapping permanents',
     ],
-    correctIndex: 2,
   },
-  // Distractors: main phase and upkeep are common wrong answers for combat timing
   {
     id: 'lo3_q4',
     lo: 'LO3',
     question: 'When can a player declare attackers?',
     options: ['First main phase', 'Combat phase', 'End step', 'Upkeep'],
-    correctIndex: 1,
   },
   {
     id: 'lo3_q5',
@@ -478,12 +433,11 @@ const questionBank = [
     imageKey: 'shadowmage-infiltrator',
     imageAlt: 'Shadowmage Infiltrator: Creature',
     options: [
-      'No — it has summoning sickness',
-      'Yes — any untapped creature can attack',
+      'No: it has summoning sickness',
+      'Yes: any untapped creature can attack',
       'Yes, but only if it has haste',
-      'No — creatures cannot attack the turn they are cast unless they have vigilance',
+      'No: creatures cannot attack the turn they are cast unless they have vigilance',
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo3_q6',
@@ -494,12 +448,11 @@ const questionBank = [
     imageKey: 'woodland-cemetery',
     imageAlt: 'Woodland Cemetery: Land',
     options: [
-      'No — tapped lands cannot be tapped again for mana',
-      'Yes — entering tapped does not matter',
+      'No: tapped lands cannot be tapped again for mana',
+      'Yes: entering tapped does not matter',
       'Only if you pay 1 life',
-      'Only during your opponent\'s turn',
+      "Only during your opponent's turn",
     ],
-    correctIndex: 0,
   },
   {
     id: 'lo3_q7',
@@ -511,11 +464,7 @@ const questionBank = [
       'Any creature can block any number of attackers',
       'Only creatures with flying can block',
     ],
-    correctIndex: 0,
   },
-
-  // LO4: Instant vs sorcery timing
-  // Distractors: restrict instants to main phase, combat, or opponent's turn
   {
     id: 'lo4_q1',
     lo: 'LO4',
@@ -529,9 +478,7 @@ const questionBank = [
       'At any time',
       "Only during your opponent's turn",
     ],
-    correctIndex: 2,
   },
-  // Distractors: "any time" is the instant rule: tests sorcery restriction
   {
     id: 'lo4_q2',
     lo: 'LO4',
@@ -545,9 +492,7 @@ const questionBank = [
       'Only during combat',
       "Only during your opponent's turn",
     ],
-    correctIndex: 1,
   },
-  // Distractors: turn ownership and phase restrictions learners often assume
   {
     id: 'lo4_q3',
     lo: 'LO4',
@@ -562,9 +507,7 @@ const questionBank = [
       'Yes, but only before they declared attackers',
       'No, you need to be in your main phase',
     ],
-    correctIndex: 0,
   },
-  // Distractors: groups that include instants or omit types with sorcery-speed timing
   {
     id: 'lo4_q4',
     lo: 'LO4',
@@ -579,7 +522,6 @@ const questionBank = [
       'Creatures, instants, and lands',
       'Sorceries, creatures, enchantments, artifacts, and planeswalkers',
     ],
-    correctIndex: 3,
   },
   {
     id: 'lo4_q5',
@@ -595,7 +537,6 @@ const questionBank = [
       'You can only cast Counterspell during your main phase',
       'Instants cannot target spells on the stack',
     ],
-    correctIndex: 0,
   },
 ]
 

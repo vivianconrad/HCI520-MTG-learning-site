@@ -19,6 +19,14 @@ describe('linkGlossaryTerms', () => {
     const segments = linkGlossaryTerms('Use priority before a spell resolves on the stack.')
     const keywords = segments.filter((segment) => segment.type === 'keyword').map((k) => k.term)
 
-    expect(keywords).toEqual(['Priority', 'Resolve', 'Stack'])
+    expect(keywords).toEqual(['Priority', 'Spell', 'Resolve', 'Stack'])
+  })
+
+  it('links spell without overlapping cast a spell with the Cast term only', () => {
+    const segments = linkGlossaryTerms('You can cast a spell when the stack is empty.')
+    const keywords = segments.filter((segment) => segment.type === 'keyword')
+
+    expect(keywords.map((k) => k.term)).toEqual(['Cast', 'Stack'])
+    expect(keywords.find((k) => k.term === 'Cast')?.value).toBe('cast a spell')
   })
 })

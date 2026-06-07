@@ -24,13 +24,7 @@ export const TOPIC_LESSON_PATHS = {
 const CARD_TYPE_QUESTION_PREFIX = 'What type of card'
 
 /** LO0 questions about setup, play vs cast, tap, and first-turn flow. */
-const FIRST_GAME_QUESTION_IDS = new Set([
-  'lo0_q4',
-  'lo0_q5',
-  'lo0_q6',
-  'lo0_q10',
-  'lo0_q11',
-])
+const FIRST_GAME_QUESTION_IDS = new Set(['lo0_q4', 'lo0_q5', 'lo0_q6', 'lo0_q10', 'lo0_q11'])
 
 /** LO1 pool questions that identify card types are taught in Lesson 2. */
 export function isCardTypeIdentificationQuestion(question) {
@@ -53,23 +47,29 @@ export function getReviewLessonPath(question) {
   return TOPIC_LESSON_PATHS[question.lo] ?? '/what-is-mtg'
 }
 
-export function calculateScores(selectedQuestions, pretestAnswers, posttestAnswers) {
+export function calculateScores(selectedQuestions, pretestAnswers, posttestAnswers, answerKeys) {
   let pretestCorrect = 0
   let posttestCorrect = 0
-  const loScores = Object.fromEntries(
-    TOPIC_ORDER.map((lo) => [lo, { pre: 0, post: 0 }]),
-  )
+  const loScores = Object.fromEntries(TOPIC_ORDER.map((lo) => [lo, { pre: 0, post: 0 }]))
+
+  const correctIndexFor = (question) => {
+    if (answerKeys && answerKeys[question.id] !== undefined) {
+      return answerKeys[question.id]
+    }
+    return question.correctIndex
+  }
 
   for (const question of selectedQuestions) {
     const preIndex = pretestAnswers[question.id]
     const postIndex = posttestAnswers[question.id]
+    const correctIndex = correctIndexFor(question)
 
-    if (preIndex === question.correctIndex) {
+    if (preIndex === correctIndex) {
       pretestCorrect += 1
       if (loScores[question.lo]) loScores[question.lo].pre += 1
     }
 
-    if (postIndex === question.correctIndex) {
+    if (postIndex === correctIndex) {
       posttestCorrect += 1
       if (loScores[question.lo]) loScores[question.lo].post += 1
     }
@@ -137,9 +137,7 @@ export function aggregateCohortStats(sessions) {
 
   let sumPre = 0
   let sumPost = 0
-  const loTotals = Object.fromEntries(
-    TOPIC_ORDER.map((lo) => [lo, { pre: 0, post: 0, gain: 0 }]),
-  )
+  const loTotals = Object.fromEntries(TOPIC_ORDER.map((lo) => [lo, { pre: 0, post: 0, gain: 0 }]))
 
   for (const row of sessions) {
     const preScore = row.pretest_score ?? row.pretest_correct ?? 0
@@ -152,7 +150,7 @@ export function aggregateCohortStats(sessions) {
       loScores = calculateScores(
         row.selected_questions,
         row.pretest_answers,
-        row.posttest_answers,
+        row.posttest_answers
       ).loScores
     }
 
@@ -181,7 +179,7 @@ export function aggregateCohortStats(sessions) {
           post: loTotals[lo].post / count,
           gain: loTotals[lo].gain / count,
         },
-      ]),
+      ])
     ),
   }
 }
@@ -211,7 +209,7 @@ export function sessionsToCsv(sessions) {
       loScores = calculateScores(
         row.selected_questions,
         row.pretest_answers,
-        row.posttest_answers,
+        row.posttest_answers
       ).loScores
     }
 

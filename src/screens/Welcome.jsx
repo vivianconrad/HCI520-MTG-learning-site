@@ -7,7 +7,8 @@ import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import { cardImage } from '../assets/cards/index.js'
 import './Welcome.css'
 
-const mtgOpeningImg = new URL('../assets/cards/Magic_ The Gathering-opening.png', import.meta.url).href
+const mtgOpeningImg = new URL('../assets/cards/Magic_ The Gathering-opening.png', import.meta.url)
+  .href
 
 const HERO_CARDS = [
   {
@@ -66,9 +67,9 @@ export default function Welcome({ session }) {
           Pre-test → overview → starting a game → four lessons → post-test → your results
         </p>
         <p className="welcome__duration">
-          Plan for about 18–22 minutes. You&apos;ll learn the rules vocabulary, how a turn works, and
-          what to do when you sit down for your first game — with a friend at the table to fill in
-          the rest.
+          Plan for about 18–22 minutes. You&apos;ll pick up rules vocabulary, how a turn works, and
+          what to do when you sit down for your first game. A friend at the table can help with the
+          rest.
         </p>
         <div className="welcome__hero-cards" aria-label="Sample Magic cards">
           {HERO_CARDS.map((card) => (

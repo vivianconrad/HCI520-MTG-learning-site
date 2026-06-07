@@ -8,11 +8,8 @@ import useScreenTime from '../hooks/useScreenTime.js'
 import { savePosttest } from '../lib/db.js'
 import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
 import { useConfirm } from '../context/useConfirm.js'
-import {
-  POSTTEST_LEAVE_CONFIRM_MESSAGE,
-  POSTTEST_LEAVE_CONFIRM_TITLE,
-} from '../lib/lessonNav.js'
-import { calculateTestScore } from '../lib/testScore.js'
+import { POSTTEST_LEAVE_CONFIRM_MESSAGE, POSTTEST_LEAVE_CONFIRM_TITLE } from '../lib/lessonNav.js'
+import { calculateTestScoreAsync } from '../lib/testScore.js'
 import useRedirectIfTestComplete from '../hooks/useRedirectIfTestComplete.js'
 
 export default function PostTest({ session }) {
@@ -34,13 +31,13 @@ export default function PostTest({ session }) {
   useBrowserBackConfirm(
     !posttestCompleted,
     POSTTEST_LEAVE_CONFIRM_MESSAGE,
-    POSTTEST_LEAVE_CONFIRM_TITLE,
+    POSTTEST_LEAVE_CONFIRM_TITLE
   )
 
   const handleComplete = useCallback(
     async (lastAnswer) => {
       const answers = { ...posttestAnswers, ...lastAnswer }
-      const score = calculateTestScore(selectedQuestions, answers)
+      const score = await calculateTestScoreAsync(selectedQuestions, answers)
       const result = await savePosttest(sessionId, sessionSecret, answers, score)
 
       if (result?.ok) {
@@ -54,7 +51,7 @@ export default function PostTest({ session }) {
       }
       setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
     },
-    [posttestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPosttestCompleted],
+    [posttestAnswers, selectedQuestions, sessionId, sessionSecret, navigate, markPosttestCompleted]
   )
 
   if (posttestCompleted) {

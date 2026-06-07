@@ -20,17 +20,17 @@ export default function Intro({ session }) {
         <div className="intro__body">
           <p className="intro__paragraph">
             We&apos;ll start with a short pre-test about Magic: The Gathering. You have not been
-            taught these topics yet — guessing is expected, and wrong answers are normal. The pre-test
-            measures what you know before any lessons, not whether you are already an expert.
+            taught these topics yet, so guessing is fine and wrong answers are normal. The pre-test
+            only records what you know before the lessons start.
           </p>
           <p className="intro__paragraph">
-            After the pre-test, you&apos;ll read a short overview, walk through starting a game and
-            your first turn, then work through four lessons covering how to read a card, card types,
-            turn structure, and putting it all together.
+            After the pre-test, you&apos;ll read a short overview, see how to start a game and take
+            your first turn, then work through four lessons on reading a card, card types, turn
+            structure, and putting it all together.
           </p>
           <p className="intro__paragraph">
-            Some questions may touch on ideas the lessons explain in more detail — that is expected.
-            Answer with your best guess; the lessons will fill in the gaps.
+            Some questions may ask about ideas the lessons cover later. Answer with your best guess;
+            the lessons will explain the rest.
           </p>
           <p className="intro__paragraph">
             When you&apos;re ready, copy your session ID below. You&apos;ll need it at the end.

@@ -34,6 +34,9 @@ create policy "Allow insert for all"
     and length(trim(session_secret)) > 0
   );
 
+-- After running validate-participant-data.sql, direct anon INSERT is revoked;
+-- new rows are created only via register_participant() RPC.
+
 create policy "Allow update with session secret"
   on public.participants for update
   to anon, authenticated

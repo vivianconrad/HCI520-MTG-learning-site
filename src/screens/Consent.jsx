@@ -21,8 +21,8 @@ export default function Consent({ session }) {
         <div className="consent__body">
           <p className="consent__paragraph consent__paragraph--lead">
             This is an e-learning system built as part of a graduate course project in
-            Human-Computer Interaction at DePaul University. The goal is to measure
-            whether the system helps new players learn the basics of Magic: The Gathering.
+            Human-Computer Interaction at DePaul University. The goal is to measure whether the
+            system helps new players learn the basics of Magic: The Gathering.
           </p>
 
           <section className="consent__section">
