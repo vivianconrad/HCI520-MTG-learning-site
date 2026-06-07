@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   isKeywordDictionaryHiddenPath,
+  isLessonKeywordRoute,
   shouldShowKeywordDictionary,
 } from './assessmentRoutes.js'
 
@@ -13,6 +14,15 @@ describe('isKeywordDictionaryHiddenPath', () => {
   it('allows the keyword guide on lesson routes', () => {
     expect(isKeywordDictionaryHiddenPath('/lesson/1')).toBe(false)
     expect(isKeywordDictionaryHiddenPath('/what-is-mtg')).toBe(false)
+  })
+})
+
+describe('isLessonKeywordRoute', () => {
+  it('flags lesson screens that show bottom navigation with the keyword guide', () => {
+    expect(isLessonKeywordRoute('/lesson/1')).toBe(true)
+    expect(isLessonKeywordRoute('/what-is-mtg')).toBe(true)
+    expect(isLessonKeywordRoute('/pretest')).toBe(false)
+    expect(isLessonKeywordRoute('/welcome')).toBe(false)
   })
 })
 

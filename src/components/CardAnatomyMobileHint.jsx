@@ -20,8 +20,8 @@ export default function CardAnatomyMobileHint() {
   return (
     <aside className="card-anatomy-mobile-hint" aria-label="Card anatomy tip">
       <p className="card-anatomy-mobile-hint__text">
-        Tap each numbered marker on the card to read what that part means. Explore all six before
-        continuing.
+        Tap each numbered marker on the card to read what that part means. On a phone, you can also
+        use the parts list below the diagram. Explore all six before continuing.
       </p>
       <button
         type="button"

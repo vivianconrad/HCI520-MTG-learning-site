@@ -231,10 +231,6 @@ export default function CardAnatomy({ session }) {
 
         <CardAnatomyMobileHint />
 
-        <p className="card-anatomy__hint">
-          Tap each numbered marker on the card to learn what that part means.
-        </p>
-
         <p className="card-anatomy__intro">
           Each Magic: The Gathering card contains key information about what it does on the
           battlefield. Learning to read a card&apos;s anatomy is the first step to building and
@@ -268,6 +264,14 @@ export default function CardAnatomy({ session }) {
             ))}
           </div>
         </div>
+
+        <CardAnatomyPartsList
+          callouts={CALLOUTS}
+          activeCallout={activeCallout}
+          seenIds={seenIds}
+          highlightMissing={highlightMissing}
+          onSelect={selectCallout}
+        />
 
         <div
           id={INFO_PANEL_ID}

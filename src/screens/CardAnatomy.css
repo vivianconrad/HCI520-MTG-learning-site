@@ -394,3 +394,106 @@
   background: var(--color-gold);
   color: var(--color-navy);
 }
+
+@media (max-width: 640px) {
+  .card-anatomy__callout-marker {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+
+  .card-anatomy__parts-list {
+    display: block;
+    margin: 0 0 20px;
+  }
+
+  .card-anatomy__parts-lede {
+    margin: 0 0 10px;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--color-text-dark);
+    text-align: left;
+  }
+
+  .card-anatomy__parts-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-anatomy__parts-item {
+    margin: 0;
+  }
+
+  .card-anatomy__parts-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: var(--touch-target-min);
+    padding: 10px 12px;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    color: var(--color-text-dark);
+    text-align: left;
+    background: var(--color-parchment-dark);
+    border: 1px solid var(--color-gold-muted);
+    border-radius: 4px;
+    cursor: pointer;
+    transition:
+      background var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  .card-anatomy__parts-button--active {
+    border-color: var(--color-gold);
+    background: rgb(184 150 78 / 0.16);
+    box-shadow: inset 0 0 0 1px rgb(184 150 78 / 0.25);
+  }
+
+  .card-anatomy__parts-button--seen {
+    border-color: var(--color-gold-muted);
+  }
+
+  .card-anatomy__parts-button--missing {
+    animation: card-anatomy-missing-pulse 1.4s ease-in-out infinite;
+    border-color: var(--color-gold);
+  }
+
+  .card-anatomy__parts-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 2px solid var(--color-gold);
+    background: var(--color-navy);
+    color: var(--color-text-light);
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  .card-anatomy__parts-button--seen .card-anatomy__parts-number {
+    background: var(--color-parchment);
+    color: var(--color-navy);
+  }
+
+  .card-anatomy__parts-label {
+    flex: 1;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+  }
+
+  .card-anatomy__parts-status {
+    font-size: 0.75rem;
+    color: var(--color-gold-on-parchment);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+}
