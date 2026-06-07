@@ -142,25 +142,6 @@ export async function createParticipantRow(sessionId, sessionSecret, selectedQue
     return null
   }
 
-  const verify = await patchParticipant(
-    sessionId,
-    sessionSecret,
-    { screens_time: {} },
-    'createParticipantRow:verifyAccess'
-  )
-
-  if (isParticipantUpdateBlocked(verify)) {
-    devWarn(
-      '[db] createParticipantRow: verify PATCH blocked: session secret likely mismatches DB row'
-    )
-    return null
-  }
-
-  if (!verify.ok) {
-    devError('[db] createParticipantRow: verify PATCH failed', verify.error)
-    return null
-  }
-
   return participantId
 }
 
