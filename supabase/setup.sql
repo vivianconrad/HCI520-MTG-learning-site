@@ -35,6 +35,7 @@ alter table public.participants enable row level security;
 drop policy if exists "Allow update own row"              on public.participants;
 drop policy if exists "Allow update for all"              on public.participants;
 drop policy if exists "Allow update with session secret"  on public.participants;
+drop policy if exists "Allow update by session id"        on public.participants;
 drop policy if exists "Allow insert for all"              on public.participants;
 drop policy if exists "Deny select for all"               on public.participants;
 drop policy if exists "Allow select for instructor dashboard" on public.participants;
