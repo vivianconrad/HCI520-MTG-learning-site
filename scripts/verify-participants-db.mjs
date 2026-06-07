@@ -1,8 +1,8 @@
 /**
  * Verifies production RLS + hardened participant API.
  * Run: node scripts/verify-participants-db.mjs
- * Requires supabase/setup.sql applied in Supabase (or fix-participants-rls.sql for
- * UPDATE-only fix, plus setup.sql for triggers and RPCs if missing).
+ * Requires supabase/setup.sql applied in Supabase (or supabase/fix-participants-rls.sql
+ * for the update_participant RPC, plus setup.sql for the validation trigger).
  */
 import { createClient } from '@supabase/supabase-js'
 import { readFileSync } from 'fs'
@@ -90,55 +90,51 @@ if (rpc.error) {
 }
 pass('register_participant RPC')
 
-// 4) UPDATE by session_id (RLS must not require x-session-secret on Supabase Cloud)
-const patch = await fetch(
-  `${url}/rest/v1/participants?session_id=eq.${encodeURIComponent(sessionId)}`,
-  {
-    method: 'PATCH',
-    headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-      'x-session-secret': sessionSecret,
-      Prefer: 'return=minimal,count=exact',
-    },
-    body: JSON.stringify({ screens_time: { verify: 1 } }),
-  }
-)
-const range = patch.headers.get('content-range')
-const rowsUpdated = range?.includes('/') ? range.split('/')[1] : '?'
-if (rowsUpdated === '0') {
+// 4) update_participant RPC (how the app saves answers)
+const update = await sb.rpc('update_participant', {
+  p_session_id: sessionId,
+  p_session_secret: sessionSecret,
+  p_patch: { screens_time: { verify: 1 } },
+})
+if (update.error) {
   fail(
-    'UPDATE affected 0 rows. Run supabase/fix-participants-rls.sql (or re-run supabase/setup.sql) in the Supabase SQL Editor.'
+    `update_participant RPC: ${update.error.message}. Run supabase/fix-participants-rls.sql or supabase/setup.sql.`
+  )
+} else if (update.data !== true) {
+  fail(
+    'update_participant returned false (wrong session secret or missing row). Run supabase/fix-participants-rls.sql or supabase/setup.sql.'
   )
 } else {
-  pass(`UPDATE by session_id (${rowsUpdated} row)`)
+  pass('update_participant RPC')
 }
 
-// 5) Score validation — mismatched score rejected
-const badScore = await fetch(
-  `${url}/rest/v1/participants?session_id=eq.${encodeURIComponent(sessionId)}`,
-  {
-    method: 'PATCH',
-    headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
-      'Content-Type': 'application/json',
-      'x-session-secret': sessionSecret,
-      Prefer: 'return=minimal',
-    },
-    body: JSON.stringify({
-      pretest_answers: { verify_q1: 0 },
-      pretest_score: 99,
-    }),
-  }
-)
-if (badScore.ok) {
-  fail(
-    'Server accepted pretest_score=99 that does not match answers. Re-run supabase/setup.sql for the validation trigger.'
-  )
+// 5) Score validation — mismatched score rejected (only when update_participant exists)
+if (update.error && /could not find the function/i.test(update.error.message)) {
+  fail('Score validation not tested: deploy update_participant first (supabase/fix-participants-rls.sql).')
 } else {
-  pass(`Mismatched pretest_score rejected (HTTP ${badScore.status})`)
+  const badScore = await sb.rpc('update_participant', {
+    p_session_id: sessionId,
+    p_session_secret: sessionSecret,
+    p_patch: {
+      pretest_answers: { verify_q1: 0 },
+      pretest_score: 10,
+    },
+  })
+  const scoreRejected =
+    badScore.error &&
+    (/pretest_score does not match/i.test(badScore.error.message) ||
+      /pretest_score must be between/i.test(badScore.error.message))
+  if (scoreRejected) {
+    pass(`Tampered pretest_score rejected (${badScore.error.message})`)
+  } else if (badScore.data === true) {
+    fail(
+      'Server accepted a tampered pretest_score. Re-run supabase/setup.sql for the validation trigger.'
+    )
+  } else if (badScore.error) {
+    fail(`Unexpected error on bad score test: ${badScore.error.message}`)
+  } else {
+    fail('Mismatched pretest_score was not rejected. Re-run supabase/setup.sql for the validation trigger.')
+  }
 }
 
 // 6) get_participant_progress RPC
@@ -154,10 +150,44 @@ if (progress.error) {
   pass('get_participant_progress RPC')
 }
 
+// 7) Optional practice: lessons_completed with 0 scenarios (Lesson 4 practice is skippable)
+const lessonSkip = await sb.rpc('update_participant', {
+  p_session_id: sessionId,
+  p_session_secret: sessionSecret,
+  p_patch: { lessons_completed: true, scenarios_attempted: 0 },
+})
+if (lessonSkip.error) {
+  fail(
+    `lessons_completed with 0 scenarios: ${lessonSkip.error.message}. Run supabase/migrations/relax-lessons-completed-scenarios.sql.`
+  )
+} else if (lessonSkip.data !== true) {
+  fail('lessons_completed with 0 scenarios returned false')
+} else {
+  pass('lessons_completed with optional practice skipped')
+}
+
+// 8) Posttest after lessons (requires lessons_completed in DB)
+const posttestSave = await sb.rpc('update_participant', {
+  p_session_id: sessionId,
+  p_session_secret: sessionSecret,
+  p_patch: {
+    posttest_answers: { verify_q1: 0 },
+    posttest_score: 1,
+    completed_at: new Date().toISOString(),
+  },
+})
+if (posttestSave.error) {
+  fail(`posttest save: ${posttestSave.error.message}`)
+} else if (posttestSave.data !== true) {
+  fail('posttest save returned false')
+} else {
+  pass('posttest save after lessons')
+}
+
 console.log('')
 if (failed) {
   console.error(
-    'One or more checks failed. Run supabase/fix-participants-rls.sql for save failures, or supabase/setup.sql for a full refresh.\n'
+    'One or more checks failed. Run supabase/fix-participants-rls.sql for save RPC, or supabase/setup.sql for a full refresh (includes validation trigger).\n'
   )
   process.exit(1)
 }

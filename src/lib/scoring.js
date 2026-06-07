@@ -23,9 +23,6 @@ export const TOPIC_LESSON_PATHS = {
 
 const CARD_TYPE_QUESTION_PREFIX = 'What type of card'
 
-/** LO0 questions about setup, play vs cast, tap, and first-turn flow. */
-const FIRST_GAME_QUESTION_IDS = new Set(['lo0_q4', 'lo0_q5', 'lo0_q6', 'lo0_q10', 'lo0_q11'])
-
 /** LO1 pool questions that identify card types are taught in Lesson 2. */
 export function isCardTypeIdentificationQuestion(question) {
   return (
@@ -39,10 +36,7 @@ export function getReviewLessonPath(question) {
   if (question?.reviewLesson) return question.reviewLesson
   if (!question?.lo) return '/what-is-mtg'
   if (question.lo === 'LO4') return '/lesson/4'
-  if (question.lo === 'LO0') {
-    if (FIRST_GAME_QUESTION_IDS.has(question.id)) return '/first-game'
-    return '/what-is-mtg'
-  }
+  if (question.lo === 'LO0') return '/what-is-mtg'
   if (isCardTypeIdentificationQuestion(question)) return '/lesson/2'
   return TOPIC_LESSON_PATHS[question.lo] ?? '/what-is-mtg'
 }

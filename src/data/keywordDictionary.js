@@ -46,6 +46,11 @@ export const KEYWORD_TERMS = [
       'Temporary mana you have produced but not spent yet. Tap lands to add mana to your pool, then pay for spells from it. Leftover mana disappears when the step or phase ends.',
   },
   {
+    term: 'Mulligan',
+    definition:
+      'After drawing your opening hand, you may shuffle it back into your library and draw a new hand with one fewer card. You can mulligan again until you keep a hand or reach your format’s minimum hand size. Exact rules depend on the format; the London mulligan is common in many groups.',
+  },
+  {
     term: 'Permanent',
     definition:
       'A card that stays on the battlefield: lands, creatures, artifacts, enchantments, and planeswalkers. Lands are played directly; other permanents were spells on the stack until they resolved. Instants and sorceries are not permanents; they resolve and go to the graveyard.',

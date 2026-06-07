@@ -7,14 +7,8 @@ import './LessonIntro.css'
 
 const OVERVIEW = {
   title: 'What Is Magic?',
-  time: '~4 min',
-  image: new URL('../assets/batrlefield-simple.jpg', import.meta.url).href,
-}
-
-const FIRST_GAME = {
-  title: 'Starting a Game & Your First Turn',
   time: '~5 min',
-  image: cardImage('land-forest.jpg'),
+  image: new URL('../assets/batrlefield-simple.jpg', import.meta.url).href,
 }
 
 const LESSONS = [
@@ -60,8 +54,8 @@ export default function LessonIntro() {
 
         <div className="lesson-intro__body">
           <p className="lesson-intro__paragraph">
-            You finished the pre-test. Next you&apos;ll see a short overview of Magic, walk through
-            starting a game and your first turn, then four lessons before the post-test.
+            You finished the pre-test. Next you&apos;ll see a short overview of Magic, then four
+            lessons before the post-test.
           </p>
           <p className="lesson-intro__paragraph">
             Official rules terms appear in gold. Hover or tap one for a short definition, or open
@@ -81,17 +75,6 @@ export default function LessonIntro() {
             {': '}
             {OVERVIEW.title}
             <span className="lesson-intro__lesson-time"> ({OVERVIEW.time})</span>
-          </li>
-          <li>
-            <img
-              className="lesson-intro__lesson-image"
-              src={FIRST_GAME.image}
-              alt="Starting a game preview"
-            />
-            <span className="lesson-intro__lesson-num">Overview</span>
-            {': '}
-            {FIRST_GAME.title}
-            <span className="lesson-intro__lesson-time"> ({FIRST_GAME.time})</span>
           </li>
           {LESSONS.map((lesson) => (
             <li key={lesson.num}>

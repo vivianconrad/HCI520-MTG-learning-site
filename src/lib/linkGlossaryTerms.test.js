@@ -29,4 +29,15 @@ describe('linkGlossaryTerms', () => {
     expect(keywords.map((k) => k.term)).toEqual(['Cast', 'Stack'])
     expect(keywords.find((k) => k.term === 'Cast')?.value).toBe('cast a spell')
   })
+
+  it('links mulligan in opening-hand setup copy', () => {
+    const segments = linkGlossaryTerms(
+      'If the hand is weak, many groups allow a mulligan: shuffle back and draw one fewer card.'
+    )
+    const keywords = segments.filter((segment) => segment.type === 'keyword')
+
+    expect(keywords).toHaveLength(1)
+    expect(keywords[0].value).toBe('mulligan')
+    expect(keywords[0].term).toBe('Mulligan')
+  })
 })

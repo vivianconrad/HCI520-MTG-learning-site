@@ -2,7 +2,7 @@
 -- Supabase Cloud strips custom headers before PostgREST, so header-based UPDATE
 -- policies always match zero rows (PATCH returns HTTP 200 with 0 rows updated).
 --
--- README alias (same SQL): supabase/fix-participants-rls.sql
+-- README alias (includes update_participant RPC): supabase/fix-participants-rls.sql
 --
 -- Safe to run on an existing project. For a full refresh (RPCs, triggers, grants),
 -- re-run supabase/setup.sql instead.

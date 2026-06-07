@@ -12,6 +12,7 @@ const GLOSSARY_MATCHES = [
   { pattern: /\bcolorless mana\b/gi, term: 'Colorless mana' },
   { pattern: /\bgeneric mana\b/gi, term: 'Generic mana' },
   { pattern: /\bmana pool\b/gi, term: 'Mana pool' },
+  { pattern: /\bmulligans?\b/gi, term: 'Mulligan' },
   { pattern: /\bplay(?:ing)?\s+(?:a\s+)?land\b/gi, term: 'Play (a land)' },
   { pattern: /\bplay(?:ing)?\s+lands\b/gi, term: 'Play (a land)' },
   { pattern: /\blands?\s+are\s+played\b/gi, term: 'Play (a land)' },

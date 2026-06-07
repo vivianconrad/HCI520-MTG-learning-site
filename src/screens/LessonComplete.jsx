@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
-import { isParticipantUpdateBlocked, saveLessonProgress, saveScreenTime } from '../lib/db.js'
+import { saveLessonProgress, saveScreenTime } from '../lib/db.js'
 import { SESSION_SAVE_FAILED_MESSAGE } from '../lib/sessionErrors.js'
 import { PRACTICE_SCENARIO_COUNT } from '../lib/lessonConstants.js'
 import { useConfirm } from '../context/useConfirm.js'
@@ -50,12 +50,10 @@ export default function LessonComplete({ session }) {
         setLessonsCompleted(true)
         return
       }
-      if (isParticipantUpdateBlocked(result)) {
-        if (import.meta.env.DEV) {
-          console.warn('[LessonComplete] saveLessonProgress blocked:', result)
-        }
-        setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
+      if (import.meta.env.DEV) {
+        console.warn('[LessonComplete] saveLessonProgress failed:', result)
       }
+      setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
     })
   }, [sessionId, sessionSecret, scenariosAttempted, setLessonsCompleted])
 
@@ -63,12 +61,11 @@ export default function LessonComplete({ session }) {
     if (screenTimeSaved.current) return
     screenTimeSaved.current = true
     saveScreenTime(sessionId, sessionSecret, screenTimes).then((result) => {
-      if (isParticipantUpdateBlocked(result)) {
-        if (import.meta.env.DEV) {
-          console.warn('[LessonComplete] saveScreenTime blocked:', result)
-        }
-        setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
+      if (result?.ok) return
+      if (import.meta.env.DEV) {
+        console.warn('[LessonComplete] saveScreenTime failed:', result)
       }
+      setSaveWarning(SESSION_SAVE_FAILED_MESSAGE)
     })
   }, [sessionId, sessionSecret, screenTimes])
 
