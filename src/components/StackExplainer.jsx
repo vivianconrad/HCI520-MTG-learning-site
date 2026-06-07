@@ -2,13 +2,13 @@ import './StackExplainer.css'
 import { renderGlossaryListItem, renderGlossaryString } from './glossaryRender.jsx'
 
 const BRIEF = [
-  'When you cast a spell (not a land), it goes on the stack first. It is a waiting line where spells and abilities sit before they happen.',
-  'If nothing is waiting, the stack is empty. Sorceries and most other non-instant spells can only be cast during your main phase when the stack is empty. Instants can be cast any time you have priority, even in response to something already on the stack.',
+  'When you or your opponent casts a spell (not a land), it goes on the stack first. The stack is the waiting line—and the window of opportunity to respond before that spell’s effect happens.',
+  'If nothing is waiting, the stack is empty. Sorceries and most other non-instant spells can only be cast during your main phase when the stack is empty. Instants can be cast any time you have priority, even in response to something already on the stack—for example, Counterspell against an opponent’s spell.',
 ]
 
 const FULL = [
-  'The stack is not a turn phase. It is a zone that exists throughout the game: a queue of spells and abilities waiting to resolve.',
-  'When you cast a spell, you pay its mana cost and put the spell on the stack. It does not happen yet. Both players get a chance to respond when they have priority by casting instants or activating abilities. When both players pass without adding anything, the spell on top of the stack resolves (its effect happens), then players get another chance to respond before the next item resolves.',
+  'The stack is not a turn phase. It is a zone that exists throughout the game: a queue of spells and abilities waiting to resolve, and the window where both players can respond before those effects happen.',
+  'When anyone casts a spell, they pay its mana cost and put the spell on the stack. It does not happen yet. Both players get a chance to respond when they have priority by casting instants or activating abilities—for example, casting Counterspell while an opponent’s spell is still waiting. When both players pass without adding anything, the spell on top of the stack resolves (its effect happens), then players get another chance to respond before the next item resolves.',
   {
     heading: 'Stack empty vs. not empty',
     list: [

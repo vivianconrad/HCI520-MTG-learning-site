@@ -65,7 +65,7 @@ const QUESTION_EXPLANATIONS = {
   lo2_q5:
     'The beginning phase contains the untap, upkeep, and draw steps before your first main phase.',
   lo2_q6:
-    'The stack holds spells and abilities that are waiting to resolve. Players can respond before each item resolves.',
+    'The stack holds spells and abilities that are waiting to resolve. When you or your opponent casts a spell, it goes on the stack first, and either player can respond before it resolves—for example, Counterspell against an opponent’s spell.',
   lo2_q7:
     'Priority is the right to cast spells or activate abilities before your opponent at a given moment in the turn.',
   lo2_q8: 'On your turn, you (the active player) receive priority first in each step and phase.',

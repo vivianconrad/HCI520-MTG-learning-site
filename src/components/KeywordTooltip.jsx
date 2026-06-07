@@ -33,9 +33,11 @@ export default function KeywordTooltip({ term, definition, children }) {
     }
 
     updatePlacement()
+    const frame = requestAnimationFrame(updatePlacement)
     window.addEventListener('resize', updatePlacement)
     window.addEventListener('scroll', updatePlacement, true)
     return () => {
+      cancelAnimationFrame(frame)
       window.removeEventListener('resize', updatePlacement)
       window.removeEventListener('scroll', updatePlacement, true)
     }
@@ -79,6 +81,12 @@ export default function KeywordTooltip({ term, definition, children }) {
       ]
         .filter(Boolean)
         .join(' ')}
+      onMouseEnter={() => {
+        if (prefersHover()) setHovered(true)
+      }}
+      onMouseLeave={() => {
+        if (prefersHover()) setHovered(false)
+      }}
     >
       <button
         type="button"
@@ -86,12 +94,6 @@ export default function KeywordTooltip({ term, definition, children }) {
         aria-expanded={open}
         aria-controls={tooltipId}
         aria-describedby={open ? tooltipId : undefined}
-        onMouseEnter={() => {
-          if (prefersHover()) setHovered(true)
-        }}
-        onMouseLeave={() => {
-          if (prefersHover()) setHovered(false)
-        }}
         onFocus={() => setHovered(true)}
         onBlur={(event) => {
           if (rootRef.current?.contains(event.relatedTarget)) return

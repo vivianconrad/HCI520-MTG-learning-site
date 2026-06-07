@@ -83,7 +83,7 @@ export const KEYWORD_TERMS = [
   {
     term: 'Stack',
     definition:
-      'The waiting line for spells and abilities. Spells resolve last in, first out. Sorceries and most non-instant spells need an empty stack; instants can be added even when something is already waiting.',
+      'The waiting line for spells and abilities, and the window to respond before they resolve. Any spell you or your opponent casts goes on the stack first; while it waits, either player can cast instants or activate abilities (for example, Counterspell in response to an opponent’s spell). Spells resolve last in, first out. Sorceries and most non-instant spells need an empty stack; instants can be added even when something is already waiting.',
   },
   {
     term: 'Summoning sickness',

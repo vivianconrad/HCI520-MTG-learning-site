@@ -14,8 +14,10 @@
 
 .keyword-tooltip {
   position: relative;
-  display: inline;
+  display: inline-block;
+  max-width: 100%;
   white-space: normal;
+  vertical-align: baseline;
 }
 
 .keyword-tooltip__trigger {
@@ -54,7 +56,9 @@
   bottom: calc(100% + 10px);
   z-index: 850;
   display: none;
-  width: min(300px, calc(100% - 32px));
+  box-sizing: border-box;
+  width: 300px;
+  max-width: calc(100vw - 32px);
   padding: 10px 12px;
   font-family: var(--font-body);
   font-size: 0.875rem;
@@ -71,6 +75,7 @@
 
 .keyword-tooltip--open .keyword-tooltip__popup {
   pointer-events: auto;
+  user-select: text;
 }
 
 .keyword-tooltip--below .keyword-tooltip__popup {
@@ -130,6 +135,7 @@
 @media (max-width: 640px) {
   .keyword-tooltip__popup {
     left: 0;
+    width: min(300px, calc(100vw - 32px));
     transform: none;
   }
 
