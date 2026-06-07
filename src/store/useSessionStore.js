@@ -47,7 +47,9 @@ export default function useSessionStore() {
   const saved = initialPersistedSession
 
   const [sessionId, setSessionId] = useState(() => saved?.sessionId ?? generateSessionId())
-  const [sessionSecret, setSessionSecret] = useState(() => saved?.sessionSecret ?? generateSessionSecret())
+  const [sessionSecret, setSessionSecret] = useState(
+    () => saved?.sessionSecret ?? generateSessionSecret()
+  )
   const [participantId, setParticipantIdState] = useState(() => saved?.participantId ?? null)
   const [participantRowReady, setParticipantRowReady] = useState(
     () => saved?.participantRowReady ?? Boolean(saved?.participantId)
