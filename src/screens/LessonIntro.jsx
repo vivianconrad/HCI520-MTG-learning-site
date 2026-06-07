@@ -1,9 +1,16 @@
 import { useNavigate } from 'react-router-dom'
+import KeywordTooltip from '../components/KeywordTooltip.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import { cardImage } from '../assets/cards/index.js'
 import './LessonIntro.css'
+
+const GOLD_TERMS_HELP = {
+  term: 'Gold-highlighted terms',
+  definition:
+    'Lessons mark official rules terms in gold, like this example. On a computer with a mouse, hover to read a short definition. On a phone or tablet, tap to open it, then tap again or press Escape to close. The same pattern works for every gold word in the lessons.',
+}
 
 const OVERVIEW = {
   title: 'What Is Magic?',
@@ -58,9 +65,19 @@ export default function LessonIntro() {
             lessons before the post-test.
           </p>
           <p className="lesson-intro__paragraph">
-            Official rules terms appear in gold. Hover or tap one for a short definition, or open
-            the Keyword guide in the corner for the full list, including informal terms like
-            summoning sickness.
+            Throughout the lessons, official rules terms{' '}
+            <KeywordTooltip term={GOLD_TERMS_HELP.term} definition={GOLD_TERMS_HELP.definition}>
+              appear in gold
+            </KeywordTooltip>
+            . For a searchable list of every term used in this course, including
+            informal ones like summoning sickness, open the Keyword guide button in the corner of
+            the page.
+          </p>
+          <p className="lesson-intro__paragraph">
+            Magic has a large vocabulary of keywords and shorthand, and even experienced players
+            look things up. This course is not meant to make you memorize all of them. The guide is
+            there when you need it—use it as a reference whenever a word is unfamiliar, and focus on
+            the ideas in each lesson instead.
           </p>
         </div>
 
