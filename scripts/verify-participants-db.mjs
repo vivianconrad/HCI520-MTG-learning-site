@@ -150,6 +150,40 @@ if (progress.error) {
   pass('get_participant_progress RPC')
 }
 
+// 7) Optional practice: lessons_completed with 0 scenarios (Lesson 4 practice is skippable)
+const lessonSkip = await sb.rpc('update_participant', {
+  p_session_id: sessionId,
+  p_session_secret: sessionSecret,
+  p_patch: { lessons_completed: true, scenarios_attempted: 0 },
+})
+if (lessonSkip.error) {
+  fail(
+    `lessons_completed with 0 scenarios: ${lessonSkip.error.message}. Run supabase/migrations/relax-lessons-completed-scenarios.sql.`
+  )
+} else if (lessonSkip.data !== true) {
+  fail('lessons_completed with 0 scenarios returned false')
+} else {
+  pass('lessons_completed with optional practice skipped')
+}
+
+// 8) Posttest after lessons (requires lessons_completed in DB)
+const posttestSave = await sb.rpc('update_participant', {
+  p_session_id: sessionId,
+  p_session_secret: sessionSecret,
+  p_patch: {
+    posttest_answers: { verify_q1: 0 },
+    posttest_score: 1,
+    completed_at: new Date().toISOString(),
+  },
+})
+if (posttestSave.error) {
+  fail(`posttest save: ${posttestSave.error.message}`)
+} else if (posttestSave.data !== true) {
+  fail('posttest save returned false')
+} else {
+  pass('posttest save after lessons')
+}
+
 console.log('')
 if (failed) {
   console.error(

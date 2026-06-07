@@ -14,7 +14,7 @@ const questionBank = [
     id: 'lo0_q2',
     lo: 'LO0',
     question: 'Which deck size is typical for a Commander game?',
-    options: ['40 cards minimum', '60 cards minimum', '100 cards (singleton)', 'No limit'],
+    options: ['40 cards minimum', '60 cards minimum', '100 cards', 'No limit'],
   },
   {
     id: 'lo0_q3',

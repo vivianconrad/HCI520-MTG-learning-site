@@ -183,11 +183,7 @@ begin
     raise exception 'scenarios_attempted cannot decrease';
   end if;
 
-  -- Progress ordering
-  if coalesce(new.lessons_completed, false) is true
-     and coalesce(new.scenarios_attempted, 0) < 11 then
-    raise exception 'lessons_completed requires at least 11 practice scenarios';
-  end if;
+  -- Progress ordering (Lesson 4 practice is optional; lessons_completed means all four lessons viewed)
   if new.posttest_answers is not null then
     if coalesce(new.lessons_completed, false) is not true then
       raise exception 'posttest_answers require lessons_completed';

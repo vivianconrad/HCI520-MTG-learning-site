@@ -8,6 +8,13 @@ import './WhatIsMtg.css'
 
 const battlefieldSimpleImg = new URL('../assets/batrlefield-simple.jpg', import.meta.url).href
 
+const SETUP_ITEMS = [
+  'Each player shuffles their deck face-down. That deck becomes their library during the game.',
+  'Each player starts at a life total set by the format you are playing. The usual goal is to reduce opponents to 0 life, unless a card or format rule wins the game another way.',
+  'Decide who goes first (flip a coin, roll dice, or just agree).',
+  'Each player draws seven cards. That is your opening hand. If the hand is weak, many groups allow a mulligan: shuffle back and draw one fewer card (optional and format-dependent).',
+]
+
 const ZONES = [
   {
     name: 'Library',
@@ -59,10 +66,22 @@ export default function WhatIsMtg({ session }) {
 
           <h2 className="what-is-mtg__subheading">Formats</h2>
           <p className="what-is-mtg__paragraph">
-            Magic has many <strong>formats</strong>, which are rule sets that define which cards you
-            can use. <strong>Standard</strong> decks are usually at least 60 cards;{' '}
-            <strong>Commander</strong> uses 100-card singleton decks built around a legendary
-            commander. The lessons teach core rules that apply in every format.
+            Magic has many <strong>formats</strong>—rule sets that define which cards you can use,
+            deck size, starting life, and other details. Whether you play one-on-one or multiplayer,
+            Standard, Commander, or something else, the lessons teach core rules that apply in every
+            format.
+          </p>
+
+          <h2 className="what-is-mtg__subheading">Starting a game</h2>
+          <ol className="what-is-mtg__setup-list">
+            {SETUP_ITEMS.map((item) => (
+              <li key={item} className="what-is-mtg__setup-item">
+                <GlossaryText text={item} />
+              </li>
+            ))}
+          </ol>
+          <p className="what-is-mtg__paragraph">
+            Once setup is done, players take turns. Lesson 3 walks through each phase in detail.
           </p>
 
           <h2 className="what-is-mtg__subheading">Zones on the table</h2>
@@ -103,9 +122,9 @@ export default function WhatIsMtg({ session }) {
           <button
             type="button"
             className="what-is-mtg__button"
-            onClick={() => navigate('/first-game')}
+            onClick={() => navigate('/lesson/1')}
           >
-            Continue to Starting a Game
+            Continue to Lesson 1
           </button>
         </div>
         <ProgressDots activeIndex={PROGRESS.WHAT_IS_MTG} />

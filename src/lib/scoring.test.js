@@ -46,7 +46,7 @@ describe('getReviewLessonPath', () => {
       '/what-is-mtg'
     )
     expect(getReviewLessonPath({ lo: 'LO0', id: 'lo0_q5', question: 'Play vs cast' })).toBe(
-      '/first-game'
+      '/what-is-mtg'
     )
     expect(getReviewLessonPath({ lo: 'LO4', question: 'Timing' })).toBe('/lesson/4')
   })
