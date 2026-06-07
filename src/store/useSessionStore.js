@@ -173,11 +173,7 @@ export default function useSessionStore() {
 
   const setParticipantId = useCallback(
     (id) => {
-      if (id == null) {
-        setParticipantIdState(null)
-        return
-      }
-      setParticipantIdState(id === sessionId ? id : sessionId)
+      setParticipantIdState(id == null ? null : sessionId)
     },
     [sessionId]
   )
