@@ -6,7 +6,7 @@ test.describe('session route guards', () => {
     page,
   }) => {
     await page.goto('pretest')
-    await expect(page).toHaveURL(/\/HCI520-MTG-learning-site\/$/)
+    await expect(page).toHaveURL(/\/HCI520-MTG-learning-site\/?$/)
 
     await seedSession(page, {
       sessionId: 'E2E-GUARD-1',
@@ -28,7 +28,7 @@ test.describe('session route guards', () => {
     })
 
     await page.goto('pretest')
-    await expect(page).toHaveURL(/\/HCI520-MTG-learning-site\/welcome$/)
+    await expect(page).toHaveURL(/\/HCI520-MTG-learning-site\/welcome\/?$/)
   })
 
   test('redirects completed pre-test away from the assessment screen', async ({ page }) => {
@@ -52,7 +52,7 @@ test.describe('session route guards', () => {
     })
 
     await page.goto('pretest')
-    await expect(page).toHaveURL(/\/HCI520-MTG-learning-site\/pretest-complete$/)
+    await expect(page).toHaveURL(/\/HCI520-MTG-learning-site\/pretest-complete\/?$/)
   })
 
   test('hides the keyword guide on the pre-test route', async ({ page }) => {
