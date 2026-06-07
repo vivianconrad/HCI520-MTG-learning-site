@@ -1,8 +1,7 @@
 const { test, expect } = require('@playwright/test')
 const { seedSession } = require('./helpers/session.cjs')
 
-const CARD_ANATOMY_GATE =
-  /explore all six numbered markers on the card before continuing/i
+const CARD_ANATOMY_GATE = /explore all six card parts before continuing/i
 
 test.describe('explore gate discoverability', () => {
   test.beforeEach(async ({ page }) => {
@@ -32,7 +31,18 @@ test.describe('explore gate discoverability', () => {
   test('scrolls to a missing marker when the gate hint is activated', async ({ page }) => {
     const gateHint = page.locator('.lesson-nav__gate-hint')
     await gateHint.click()
-    await expect(page.locator('.card-anatomy__marker--missing').first()).toBeVisible()
+    await expect(
+      page.locator('.card-anatomy__marker--missing, .card-anatomy__parts-button--missing').first()
+    ).toBeVisible()
+  })
+
+  test('opens inline explanation from the parts list on mobile', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'Parts list accordion is mobile-specific')
+
+    const firstPart = page.getByRole('button', { name: /^name, part 1 of 6$/i })
+    await firstPart.click()
+    await expect(page.locator('#card-anatomy-detail-name')).toBeVisible()
+    await expect(page.locator('#card-anatomy-detail-name')).toContainText(/card's name/i)
   })
 
   test('shows a ready message after all markers are explored', async ({ page }) => {

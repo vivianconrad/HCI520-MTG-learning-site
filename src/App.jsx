@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ConfirmProvider } from './context/ConfirmContext.jsx'
+import ForwardLessonProgress from './components/ForwardLessonProgress.jsx'
 import RequireSessionStep from './components/RequireSessionStep.jsx'
 import ParchmentFrameSkeleton from './components/ParchmentFrameSkeleton.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
@@ -65,7 +66,14 @@ function App() {
         <ScrollToTop />
         <Suspense fallback={<RouteFallback />}>
           <Routes>
-            <Route path="/" element={<Consent session={session} />} />
+            <Route
+              path="/"
+              element={
+                <ForwardLessonProgress session={session}>
+                  <Consent session={session} />
+                </ForwardLessonProgress>
+              }
+            />
             <Route
               path="/welcome"
               element={

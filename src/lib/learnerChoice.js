@@ -15,7 +15,7 @@ export const CURIOSITY_OPTIONS = [
   {
     id: CURIOSITY_FOCUS.CARD_TYPES,
     label: 'Card types',
-    hint: 'Creatures, instants, lands, and when you can play each',
+    hint: 'Creatures, instants, lands, and when you can play or cast each',
     lessonNum: 2,
   },
   {

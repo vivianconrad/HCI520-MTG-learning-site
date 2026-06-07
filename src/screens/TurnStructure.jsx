@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import TapExplainer from '../components/TapExplainer.jsx'
-import CastVsPlayExplainer from '../components/CastVsPlayExplainer.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import StackExplainer from '../components/StackExplainer.jsx'
 import { useNavigate } from 'react-router-dom'
@@ -141,6 +140,10 @@ export default function TurnStructure({ session }) {
           use Next phase to walk through a sample turn at your own pace.
         </p>
 
+        <TapExplainer variant="brief" />
+
+        <StackExplainer variant="brief" />
+
         <p className="turn-structure__hint">
           Open all five phases before you continue.
         </p>
@@ -240,12 +243,6 @@ export default function TurnStructure({ session }) {
             </button>
           ) : null}
         </div>
-
-        <CastVsPlayExplainer variant="brief" />
-
-        <TapExplainer variant="brief" />
-
-        <StackExplainer variant="brief" />
 
         <hr className="turn-structure__divider" aria-hidden="true" />
 

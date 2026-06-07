@@ -249,7 +249,7 @@ const CARD_TYPES = [
     tag: 'Any time · you have priority',
     wide: false,
     details: [
-      'Priority is your window to play cards, activate abilities, or pass and let the game move on. When you have priority, you can act; when you pass, your opponent gets a chance.',
+      'Priority is your window to play a land, cast spells, activate abilities, or pass and let the game move on. When you have priority, you can act; when you pass, your opponent gets a chance.',
       'When you cast an instant, it goes on the stack like any other spell. The difference is when you are allowed to cast it: instants can be cast any time you have priority, even when the stack is not empty.',
       'That lets you respond to your opponent. If they cast a spell, you can cast an instant while their spell is still on the stack, before it resolves. Counterspell does exactly that: it counters another spell waiting on the stack.',
       'Instants also work during your main phase, combat, or on your opponent’s turn. Shock can deal damage during combat; Giant Growth can save a creature from dying after damage is assigned.',
@@ -332,7 +332,7 @@ const CARD_TYPES = [
     tag: 'Main phase · stack empty',
     wide: false,
     details: [
-      'Artifacts are magical objects you cast and keep on the battlefield, like creatures or enchantments. They are not lands. You cast them during your main phase when the stack is empty, paying their mana cost like any other spell. Once in play, their rules text tells you what they do.',
+      'Artifacts are magical objects you cast and keep on the battlefield, like creatures or enchantments. They are not lands. You cast them during your main phase when the stack is empty, paying their mana cost like any other spell. Once on the battlefield, their rules text tells you what they do.',
       'Most artifacts are colorless (their mana cost uses gray symbols only), so they can fit into decks of any color. Some artifacts are colored and need specific mana to cast, check the mana cost in the corner.',
       {
         heading: 'What artifacts can do',
@@ -380,14 +380,14 @@ const CARD_TYPES = [
     tag: 'Main phase · stack empty',
     wide: false,
     details: [
-      'Enchantments are permanent spells you cast during your main phase when the stack is empty. They stay on the battlefield and change how the game works while they remain in play.',
+      'Enchantments are permanent spells you cast during your main phase when the stack is empty. They stay on the battlefield and change how the game works while they remain there.',
       {
         heading: 'Auras vs. other enchantments',
         list: [
           'Non-aura enchantments (like Sylvan Library or Goblin Oriflamme) sit on the battlefield and affect the game broadly: your draws, your creatures, the whole table, and so on.',
           'Aura enchantments target something specific, usually a creature, land, or player, and attach to it. Alien Symbiosis and Hyena Umbra are auras that attach to a creature. If the thing they are attached to leaves the battlefield, the aura goes to the graveyard.',
         ],
-        text: 'Read the rules text to see exactly what each enchantment changes. They leave play if destroyed or if an effect exiles them.',
+        text: 'Read the rules text to see exactly what each enchantment changes. They leave the battlefield if destroyed or if an effect exiles them.',
       },
     ],
     examples: [
@@ -435,7 +435,7 @@ const CARD_TYPES = [
     tag: 'Main phase · stack empty',
     wide: true,
     details: [
-      'Planeswalkers are permanent allies you cast during your main phase when the stack is empty. They enter the battlefield with loyalty counters (shown in the bottom-right corner). After a planeswalker is in play, you activate its loyalty abilities. You do not cast those abilities from your hand.',
+      'Planeswalkers are permanent allies you cast during your main phase when the stack is empty. They enter the battlefield with loyalty counters (shown in the bottom-right corner). After a planeswalker is on the battlefield, you activate its loyalty abilities. You do not cast those abilities from your hand.',
       {
         heading: 'What is loyalty?',
         text: 'Loyalty counters track how much life your planeswalker has left in the game and how much power they can spend on abilities. The number in the corner is not mana, and planeswalkers do not have power or toughness like creatures. Loyalty belongs only to that planeswalker card.',
@@ -504,10 +504,12 @@ function createDisplayExamplesMap() {
   )
 }
 
-function CardTypeTimingTag({ timing }) {
+function CardTypeTimingTag({ timing, isLand = false }) {
   return (
     <span className="card-types__tag">
-      <span className="card-types__tag-label">When you can play</span>
+      <span className="card-types__tag-label">
+        {isLand ? 'When you can play' : 'When you can cast'}
+      </span>
       <span className="card-types__tag-value">
         <GlossaryText text={timing} />
       </span>
@@ -604,7 +606,7 @@ function CardTypeItem({ type, examples, hasBeenViewed, highlightMissing, onSeeCa
     >
       <h3 className="card-types__type-name">{type.name}</h3>
       <CardTypeDetails description={type.description} />
-      <CardTypeTimingTag timing={type.tag} />
+      <CardTypeTimingTag timing={type.tag} isLand={type.id === 'land'} />
       <div className="card-types__preview">
         <div className="card-types__examples" role="group" aria-label={`${type.name} sample cards`}>
           {examples.map((example) => (
@@ -934,7 +936,7 @@ export default function CardTypes({ session }) {
                     details={activeType.details}
                     variant="overlay"
                   />
-                  <CardTypeTimingTag timing={activeType.tag} />
+                  <CardTypeTimingTag timing={activeType.tag} isLand={activeType.id === 'land'} />
                 </>
               )
             })()}

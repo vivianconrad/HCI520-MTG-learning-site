@@ -40,12 +40,12 @@ const ZONES = [
   {
     name: 'Hand',
     description:
-      'Cards you are holding. You play or cast them when the rules allow, mostly on your turn, though instants can be cast on your opponent’s turn too.',
+      'Cards you are holding. You play lands and cast spells when the rules allow, mostly on your turn, though instants can be cast on your opponent’s turn too.',
   },
   {
     name: 'Battlefield',
     description:
-      'The table area where permanents in play sit, including lands, creatures, artifacts, enchantments, and planeswalkers.',
+      'The table area where permanents on the battlefield sit, including lands, creatures, artifacts, enchantments, and planeswalkers.',
   },
   {
     name: 'Graveyard',

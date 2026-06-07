@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-height: var(--touch-target-min);
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 600;
@@ -51,6 +52,32 @@
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid rgb(139 105 20 / 18%);
+}
+
+.session-recovery-guide__lead {
+  margin: 0 0 14px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.session-recovery-guide__section {
+  margin: 0 0 14px;
+}
+
+.session-recovery-guide__section:last-child {
+  margin-bottom: 0;
+}
+
+.session-recovery-guide__section-title {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-gold-on-parchment);
 }
 
 .session-recovery-guide__list {

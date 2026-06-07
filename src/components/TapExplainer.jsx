@@ -22,7 +22,7 @@ const FULL = [
     heading: 'Entering the battlefield tapped',
     list: [
       'Some lands and artifacts say they enter the battlefield tapped. They start sideways and cannot be used right away.',
-      'Woodland Cemetery is an example: without a Swamp or Forest already in play, it enters tapped and you cannot tap it for mana until your next turn.',
+      'Woodland Cemetery is an example: without a Swamp or Forest already on the battlefield, it enters tapped and you cannot tap it for mana until your next turn.',
     ],
   },
   'During your untap step at the beginning of your turn, you untap all permanents you control. They turn upright and are ready to use again. You never choose which to untap; they all untap at once.',

@@ -248,6 +248,49 @@
   font-size: 14px;
 }
 
+.card-anatomy__explore {
+  margin-bottom: 24px;
+}
+
+.card-anatomy__explore-lede {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-text-dark);
+  line-height: 1.5;
+  margin: 0 0 16px;
+  text-align: left;
+}
+
+.card-anatomy__diagram-caption {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-gold-on-parchment);
+  text-align: center;
+}
+
+.card-anatomy__subheading--summary {
+  margin-top: 8px;
+}
+
+.card-anatomy__parts-detail {
+  margin-top: 8px;
+  padding: 12px;
+  background: var(--color-parchment-dark);
+  border: 1px solid var(--color-gold-muted);
+  border-radius: 4px;
+}
+
+.card-anatomy__parts-detail-text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-dark);
+}
+
 .card-anatomy__parts-list {
   display: none;
 }
@@ -396,6 +439,22 @@
 }
 
 @media (max-width: 640px) {
+  .card-anatomy__explore-lede {
+    display: none;
+  }
+
+  .card-anatomy__diagram-caption {
+    font-size: 13px;
+  }
+
+  .card-anatomy__info-panel {
+    display: none;
+  }
+
+  .card-anatomy__subheading--summary {
+    margin-top: 0;
+  }
+
   .card-anatomy__callout-marker {
     width: 44px;
     height: 44px;
@@ -405,6 +464,12 @@
   .card-anatomy__parts-list {
     display: block;
     margin: 0 0 20px;
+  }
+
+  .card-anatomy__progress {
+    margin-bottom: 12px;
+    font-weight: 600;
+    text-align: left;
   }
 
   .card-anatomy__parts-lede {

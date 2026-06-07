@@ -6,6 +6,8 @@ import './Consent.css'
 
 const consentCardArt = new URL('../assets/hero.png', import.meta.url).href
 
+const privacyNoticeUrl = `${import.meta.env.BASE_URL}privacy.md`
+
 export default function Consent({ session }) {
   const navigate = useNavigate()
   const { markConsentGiven } = session
@@ -41,6 +43,42 @@ export default function Consent({ session }) {
           </section>
 
           <section className="consent__section">
+            <h2 className="consent__section-heading">What we store (no names or contact info):</h2>
+            <ul className="consent__list">
+              <li>
+                An anonymous <strong>save code</strong> (session ID) generated in your browser
+              </li>
+              <li>Pre-test and post-test answers and scores</li>
+              <li>Time spent on each screen during the lesson</li>
+              <li>
+                Optional learner choices (for example, which topic you wanted to explore first, and
+                how ready you felt before the post-test)
+              </li>
+              <li>Which practice scenarios you attempted in Lesson 4</li>
+            </ul>
+          </section>
+
+          <section className="consent__section">
+            <h2 className="consent__section-heading">Where data is stored:</h2>
+            <ul className="consent__list">
+              <li>
+                Research responses are saved to a secure database hosted by{' '}
+                <strong>Supabase</strong> (cloud PostgreSQL). The site does not use advertising or
+                analytics trackers.
+              </li>
+              <li>
+                Closing the tab does <strong>not</strong> delete data already saved to the server.
+                Clearing this browser&apos;s site data or using &quot;Start over&quot; on the results
+                page only removes the copy stored in your browser.
+              </li>
+              <li>
+                Fonts are loaded from this site (not from Google&apos;s servers) so your browser
+                does not send your IP address to Google for typography.
+              </li>
+            </ul>
+          </section>
+
+          <section className="consent__section">
             <h2 className="consent__section-heading">What you should know:</h2>
             <ul className="consent__list">
               <li>
@@ -52,6 +90,11 @@ export default function Consent({ session }) {
               </li>
               <li>
                 Your responses are stored securely and will only be used for this class project.
+                They are deleted automatically after the study retention period (see our{' '}
+                <a href={privacyNoticeUrl} className="consent__link" target="_blank" rel="noopener noreferrer">
+                  privacy notice
+                </a>
+                ).
               </li>
               <li>
                 This study has not been submitted for formal IRB review as it qualifies as exempt

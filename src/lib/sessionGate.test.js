@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { getLessonsResumePath, getRedirectInfo, getRedirectPath, getGateNotice } from './sessionGate.js'
+import {
+  getLessonsResumePath,
+  getLessonProgressForwardPath,
+  getRedirectInfo,
+  getRedirectPath,
+  getGateNotice,
+} from './sessionGate.js'
 
 const baseSession = {
   consentGiven: false,
@@ -130,5 +136,84 @@ describe('getGateNotice', () => {
     expect(getGateNotice('pretest')).toMatch(/sent you/i)
     expect(getGateNotice('posttest')).toMatch(/post-test/i)
     expect(getGateNotice('lessons', '/lesson/3')).toMatch(/turn structure/i)
+  })
+})
+
+describe('getLessonProgressForwardPath', () => {
+  const inLessons = {
+    ...baseSession,
+    consentGiven: true,
+    pretestCompleted: true,
+    lessonsCompleted: false,
+  }
+
+  it('returns null before the pre-test is finished', () => {
+    expect(getLessonProgressForwardPath('/welcome', baseSession)).toBeNull()
+  })
+
+  it('returns null when already on the resume path', () => {
+    expect(
+      getLessonProgressForwardPath('/lesson/3', {
+        ...inLessons,
+        screenTimes: { TurnStructure: 1000 },
+      })
+    ).toBeNull()
+  })
+
+  it('allows the first visit to pre-test complete after finishing the pre-test', () => {
+    expect(getLessonProgressForwardPath('/pretest-complete', inLessons)).toBeNull()
+  })
+
+  it('forwards from onboarding routes to the last visited lesson', () => {
+    expect(
+      getLessonProgressForwardPath('/welcome', {
+        ...inLessons,
+        screenTimes: { CardAnatomy: 1000 },
+      })
+    ).toBe('/lesson/1')
+  })
+
+  it('forwards from an earlier lesson to the last visited lesson', () => {
+    expect(
+      getLessonProgressForwardPath('/lesson/1', {
+        ...inLessons,
+        screenTimes: { TurnStructure: 1000 },
+      })
+    ).toBe('/lesson/3')
+  })
+
+  it('does not forward when moving forward through the lesson flow', () => {
+    expect(getLessonProgressForwardPath('/what-is-mtg', inLessons)).toBeNull()
+  })
+
+  it('forwards from pre-test complete once lesson content has started', () => {
+    expect(
+      getLessonProgressForwardPath('/pretest-complete', {
+        ...inLessons,
+        screenTimes: { WhatIsMtg: 500 },
+      })
+    ).toBe('/what-is-mtg')
+  })
+
+  it('forwards to post-test prep after lessons are complete', () => {
+    expect(
+      getLessonProgressForwardPath('/lesson/2', {
+        ...baseSession,
+        consentGiven: true,
+        pretestCompleted: true,
+        lessonsCompleted: true,
+      })
+    ).toBe('/posttest-prep')
+  })
+
+  it('returns null after the post-test is complete', () => {
+    expect(
+      getLessonProgressForwardPath('/lesson/1', {
+        ...baseSession,
+        pretestCompleted: true,
+        lessonsCompleted: true,
+        posttestCompleted: true,
+      })
+    ).toBeNull()
   })
 })

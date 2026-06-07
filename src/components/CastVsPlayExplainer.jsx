@@ -4,12 +4,12 @@ import { renderGlossaryListItem, renderGlossaryString } from './glossaryRender.j
 const BRIEF = [
   'In Magic, playing and casting are different actions. You play lands; you cast everything else that is a spell.',
   'Playing a land puts it straight onto the battlefield with no stack and no waiting for your opponent to respond. Casting means paying mana and putting a spell on the stack first, where both players can respond before it resolves. On the stack it is a spell; if it stays on the battlefield after resolving, it becomes a permanent.',
-  'Priority is your window to play cards, activate abilities, or pass and let the game move on.',
+  'Priority is your window to play a land, cast spells, activate abilities, or pass and let the game move on.',
 ]
 
 const FULL = [
   'Magic uses two different words on purpose. Mixing them up is a common beginner mistake. Lands are played; everything else with a mana cost is cast.',
-  'Priority is your window to play cards, activate abilities, or pass and let the game move on. When you have priority, you can act; when you pass, your opponent gets a chance.',
+  'Priority is your window to play a land, cast spells, activate abilities, or pass and let the game move on. When you have priority, you can act; when you pass, your opponent gets a chance.',
   {
     heading: 'Playing a land',
     list: [

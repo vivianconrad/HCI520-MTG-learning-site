@@ -1,5 +1,5 @@
-import { Navigate } from 'react-router-dom'
-import { getGateNotice, getRedirectInfo } from '../lib/sessionGate.js'
+import { Navigate, useLocation } from 'react-router-dom'
+import { getGateNotice, getLessonProgressForwardPath, getRedirectInfo } from '../lib/sessionGate.js'
 
 export default function RequireSessionStep({
   session,
@@ -8,11 +8,8 @@ export default function RequireSessionStep({
   redirectIfPosttestComplete,
   children,
 }) {
+  const { pathname } = useLocation()
   const requirements = Array.isArray(require) ? require : [require]
-
-  if (redirectIfPretestComplete && session.pretestCompleted) {
-    return <Navigate to="/pretest-complete" replace />
-  }
 
   if (redirectIfPosttestComplete && session.posttestCompleted) {
     return <Navigate to="/results" replace />
@@ -24,10 +21,19 @@ export default function RequireSessionStep({
     return (
       <Navigate
         to={redirectInfo.path}
-        replace
         state={{ gateNotice: getGateNotice(redirectInfo.failedKey, redirectInfo.path) }}
+        replace
       />
     )
+  }
+
+  const progressForward = getLessonProgressForwardPath(pathname, session)
+  if (progressForward) {
+    return <Navigate to={progressForward} replace />
+  }
+
+  if (redirectIfPretestComplete && session.pretestCompleted) {
+    return <Navigate to="/pretest-complete" replace />
   }
 
   return children

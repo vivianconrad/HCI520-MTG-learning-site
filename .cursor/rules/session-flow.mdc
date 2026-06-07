@@ -1,0 +1,37 @@
+---
+description: 15-step learner flow, session gating, and useSessionStore conventions
+globs: src/App.jsx,src/screens/**,src/components/RequireSessionStep.jsx,src/lib/sessionGate.js,src/store/**
+alwaysApply: false
+---
+
+# Session Flow
+
+## 15 progress steps (README order)
+
+1. Consent `/` → 2. Welcome `/welcome` → 3. Intro `/intro` → 4. Pre-Test `/pretest` → 5. Pre-Test Complete `/pretest-complete` → 6. Lesson Intro `/lesson/intro` → 7. What Is MTG `/what-is-mtg` → 8–11. Lessons `/lesson/1`–`/lesson/4` → 12. Lesson Complete `/lesson/complete` → 13. Post-Test Prep `/posttest-prep` → 14. Post-Test `/posttest` → 15. Calculating `/calculating` → Results `/results`
+
+Instructor `/instructor` is outside the gated learner flow.
+
+## Gating (`sessionGate.js` + `RequireSessionStep`)
+
+Check order: `consent` → `questions` → `rowReady` → `pretest` → `lessons` → `posttest`
+
+| Gate key | Session field | Redirect |
+|----------|---------------|----------|
+| consent | `consentGiven` | `/` |
+| questions | `selectedQuestions != null` | `/welcome` |
+| rowReady | `participantRowReady` | `/welcome` |
+| pretest | `pretestCompleted` | `/pretest` |
+| lessons | `lessonsCompleted` | resume lesson path |
+| posttest | `posttestCompleted` | `/posttest` |
+
+- Wrap routes in `GuardedRoute` with a `require` array matching prerequisites
+- Use `getRedirectInfo()` for redirect path + user-facing gate notice
+
+## Session store
+
+- `useSessionStore` — single hook; pass `session` prop into screens
+- Questions: `selectQuestions()` samples 2 per topic (`TOPIC_ORDER`) from `questionBank.js`
+- Screen time: `recordScreenEnter` / `recordScreenExit` → `screenTimes` saved to Supabase
+- `resetSession()` clears storage and reloads at `import.meta.env.BASE_URL` — do not setState before navigate
+- `rotateSessionCredentials()` on session conflict — new id/secret, clears participant row state

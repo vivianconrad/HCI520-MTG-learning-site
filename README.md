@@ -107,22 +107,26 @@ Workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) runs the
 
 ## Participant data (Supabase)
 
-Research data is saved incrementally to the `participants` table:
+Research data is saved incrementally to the `participants` table. See **[docs/privacy.md](docs/privacy.md)** for purpose, stored fields, retention, Supabase as processor, participant export, and researcher erasure steps.
 
 | When               | What is saved                                         |
 | ------------------ | ----------------------------------------------------- |
-| Intro screen       | New row with session ID, question set, participant ID |
+| Intro screen       | New row with session ID (save code) and question set  |
 | Pre-test complete  | Answers and score                                     |
 | Lesson complete    | Screen times, lessons completed, scenarios attempted  |
 | Post-test complete | Answers, score, completion timestamp                  |
 
 **Setup**
 
-1. Run **`supabase/setup.sql`** in the [Supabase SQL editor](https://supabase.com/dashboard) for a new project (table, RLS, RPCs, validation triggers).
-2. If participant rows are created but saves fail with “stored in this browser only”, run **`supabase/fix-participants-rls.sql`** (deploys `update_participant` RPC and fixes UPDATE RLS). Same RLS section lives in `supabase/migrations/fix-update-rls-after-security.sql`.
-3. Verify with `node scripts/verify-participants-db.mjs`. It should print `All participant security checks passed.`
-4. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-5. For GitHub Pages, the deploy workflow embeds those values at build time via repository secrets (see **CI/CD and GitHub Pages** above).
+1. Run **`supabase/setup.sql`** in the [Supabase SQL editor](https://supabase.com/dashboard) for a new project (table, RLS, RPCs, validation triggers, retention config, hashed session secrets).
+2. For existing projects, also run migrations in order:
+   - **`supabase/migrations/hash-session-secret.sql`** — store session secrets as SHA-256 hashes at rest.
+   - **`supabase/migrations/add-retention-policy.sql`** — retention config and `purge_expired_participants()`.
+3. Before your study ends, set **`study_end_date`** in `study_privacy_config` (Table Editor, row `id = 1`).
+4. If participant rows are created but saves fail with “stored in this browser only”, run **`supabase/fix-participants-rls.sql`** (deploys `update_participant` RPC and fixes UPDATE RLS). Same RLS section lives in `supabase/migrations/fix-update-rls-after-security.sql`.
+5. Verify with `node scripts/verify-participants-db.mjs` — it should print `All participant security checks passed.`
+6. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+7. For GitHub Pages, the deploy workflow embeds those values at build time via repository secrets (see **CI/CD and GitHub Pages** above).
 
 **Instructor analysis**
 
@@ -150,6 +154,13 @@ For existing Supabase projects that already have a `participants` table without 
 - Test questions in the client bundle omit answer keys; keys are loaded only when saving scores or viewing results.
 - **Instructor** participant reads are not available from the browser when deny-select RLS is applied.
 - Do **not** commit `.env.local` or other files containing secrets.
+
+## Privacy
+
+- Participant-facing copy on the consent screen names Supabase, lists stored fields, and links to the privacy notice.
+- **[docs/privacy.md](docs/privacy.md)** — retention, backups, processor details, erasure runbook.
+- **`public/privacy.md`** — same notice, copied to the deployed site at `/HCI520-MTG-learning-site/privacy.md`.
+- **`participant_id`** mirrors **`session_id`** (same anonymous save code); the client registers both with the same value.
 
 ## Notes
 

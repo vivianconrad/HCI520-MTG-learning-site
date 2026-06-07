@@ -350,7 +350,7 @@ const questionBank = [
     question: 'What is the stack used for in Magic?',
     options: [
       'Spells and abilities wait there before they resolve',
-      'Cards you have played are stored there permanently',
+      'It is a permanent zone where every card you use is stored',
       'It is another name for the combat phase',
       'It is where lands go after you play them',
     ],

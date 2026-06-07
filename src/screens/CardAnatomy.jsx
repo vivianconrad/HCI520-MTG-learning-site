@@ -66,7 +66,7 @@ const CALLOUTS = [
 ]
 
 const BULLETS = [
-  'Every card has a name and a mana cost that tell you what it is and how to cast it.',
+  'Every card has a name. Spells also show a mana cost in the corner that tells you how to cast them. Lands have no mana cost because you play them instead.',
   'The type line tells you what kind of card it is: creature, land, instant, and so on.',
   'Power and toughness only appear on creature cards. They determine combat outcomes.',
 ]
@@ -98,19 +98,51 @@ function getMarkerModifier(position) {
 }
 
 const INFO_PANEL_ID = 'card-anatomy-info-panel'
+const MOBILE_EXPLORE_QUERY = '(max-width: 640px)'
 
-function CardAnatomyPartsList({ callouts, activeCallout, seenIds, highlightMissing, onSelect }) {
+function prefersMobileExploreLayout() {
+  return typeof window !== 'undefined' && window.matchMedia(MOBILE_EXPLORE_QUERY).matches
+}
+
+function scrollToCalloutTarget(id) {
+  const mobile = prefersMobileExploreLayout()
+  const targetId = mobile ? `card-anatomy-part-${id}` : `card-anatomy-marker-${id}`
+  document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  if (mobile) {
+    document.getElementById(`card-anatomy-detail-${id}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    })
+  } else {
+    document.getElementById(INFO_PANEL_ID)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }
+}
+
+function CardAnatomyPartsList({
+  callouts,
+  activeCallout,
+  seenIds,
+  highlightMissing,
+  onSelect,
+  showInlineDetail = false,
+}) {
   return (
     <nav className="card-anatomy__parts-list" aria-label="Card parts list">
-      <p className="card-anatomy__parts-lede">On small screens, use this list if the markers are hard to tap.</p>
+      <p className="card-anatomy__parts-lede">
+        {showInlineDetail
+          ? 'Tap a part to read what it does. The explanation opens right here — explore all six to continue.'
+          : 'On small screens, use this list if the markers are hard to tap.'}
+      </p>
       <ol className="card-anatomy__parts-items">
         {callouts.map((callout) => {
           const isActive = activeCallout === callout.id
           const isSeen = seenIds.has(callout.id)
+          const detailId = `card-anatomy-detail-${callout.id}`
           return (
             <li key={callout.id} className="card-anatomy__parts-item">
               <button
                 type="button"
+                id={`card-anatomy-part-${callout.id}`}
                 className={[
                   'card-anatomy__parts-button',
                   isActive ? 'card-anatomy__parts-button--active' : '',
@@ -120,6 +152,9 @@ function CardAnatomyPartsList({ callouts, activeCallout, seenIds, highlightMissi
                   .filter(Boolean)
                   .join(' ')}
                 aria-current={isActive ? 'true' : undefined}
+                aria-expanded={showInlineDetail ? isActive : undefined}
+                aria-controls={showInlineDetail ? detailId : undefined}
+                aria-label={`${callout.label}, part ${callout.number} of ${callouts.length}`}
                 onClick={() => onSelect(callout.id)}
               >
                 <span className="card-anatomy__parts-number" aria-hidden="true">
@@ -132,6 +167,18 @@ function CardAnatomyPartsList({ callouts, activeCallout, seenIds, highlightMissi
                   </span>
                 ) : null}
               </button>
+              {showInlineDetail && isActive ? (
+                <div
+                  id={detailId}
+                  className="card-anatomy__parts-detail"
+                  role="region"
+                  aria-labelledby={`card-anatomy-part-${callout.id}`}
+                >
+                  <p className="card-anatomy__parts-detail-text">
+                    <GlossaryText text={callout.text} />
+                  </p>
+                </div>
+              ) : null}
             </li>
           )
         })}
@@ -190,9 +237,7 @@ export default function CardAnatomy({ session }) {
     setHighlightMissing(true)
     const firstMissing = CALLOUTS.find((callout) => !seenIds.has(callout.id))
     if (firstMissing) {
-      document
-        .getElementById(`card-anatomy-marker-${firstMissing.id}`)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      scrollToCalloutTarget(firstMissing.id)
     }
   }, [seenIds])
   const activeCalloutData = CALLOUTS.find((c) => c.id === activeCallout)
@@ -208,16 +253,19 @@ export default function CardAnatomy({ session }) {
 
   function toggleCallout(id) {
     markCalloutSeen(id)
-    setActiveCallout((prev) => (prev === id ? null : id))
+    setActiveCallout((prev) => {
+      const next = prev === id ? null : id
+      if (next) {
+        window.requestAnimationFrame(() => scrollToCalloutTarget(next))
+      }
+      return next
+    })
   }
 
   function selectCallout(id) {
     markCalloutSeen(id)
     setActiveCallout(id)
-    document
-      .getElementById(`card-anatomy-marker-${id}`)
-      ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    document.getElementById(INFO_PANEL_ID)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    scrollToCalloutTarget(id)
   }
 
   return (
@@ -237,7 +285,78 @@ export default function CardAnatomy({ session }) {
           piloting any deck.
         </p>
 
-        <h2 className="card-anatomy__subheading">Card Anatomy at a Glance</h2>
+        <section className="card-anatomy__explore" aria-labelledby="card-anatomy-explore-heading">
+          <h2 id="card-anatomy-explore-heading" className="card-anatomy__subheading">
+            Explore the sample card
+          </h2>
+          <p className="card-anatomy__explore-lede">
+            Each numbered dot matches a part of the card. Read about every part to unlock the next
+            lesson.
+          </p>
+
+          <p className="card-anatomy__progress" aria-live="polite">
+            {allExplored
+              ? 'All six parts explored.'
+              : `Explored ${seenIds.size} of ${CALLOUTS.length} parts`}
+          </p>
+
+          <div className="card-anatomy__diagram">
+            <p className="card-anatomy__diagram-caption">Sample card</p>
+            <div className="card-anatomy__card-wrap">
+              <CardImage />
+              {CALLOUTS.map((callout) => (
+                <CardMarker
+                  key={callout.id}
+                  callout={callout}
+                  isActive={activeCallout === callout.id}
+                  isSeen={seenIds.has(callout.id)}
+                  highlightMissing={highlightMissing}
+                  onToggle={toggleCallout}
+                />
+              ))}
+            </div>
+          </div>
+
+          <CardAnatomyPartsList
+            callouts={CALLOUTS}
+            activeCallout={activeCallout}
+            seenIds={seenIds}
+            highlightMissing={highlightMissing}
+            onSelect={selectCallout}
+            showInlineDetail
+          />
+
+          <div
+            id={INFO_PANEL_ID}
+            className={
+              activeCalloutData
+                ? 'card-anatomy__info-panel'
+                : 'card-anatomy__info-panel card-anatomy__info-panel--empty'
+            }
+            role="region"
+            aria-live="polite"
+            aria-labelledby={activeCalloutData ? 'callout-heading' : 'callout-placeholder'}
+          >
+            {activeCalloutData ? (
+              <>
+                <h3 id="callout-heading" className="card-anatomy__info-panel-title">
+                  {activeCalloutData.label}
+                </h3>
+                <p className="card-anatomy__info-panel-text">
+                  <GlossaryText text={activeCalloutData.text} />
+                </p>
+              </>
+            ) : (
+              <p id="callout-placeholder" className="card-anatomy__info-placeholder">
+                Select a numbered marker on the card to read its explanation.
+              </p>
+            )}
+          </div>
+        </section>
+
+        <h2 className="card-anatomy__subheading card-anatomy__subheading--summary">
+          Card anatomy at a glance
+        </h2>
         <ul className="card-anatomy__list">
           {BULLETS.map((text) => (
             <li key={text} className="card-anatomy__list-item">
@@ -249,63 +368,6 @@ export default function CardAnatomy({ session }) {
           ))}
         </ul>
 
-        <div className="card-anatomy__diagram">
-          <div className="card-anatomy__card-wrap">
-            <CardImage />
-            {CALLOUTS.map((callout) => (
-              <CardMarker
-                key={callout.id}
-                callout={callout}
-                isActive={activeCallout === callout.id}
-                isSeen={seenIds.has(callout.id)}
-                highlightMissing={highlightMissing}
-                onToggle={toggleCallout}
-              />
-            ))}
-          </div>
-        </div>
-
-        <CardAnatomyPartsList
-          callouts={CALLOUTS}
-          activeCallout={activeCallout}
-          seenIds={seenIds}
-          highlightMissing={highlightMissing}
-          onSelect={selectCallout}
-        />
-
-        <div
-          id={INFO_PANEL_ID}
-          className={
-            activeCalloutData
-              ? 'card-anatomy__info-panel'
-              : 'card-anatomy__info-panel card-anatomy__info-panel--empty'
-          }
-          role="region"
-          aria-live="polite"
-          aria-labelledby={activeCalloutData ? 'callout-heading' : 'callout-placeholder'}
-        >
-          {activeCalloutData ? (
-            <>
-              <h2 id="callout-heading" className="card-anatomy__info-panel-title">
-                {activeCalloutData.label}
-              </h2>
-              <p className="card-anatomy__info-panel-text">
-                <GlossaryText text={activeCalloutData.text} />
-              </p>
-            </>
-          ) : (
-            <p id="callout-placeholder" className="card-anatomy__info-placeholder">
-              Select a marker to read its explanation.
-            </p>
-          )}
-        </div>
-
-        <p className="card-anatomy__progress" aria-live="polite">
-          {allExplored
-            ? 'All six parts explored.'
-            : `Explored ${seenIds.size} of ${CALLOUTS.length} parts`}
-        </p>
-
         <hr className="card-anatomy__divider" aria-hidden="true" />
 
         <LessonActions
@@ -315,7 +377,7 @@ export default function CardAnatomy({ session }) {
           onNext={() => navigate('/lesson/2')}
           nextLabel="Continue to card types"
           canProceed={allExplored}
-          gateMessage="Explore all six numbered markers on the card before continuing."
+          gateMessage="Explore all six card parts before continuing."
           readyMessage="You've explored everything on this card. Ready to continue."
           onGateBlocked={handleGateBlocked}
         />

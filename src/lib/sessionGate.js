@@ -48,6 +48,34 @@ const LESSON_RESUME_SCREENS = [
   { screen: 'PuttingItTogether', path: '/lesson/4' },
 ]
 
+/** Ordered lesson routes used to detect backward navigation within the lesson phase. */
+export const LESSON_FLOW_ORDER = [
+  '/lesson/intro',
+  '/what-is-mtg',
+  '/lesson/1',
+  '/lesson/2',
+  '/lesson/3',
+  '/lesson/4',
+]
+
+const PRE_LESSON_ALWAYS_FORWARD = ['/', '/welcome', '/intro', '/pretest', '/pretest-complete']
+
+const POST_LESSON_FORWARD_TARGET = '/posttest-prep'
+
+const POST_LESSON_STALE_PATHS = [
+  '/',
+  '/welcome',
+  '/intro',
+  '/pretest',
+  '/pretest-complete',
+  ...LESSON_FLOW_ORDER,
+  '/lesson/complete',
+]
+
+function hasLessonDwell(screenTimes = {}) {
+  return LESSON_RESUME_SCREENS.some(({ screen }) => (screenTimes[screen] ?? 0) > 0)
+}
+
 /** Resume the lesson path the participant visited most recently, or lesson intro if none. */
 export function getLessonsResumePath(screenTimes = {}) {
   let resumePath = '/lesson/intro'
@@ -60,6 +88,52 @@ export function getLessonsResumePath(screenTimes = {}) {
   }
 
   return resumePath
+}
+
+/**
+ * When a participant has already passed gates, send them forward to their last lesson
+ * (or post-test prep after lessons) instead of leaving them on an earlier step via Back.
+ */
+export function getLessonProgressForwardPath(currentPath, session) {
+  const {
+    pretestCompleted,
+    lessonsCompleted,
+    posttestCompleted,
+    screenTimes = {},
+  } = session
+
+  if (posttestCompleted) return null
+
+  if (lessonsCompleted) {
+    if (
+      POST_LESSON_STALE_PATHS.includes(currentPath) &&
+      currentPath !== POST_LESSON_FORWARD_TARGET &&
+      currentPath !== '/posttest'
+    ) {
+      return POST_LESSON_FORWARD_TARGET
+    }
+    return null
+  }
+
+  if (!pretestCompleted) return null
+
+  const resumePath = getLessonsResumePath(screenTimes)
+  if (currentPath === resumePath) return null
+
+  if (PRE_LESSON_ALWAYS_FORWARD.includes(currentPath)) {
+    if (currentPath === '/pretest-complete' && !hasLessonDwell(screenTimes)) {
+      return null
+    }
+    return resumePath
+  }
+
+  const flowIndex = LESSON_FLOW_ORDER.indexOf(currentPath)
+  const resumeIndex = LESSON_FLOW_ORDER.indexOf(resumePath)
+
+  if (flowIndex === -1 || resumeIndex === -1) return null
+  if (flowIndex < resumeIndex) return resumePath
+
+  return null
 }
 
 /** First unmet requirement in flow order, or null when the route is allowed. */

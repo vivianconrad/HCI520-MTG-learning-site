@@ -14,6 +14,29 @@
   margin: 0 auto 12px;
 }
 
+/* SessionRecoveryGuide sits on the navy page chrome, not the parchment frame. */
+.pretest .session-recovery-guide {
+  background: rgba(201, 168, 76, 0.12);
+  border-color: rgba(201, 168, 76, 0.45);
+}
+
+.pretest .session-recovery-guide__summary,
+.pretest .session-recovery-guide__summary-text {
+  color: var(--color-text-light);
+}
+
+.pretest .session-recovery-guide__summary::before {
+  border-left-color: var(--color-gold);
+}
+
+.pretest .session-recovery-guide__body {
+  border-top-color: rgba(201, 168, 76, 0.35);
+}
+
+.pretest .session-recovery-guide__list {
+  color: rgba(255, 255, 255, 0.88);
+}
+
 .pretest__frame {
   max-width: 680px;
   width: 100%;
@@ -138,7 +161,7 @@
   gap: 8px;
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.88);
   text-align: center;
   margin: 0 auto 16px;
   max-width: 36rem;
@@ -329,7 +352,7 @@
 .pretest__save-warning-detail {
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.88);
   text-align: center;
   margin: 0;
   line-height: 1.45;
