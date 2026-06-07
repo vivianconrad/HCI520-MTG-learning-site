@@ -20,6 +20,7 @@ export default function TestQuestionFlow({
 }) {
   const navigate = useNavigate()
   const confirm = useConfirm()
+  const frameRef = useRef(null)
   const optionRefs = useRef([])
   const shouldFocusOptionRef = useRef(false)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -49,6 +50,7 @@ export default function TestQuestionFlow({
 
   useEffect(() => {
     optionRefs.current = optionRefs.current.slice(0, question.options.length)
+    frameRef.current?.focus({ preventScroll: true })
   }, [question.options.length, currentIndex])
 
   useEffect(() => {
@@ -110,7 +112,7 @@ export default function TestQuestionFlow({
   }
 
   return (
-    <div className="pretest__frame" onKeyDown={handleFrameKeyDown}>
+    <div ref={frameRef} className="pretest__frame" tabIndex={-1} onKeyDown={handleFrameKeyDown}>
       <p className="pretest__breadcrumb" aria-live="polite" aria-atomic="true">
         {progressAnnouncement}
       </p>
