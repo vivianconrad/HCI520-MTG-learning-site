@@ -20,10 +20,7 @@ export default function KeywordTooltip({ term, definition, children }) {
   const open = hovered || pinned
 
   useEffect(() => {
-    if (!open) {
-      setPopupStyle(null)
-      return undefined
-    }
+    if (!open) return undefined
 
     function updatePosition() {
       const root = rootRef.current
@@ -146,12 +143,12 @@ export default function KeywordTooltip({ term, definition, children }) {
         role="tooltip"
         className={[
           'keyword-tooltip__popup',
-          popupStyle ? 'keyword-tooltip__popup--positioned' : '',
+          open && popupStyle ? 'keyword-tooltip__popup--positioned' : '',
         ]
           .filter(Boolean)
           .join(' ')}
         aria-hidden={!open}
-        style={popupStyle ?? undefined}
+        style={open ? (popupStyle ?? undefined) : undefined}
       >
         <span className="keyword-tooltip__term">{term}</span>
         <span className="keyword-tooltip__definition">{definition}</span>
