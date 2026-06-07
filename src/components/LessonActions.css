@@ -9,6 +9,17 @@
   border-radius: 4px;
 }
 
+.lesson-nav__ready-hint {
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--color-text-dark);
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  border-radius: 4px;
+}
+
 [class*='__button--next-blocked'] {
   opacity: 0.72;
   cursor: pointer;

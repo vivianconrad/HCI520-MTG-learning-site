@@ -783,6 +783,7 @@ export default function CardTypes({ session }) {
           nextLabel="Continue to turn structure"
           canProceed={allViewed}
           gateMessage="Open See cards & examples on each of the seven card types before continuing."
+          readyMessage="You've explored every card type — ready to continue."
           onGateBlocked={handleGateBlocked}
         />
         <ProgressDots activeIndex={PROGRESS.LESSON_2} />

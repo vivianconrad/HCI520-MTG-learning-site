@@ -256,6 +256,7 @@ export default function TurnStructure({ session }) {
           nextLabel="Continue to practice"
           canProceed={allPhasesExplored}
           gateMessage="Open all five phases on the timeline before continuing."
+          readyMessage="You've explored every turn phase — ready to continue."
           onGateBlocked={handleGateBlocked}
         />
         <ProgressDots activeIndex={PROGRESS.LESSON_3} />

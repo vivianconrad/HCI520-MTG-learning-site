@@ -4,6 +4,7 @@ import LessonActions from '../components/LessonActions.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
+import CardAnatomyMobileHint from '../components/CardAnatomyMobileHint.jsx'
 import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { cardImage } from '../assets/cards/index.js'
@@ -169,6 +170,8 @@ export default function CardAnatomy({ session }) {
         <h1 className="card-anatomy__heading">How to Read a Card</h1>
         <hr className="card-anatomy__rule" aria-hidden="true" />
 
+        <CardAnatomyMobileHint />
+
         <p className="card-anatomy__hint">
           Tap each numbered marker on the card to learn what that part means.
         </p>
@@ -250,6 +253,7 @@ export default function CardAnatomy({ session }) {
           nextLabel="Continue to card types"
           canProceed={allExplored}
           gateMessage="Explore all six numbered markers on the card before continuing."
+          readyMessage="You've explored everything on this card — ready to continue."
           onGateBlocked={handleGateBlocked}
         />
 

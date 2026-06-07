@@ -127,7 +127,7 @@ export default function WhatIsMtg({ session }) {
           onNext={() => navigate('/lesson/1')}
           nextLabel="Continue to card anatomy"
         />
-        <ProgressDots activeIndex={PROGRESS.WHAT_IS_MTG} />
+        <ProgressDots activeIndex={PROGRESS.WHAT_IS_MTG} stepLabel="Overview" />
       </div>
     </PageLayout>
   )

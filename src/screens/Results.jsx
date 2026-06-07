@@ -27,7 +27,7 @@ function getTopicReviewPath(topicKey, selectedQuestions, pretestAnswers, posttes
 
   const missedQuestion = selectedQuestions.find((question) => {
     if (question.lo !== topicKey) return false
-    return questionResultMeta(question, pretestAnswers, posttestAnswers).eitherWrong
+    return questionResultMeta(question, pretestAnswers, posttestAnswers).postWrong
   })
 
   if (missedQuestion) return getReviewLessonPath(missedQuestion)
@@ -38,14 +38,18 @@ function questionResultMeta(question, pretestAnswers, posttestAnswers) {
   const correctIndex = answerKeys[question.id] ?? question.correctIndex
   const preIndex = pretestAnswers[question.id]
   const postIndex = posttestAnswers[question.id]
-  const eitherWrong = preIndex !== correctIndex || postIndex !== correctIndex
+  const preWrong = preIndex !== correctIndex
+  const postWrong = postIndex !== correctIndex
+  const eitherWrong = preWrong || postWrong
 
   return {
     preIndex,
     postIndex,
+    preWrong,
+    postWrong,
     eitherWrong,
     correctIndex,
-    explanation: eitherWrong ? getQuestionExplanation(question) : null,
+    explanation: postWrong ? getQuestionExplanation(question) : null,
   }
 }
 
@@ -86,6 +90,7 @@ export default function Results({ session }) {
     posttestAnswers,
     scenariosAttempted,
     screenTimes,
+    posttestReadiness,
     resetSession,
   } = session
   const [copiedSummary, setCopiedSummary] = useState(false)
@@ -146,6 +151,9 @@ export default function Results({ session }) {
 
   const improvement = getImprovementMessage(scores.pretestCorrect, scores.posttestCorrect)
   const practiceIncomplete = scenariosAttempted < PRACTICE_SCENARIO_COUNT
+  const practicedFully = scenariosAttempted >= PRACTICE_SCENARIO_COUNT
+  const showReadinessEncouragement =
+    posttestReadiness != null && posttestReadiness <= 2 && practicedFully
 
   return (
     <PageLayout title="Your Results · Learn to Play MTG" className="results">
@@ -172,6 +180,13 @@ export default function Results({ session }) {
             </div>
           </div>
           <p className={improvement.className}>{improvement.text}</p>
+          {showReadinessEncouragement ? (
+            <p className="results__reflection-note" role="note">
+              Before the post-test you felt less than ready, but you still worked through every
+              practice scenario. That effort counts — use the review links below for anything that
+              still feels fuzzy. This is only for you; no one else sees your readiness score.
+            </p>
+          ) : null}
         </section>
 
         <hr className="results__divider" aria-hidden="true" />
@@ -297,7 +312,7 @@ export default function Results({ session }) {
             </thead>
             <tbody>
               {selectedQuestions.map((question, index) => {
-                const { preIndex, postIndex, eitherWrong, explanation, correctIndex } =
+                const { preIndex, postIndex, postWrong, explanation, correctIndex } =
                   questionResultMeta(question, pretestAnswers, posttestAnswers)
 
                 return (
@@ -329,7 +344,7 @@ export default function Results({ session }) {
                       />
                     </td>
                     <td>
-                      {eitherWrong ? (
+                      {postWrong ? (
                         <span className="results__question-review-cell">
                           <span className="results__correct-tag">
                             Correct: {question.options[correctIndex]}
@@ -354,7 +369,7 @@ export default function Results({ session }) {
 
           <div className="results__question-cards results__question-cards--mobile">
             {selectedQuestions.map((question, index) => {
-              const { preIndex, postIndex, eitherWrong, explanation, correctIndex } =
+              const { preIndex, postIndex, postWrong, explanation, correctIndex } =
                 questionResultMeta(question, pretestAnswers, posttestAnswers)
 
               return (
@@ -382,7 +397,7 @@ export default function Results({ session }) {
                       />
                     </div>
                   </div>
-                  {eitherWrong && (
+                  {postWrong && (
                     <>
                       <p className="results__question-card-correct">
                         Correct: {question.options[correctIndex]}

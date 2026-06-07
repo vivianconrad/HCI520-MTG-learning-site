@@ -46,20 +46,25 @@ npm run build
 
 ## App Flow
 
-Current learning path:
+Current learning path (15 progress steps; routes in parentheses):
 
-1. Welcome
-2. Intro
-3. Pre-Test
-4. Lesson Intro
-5. Lesson 1: Card Anatomy
-6. Lesson 2: Card Types
-7. Lesson 3: Turn Structure
-8. Lesson 4: Putting It Together
-9. Lesson Complete
-10. Post-Test
-11. Calculating
-12. Results
+1. Consent (`/`)
+2. Welcome (`/welcome`)
+3. Intro (`/intro`)
+4. Pre-Test (`/pretest`)
+5. Pre-Test Complete (`/pretest-complete`)
+6. Lesson Intro — curiosity focus (`/lesson/intro`)
+7. What Is MTG? (`/what-is-mtg`)
+8. Lesson 1: Card Anatomy (`/lesson/1`)
+9. Lesson 2: Card Types (`/lesson/2`)
+10. Lesson 3: Turn Structure (`/lesson/3`)
+11. Lesson 4: Putting It Together (`/lesson/4`)
+12. Lesson Complete (`/lesson/complete`)
+13. Post-Test Prep (`/posttest-prep`) — optional bridge before the post-test
+14. Post-Test (`/posttest`)
+15. Calculating (`/calculating`) → Results (`/results`)
+
+Instructor dashboard: `/instructor`
 
 ## Project Structure
 

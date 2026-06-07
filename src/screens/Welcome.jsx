@@ -51,7 +51,19 @@ export default function Welcome({ session }) {
     }
   }, [selectedQuestions, selectQuestions])
 
-  const { rowReady, rowError } = useParticipantBootstrap(session)
+  const { rowReady, rowError, verifying } = useParticipantBootstrap(session)
+
+  const bootstrapStatusId = 'welcome-bootstrap-status'
+  let bootstrapStatus = null
+  if (!rowReady && !rowError) {
+    if (verifying) {
+      bootstrapStatus = 'Checking your saved session…'
+    } else if (!selectedQuestions?.length) {
+      bootstrapStatus = 'Drawing your assessment questions…'
+    } else {
+      bootstrapStatus = 'Registering your study session…'
+    }
+  }
 
   return (
     <PageLayout title="Welcome · Learn to Play MTG" className="welcome">
@@ -90,9 +102,9 @@ export default function Welcome({ session }) {
             </button>
           </div>
         ) : null}
-        {!rowReady && !rowError ? (
-          <p className="welcome__status" aria-live="polite">
-            Preparing your session…
+        {bootstrapStatus ? (
+          <p id={bootstrapStatusId} className="welcome__status" aria-live="polite">
+            {bootstrapStatus}
           </p>
         ) : null}
         <div className="welcome__actions">
@@ -100,6 +112,7 @@ export default function Welcome({ session }) {
             type="button"
             className="welcome__button"
             disabled={!rowReady}
+            aria-describedby={bootstrapStatus ? bootstrapStatusId : undefined}
             onClick={() => navigate('/intro')}
           >
             Start

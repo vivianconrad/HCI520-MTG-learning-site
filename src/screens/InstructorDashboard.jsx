@@ -126,14 +126,35 @@ export default function InstructorDashboard() {
           </div>
         </div>
 
-        {!loadAttempted && (
+        <section className="instructor__setup" aria-labelledby="instructor-setup-heading">
+          <h2 id="instructor-setup-heading" className="instructor__subheading">
+            Researcher workflow
+          </h2>
           <p className="instructor__intro">
-            Cohort summaries come from Supabase when browser access is allowed. Row-level security
-            often blocks SELECT on the <code>participants</code> table. Use your Supabase project →
-            Table Editor → <code>participants</code> to view and export submissions. Click{' '}
-            <strong>Try loading cohort data</strong> when you want to attempt a dashboard load.
+            Participant rows are private by design. With deny-select RLS (the default from{' '}
+            <code>supabase/setup.sql</code>), this page cannot read cohort data from the browser.
+            That is expected — use Supabase for analysis, and treat the button below as an optional
+            check when you have changed policies.
           </p>
-        )}
+          <ol className="instructor__steps">
+            <li>
+              Open your Supabase project → <strong>Table Editor</strong> →{' '}
+              <code>participants</code>.
+            </li>
+            <li>
+              Filter or sort by <code>completed_at</code> to find finished sessions. Rows appear
+              after a participant submits the post-test.
+            </li>
+            <li>
+              Export from Table Editor (CSV) for SPSS, R, or Excel. Column definitions and scoring
+              caveats are in <code>docs/evaluation.md</code>.
+            </li>
+            <li>
+              Optional: click <strong>Try loading cohort data</strong> to see whether browser reads
+              work in your environment. If RLS blocks reads, use the Table Editor instead.
+            </li>
+          </ol>
+        </section>
 
         {error && (
           <p className="instructor__error" role="alert">
@@ -142,9 +163,16 @@ export default function InstructorDashboard() {
         )}
 
         {rlsBlocked && (
-          <p className="instructor__intro">
-            Browser reads are blocked by RLS. Open Supabase → Table Editor →{' '}
-            <code>participants</code> to review cohort submissions directly.
+          <p className="instructor__callout" role="status">
+            Browser reads are blocked. This is normal with deny-select RLS. Continue in Supabase
+            Table Editor — the empty tables below are not a bug.
+          </p>
+        )}
+
+        {loadAttempted && !rlsBlocked && !error && sessions.length === 0 && !loading && (
+          <p className="instructor__callout" role="status">
+            Load succeeded, but no completed sessions are in the database yet. Participants appear
+            after they finish the post-test. Use Table Editor to confirm rows as they arrive.
           </p>
         )}
 
@@ -199,11 +227,6 @@ export default function InstructorDashboard() {
 
             <section className="instructor__participants" aria-label="Participants">
               <h2 className="instructor__subheading">Participants</h2>
-              {!sessions.length && !loading && (
-                <p className="instructor__empty">
-                  No sessions yet. Participants submit after the post-test.
-                </p>
-              )}
               {sessions.length > 0 && (
                 <div className="instructor__table-wrap">
                   <table className="instructor__table instructor__table--compact">

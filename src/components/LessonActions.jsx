@@ -15,11 +15,14 @@ export default function LessonActions({
   nextLabel = 'Next',
   canProceed = true,
   gateMessage,
+  readyMessage,
   onGateBlocked,
 }) {
   const confirm = useConfirm()
   const hintId = `${classPrefix}-gate-hint`
+  const readyId = `${classPrefix}-ready-hint`
   const visibleGateHint = !canProceed && gateMessage ? gateMessage : ''
+  const visibleReadyMessage = canProceed && readyMessage ? readyMessage : ''
 
   async function handleBack() {
     if (
@@ -81,13 +84,20 @@ export default function LessonActions({
               {visibleGateHint}
             </p>
           ) : null}
+          {visibleReadyMessage ? (
+            <p id={readyId} className="lesson-nav__ready-hint" role="status">
+              {visibleReadyMessage}
+            </p>
+          ) : null}
           <button
             type="button"
             className={`${classPrefix}__button ${classPrefix}__button--next${
               !canProceed ? ` ${classPrefix}__button--next-blocked` : ''
             }${onReview ? ` ${classPrefix}__button--stacked` : ''}`}
             onClick={handleNext}
-            aria-describedby={visibleGateHint ? hintId : undefined}
+            aria-describedby={
+              visibleGateHint ? hintId : visibleReadyMessage ? readyId : undefined
+            }
           >
             {onReview ? (
               <>

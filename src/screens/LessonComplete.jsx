@@ -193,6 +193,13 @@ export default function LessonComplete({ session }) {
               Saving your response…
             </p>
           ) : null}
+          {readiness != null && readiness <= 2 && completedAllPractice ? (
+            <p className="lesson-complete__reflection" role="note">
+              You finished every practice scenario even though you feel less than ready. That work
+              matters — the post-test is just a check-in on what stuck, not a grade and not compared
+              to anyone else.
+            </p>
+          ) : null}
         </fieldset>
 
         {canChooseNext ? (

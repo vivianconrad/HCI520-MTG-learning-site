@@ -403,6 +403,13 @@
   color: var(--color-text-muted, #4a4540);
 }
 
+.results__reflection-note {
+  margin: 14px 0 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-text-muted, #4a4540);
+}
+
 .results__review-link--standalone {
   display: inline-block;
 }
