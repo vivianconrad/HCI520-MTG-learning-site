@@ -8,8 +8,8 @@ import { chromium } from 'playwright'
 import answerKeys from '../src/data/questionAnswerKeys.js'
 
 const BASE = process.env.APP_URL ?? 'http://localhost:5173/HCI520-MTG-learning-site/'
-const PRETEST_TARGET = Number(process.env.PRETEST_TARGET ?? 3)
-const POSTTEST_TARGET = Number(process.env.POSTTEST_TARGET ?? 7)
+const PRETEST_TARGET = Number(process.env.PRETEST_TARGET ?? 1)
+const POSTTEST_TARGET = Number(process.env.POSTTEST_TARGET ?? 8)
 
 async function waitForProgress(page, textPattern) {
   await page.locator('.card-anatomy__progress, .card-types__progress, .turn-structure__progress').filter({
@@ -25,6 +25,12 @@ async function closeCardTypeOverlay(page) {
 
 async function clickPrimary(page, pattern) {
   const btn = page.getByRole('button', { name: pattern })
+  await btn.waitFor({ state: 'visible', timeout: 60_000 })
+  await btn.click()
+}
+
+async function clickLessonContinue(page) {
+  const btn = page.locator('[class*="__button--next"]').filter({ hasText: /^Continue$/ }).first()
   await btn.waitFor({ state: 'visible', timeout: 60_000 })
   await btn.click()
 }
@@ -93,20 +99,16 @@ async function main() {
   await page.getByRole('button', { name: "I'll follow the guide" }).click()
   await clickPrimary(page, /Continue to What Is Magic/)
 
-  console.log('What Is Magic — explore zones')
+  console.log('What Is Magic — overview')
   await page.waitForURL(/\/what-is-mtg/)
-  for (const zone of ['Library', 'Hand', 'Battlefield', 'Graveyard', 'Exile']) {
-    await page.getByRole('button', { name: `${zone} zone` }).click()
-  }
-  await page.getByText(/All five zones explored/i).waitFor({ timeout: 15_000 })
-  await clickPrimary(page, /Continue to First Turn Walkthrough/)
+  await clickPrimary(page, /Continue to walkthrough/)
 
   console.log('First turn walkthrough')
   await page.waitForURL(/\/first-game/)
   for (let step = 0; step < 5; step += 1) {
     await clickPrimary(page, /Next step/)
   }
-  await clickPrimary(page, /Continue to Lesson 1/)
+  await clickPrimary(page, /Continue to card anatomy/)
 
   await page.waitForURL(/\/lesson\/1/)
   console.log('Lesson 1 — card anatomy markers')
@@ -115,7 +117,7 @@ async function main() {
     await page.getByRole('button', { name: `${label} callout` }).click()
   }
   await page.getByText(/All six parts explored/i).waitFor({ timeout: 15_000 })
-  await clickPrimary(page, /^Next$/)
+  await clickLessonContinue(page)
 
   console.log('Lesson 2 — card types')
   await page.waitForURL(/\/lesson\/2/)
@@ -127,7 +129,7 @@ async function main() {
     await closeCardTypeOverlay(page)
   }
   await page.getByText(/All card types explored/i).waitFor({ timeout: 15_000 })
-  await clickPrimary(page, /^Next$/)
+  await clickLessonContinue(page)
 
   console.log('Lesson 3 — turn phases')
   await page.waitForURL(/\/lesson\/3/)
@@ -135,12 +137,13 @@ async function main() {
     await page.locator(`#turn-tab-${phaseId}`).click()
   }
   await page.getByText(/Explored 5 of 5 phases/i).waitFor({ timeout: 15_000 })
-  await clickPrimary(page, /^Next$/)
+  await clickLessonContinue(page)
 
   console.log('Lesson 4 — one scenario then finish')
   await page.waitForURL(/\/lesson\/4/)
   await page.getByRole('button', { name: 'Yes' }).click()
-  await page.getByRole('button', { name: 'Finish Lesson' }).first().click()
+  await page.getByText(/Correct!|Not quite/i).waitFor({ timeout: 15_000 })
+  await page.getByRole('button', { name: /Finish Lesson/i }).click()
 
   console.log('Lesson complete → save → readiness → post-test')
   await page.waitForURL(/\/lesson\/complete/)

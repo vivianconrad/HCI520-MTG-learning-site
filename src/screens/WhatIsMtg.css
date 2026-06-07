@@ -150,7 +150,10 @@
 
 .what-is-mtg__actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-top: 32px;
 }
 

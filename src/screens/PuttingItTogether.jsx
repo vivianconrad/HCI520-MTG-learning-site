@@ -339,7 +339,7 @@ export default function PuttingItTogether({ session }) {
         <div className="putting-together__actions">
           <button
             type="button"
-            className="putting-together__button putting-together__button--back putting-together__button--stacked"
+            className="putting-together__button putting-together__button--back"
             onClick={async () => {
               if (
                 !(await confirm(LESSON_BACK_CONFIRM_MESSAGE, {
@@ -351,17 +351,15 @@ export default function PuttingItTogether({ session }) {
               navigate('/lesson/3')
             }}
           >
-            <span className="putting-together__button-label">Back</span>
-            <span className="putting-together__button-hint">Return to Turn Structure</span>
+            Back to turn structure
           </button>
           {phase === 'question' && hasCompletedRequiredScenario && (
             <button
               type="button"
-              className="putting-together__button putting-together__button--next putting-together__button--stacked"
+              className="putting-together__button putting-together__button--next"
               onClick={handleComplete}
             >
-              <span className="putting-together__button-label">Finish Lesson</span>
-              <span className="putting-together__button-hint">Go to lesson wrap-up</span>
+              Finish lesson
             </button>
           )}
         </div>

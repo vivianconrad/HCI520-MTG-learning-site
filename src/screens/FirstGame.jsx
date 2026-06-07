@@ -96,14 +96,23 @@ export default function FirstGame({ session }) {
         </div>
 
         <div className="first-game__step-nav">
-          <button
-            type="button"
-            className="first-game__button first-game__button--back"
-            disabled={isFirst}
-            onClick={() => setStepIndex((i) => Math.max(0, i - 1))}
-          >
-            Previous step
-          </button>
+          {isFirst ? (
+            <button
+              type="button"
+              className="first-game__button first-game__button--back"
+              onClick={() => navigate('/what-is-mtg')}
+            >
+              Back to overview
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="first-game__button first-game__button--back"
+              onClick={() => setStepIndex((i) => Math.max(0, i - 1))}
+            >
+              Previous step
+            </button>
+          )}
           {!isLast ? (
             <button
               type="button"
@@ -118,19 +127,9 @@ export default function FirstGame({ session }) {
               className="first-game__button first-game__button--next"
               onClick={() => navigate('/lesson/1')}
             >
-              Continue to Lesson 1
+              Continue to card anatomy
             </button>
           )}
-        </div>
-
-        <div className="first-game__route-nav">
-          <button
-            type="button"
-            className="first-game__button first-game__button--muted"
-            onClick={() => navigate('/what-is-mtg')}
-          >
-            Back to What Is Magic?
-          </button>
         </div>
 
         <ProgressDots activeIndex={PROGRESS.FIRST_GAME} />

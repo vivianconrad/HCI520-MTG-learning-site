@@ -197,11 +197,10 @@ export default function TurnStructure({ session }) {
 
         <LessonActions
           classPrefix="turn-structure"
-          backHint="Return to Card Types"
+          backLabel="Back to card types"
           onBack={() => navigate('/lesson/2')}
-          onReview={() => {}}
           onNext={() => navigate('/lesson/4')}
-          nextLabel="Continue"
+          nextLabel="Continue to practice"
           canProceed={allPhasesExplored}
           gateMessage="Click each phase in the timeline above to read about it before continuing."
         />

@@ -726,11 +726,10 @@ export default function CardTypes({ session }) {
 
         <LessonActions
           classPrefix="card-types"
-          backHint="Return to Card Anatomy"
+          backLabel="Back to card anatomy"
           onBack={() => navigate('/lesson/1')}
-          onReview={() => {}}
           onNext={() => navigate('/lesson/3')}
-          nextLabel="Continue"
+          nextLabel="Continue to turn structure"
           canProceed={allViewed}
           gateMessage="Open See Cards on each of the seven card types before continuing."
         />
