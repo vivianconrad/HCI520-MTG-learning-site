@@ -108,9 +108,7 @@ export default function LessonComplete({ session }) {
         if (import.meta.env.DEV) {
           console.warn('[LessonComplete] savePosttestReadiness failed:', result)
         }
-        setReadinessWarning(
-          'We could not save your readiness rating to the server. Your choice is saved on this device.'
-        )
+        setReadinessWarning(describeSaveFailure(result))
       }
     }
     setReadinessSaving(false)

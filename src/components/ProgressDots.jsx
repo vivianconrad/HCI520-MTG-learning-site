@@ -1,24 +1,27 @@
 import './ProgressDots.css'
-import { PROGRESS_STEP_COUNT } from './progressConstants.js'
+import { PROGRESS_STEP_COUNT, getProgressPhaseLabel } from './progressConstants.js'
 
-export { PROGRESS, PROGRESS_STEP_COUNT } from './progressConstants.js'
+export { PROGRESS, PROGRESS_STEP_COUNT, getProgressPhaseLabel } from './progressConstants.js'
 
-function dotLabel(index, activeIndex) {
+function dotLabel(index, activeIndex, phaseLabel) {
   const stepNumber = index + 1
+  const stepOf = `Step ${stepNumber} of ${PROGRESS_STEP_COUNT}`
   if (index < activeIndex) {
-    return `Step ${stepNumber} of ${PROGRESS_STEP_COUNT}, completed`
+    return `${phaseLabel} · ${stepOf}, completed`
   }
   if (index === activeIndex) {
-    return `Step ${stepNumber} of ${PROGRESS_STEP_COUNT}, current step`
+    return `${phaseLabel} · ${stepOf}, current step`
   }
-  return `Step ${stepNumber} of ${PROGRESS_STEP_COUNT}, upcoming`
+  return `${phaseLabel} · ${stepOf}, upcoming`
 }
 
 export default function ProgressDots({ activeIndex, stepLabel }) {
   const stepNumber = activeIndex + 1
+  const phaseLabel = getProgressPhaseLabel(activeIndex)
+  const stepOf = `Step ${stepNumber} of ${PROGRESS_STEP_COUNT}`
   const stepText = stepLabel
-    ? `Step ${stepNumber} of ${PROGRESS_STEP_COUNT} · ${stepLabel}`
-    : `Step ${stepNumber} of ${PROGRESS_STEP_COUNT}`
+    ? `${phaseLabel} · ${stepOf} · ${stepLabel}`
+    : `${phaseLabel} · ${stepOf}`
 
   return (
     <nav className="progress-dots" aria-label="Lesson progress">
@@ -28,7 +31,7 @@ export default function ProgressDots({ activeIndex, stepLabel }) {
           <span
             key={index}
             role="listitem"
-            aria-label={dotLabel(index, activeIndex)}
+            aria-label={dotLabel(index, activeIndex, getProgressPhaseLabel(index))}
             aria-current={index === activeIndex ? 'step' : undefined}
             className={`progress-dots__dot${
               index === activeIndex ? ' progress-dots__dot--active' : ''

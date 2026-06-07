@@ -14,6 +14,8 @@ const questionBank = [
     id: 'lo0_q2',
     lo: 'LO0',
     question: 'Which deck size is typical for a Commander game?',
+    context:
+      'Commander is a popular multiplayer format. Each player builds a 100-card deck around one legendary commander card.',
     options: ['40 cards minimum', '60 cards minimum', '100 cards', 'No limit'],
   },
   {
@@ -21,6 +23,8 @@ const questionBank = [
     lo: 'LO0',
     question:
       'In most Standard-style constructed formats, a deck must contain at least how many cards?',
+    context:
+      'Constructed formats let you build a deck ahead of time. Standard is the most common competitive constructed format.',
     options: ['40', '60', '75', '100'],
   },
   {

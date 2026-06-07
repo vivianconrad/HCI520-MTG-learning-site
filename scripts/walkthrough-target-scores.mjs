@@ -174,8 +174,12 @@ async function main() {
   await page.getByRole('button', { name: /Start post-test/i }).waitFor({ state: 'visible', timeout: 30_000 })
   await page.getByRole('button', { name: /Start post-test/i }).click()
 
+  console.log('Post-test prep')
+  await page.waitForURL(/\/posttest-prep/, { timeout: 30_000 })
+  await page.getByRole('button', { name: /Begin post-test/i }).click()
+
   console.log(`Post-test (target ${POSTTEST_TARGET}/10)`)
-  await page.waitForURL(/\/posttest/)
+  await page.waitForURL(/\/posttest(?:\/|$|\?)/, { timeout: 30_000 })
   await answerTest(page, POSTTEST_TARGET)
 
   console.log('Results')

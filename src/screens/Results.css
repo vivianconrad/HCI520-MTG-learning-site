@@ -1,5 +1,5 @@
 .results {
-  min-height: 100vh;
+  min-height: var(--viewport-min-height);
   background: var(--color-navy);
   display: flex;
   align-items: center;
@@ -318,11 +318,11 @@
 }
 
 .results__answer--correct .results__answer-status {
-  color: #2d5a27;
+  color: var(--color-success);
 }
 
 .results__answer--wrong .results__answer-status {
-  color: #8b2e2e;
+  color: var(--color-danger);
 }
 
 .results__answer--correct {

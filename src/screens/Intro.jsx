@@ -35,10 +35,15 @@ export default function Intro({ session }) {
             the lessons will explain the rest.
           </p>
           <p className="intro__paragraph">
-            When you&apos;re ready, copy your session ID below. You&apos;ll need it at the end.
+            If you might close this tab before finishing, copy your save code below. We use it to
+            match your results later — no account or password needed.
           </p>
         </div>
-        <CopySessionId sessionId={sessionId} className="intro__session" />
+        <CopySessionId
+          sessionId={sessionId}
+          className="intro__session"
+          description="Optional now; you can also copy this code on the results screen at the end."
+        />
         <SessionRecoveryGuide />
         {rowError ? (
           <p className="intro__error" role="alert">

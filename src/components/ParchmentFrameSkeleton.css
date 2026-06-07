@@ -1,5 +1,5 @@
 .parchment-skeleton-screen {
-  min-height: 100dvh;
+  min-height: var(--viewport-min-height);
   background: var(--color-navy);
   display: flex;
   align-items: center;

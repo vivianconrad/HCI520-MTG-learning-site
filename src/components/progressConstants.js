@@ -1,5 +1,20 @@
 export const PROGRESS_STEP_COUNT = 15
 
+/** Learner-facing phase names for the progress indicator (inclusive step ranges). */
+export const PROGRESS_PHASE_RANGES = [
+  { from: 0, to: 2, label: 'Setup' },
+  { from: 3, to: 4, label: 'Pre-test' },
+  { from: 5, to: 11, label: 'Learn' },
+  { from: 12, to: 14, label: 'Post-test' },
+]
+
+export function getProgressPhaseLabel(activeIndex) {
+  const phase = PROGRESS_PHASE_RANGES.find(
+    ({ from, to }) => activeIndex >= from && activeIndex <= to
+  )
+  return phase?.label ?? 'Progress'
+}
+
 export const PROGRESS = {
   CONSENT: 0,
   WELCOME: 1,

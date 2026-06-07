@@ -13,6 +13,8 @@
     "test": "vitest run --exclude test/supabase.integration.test.mjs",
     "test:supabase": "vitest run test/supabase.integration.test.mjs",
     "test:e2e": "playwright test --config=playwright.config.cjs",
+    "test:a11y": "playwright test --config=playwright.config.cjs e2e/a11y.spec.cjs",
+    "audit:a11y": "node scripts/a11y-audit.mjs",
     "verify:db": "node scripts/verify-participants-db.mjs"
   },
   "dependencies": {
@@ -23,6 +25,7 @@
     "react-router-dom": "^7.16.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.52.0",
     "@types/react": "^19.2.14",

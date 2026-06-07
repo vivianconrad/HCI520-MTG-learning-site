@@ -1,5 +1,5 @@
 .card-types {
-  min-height: 100vh;
+  min-height: var(--viewport-min-height);
   background: var(--color-navy);
   display: flex;
   align-items: center;
@@ -235,6 +235,47 @@
   flex-shrink: 0;
   cursor: pointer;
   transition: border-color var(--transition-fast);
+}
+
+.card-types__thumbnail-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.card-types__thumbnail-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--color-parchment-dark) 0%,
+    color-mix(in srgb, var(--color-gold-muted) 35%, var(--color-parchment-dark)) 50%,
+    var(--color-parchment-dark) 100%
+  );
+  background-size: 200% 100%;
+  animation: card-types-thumbnail-shimmer 1.4s ease-in-out infinite;
+}
+
+.card-types__thumbnail-image--loading {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-types__thumbnail-shimmer {
+    animation: none;
+    background: var(--color-parchment-dark);
+  }
+}
+
+@keyframes card-types-thumbnail-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .card-types__thumbnail:hover {

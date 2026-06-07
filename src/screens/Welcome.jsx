@@ -5,6 +5,8 @@ import SessionRecoveryGuide from '../components/SessionRecoveryGuide.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
+import { useConfirm } from '../context/useConfirm.js'
+import { RESET_SESSION_CONFIRM_MESSAGE, RESET_SESSION_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import { cardImage } from '../assets/cards/index.js'
 import './Welcome.css'
 
@@ -13,30 +15,37 @@ const mtgOpeningImg = new URL('../assets/cards/Magic_ The Gathering-opening.png'
 
 const HERO_CARDS = [
   {
+    label: 'Creature',
     src: cardImage('creature-llanowar-elves.jpg'),
     alt: 'Llanowar Elves creature card',
   },
   {
+    label: 'Instant',
     src: cardImage('instant-shock.jpg'),
     alt: 'Shock instant card',
   },
   {
+    label: 'Sorcery',
     src: cardImage('sorcery-cultivate.jpg'),
     alt: 'Cultivate sorcery card',
   },
   {
+    label: 'Artifact',
     src: cardImage('artifact-sol-ring.jpg'),
     alt: 'Sol Ring artifact card',
   },
   {
+    label: 'Enchantment',
     src: cardImage('enchantment-sylvan-library.webp'),
     alt: 'Sylvan Library enchantment card',
   },
   {
+    label: 'Planeswalker',
     src: cardImage('planeswalker-ajani.webp'),
     alt: 'Ajani planeswalker card',
   },
   {
+    label: 'Land',
     src: cardImage('land-forest.jpg'),
     alt: 'Forest land card',
   },
@@ -44,6 +53,7 @@ const HERO_CARDS = [
 
 export default function Welcome({ session }) {
   const navigate = useNavigate()
+  const confirm = useConfirm()
   const { selectedQuestions, selectQuestions, questionsLoading, questionsError } = session
 
   useEffect(() => {
@@ -75,6 +85,10 @@ export default function Welcome({ session }) {
         <h1 className="welcome__heading">Learn to Play</h1>
         <hr className="welcome__rule" aria-hidden="true" />
         <img src={mtgOpeningImg} alt="Magic: The Gathering" className="welcome__opening-image" />
+        <p className="welcome__pitch">
+          In Magic, two players use custom decks of cards to cast spells and creatures until one
+          player reaches zero life.
+        </p>
         <p className="welcome__subheading">
           A quick guide to reading cards, understanding card types, and taking your first turn.
         </p>
@@ -86,9 +100,18 @@ export default function Welcome({ session }) {
           what to do when you sit down for your first game. A friend at the table can help with the
           rest.
         </p>
-        <div className="welcome__hero-cards" role="group" aria-label="Sample Magic cards">
+        <div className="welcome__hero-cards" role="list" aria-label="Sample Magic card types">
           {HERO_CARDS.map((card) => (
-            <img key={card.alt} className="welcome__hero-card" src={card.src} alt={card.alt} />
+            <figure key={card.label} className="welcome__hero-card-wrap" role="listitem">
+              <img
+                className="welcome__hero-card"
+                src={card.src}
+                alt={card.alt}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption className="welcome__hero-card-label">{card.label}</figcaption>
+            </figure>
           ))}
         </div>
         <SessionRecoveryGuide />
@@ -100,7 +123,16 @@ export default function Welcome({ session }) {
             <button
               type="button"
               className="welcome__button welcome__button--reset"
-              onClick={() => session.resetSession()}
+              onClick={async () => {
+                if (
+                  !(await confirm(RESET_SESSION_CONFIRM_MESSAGE, {
+                    title: RESET_SESSION_CONFIRM_TITLE,
+                  }))
+                ) {
+                  return
+                }
+                session.resetSession()
+              }}
             >
               Reset session
             </button>

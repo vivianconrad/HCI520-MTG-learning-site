@@ -31,7 +31,7 @@ export default function TestQuestionFlow({
   const focusableOptionIndex = selectedIndex ?? 0
 
   const handleNext = useCallback(() => {
-    if (selectedIndex === null) return
+    if (saving || selectedIndex === null) return
 
     setAnswer(question.id, selectedIndex)
 
@@ -41,7 +41,7 @@ export default function TestQuestionFlow({
     }
 
     setCurrentIndex((prev) => prev + 1)
-  }, [selectedIndex, question.id, setAnswer, isLast, onComplete])
+  }, [saving, selectedIndex, question.id, setAnswer, isLast, onComplete])
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
@@ -126,6 +126,9 @@ export default function TestQuestionFlow({
       <h2 id={questionHeadingId} className="pretest__question">
         {question.question}
       </h2>
+      {question.context ? (
+        <p className="pretest__question-context">{question.context}</p>
+      ) : null}
       {question.hasImage && (
         <QuestionCardImage
           src={getQuestionImage(question.imageKey)}

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import PageLayout from '../components/PageLayout.jsx'
+import ParchmentFrameSkeleton from '../components/ParchmentFrameSkeleton.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
@@ -97,12 +98,7 @@ export default function PreTest({ session }) {
         className="pretest"
         showKeywordDictionary={false}
       >
-        <div className="pretest__frame">
-          <h1 className="pretest__empty">Pre-Test</h1>
-          <p className="pretest__empty" aria-live="polite">
-            Loading your questions…
-          </p>
-        </div>
+        <ParchmentFrameSkeleton className="pretest" label="Loading pre-test questions…" compact />
       </PageLayout>
     )
   }
@@ -163,7 +159,8 @@ export default function PreTest({ session }) {
         </div>
       ) : null}
       {!canSave && !rowError ? (
-        <p className="pretest__intro-note" aria-live="polite">
+        <p className="pretest__session-status" aria-live="polite">
+          <span className="pretest__session-status-dot" aria-hidden="true" />
           Preparing your session…
         </p>
       ) : null}

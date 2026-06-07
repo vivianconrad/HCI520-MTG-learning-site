@@ -1,5 +1,5 @@
 .turn-structure {
-  min-height: 100vh;
+  min-height: var(--viewport-min-height);
   background: var(--color-navy);
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './CopySessionId.css'
 
-export default function CopySessionId({ sessionId, className = '' }) {
+export default function CopySessionId({ sessionId, className = '', description = null }) {
   const [copied, setCopied] = useState(false)
   const [copyFailed, setCopyFailed] = useState(false)
 
@@ -32,18 +32,19 @@ export default function CopySessionId({ sessionId, className = '' }) {
 
   return (
     <div className={`copy-session-id${className ? ` ${className}` : ''}`}>
-      <span className="copy-session-id__label">Your session ID:</span>
+      <span className="copy-session-id__label">Your save code:</span>
       <code className="copy-session-id__value">{sessionId}</code>
       <button type="button" className="copy-session-id__button" onClick={handleCopy}>
-        {copied ? 'Copied!' : 'Copy session ID'}
+        {copied ? 'Copied!' : 'Copy code'}
       </button>
+      {description ? <p className="copy-session-id__description">{description}</p> : null}
       {copyFailed ? (
         <p className="copy-session-id__error" role="alert">
-          Could not copy automatically. Select the ID above and copy it manually.
+          Could not copy automatically. Select the code above and copy it manually.
         </p>
       ) : null}
       <span className="visually-hidden" aria-live="polite">
-        {copied ? 'Session ID copied to clipboard.' : ''}
+        {copied ? 'Save code copied to clipboard.' : ''}
       </span>
     </div>
   )

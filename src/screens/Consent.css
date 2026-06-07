@@ -1,5 +1,5 @@
 .consent {
-  min-height: 100vh;
+  min-height: var(--viewport-min-height);
   background: var(--color-navy);
   display: flex;
   align-items: center;
@@ -123,6 +123,7 @@
   background: transparent;
   border: 1.5px solid var(--color-gold-on-parchment);
   border-radius: 4px;
+  min-height: var(--touch-target-min);
   padding: 12px 24px;
   cursor: pointer;
   transition:

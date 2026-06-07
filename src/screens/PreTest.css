@@ -1,5 +1,5 @@
 .pretest {
-  min-height: 100vh;
+  min-height: var(--viewport-min-height);
   background: var(--color-navy);
   display: flex;
   align-items: center;
@@ -40,11 +40,23 @@
   font-weight: 400;
   color: var(--color-text-dark);
   text-align: center;
-  margin: 0 0 24px;
+  margin: 0 0 12px;
   line-height: 1.3;
 }
 
+.pretest__question-context {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--color-gold-on-parchment);
+  text-align: center;
+  margin: 0 0 24px;
+  line-height: 1.45;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
 .pretest__image-slot {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,6 +87,81 @@
 
 .pretest__card-image--wide {
   object-fit: contain;
+}
+
+.pretest__card-image--loading {
+  opacity: 0;
+}
+
+.pretest__image-shimmer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--color-parchment-dark) 0%,
+    color-mix(in srgb, var(--color-gold-muted) 35%, var(--color-parchment-dark)) 50%,
+    var(--color-parchment-dark) 100%
+  );
+  background-size: 200% 100%;
+  animation: pretest-image-shimmer 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pretest__image-shimmer {
+    animation: none;
+    background: var(--color-parchment-dark);
+  }
+}
+
+@keyframes pretest-image-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.pretest__session-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0 auto 16px;
+  max-width: 36rem;
+  line-height: 1.4;
+}
+
+.pretest__session-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  flex-shrink: 0;
+  animation: pretest-session-pulse 1.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pretest__session-status-dot {
+    animation: none;
+  }
+}
+
+@keyframes pretest-session-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .pretest__options {

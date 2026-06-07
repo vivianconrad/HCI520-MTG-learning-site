@@ -21,6 +21,8 @@ import { getResultsEmptyContent } from '../lib/resultsEmptyState.js'
 import answerKeys from '../data/questionAnswerKeys.js'
 import { saveScreenTime } from '../lib/db.js'
 import { getQuestionExplanation } from '../lib/questionExplanations.js'
+import { useConfirm } from '../context/useConfirm.js'
+import { START_OVER_CONFIRM_MESSAGE, START_OVER_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import './Results.css'
 
 function getTopicReviewPath(topicKey, selectedQuestions, pretestAnswers, posttestAnswers) {
@@ -82,6 +84,7 @@ function AnswerCell({ answerIndex, question, correctIndex }) {
 
 export default function Results({ session }) {
   const navigate = useNavigate()
+  const confirm = useConfirm()
   useBlockBrowserBack()
   const {
     sessionId,
@@ -134,6 +137,17 @@ export default function Results({ session }) {
     window.setTimeout(() => setCopiedSummary(false), 2000)
   }
 
+  async function handleStartOver() {
+    if (
+      !(await confirm(START_OVER_CONFIRM_MESSAGE, {
+        title: START_OVER_CONFIRM_TITLE,
+      }))
+    ) {
+      return
+    }
+    resetSession()
+  }
+
   if (!hasTestData || !scores) {
     const emptyContent = getResultsEmptyContent(session)
 
@@ -145,7 +159,7 @@ export default function Results({ session }) {
 
     function handleEmptySecondary() {
       if (emptyContent.secondary?.action === 'reset') {
-        resetSession()
+        handleStartOver()
         return
       }
       if (emptyContent.secondary?.path) {
@@ -455,12 +469,12 @@ export default function Results({ session }) {
 
         <div className="results__actions">
           <button type="button" className="results__action-button" onClick={handleCopySummary}>
-            {copiedSummary ? 'Summary copied!' : 'Copy results summary'}
+            <span aria-live="polite">{copiedSummary ? 'Summary copied!' : 'Copy results summary'}</span>
           </button>
           <button
             type="button"
             className="results__action-button results__action-button--muted"
-            onClick={resetSession}
+            onClick={handleStartOver}
           >
             Start over
           </button>

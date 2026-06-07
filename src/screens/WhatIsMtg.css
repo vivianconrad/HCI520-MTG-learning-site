@@ -1,5 +1,5 @@
 .what-is-mtg {
-  min-height: 100vh;
+  min-height: var(--viewport-min-height);
   background: var(--color-navy);
   display: flex;
   align-items: center;

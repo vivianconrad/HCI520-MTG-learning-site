@@ -7,6 +7,7 @@ import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import { saveCuriosityFocus } from '../lib/db.js'
+import { describeSaveFailure } from '../lib/sessionErrors.js'
 import { CURIOSITY_OPTIONS } from '../lib/learnerChoice.js'
 import { cardImage } from '../assets/cards/index.js'
 import './LessonIntro.css'
@@ -72,9 +73,7 @@ export default function LessonIntro({ session }) {
           console.warn('[LessonIntro] saveCuriosityFocus failed:', result)
         }
         setSaving(false)
-        setSaveWarning(
-          'We could not save your choice to the server. Your answer is saved on this device. You can continue, or try again.'
-        )
+        setSaveWarning(describeSaveFailure(result))
         return
       }
     }

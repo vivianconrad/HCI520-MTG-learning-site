@@ -120,6 +120,7 @@ const PAGES = [
     path: '/results',
     session: baseSession({
       pretestCompleted: true,
+      lessonsCompleted: true,
       posttestCompleted: true,
       pretestAnswers: MOCK_PRETEST_ANSWERS,
       posttestAnswers: MOCK_POSTTEST_ANSWERS,
@@ -191,7 +192,7 @@ async function auditPage(browser, pageConfig) {
   const url = `${BASE}${pageConfig.path}`
 
   try {
-    await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 })
+    await page.goto(url, { waitUntil: 'load', timeout: 60000 })
     await page.waitForSelector(pageConfig.waitFor, { timeout: 30000 })
     const results = await runAxe(page)
     const summary = summarize(results)

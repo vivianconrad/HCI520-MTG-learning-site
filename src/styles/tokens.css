@@ -6,12 +6,15 @@
   --color-text-secondary: #524010;
   --color-disabled-text: #4a4540;
   --touch-target-min: 44px;
+  --viewport-min-height: 100dvh;
   --color-parchment: #f5e6c8;
   --color-parchment-dark: #e8d5a3;
   --color-text-dark: #1a1a2e;
   --color-text-light: #ffffff;
   --color-ink-muted: #4a4540;
   --color-error: #8b1a1a;
+  --color-success: #2d5a27;
+  --color-danger: #8b2e2e;
   --font-display: 'Cinzel', 'Palatino Linotype', serif;
   --font-body: 'Inter', sans-serif;
   --transition-fast: 200ms ease;

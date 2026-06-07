@@ -515,14 +515,28 @@ function CardTypeTimingTag({ timing }) {
   )
 }
 
-function CardThumbnail({ src, alt, className }) {
+function CardThumbnail({ src, alt, className, loading = 'lazy' }) {
   const [hasImage, setHasImage] = useState(true)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   if (!hasImage) {
     return <span className="card-types__thumbnail-placeholder">{alt || 'Card image unavailable'}</span>
   }
 
-  return <img className={className} src={src} alt={alt} onError={() => setHasImage(false)} />
+  return (
+    <span className="card-types__thumbnail-wrap">
+      {!isLoaded && <span className="card-types__thumbnail-shimmer" aria-hidden="true" />}
+      <img
+        className={`${className}${isLoaded ? '' : ' card-types__thumbnail-image--loading'}`}
+        src={src}
+        alt={alt}
+        loading={loading}
+        decoding="async"
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setHasImage(false)}
+      />
+    </span>
+  )
 }
 
 function CardTypeDetails({ description, details, variant = 'grid' }) {
@@ -854,6 +868,7 @@ export default function CardTypes({ session }) {
                                 src={example.src}
                                 alt={`${example.label}, ${activeType.name} card`}
                                 className="card-types__thumbnail-image"
+                                loading="eager"
                               />
                             </div>
                           ))}
@@ -874,6 +889,7 @@ export default function CardTypes({ session }) {
                               src={activeSlide.example.src}
                               alt={`${activeSlide.example.label}, ${activeType.name} card`}
                               className="card-types__thumbnail-image"
+                              loading="eager"
                             />
                           </div>
                           <figcaption className="card-types__overlay-caption">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import BrowserBackNotice from '../components/BrowserBackNotice.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
@@ -13,6 +13,8 @@ function prefersReducedMotion() {
 
 export default function Calculating() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const screenTimeWarning = location.state?.screenTimeWarning === true
   useBlockBrowserBack()
   const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion)
 
@@ -39,6 +41,11 @@ export default function Calculating() {
         <BrowserBackNotice />
         <h1 className="calculating__heading">Calculating your results...</h1>
         <hr className="calculating__rule" aria-hidden="true" />
+        {screenTimeWarning ? (
+          <p className="calculating__subtext" role="status" aria-live="polite">
+            Your timing data may not have saved. The results page will try again.
+          </p>
+        ) : null}
         <div className="calculating__dots" aria-hidden="true">
           <span className="calculating__dot calculating__dot--1" />
           <span className="calculating__dot calculating__dot--2" />

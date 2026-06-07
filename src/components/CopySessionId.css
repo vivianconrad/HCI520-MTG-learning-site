@@ -53,6 +53,15 @@
   outline-offset: 2px;
 }
 
+.copy-session-id__description {
+  flex-basis: 100%;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-gold-on-parchment);
+  margin: 0;
+  line-height: 1.45;
+}
+
 .copy-session-id__error {
   flex-basis: 100%;
   font-family: var(--font-body);
