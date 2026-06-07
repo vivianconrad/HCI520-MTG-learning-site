@@ -14,13 +14,6 @@ if (!hasViteCreds) {
   process.exit(0)
 }
 
-if (!dbUrl) {
-  console.error(
-    'Add SUPABASE_DB_URL (Supabase → Settings → Database → URI) so CI can run npm run apply:db-security before integration tests.'
-  )
-  process.exit(1)
-}
-
 function run(command, args) {
   const result = spawnSync(command, args, {
     stdio: 'inherit',
@@ -32,5 +25,14 @@ function run(command, args) {
   }
 }
 
-run('node', ['scripts/apply-db-security.mjs'])
+if (dbUrl) {
+  run('node', ['scripts/apply-db-security.mjs'])
+} else {
+  console.warn(
+    'SUPABASE_DB_URL not set — skipping npm run apply:db-security.\n' +
+      'Either add repository secret SUPABASE_DB_URL (Supabase → Project Settings → Database → Direct connection URI),\n' +
+      'or run supabase/setup.sql once in the Supabase SQL editor so integration tests match the repo.'
+  )
+}
+
 run('npm', ['run', 'test:supabase'])
