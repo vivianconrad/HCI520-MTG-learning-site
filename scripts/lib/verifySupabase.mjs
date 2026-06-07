@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { randomBytes } from 'crypto'
+import ws from 'ws'
 
 function defaultSelectedQuestions() {
   return Array.from({ length: 10 }, (_, index) => ({
@@ -227,5 +228,7 @@ export async function verifySupabaseParticipantApi(client, options = {}) {
 }
 
 export function createSupabaseClient(url, key) {
-  return createClient(url, key)
+  const options =
+    typeof globalThis.WebSocket === 'undefined' ? { realtime: { transport: ws } } : {}
+  return createClient(url, key, options)
 }
