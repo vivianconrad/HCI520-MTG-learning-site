@@ -566,33 +566,41 @@ function CardTypeItem({ type, examples, hasBeenViewed, onSeeCard }) {
         'card-types__item',
         type.wide ? 'card-types__item--wide' : '',
         type.id === 'instant' ? 'card-types__item--any-time' : '',
+        hasBeenViewed ? '' : 'card-types__item--pending',
       ]
         .filter(Boolean)
         .join(' ')}
     >
       <h3 className="card-types__type-name">{type.name}</h3>
-      <div className="card-types__examples" aria-label={`${type.name} examples`}>
-        {examples.map((example) => (
-          <button
-            key={example.label}
-            type="button"
-            className="card-types__thumbnail"
-            aria-label={`View ${example.label}`}
-            onClick={() => onSeeCard(type.id)}
-          >
-            <CardThumbnail src={example.src} alt="" className="card-types__thumbnail-image" />
-          </button>
-        ))}
-      </div>
       <CardTypeDetails description={type.description} />
       <CardTypeTimingTag timing={type.tag} />
-      <button
-        type="button"
-        className={`card-types__see-card${hasBeenViewed ? ' card-types__see-card--viewed' : ''}`}
-        onClick={() => onSeeCard(type.id)}
-      >
-        {hasBeenViewed ? 'See Again ▸' : 'See Cards ▸'}
-      </button>
+      <div className="card-types__preview">
+        <div className="card-types__examples" aria-label={`${type.name} sample cards`}>
+          {examples.map((example) => (
+            <button
+              key={example.label}
+              type="button"
+              className="card-types__thumbnail"
+              aria-label={`Open ${type.name} cards, ${example.label} sample`}
+              onClick={() => onSeeCard(type.id)}
+            >
+              <CardThumbnail src={example.src} alt="" className="card-types__thumbnail-image" />
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          className={`card-types__see-card${hasBeenViewed ? ' card-types__see-card--viewed' : ''}`}
+          aria-label={
+            hasBeenViewed
+              ? `See ${type.name} cards and examples again`
+              : `See ${type.name} cards and examples`
+          }
+          onClick={() => onSeeCard(type.id)}
+        >
+          {hasBeenViewed ? 'Viewed · See again' : 'See cards & examples'}
+        </button>
+      </div>
     </article>
   )
 }
@@ -690,8 +698,8 @@ export default function CardTypes({ session }) {
         <CastVsPlayExplainer variant="brief" />
 
         <p className="card-types__hint">
-          Tap See Cards on each type below once to read about it. You do not need to swipe through
-          every example photo.
+          Tap See cards &amp; examples on each type below once to open the gallery and read more. You
+          do not need to swipe through every example photo.
         </p>
 
         <div className="card-types__grid">
@@ -733,7 +741,7 @@ export default function CardTypes({ session }) {
           onNext={() => navigate('/lesson/3')}
           nextLabel="Continue to turn structure"
           canProceed={allViewed}
-          gateMessage="Open See Cards on each of the seven card types before continuing."
+          gateMessage="Open See cards & examples on each of the seven card types before continuing."
         />
         <ProgressDots activeIndex={PROGRESS.LESSON_2} />
       </div>

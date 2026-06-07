@@ -171,6 +171,10 @@
   line-height: 1.5;
 }
 
+.turn-structure__detail-body--spaced {
+  margin-bottom: 12px;
+}
+
 .turn-structure__substeps {
   list-style: none;
   margin: 0;

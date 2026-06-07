@@ -17,6 +17,8 @@ const PHASES = [
     id: 'beginning',
     label: 'Beginning Phase',
     title: 'Beginning Phase',
+    intro:
+      'The beginning phase has three parts, always in this order: untap, upkeep, and draw.',
     substeps: [
       'Untap: You untap all of your permanents. Turn every tapped card upright so it can be used again. Tapping means turning a card sideways to show it has been used; untapping reverses that at the start of each of your turns.',
       "Upkeep: Triggered abilities that say 'at the beginning of your upkeep' happen here. Most turns nothing happens during upkeep.",
@@ -170,7 +172,13 @@ export default function TurnStructure({ session }) {
             alt={selected.imageAlt}
           />
           {selected.substeps ? (
-            <ul className="turn-structure__substeps">
+            <>
+              {selected.intro ? (
+                <p className="turn-structure__detail-body turn-structure__detail-body--spaced">
+                  <GlossaryText text={selected.intro} />
+                </p>
+              ) : null}
+              <ul className="turn-structure__substeps">
               {selected.substeps.map((text) => (
                 <li key={text} className="turn-structure__substep">
                   <span className="turn-structure__bullet" aria-hidden="true">
@@ -179,7 +187,8 @@ export default function TurnStructure({ session }) {
                   <GlossaryText text={text} />
                 </li>
               ))}
-            </ul>
+              </ul>
+            </>
           ) : (
             <p className="turn-structure__detail-body">
               <GlossaryText text={selected.body} />
