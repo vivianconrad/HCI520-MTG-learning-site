@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
-import { useBrowserBackConfirm } from '../hooks/useBrowserBackConfirm.js'
+import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { savePosttest, saveScreenTime } from '../lib/db.js'
 import { describeSaveFailure } from '../lib/sessionErrors.js'
@@ -29,11 +29,7 @@ export default function PostTest({ session }) {
 
   useRedirectIfTestComplete(posttestCompleted, '/results')
   useScreenTime(session, 'PostTest')
-  useBrowserBackConfirm(
-    !posttestCompleted,
-    POSTTEST_LEAVE_CONFIRM_MESSAGE,
-    POSTTEST_LEAVE_CONFIRM_TITLE
-  )
+  useBlockBrowserBack(!posttestCompleted)
 
   const handleComplete = useCallback(
     async (lastAnswer) => {
@@ -125,9 +121,6 @@ export default function PostTest({ session }) {
         selectedQuestions={selectedQuestions}
         setAnswer={setPosttestAnswer}
         onComplete={handleComplete}
-        firstQuestionBackPath="/lesson/complete"
-        leaveConfirmMessage={POSTTEST_LEAVE_CONFIRM_MESSAGE}
-        leaveConfirmTitle={POSTTEST_LEAVE_CONFIRM_TITLE}
         lastButtonLabel="Submit"
         introNote="These are the same questions as the pre-test. Answer from what you learned in the lessons."
       />

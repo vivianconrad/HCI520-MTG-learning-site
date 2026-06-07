@@ -141,11 +141,14 @@ export default function TurnStructure({ session }) {
         </p>
 
         <div
-          className="turn-structure__timeline"
-          role="tablist"
-          aria-label="Turn phases"
-          onKeyDown={handleTabListKeyDown}
+          className="turn-structure__timeline-wrap"
         >
+          <div
+            className="turn-structure__timeline"
+            role="tablist"
+            aria-label="Turn phases"
+            onKeyDown={handleTabListKeyDown}
+          >
           {PHASES.map((phase, index) => (
             <span key={phase.id} style={{ display: 'contents' }}>
               {index > 0 && <span className="turn-structure__connector" aria-hidden="true" />}
@@ -163,9 +166,12 @@ export default function TurnStructure({ session }) {
               </button>
             </span>
           ))}
+          </div>
         </div>
 
-        <p className="turn-structure__timeline-hint">Swipe the timeline to see all five phases.</p>
+        <p id="turn-structure-timeline-hint" className="turn-structure__timeline-hint">
+          Swipe the timeline to see all five phases.
+        </p>
 
         <p className="turn-structure__progress" aria-live="polite">
           {allPhasesExplored

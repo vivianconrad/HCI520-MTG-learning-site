@@ -61,6 +61,41 @@
   .turn-structure__timeline {
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    scroll-padding-inline: 12px;
+  }
+
+  .card-types__overlay {
+    align-items: flex-end;
+    padding: max(8px, env(safe-area-inset-top, 0px)) max(8px, env(safe-area-inset-right, 0px))
+      max(8px, env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
+  }
+
+  .card-types__overlay-card {
+    max-height: min(92dvh, 100%);
+    padding: 16px 14px 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .card-types__overlay-close {
+    top: 8px;
+    right: 8px;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-types__overlay-controls {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .card-types__overlay-nav {
+    min-height: var(--touch-target-min);
+    padding: 10px 14px;
+    flex: 1;
   }
 
   .turn-structure__node {

@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useConfirm } from '../context/useConfirm.js'
 import ProgressDots from './ProgressDots.jsx'
 import QuestionCardImage from './QuestionCardImage.jsx'
 import { getQuestionImage } from '../data/questionImages.js'
@@ -12,14 +10,9 @@ export default function TestQuestionFlow({
   selectedQuestions,
   setAnswer,
   onComplete,
-  firstQuestionBackPath,
-  leaveConfirmMessage,
-  leaveConfirmTitle,
   introNote,
   lastButtonLabel,
 }) {
-  const navigate = useNavigate()
-  const confirm = useConfirm()
   const frameRef = useRef(null)
   const optionRefs = useRef([])
   const shouldFocusOptionRef = useRef(false)
@@ -96,17 +89,8 @@ export default function TestQuestionFlow({
     }
   }
 
-  async function handleBack() {
-    if (isFirst) {
-      if (
-        leaveConfirmMessage &&
-        !(await confirm(leaveConfirmMessage, { title: leaveConfirmTitle }))
-      ) {
-        return
-      }
-      navigate(firstQuestionBackPath)
-      return
-    }
+  function handleBack() {
+    if (isFirst) return
     setCurrentIndex((prev) => prev - 1)
     setSelectedIndex(null)
   }
@@ -161,15 +145,18 @@ export default function TestQuestionFlow({
       <p className="pretest__keyboard-hint">
         Press 1–{question.options.length} or arrow keys to select, Enter to continue
       </p>
-      <div className="pretest__actions pretest__actions--split">
-        <button
-          type="button"
-          className="pretest__button pretest__button--back"
-          onClick={handleBack}
-          title={isFirst && leaveConfirmMessage ? 'Leave the test' : undefined}
-        >
-          {isFirst && leaveConfirmMessage ? 'Leave test' : 'Back'}
-        </button>
+      <div
+        className={`pretest__actions${isFirst ? '' : ' pretest__actions--split'}`}
+      >
+        {!isFirst ? (
+          <button
+            type="button"
+            className="pretest__button pretest__button--back"
+            onClick={handleBack}
+          >
+            Back
+          </button>
+        ) : null}
         <button
           type="button"
           className="pretest__button"

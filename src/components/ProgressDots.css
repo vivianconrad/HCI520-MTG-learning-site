@@ -8,8 +8,8 @@
 
 .progress-dots__label {
   font-family: var(--font-body);
-  font-size: 12px;
-  color: var(--color-gold-muted);
+  font-size: 13px;
+  color: var(--color-text-secondary);
   letter-spacing: 0.04em;
 }
 

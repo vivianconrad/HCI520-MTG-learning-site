@@ -92,12 +92,15 @@ async function main() {
   await page.waitForURL(/\/pretest/)
   await answerTest(page, PRETEST_TARGET)
 
-  console.log('Post pre-test flow → lessons')
-  await page.waitForURL(/\/pretest-complete/)
-  await page.getByRole('button', { name: 'Continue', exact: true }).click()
+  console.log('Post pre-test flow → lesson intro')
+  const skipSave = page.getByRole('button', { name: /Continue without saving/i })
+  if (await skipSave.isVisible().catch(() => false)) {
+    console.log('Pre-test save failed — continuing without saving')
+    await skipSave.click()
+  }
+  await page.waitForURL(/\/lesson\/intro/, { timeout: 60_000 })
 
   console.log('Lesson intro — curiosity focus')
-  await page.waitForURL(/\/lesson\/intro/)
   await page.getByRole('button', { name: "I'll follow the guide" }).click()
   await page.waitForFunction(
     () => {
@@ -116,9 +119,10 @@ async function main() {
 
   await page.waitForURL(/\/lesson\/1/)
   console.log('Lesson 1 — card anatomy markers')
-  const anatomyLabels = ['Name', 'Mana Cost', 'Type Line', 'Text Box', 'Power', 'Toughness']
-  for (const label of anatomyLabels) {
-    await page.getByRole('button', { name: `${label} callout` }).click()
+  const anatomyMarkers = page.locator('.card-anatomy__callout-marker')
+  const markerCount = await anatomyMarkers.count()
+  for (let i = 0; i < markerCount; i += 1) {
+    await anatomyMarkers.nth(i).click()
   }
   await page.getByText(/All six parts explored/i).waitFor({ timeout: 15_000 })
   await clickLessonContinue(page)

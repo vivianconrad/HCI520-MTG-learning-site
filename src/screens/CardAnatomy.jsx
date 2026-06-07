@@ -94,6 +94,8 @@ function getMarkerModifier(position) {
   return 'card-anatomy__marker--anchor-tl'
 }
 
+const INFO_PANEL_ID = 'card-anatomy-info-panel'
+
 function CardMarker({ callout, isActive, isSeen, onToggle }) {
   const { id, label, number, position, tipDir } = callout
 
@@ -113,13 +115,17 @@ function CardMarker({ callout, isActive, isSeen, onToggle }) {
       <button
         type="button"
         className="card-anatomy__callout-marker"
-        aria-label={`${label} callout`}
+        aria-label={`${label}, part ${number} of ${CALLOUTS.length}`}
+        aria-expanded={isActive}
+        aria-controls={INFO_PANEL_ID}
         aria-pressed={isActive}
         onClick={() => onToggle(id)}
       >
         {number}
       </button>
-      <span className="card-anatomy__marker-tooltip">{label}</span>
+      <span className="card-anatomy__marker-tooltip" aria-hidden="true">
+        {label}
+      </span>
     </div>
   )
 }
@@ -187,18 +193,32 @@ export default function CardAnatomy({ session }) {
           </div>
         </div>
 
-        {activeCalloutData ? (
-          <div className="card-anatomy__info-panel" role="region" aria-labelledby="callout-heading">
-            <h2 id="callout-heading" className="card-anatomy__info-panel-title">
-              {activeCalloutData.label}
-            </h2>
-            <p className="card-anatomy__info-panel-text">
-              <GlossaryText text={activeCalloutData.text} />
+        <div
+          id={INFO_PANEL_ID}
+          className={
+            activeCalloutData
+              ? 'card-anatomy__info-panel'
+              : 'card-anatomy__info-panel card-anatomy__info-panel--empty'
+          }
+          role="region"
+          aria-live="polite"
+          aria-labelledby={activeCalloutData ? 'callout-heading' : 'callout-placeholder'}
+        >
+          {activeCalloutData ? (
+            <>
+              <h2 id="callout-heading" className="card-anatomy__info-panel-title">
+                {activeCalloutData.label}
+              </h2>
+              <p className="card-anatomy__info-panel-text">
+                <GlossaryText text={activeCalloutData.text} />
+              </p>
+            </>
+          ) : (
+            <p id="callout-placeholder" className="card-anatomy__info-placeholder">
+              Select a marker to read its explanation.
             </p>
-          </div>
-        ) : (
-          <p className="card-anatomy__info-placeholder">Select a marker to read its explanation.</p>
-        )}
+          )}
+        </div>
 
         <p className="card-anatomy__progress" aria-live="polite">
           {allExplored

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
 import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
-import { useBrowserBackConfirm } from '../hooks/useBrowserBackConfirm.js'
+import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { savePretest } from '../lib/db.js'
 import { describeSaveFailure } from '../lib/sessionErrors.js'
@@ -34,11 +34,7 @@ export default function PreTest({ session }) {
 
   useRedirectIfTestComplete(pretestCompleted, '/pretest-complete')
   useScreenTime(session, 'PreTest')
-  useBrowserBackConfirm(
-    !pretestCompleted,
-    PRETEST_LEAVE_CONFIRM_MESSAGE,
-    PRETEST_LEAVE_CONFIRM_TITLE
-  )
+  useBlockBrowserBack(!pretestCompleted)
 
   useEffect(() => {
     if (selectedQuestions === null) {
@@ -154,9 +150,6 @@ export default function PreTest({ session }) {
         selectedQuestions={selectedQuestions}
         setAnswer={setPretestAnswer}
         onComplete={handleComplete}
-        firstQuestionBackPath="/intro"
-        leaveConfirmMessage={PRETEST_LEAVE_CONFIRM_MESSAGE}
-        leaveConfirmTitle={PRETEST_LEAVE_CONFIRM_TITLE}
         lastButtonLabel="Continue"
         introNote="You have not been taught these topics yet. Answer with your best guess. Wrong answers are expected and help show what the lessons should cover."
       />

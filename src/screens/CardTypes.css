@@ -466,6 +466,8 @@
   position: absolute;
   top: 12px;
   right: 16px;
+  min-width: var(--touch-target-min);
+  min-height: var(--touch-target-min);
   padding: 0;
   border: none;
   background: none;
@@ -474,6 +476,9 @@
   line-height: 1;
   color: var(--color-text-dark);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: color var(--transition-fast);
 }
 
@@ -591,7 +596,8 @@
   background: transparent;
   border: 1px solid var(--color-gold);
   border-radius: 0;
-  padding: 5px 12px;
+  min-height: var(--touch-target-min);
+  padding: 8px 14px;
   cursor: pointer;
   transition:
     color var(--transition-fast),

@@ -569,6 +569,10 @@ function CardTypeDetails({ description, details, variant = 'grid' }) {
 }
 
 function CardTypeItem({ type, examples, hasBeenViewed, highlightMissing, onSeeCard }) {
+  function handleSeeCard(event) {
+    onSeeCard(type.id, event.currentTarget)
+  }
+
   return (
     <article
       id={`card-type-${type.id}`}
@@ -593,7 +597,7 @@ function CardTypeItem({ type, examples, hasBeenViewed, highlightMissing, onSeeCa
               type="button"
               className="card-types__thumbnail"
               aria-label={`Open ${type.name} cards, ${example.label} sample`}
-              onClick={() => onSeeCard(type.id)}
+              onClick={handleSeeCard}
             >
               <CardThumbnail src={example.src} alt="" className="card-types__thumbnail-image" />
             </button>
@@ -607,7 +611,7 @@ function CardTypeItem({ type, examples, hasBeenViewed, highlightMissing, onSeeCa
               ? `See ${type.name} cards and examples again`
               : `See ${type.name} cards and examples`
           }
-          onClick={() => onSeeCard(type.id)}
+          onClick={handleSeeCard}
         >
           {hasBeenViewed ? 'Viewed · See again' : 'See cards & examples'}
         </button>
@@ -626,6 +630,7 @@ export default function CardTypes({ session }) {
   const [displayExamplesByType, setDisplayExamplesByType] = useState(createDisplayExamplesMap)
   const [highlightMissing, setHighlightMissing] = useState(false)
   const overlayPanelRef = useRef(null)
+  const lastTriggerRef = useRef(null)
 
   const activeType = CARD_TYPES.find((t) => t.id === overlayId)
   const overlaySlides = useMemo(() => {
@@ -637,9 +642,13 @@ export default function CardTypes({ session }) {
   useFocusTrap(overlayPanelRef, overlayOpen)
   const allViewed = seenIds.size === CARD_TYPES.length
 
-  const openOverlay = useCallback((id) => {
+  const openOverlay = useCallback((id, triggerEl) => {
     const type = CARD_TYPES.find((entry) => entry.id === id)
     if (!type) return
+
+    if (triggerEl instanceof HTMLElement) {
+      lastTriggerRef.current = triggerEl
+    }
 
     setIsClosing(false)
     setOverlayId(id)
@@ -682,6 +691,14 @@ export default function CardTypes({ session }) {
 
     return () => window.clearTimeout(timer)
   }, [isClosing])
+
+  useEffect(() => {
+    if (overlayId || isClosing) return undefined
+    const trigger = lastTriggerRef.current
+    if (!trigger) return undefined
+    const id = window.requestAnimationFrame(() => trigger.focus())
+    return () => window.cancelAnimationFrame(id)
+  }, [overlayId, isClosing])
 
   useEffect(() => {
     if (!overlayId) return undefined
@@ -808,7 +825,7 @@ export default function CardTypes({ session }) {
                   <button
                     type="button"
                     className="card-types__overlay-close"
-                    aria-label="Close"
+                    aria-label={`Close ${activeType.name} card type overlay`}
                     onClick={closeOverlay}
                   >
                     ×
