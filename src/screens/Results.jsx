@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import CopySessionId from '../components/CopySessionId.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots, { PROGRESS } from '../components/ProgressDots.jsx'
+import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import {
   TOPIC_LABELS,
   TOPIC_LESSON_PATHS,
@@ -75,6 +76,7 @@ function AnswerCell({ answerIndex, question, correctIndex }) {
 
 export default function Results({ session }) {
   const navigate = useNavigate()
+  useBlockBrowserBack()
   const {
     sessionId,
     sessionSecret,

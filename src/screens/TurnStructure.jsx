@@ -12,6 +12,57 @@ import useScreenTime from '../hooks/useScreenTime.js'
 import { cardImage } from '../assets/cards/index.js'
 import './TurnStructure.css'
 
+const TURN_STEPS = [
+  {
+    id: 'untap',
+    phase: 'Beginning phase',
+    title: 'Untap your permanents',
+    body: 'At the start of your turn, turn every tapped card upright. Lands, creatures, and other permanents on your side of the table untap so you can use them again.',
+    image: cardImage('land-forest.jpg'),
+    imageAlt: 'Forest land card',
+  },
+  {
+    id: 'draw',
+    phase: 'Beginning phase',
+    title: 'Draw a card',
+    body: 'Draw one card from the top of your library. On the very first turn of the game, only the player who goes second draws; the first player skips this draw step once.',
+    image: cardImage('creature-llanowar-elves.jpg'),
+    imageAlt: 'Llanowar Elves creature card',
+  },
+  {
+    id: 'main-one',
+    phase: 'First main phase',
+    title: 'Play lands and cast spells',
+    body: 'This is your first main phase. You may play one land from your hand onto the battlefield. You can also cast creatures, sorceries, artifacts, enchantments, and planeswalkers when the stack is empty. Instants can be cast any time you have priority, including here.',
+    image: cardImage('sorcery-cultivate.jpg'),
+    imageAlt: 'Cultivate sorcery card',
+  },
+  {
+    id: 'combat',
+    phase: 'Combat phase',
+    title: 'Attack and block',
+    body: 'You choose which untapped creatures attack. The defending player chooses blockers. Creatures deal damage equal to their power. Unblocked attackers deal damage to the defending player. The phase timeline below breaks down each combat step.',
+    image: cardImage('creature-hellkite-tyrant.webp'),
+    imageAlt: 'Hellkite Tyrant creature card',
+  },
+  {
+    id: 'main-two',
+    phase: 'Second main phase',
+    title: 'Another main phase',
+    body: 'After combat, you get a second main phase. Many players hold back creatures or sorceries until they see how combat went. If you have not played a land yet, you may play it now—you still get only one land per turn total.',
+    image: cardImage('artifact-sol-ring.jpg'),
+    imageAlt: 'Sol Ring artifact card',
+  },
+  {
+    id: 'end',
+    phase: 'End phase',
+    title: 'Wrap up the turn',
+    body: "If you have more than seven cards in hand, discard down to seven. Damage on creatures is removed and 'until end of turn' effects expire. Then it is your opponent's turn.",
+    image: cardImage('instant-shock.jpg'),
+    imageAlt: 'Shock instant card',
+  },
+]
+
 const PHASES = [
   {
     id: 'beginning',
@@ -68,12 +119,29 @@ const PHASES = [
 export default function TurnStructure({ session }) {
   const navigate = useNavigate()
   useScreenTime(session, 'TurnStructure')
+  const [stepIndex, setStepIndex] = useState(0)
+  const [seenStepIds, setSeenStepIds] = useState(() => new Set([TURN_STEPS[0].id]))
   const [selectedId, setSelectedId] = useState('beginning')
   const [visitedIds, setVisitedIds] = useState(() => new Set(['beginning']))
 
+  const step = TURN_STEPS[stepIndex]
+  const isFirstStep = stepIndex === 0
+  const isLastStep = stepIndex === TURN_STEPS.length - 1
   const selected = PHASES.find((p) => p.id === selectedId) ?? PHASES[0]
   const panelId = 'turn-phase-panel'
+  const allStepsSeen = seenStepIds.size === TURN_STEPS.length
   const allPhasesExplored = visitedIds.size === PHASES.length
+  const canProceed = allStepsSeen && allPhasesExplored
+
+  function goToStep(index) {
+    const nextIndex = Math.min(Math.max(index, 0), TURN_STEPS.length - 1)
+    setStepIndex(nextIndex)
+    setSeenStepIds((prev) => {
+      const next = new Set(prev)
+      next.add(TURN_STEPS[nextIndex].id)
+      return next
+    })
+  }
 
   const selectPhase = useCallback((id) => {
     setSelectedId(id)
@@ -115,10 +183,62 @@ export default function TurnStructure({ session }) {
         <hr className="turn-structure__rule" aria-hidden="true" />
 
         <p className="turn-structure__intro">
-          Every Magic turn follows the same sequence of phases. Once you know this order,
-          you&apos;ll always know what you can do and when.
+          Every Magic turn follows the same sequence of phases. Step through one sample turn below,
+          then explore each phase in more detail.
         </p>
 
+        <h2 className="turn-structure__subheading">Walk through a sample turn</h2>
+        <p className="turn-structure__walkthrough-note">
+          Click Next step when you are ready—there is no timer.
+        </p>
+        <p className="turn-structure__walkthrough-progress" aria-live="polite">
+          {allStepsSeen
+            ? 'Sample turn complete.'
+            : `Step ${stepIndex + 1} of ${TURN_STEPS.length}`}
+        </p>
+
+        <div
+          className="turn-structure__walkthrough-step"
+          role="region"
+          aria-labelledby="turn-walkthrough-step-title"
+        >
+          <p className="turn-structure__walkthrough-phase">{step.phase}</p>
+          <h3 id="turn-walkthrough-step-title" className="turn-structure__walkthrough-title">
+            {step.title}
+          </h3>
+          <img
+            className="turn-structure__walkthrough-image"
+            src={step.image}
+            alt={step.imageAlt}
+          />
+          <p className="turn-structure__walkthrough-body">
+            <GlossaryText text={step.body} />
+          </p>
+        </div>
+
+        <div className="turn-structure__walkthrough-nav">
+          <button
+            type="button"
+            className="turn-structure__button turn-structure__button--back"
+            onClick={() => goToStep(stepIndex - 1)}
+            disabled={isFirstStep}
+          >
+            Previous step
+          </button>
+          {!isLastStep ? (
+            <button
+              type="button"
+              className="turn-structure__button turn-structure__button--next"
+              onClick={() => goToStep(stepIndex + 1)}
+            >
+              Next step
+            </button>
+          ) : null}
+        </div>
+
+        <hr className="turn-structure__divider turn-structure__divider--section" aria-hidden="true" />
+
+        <h2 className="turn-structure__subheading">Explore each phase</h2>
         <p className="turn-structure__hint">
           Click each phase in the timeline below to read about it. Open all five before you
           continue.
@@ -201,8 +321,12 @@ export default function TurnStructure({ session }) {
           onBack={() => navigate('/lesson/2')}
           onNext={() => navigate('/lesson/4')}
           nextLabel="Continue to practice"
-          canProceed={allPhasesExplored}
-          gateMessage="Click each phase in the timeline above to read about it before continuing."
+          canProceed={canProceed}
+          gateMessage={
+            allStepsSeen
+              ? 'Click each phase in the timeline above to read about it before continuing.'
+              : 'Step through all six parts of the sample turn above before continuing.'
+          }
         />
         <ProgressDots activeIndex={PROGRESS.LESSON_3} />
       </div>

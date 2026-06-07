@@ -30,7 +30,9 @@ async function clickPrimary(page, pattern) {
 }
 
 async function clickLessonContinue(page) {
-  const btn = page.locator('[class*="__button--next"]').filter({ hasText: /^Continue$/ }).first()
+  const btn = page
+    .locator('[class*="__actions-forward"] [class*="__button--next"]:not([class*="blocked"])')
+    .last()
   await btn.waitFor({ state: 'visible', timeout: 60_000 })
   await btn.click()
 }
@@ -101,13 +103,6 @@ async function main() {
 
   console.log('What Is Magic — overview')
   await page.waitForURL(/\/what-is-mtg/)
-  await clickPrimary(page, /Continue to walkthrough/)
-
-  console.log('First turn walkthrough')
-  await page.waitForURL(/\/first-game/)
-  for (let step = 0; step < 5; step += 1) {
-    await clickPrimary(page, /Next step/)
-  }
   await clickPrimary(page, /Continue to card anatomy/)
 
   await page.waitForURL(/\/lesson\/1/)
@@ -131,8 +126,11 @@ async function main() {
   await page.getByText(/All card types explored/i).waitFor({ timeout: 15_000 })
   await clickLessonContinue(page)
 
-  console.log('Lesson 3 — turn phases')
+  console.log('Lesson 3 — sample turn and turn phases')
   await page.waitForURL(/\/lesson\/3/)
+  for (let step = 0; step < 5; step += 1) {
+    await clickPrimary(page, /Next step/)
+  }
   for (const phaseId of ['beginning', 'first-main', 'combat', 'second-main', 'end']) {
     await page.locator(`#turn-tab-${phaseId}`).click()
   }

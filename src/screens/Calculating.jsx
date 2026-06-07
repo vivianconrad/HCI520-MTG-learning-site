@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
+import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import './Calculating.css'
 
 function prefersReducedMotion() {
@@ -11,6 +12,7 @@ function prefersReducedMotion() {
 
 export default function Calculating() {
   const navigate = useNavigate()
+  useBlockBrowserBack()
   const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion)
 
   useEffect(() => {
@@ -24,7 +26,7 @@ export default function Calculating() {
     if (reducedMotion) return undefined
 
     const timer = window.setTimeout(() => {
-      navigate('/results')
+      navigate('/results', { replace: true })
     }, 2500)
 
     return () => window.clearTimeout(timer)

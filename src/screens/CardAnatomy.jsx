@@ -210,8 +210,8 @@ export default function CardAnatomy({ session }) {
 
         <LessonActions
           classPrefix="card-anatomy"
-          backLabel="Back to walkthrough"
-          onBack={() => navigate('/first-game')}
+          backLabel="Back to overview"
+          onBack={() => navigate('/what-is-mtg')}
           onNext={() => navigate('/lesson/2')}
           nextLabel="Continue to card types"
           canProceed={allExplored}

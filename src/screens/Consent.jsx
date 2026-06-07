@@ -30,8 +30,8 @@ export default function Consent({ session }) {
             <ul className="consent__list">
               <li>A short pre-test before any teaching (about 2 minutes)</li>
               <li>
-                A brief overview, a starting-a-game walkthrough, and four lessons on card anatomy,
-                card types, turn structure, and gameplay scenarios (about 18 minutes)
+                A brief overview and four lessons on card anatomy, card types, turn structure
+                (including a sample turn walkthrough), and gameplay scenarios (about 18 minutes)
               </li>
               <li>
                 The same post-test after the lessons to measure what you learned (about 2 minutes).

@@ -24,9 +24,9 @@ export default function Intro({ session }) {
             only records what you know before the lessons start.
           </p>
           <p className="intro__paragraph">
-            After the pre-test, you&apos;ll read a short overview, see how to start a game and take
-            your first turn, then work through four lessons on reading a card, card types, turn
-            structure, and putting it all together.
+            After the pre-test, you&apos;ll read a short overview, then work through four lessons on
+            reading a card, card types, turn structure (including a sample turn walkthrough), and
+            putting it all together.
           </p>
           <p className="intro__paragraph">
             Some questions may ask about ideas the lessons cover later. Answer with your best guess;

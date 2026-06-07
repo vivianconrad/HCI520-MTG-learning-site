@@ -43,7 +43,7 @@ export function getCuriosityWhatIsMtgNote(focus) {
   const phrase = FOCUS_LESSON_PHRASE[focus]
   const option = CURIOSITY_OPTIONS.find((o) => o.id === focus)
   if (!phrase || !option?.lessonNum) return null
-  return `You said you are most curious about ${phrase}. We will get there in Lesson ${option.lessonNum}. First, a quick overview of the game, then a sample turn walkthrough, then how to read a card.`
+  return `You said you are most curious about ${phrase}. We will get there in Lesson ${option.lessonNum}. First, a quick overview of the game, then how to read a card.`
 }
 
 export const REVIEW_TOPIC_CHOICES = [

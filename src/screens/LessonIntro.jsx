@@ -4,6 +4,7 @@ import KeywordTooltip from '../components/KeywordTooltip.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
+import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import { saveCuriosityFocus } from '../lib/db.js'
 import { CURIOSITY_OPTIONS } from '../lib/learnerChoice.js'
 import { cardImage } from '../assets/cards/index.js'
@@ -50,6 +51,7 @@ const LESSONS = [
 
 export default function LessonIntro({ session }) {
   const navigate = useNavigate()
+  useBlockBrowserBack()
   const { sessionId, sessionSecret, curiosityFocus, setCuriosityFocus } = session
   const [selectedFocus, setSelectedFocus] = useState(curiosityFocus)
   const [saving, setSaving] = useState(false)
@@ -64,7 +66,7 @@ export default function LessonIntro({ session }) {
       await saveCuriosityFocus(sessionId, sessionSecret, selectedFocus)
     }
     setSaving(false)
-    navigate('/what-is-mtg')
+    navigate('/what-is-mtg', { replace: true })
   }
 
   return (
@@ -80,8 +82,8 @@ export default function LessonIntro({ session }) {
 
         <div className="lesson-intro__body">
           <p className="lesson-intro__paragraph">
-            You finished the pre-test. Next you&apos;ll see a short overview of Magic, a sample
-            first-turn walkthrough, then four lessons before the post-test.
+            You finished the pre-test. Next you&apos;ll see a short overview of Magic, then four
+            lessons before the post-test.
           </p>
           <p className="lesson-intro__paragraph">
             Throughout the lessons, official rules terms{' '}
@@ -153,14 +155,7 @@ export default function LessonIntro({ session }) {
 
         <p className="lesson-intro__closing">Work at your own pace.</p>
 
-        <div className="lesson-intro__actions">
-          <button
-            type="button"
-            className="lesson-intro__button lesson-intro__button--back"
-            onClick={() => navigate('/pretest-complete')}
-          >
-            Back
-          </button>
+        <div className="lesson-intro__actions lesson-intro__actions--end">
           <button
             type="button"
             className="lesson-intro__button lesson-intro__button--next"

@@ -30,8 +30,23 @@ function getRedirectPath(requirements, session) {
   return null
 }
 
-export default function RequireSessionStep({ session, require, children }) {
+export default function RequireSessionStep({
+  session,
+  require,
+  redirectIfPretestComplete,
+  redirectIfPosttestComplete,
+  children,
+}) {
   const requirements = Array.isArray(require) ? require : [require]
+
+  if (redirectIfPretestComplete && session.pretestCompleted) {
+    return <Navigate to="/lesson/intro" replace />
+  }
+
+  if (redirectIfPosttestComplete && session.posttestCompleted) {
+    return <Navigate to="/results" replace />
+  }
+
   const redirect = getRedirectPath(requirements, session)
 
   if (redirect) {
