@@ -1,8 +1,8 @@
 -- Hash session_secret at rest (SHA-256 hex). Clients still send the plaintext secret;
 -- RPCs hash the provided value before compare/insert.
 --
--- Run once in Supabase SQL Editor. Safe to re-run (skips if already applied).
-
+-- For fresh projects, supabase/setup.sql already includes this. Run this migration
+-- once on existing deployments that still store plaintext session_secret.
 create extension if not exists pgcrypto with schema extensions;
 
 create schema if not exists private;
@@ -51,6 +51,10 @@ as $$
 declare
   recent_count int;
 begin
+  if p_participant_id is distinct from p_session_id then
+    raise exception 'participant_id must match session_id' using errcode = 'P0001';
+  end if;
+
   select count(*) into recent_count
   from public.participants
   where created_at > now() - interval '1 hour';

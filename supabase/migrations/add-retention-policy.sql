@@ -1,7 +1,7 @@
 -- Retention policy: delete participant rows after study end + N days.
+-- For fresh projects, supabase/setup.sql already includes this.
 -- Update study_privacy_config before the study ends; schedule purge_expired_participants
 -- via Supabase Dashboard → Database → Extensions → pg_cron (Pro) or run manually.
-
 create table if not exists public.study_privacy_config (
   id int primary key default 1 check (id = 1),
   study_end_date date not null default '2026-06-30',

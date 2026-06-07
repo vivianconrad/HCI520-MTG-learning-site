@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid'
 import { attachAnswerKeys } from './questionKeys.js'
 import { supabase } from './supabase'
 
@@ -94,11 +93,10 @@ export async function createParticipantRow(sessionId, sessionSecret, selectedQue
     return null
   }
 
-  const participantId = nanoid(10)
   const questionsForServer = await attachAnswerKeys(selectedQuestions)
 
   const { data, error } = await supabase.rpc('register_participant', {
-    p_participant_id: participantId,
+    p_participant_id: sessionId,
     p_session_id: sessionId,
     p_session_secret: sessionSecret,
     p_selected_questions: questionsForServer,
@@ -116,7 +114,7 @@ export async function createParticipantRow(sessionId, sessionSecret, selectedQue
     return null
   }
 
-  return participantId
+  return data ?? sessionId
 }
 
 /** Fetch server-side progress flags for the current session (requires RPC in Supabase). */

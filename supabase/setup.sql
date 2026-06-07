@@ -1,8 +1,11 @@
 -- HCI520 Participant database setup
--- Run once in Supabase SQL Editor for a fresh deployment.
+-- Run once in Supabase SQL Editor for a fresh deployment (table, RLS, RPCs,
+-- validation triggers, SHA-256 session secrets, retention config).
 --
--- For an existing deployment whose participants table predates session_secret,
--- run migrations/add-session-secret.sql first, then re-run this file.
+-- Existing deployments:
+--   - No session_secret column: migrations/add-session-secret.sql, then re-run this file.
+--   - Plaintext session_secret at rest: migrations/hash-session-secret.sql instead.
+--   - Saves fail after RLS hardening: supabase/fix-participants-rls.sql (includes hash helper).
 --
 -- Instructor access: use Supabase Dashboard → Table Editor (service role).
 -- Do NOT re-enable anon SELECT — all participant data would be publicly readable.
@@ -59,6 +62,26 @@ create policy "Deny select for all"
 
 grant usage on schema public to anon, authenticated;
 revoke insert, update on table public.participants from anon, authenticated;
+
+-- ---------------------------------------------------------------------------
+-- Private helpers (session secret hashing; not exposed via PostgREST)
+-- ---------------------------------------------------------------------------
+create extension if not exists pgcrypto with schema extensions;
+
+create schema if not exists private;
+revoke all on schema private from public;
+grant usage on schema private to postgres, service_role;
+
+create or replace function private.hash_session_secret(p_secret text)
+returns text
+language sql
+immutable
+set search_path = private, extensions
+as $$
+  select encode(extensions.digest(p_secret, 'sha256'), 'hex');
+$$;
+
+drop function if exists public.hash_session_secret(text);
 
 -- ---------------------------------------------------------------------------
 -- Score helper — mirrors client-side calculateTestScore
@@ -217,6 +240,7 @@ create trigger validate_participant_row_trigger
 -- ---------------------------------------------------------------------------
 -- RPC: register_participant
 -- Security definer so it can INSERT despite anon INSERT being revoked.
+-- participant_id mirrors session_id (same anonymous save code).
 -- Rate-limited to 200 registrations per hour.
 -- ---------------------------------------------------------------------------
 create or replace function public.register_participant(
@@ -227,11 +251,15 @@ create or replace function public.register_participant(
 ) returns text
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, private, extensions
 as $$
 declare
   recent_count int;
 begin
+  if p_participant_id is distinct from p_session_id then
+    raise exception 'participant_id must match session_id' using errcode = 'P0001';
+  end if;
+
   select count(*) into recent_count
   from public.participants
   where created_at > now() - interval '1 hour';
@@ -243,10 +271,14 @@ begin
   insert into public.participants (
     participant_id, session_id, session_secret, selected_questions, screens_time
   ) values (
-    p_participant_id, p_session_id, p_session_secret, p_selected_questions, '{}'::jsonb
+    p_session_id,
+    p_session_id,
+    private.hash_session_secret(p_session_secret),
+    p_selected_questions,
+    '{}'::jsonb
   );
 
-  return p_participant_id;
+  return p_session_id;
 exception
   when unique_violation then
     raise exception 'session_id already registered' using errcode = '23505';
@@ -267,10 +299,11 @@ create or replace function public.update_participant(
 ) returns boolean
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, private, extensions
 as $$
 declare
   updated int;
+  secret_hash text := private.hash_session_secret(p_session_secret);
 begin
   if p_session_id is null or length(trim(p_session_id)) = 0
      or p_session_secret is null or length(trim(p_session_secret)) = 0
@@ -300,7 +333,7 @@ begin
       then p_patch->>'curiosity_focus' else curiosity_focus end,
     posttest_readiness = case when p_patch ? 'posttest_readiness'
       then (p_patch->>'posttest_readiness')::integer else posttest_readiness end
-  where session_id = p_session_id and session_secret = p_session_secret;
+  where session_id = p_session_id and session_secret = secret_hash;
 
   get diagnostics updated = row_count;
   return updated > 0;
@@ -320,16 +353,17 @@ create or replace function public.get_participant_progress(
 ) returns jsonb
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, private, extensions
 as $$
 declare
   r public.participants%rowtype;
+  secret_hash text := private.hash_session_secret(p_session_secret);
 begin
   if p_session_id is null or p_session_secret is null then return null; end if;
 
   select * into r
   from public.participants
-  where session_id = p_session_id and session_secret = p_session_secret;
+  where session_id = p_session_id and session_secret = secret_hash;
 
   if not found then return null; end if;
 
@@ -347,6 +381,71 @@ $$;
 revoke all    on function public.get_participant_progress(text, text) from public;
 grant execute on function public.get_participant_progress(text, text) to anon, authenticated;
 
--- After hash-session-secret / retention migrations, run
--- supabase/revoke-internal-rpc-execute.sql if verify:db reports internal RPCs
--- are still callable by anon (moves helpers to private schema).
+-- ---------------------------------------------------------------------------
+-- Retention policy (purge via SQL editor / pg_cron — not callable by anon)
+-- ---------------------------------------------------------------------------
+create table if not exists public.study_privacy_config (
+  id int primary key default 1 check (id = 1),
+  study_end_date date not null default '2026-06-30',
+  retention_days_after_study_end int not null default 90 check (retention_days_after_study_end >= 0),
+  updated_at timestamptz not null default now()
+);
+
+comment on table public.study_privacy_config is
+  'Single-row retention settings. Purge runs only after study_end_date + retention_days.';
+
+insert into public.study_privacy_config (study_end_date, retention_days_after_study_end)
+values ('2026-06-30', 90)
+on conflict (id) do nothing;
+
+alter table public.study_privacy_config enable row level security;
+
+drop policy if exists "Deny all on study_privacy_config" on public.study_privacy_config;
+create policy "Deny all on study_privacy_config"
+  on public.study_privacy_config for all
+  to anon, authenticated
+  using (false);
+
+revoke all on table public.study_privacy_config from anon, authenticated;
+
+create or replace function private.purge_expired_participants()
+returns integer
+language plpgsql
+security definer
+set search_path = public, private
+as $$
+declare
+  cfg record;
+  purge_after timestamptz;
+  deleted_count int;
+begin
+  select study_end_date, retention_days_after_study_end
+  into cfg
+  from public.study_privacy_config
+  where id = 1;
+
+  if not found then
+    return 0;
+  end if;
+
+  purge_after := (cfg.study_end_date + cfg.retention_days_after_study_end * interval '1 day')::timestamptz;
+
+  if now() < purge_after then
+    return 0;
+  end if;
+
+  delete from public.participants;
+  get diagnostics deleted_count = row_count;
+  return deleted_count;
+end;
+$$;
+
+drop function if exists public.purge_expired_participants();
+
+comment on function private.purge_expired_participants() is
+  'Deletes all participant rows once current time is past study_end_date + retention_days. '
+  'Run in SQL editor: select private.purge_expired_participants(); '
+  'Include Supabase backups in your retention plan — enable PITR expiry or delete projects when done.';
+
+-- Legacy deployments: if verify:db reports hash_session_secret or purge_expired_participants
+-- callable by anon, run supabase/revoke-internal-rpc-execute.sql once.

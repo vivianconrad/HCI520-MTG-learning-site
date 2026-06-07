@@ -32,6 +32,10 @@ as $$
 declare
   recent_count int;
 begin
+  if p_participant_id is distinct from p_session_id then
+    raise exception 'participant_id must match session_id' using errcode = 'P0001';
+  end if;
+
   select count(*) into recent_count
   from public.participants
   where created_at > now() - interval '1 hour';

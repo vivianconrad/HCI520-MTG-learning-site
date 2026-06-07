@@ -15,9 +15,28 @@
 -- Verify: node scripts/verify-participants-db.mjs
 
 -- ---------------------------------------------------------------------------
--- Row-level security (replace header-based UPDATE policy)
+-- Private session-secret hashing (idempotent; included in setup.sql)
 -- ---------------------------------------------------------------------------
-alter table public.participants enable row level security;
+create extension if not exists pgcrypto with schema extensions;
+
+create schema if not exists private;
+revoke all on schema private from public;
+grant usage on schema private to postgres, service_role;
+
+create or replace function private.hash_session_secret(p_secret text)
+returns text
+language sql
+immutable
+set search_path = private, extensions
+as $$
+  select encode(extensions.digest(p_secret, 'sha256'), 'hex');
+$$;
+
+drop function if exists public.hash_session_secret(text);
+
+-- ---------------------------------------------------------------------------
+-- Row-level security (replace header-based UPDATE policy)
+-- ---------------------------------------------------------------------------alter table public.participants enable row level security;
 
 drop policy if exists "Allow update own row"              on public.participants;
 drop policy if exists "Allow update for all"              on public.participants;

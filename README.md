@@ -118,15 +118,17 @@ Research data is saved incrementally to the `participants` table. See **[docs/pr
 
 **Setup**
 
-1. Run **`supabase/setup.sql`** in the [Supabase SQL editor](https://supabase.com/dashboard) for a new project (table, RLS, RPCs, validation triggers, retention config, hashed session secrets).
-2. For existing projects, also run migrations in order:
-   - **`supabase/migrations/hash-session-secret.sql`** — store session secrets as SHA-256 hashes at rest.
-   - **`supabase/migrations/add-retention-policy.sql`** — retention config and `purge_expired_participants()`.
+1. **New project:** run **`supabase/setup.sql`** once in the [Supabase SQL editor](https://supabase.com/dashboard). It creates the table, RLS, RPCs, validation triggers, SHA-256 session secrets, and retention config.
+2. **Existing project** (already has `participants`):
+   - No `session_secret` column → **`supabase/migrations/add-session-secret.sql`**, then re-run **`supabase/setup.sql`**
+   - Plaintext `session_secret` at rest → **`supabase/migrations/hash-session-secret.sql`**
+   - Retention config missing → **`supabase/migrations/add-retention-policy.sql`**
+   - Rows created but saves fail (“stored in this browser only”) → **`supabase/fix-participants-rls.sql`**
+   - `verify:db` reports internal RPCs callable by anon → **`supabase/revoke-internal-rpc-execute.sql`**
 3. Before your study ends, set **`study_end_date`** in `study_privacy_config` (Table Editor, row `id = 1`).
-4. If participant rows are created but saves fail with “stored in this browser only”, run **`supabase/fix-participants-rls.sql`** (deploys `update_participant` RPC and fixes UPDATE RLS). Same RLS section lives in `supabase/migrations/fix-update-rls-after-security.sql`.
-5. Verify with `node scripts/verify-participants-db.mjs` — it should print `All participant security checks passed.`
-6. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-7. For GitHub Pages, the deploy workflow embeds those values at build time via repository secrets (see **CI/CD and GitHub Pages** above).
+4. Verify with `npm run verify:db` — it should print `All participant security checks passed.`
+5. Copy `.env.example` → `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+6. For GitHub Pages, the deploy workflow embeds those values at build time via repository secrets (see **CI/CD and GitHub Pages** above).
 
 **Instructor analysis**
 
