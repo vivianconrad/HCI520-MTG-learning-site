@@ -10,8 +10,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preview": "vite preview",
-    "test": "vitest run",
-    "test:e2e": "playwright test --config=playwright.config.cjs"
+    "test": "vitest run --exclude test/supabase.integration.test.mjs",
+    "test:supabase": "vitest run test/supabase.integration.test.mjs",
+    "test:e2e": "playwright test --config=playwright.config.cjs",
+    "verify:db": "node scripts/verify-participants-db.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
