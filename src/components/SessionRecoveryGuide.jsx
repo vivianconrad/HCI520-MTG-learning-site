@@ -14,7 +14,7 @@ export default function SessionRecoveryGuide({ className = '' }) {
         </p>
         <p>
           If Welcome shows a session error, use Reset session there or finish the study and use
-          Start a new session on the Results page.
+          Start over on the Results page.
         </p>
         <p>Refreshing the page is safe — your answers and lesson progress are saved as you go.</p>
       </div>

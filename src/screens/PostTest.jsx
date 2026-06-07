@@ -7,7 +7,8 @@ import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { savePosttest, saveScreenTime } from '../lib/db.js'
-import { describeSaveFailure } from '../lib/sessionErrors.js'
+import { describeSaveFailure, describeSessionSetupError, SESSION_NOT_READY_MESSAGE } from '../lib/sessionErrors.js'
+import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import { useConfirm } from '../context/useConfirm.js'
 import { POSTTEST_LEAVE_CONFIRM_MESSAGE, POSTTEST_LEAVE_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import { calculateTestScoreAsync } from '../lib/testScore.js'
@@ -17,6 +18,7 @@ export default function PostTest({ session }) {
   const navigate = useNavigate()
   const confirm = useConfirm()
   const [saveWarning, setSaveWarning] = useState(null)
+  const [saving, setSaving] = useState(false)
   const {
     sessionId,
     sessionSecret,
@@ -26,7 +28,11 @@ export default function PostTest({ session }) {
     posttestAnswers,
     posttestCompleted,
     markPosttestCompleted,
+    participantRowReady,
   } = session
+
+  const { rowReady, rowError } = useParticipantBootstrap(session)
+  const canSave = participantRowReady && rowReady
 
   useRedirectIfTestComplete(posttestCompleted, '/results')
   useScreenTime(session, 'PostTest')
@@ -34,6 +40,16 @@ export default function PostTest({ session }) {
 
   const handleComplete = useCallback(
     async (lastAnswer) => {
+      if (!canSave) {
+        setSaveWarning(
+          rowError ? describeSessionSetupError(rowError) : SESSION_NOT_READY_MESSAGE
+        )
+        return
+      }
+
+      setSaving(true)
+      setSaveWarning(null)
+
       const answers = { ...posttestAnswers, ...lastAnswer }
       const score = await calculateTestScoreAsync(selectedQuestions, answers)
       const result = await savePosttest(sessionId, sessionSecret, answers, score)
@@ -48,9 +64,12 @@ export default function PostTest({ session }) {
       if (import.meta.env.DEV) {
         console.warn('[PostTest] savePosttest failed:', result)
       }
+      setSaving(false)
       setSaveWarning(describeSaveFailure(result))
     },
     [
+      canSave,
+      rowError,
       posttestAnswers,
       selectedQuestions,
       sessionId,
@@ -104,6 +123,16 @@ export default function PostTest({ session }) {
       className="pretest"
       showKeywordDictionary={false}
     >
+      {rowError ? (
+        <div className="pretest__save-warning-block" role="alert">
+          <p className="pretest__save-warning">{describeSessionSetupError(rowError)}</p>
+        </div>
+      ) : null}
+      {!canSave && !rowError ? (
+        <p className="pretest__intro-note" aria-live="polite">
+          Preparing your session…
+        </p>
+      ) : null}
       {saveWarning ? (
         <div className="pretest__save-warning-block" role="alert">
           <p className="pretest__save-warning">{saveWarning}</p>
@@ -127,7 +156,8 @@ export default function PostTest({ session }) {
         selectedQuestions={selectedQuestions}
         setAnswer={setPosttestAnswer}
         onComplete={handleComplete}
-        lastButtonLabel="Submit"
+        saving={saving}
+        lastButtonLabel="Submit post-test"
         introNote="These are the same questions as the pre-test. Answer from what you learned in the lessons."
       />
     </PageLayout>

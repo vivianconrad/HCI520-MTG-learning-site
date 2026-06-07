@@ -519,7 +519,7 @@ function CardThumbnail({ src, alt, className }) {
   const [hasImage, setHasImage] = useState(true)
 
   if (!hasImage) {
-    return <span className="card-types__thumbnail-placeholder">img</span>
+    return <span className="card-types__thumbnail-placeholder">{alt || 'Card image unavailable'}</span>
   }
 
   return <img className={className} src={src} alt={alt} onError={() => setHasImage(false)} />

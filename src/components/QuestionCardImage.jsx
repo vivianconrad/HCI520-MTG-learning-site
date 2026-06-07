@@ -8,7 +8,7 @@ function QuestionCardImageContent({ src, alt, layout }) {
       <div
         className={`pretest__image-slot${layout === 'wide' ? ' pretest__image-slot--wide' : ''}`}
       >
-        Card image
+        {alt || 'Card image unavailable'}
       </div>
     )
   }

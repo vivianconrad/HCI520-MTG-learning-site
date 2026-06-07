@@ -5,9 +5,9 @@ import {
 } from './sessionErrors.js'
 
 describe('describeSaveFailure', () => {
-  it('includes the server error when one is present', () => {
+  it('returns generic copy when a server error is present', () => {
     expect(describeSaveFailure({ error: 'permission denied' })).toBe(
-      `${SESSION_SAVE_FAILED_MESSAGE} Server: permission denied`
+      SESSION_SAVE_FAILED_MESSAGE
     )
   })
 

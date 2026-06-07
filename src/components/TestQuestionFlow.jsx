@@ -13,6 +13,7 @@ export default function TestQuestionFlow({
   introNote,
   assessmentNote,
   lastButtonLabel,
+  saving = false,
 }) {
   const frameRef = useRef(null)
   const optionRefs = useRef([])
@@ -167,6 +168,7 @@ export default function TestQuestionFlow({
           <button
             type="button"
             className="pretest__button pretest__button--back"
+            disabled={saving}
             onClick={handleBack}
           >
             Back
@@ -175,10 +177,11 @@ export default function TestQuestionFlow({
         <button
           type="button"
           className="pretest__button"
-          disabled={selectedIndex === null}
+          disabled={selectedIndex === null || saving}
+          aria-busy={saving || undefined}
           onClick={handleNext}
         >
-          {isLast ? lastButtonLabel : 'Next'}
+          {saving ? 'Saving your answers…' : isLast ? lastButtonLabel : 'Next'}
         </button>
       </div>
       <ProgressDots activeIndex={progressIndex} />

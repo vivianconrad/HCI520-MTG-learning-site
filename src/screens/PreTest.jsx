@@ -7,7 +7,7 @@ import TestQuestionFlow from '../components/TestQuestionFlow.jsx'
 import { useBlockBrowserBack } from '../hooks/useBlockBrowserBack.js'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { savePretest } from '../lib/db.js'
-import { describeSaveFailure } from '../lib/sessionErrors.js'
+import { describeSaveFailure, describeSessionSetupError, SESSION_NOT_READY_MESSAGE } from '../lib/sessionErrors.js'
 import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
 import { useConfirm } from '../context/useConfirm.js'
 import { PRETEST_LEAVE_CONFIRM_MESSAGE, PRETEST_LEAVE_CONFIRM_TITLE } from '../lib/lessonNav.js'
@@ -18,6 +18,7 @@ export default function PreTest({ session }) {
   const navigate = useNavigate()
   const confirm = useConfirm()
   const [saveWarning, setSaveWarning] = useState(null)
+  const [saving, setSaving] = useState(false)
   const {
     sessionId,
     sessionSecret,
@@ -47,11 +48,13 @@ export default function PreTest({ session }) {
     async (lastAnswer) => {
       if (!canSave) {
         setSaveWarning(
-          rowError ??
-            'Your session is still being registered. Wait a moment, or return to Welcome and try again.'
+          rowError ? describeSessionSetupError(rowError) : SESSION_NOT_READY_MESSAGE
         )
         return
       }
+
+      setSaving(true)
+      setSaveWarning(null)
 
       const answers = { ...pretestAnswers, ...lastAnswer }
       const score = await calculateTestScoreAsync(selectedQuestions, answers)
@@ -66,6 +69,7 @@ export default function PreTest({ session }) {
       if (import.meta.env.DEV) {
         console.warn('[PreTest] savePretest failed:', result)
       }
+      setSaving(false)
       setSaveWarning(describeSaveFailure(result))
     },
     [
@@ -125,7 +129,7 @@ export default function PreTest({ session }) {
     >
       {rowError ? (
         <div className="pretest__save-warning-block" role="alert">
-          <p className="pretest__save-warning">{rowError}</p>
+          <p className="pretest__save-warning">{describeSessionSetupError(rowError)}</p>
         </div>
       ) : null}
       {!canSave && !rowError ? (
@@ -156,7 +160,8 @@ export default function PreTest({ session }) {
         selectedQuestions={selectedQuestions}
         setAnswer={setPretestAnswer}
         onComplete={handleComplete}
-        lastButtonLabel="Continue"
+        saving={saving}
+        lastButtonLabel="Finish pre-test"
         introNote="You have not been taught these topics yet. Answer with your best guess. Wrong answers are expected and help show what the lessons should cover."
         assessmentNote="Gold-highlighted term definitions from the lessons are not available during the test."
       />

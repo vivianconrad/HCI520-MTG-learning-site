@@ -3,11 +3,20 @@
   padding: 0.55rem 0.75rem;
   font-size: 0.85rem;
   line-height: 1.45;
-  color: var(--color-text-dark);
-  background: rgba(139, 105, 20, 0.06);
-  border: 1px solid rgba(139, 105, 20, 0.18);
+  color: var(--color-text-light);
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid var(--color-gold);
   border-radius: 4px;
   text-align: center;
+}
+
+/* Inside parchment frames — secondary text, subtle border (not gold body copy) */
+.lesson-intro__frame .browser-back-notice,
+.calculating__frame .browser-back-notice,
+.results__frame .browser-back-notice {
+  color: var(--color-text-secondary);
+  background: rgba(139, 105, 20, 0.06);
+  border-color: rgba(139, 105, 20, 0.18);
 }
 
 .pretest .browser-back-notice {
