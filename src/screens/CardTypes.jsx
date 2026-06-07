@@ -266,10 +266,6 @@ const CARD_TYPES = [
         src: cardImage('sorcery-duress.jpg'),
         label: 'Duress',
       },
-      {
-        src: cardImage('divination.jpg'),
-        label: 'Divination',
-      },
     ],
   },
   {
