@@ -77,9 +77,18 @@ export default function Welcome({ session }) {
           ))}
         </div>
         {rowError ? (
-          <p className="welcome__error" role="alert">
-            {rowError}
-          </p>
+          <div className="welcome__error-block" role="alert">
+            <p className="welcome__error">
+              Your saved session is out of date. Reset to start fresh.
+            </p>
+            <button
+              type="button"
+              className="welcome__button welcome__button--reset"
+              onClick={() => session.resetSession()}
+            >
+              Reset session
+            </button>
+          </div>
         ) : null}
         {!rowReady && !rowError ? (
           <p className="welcome__status" aria-live="polite">

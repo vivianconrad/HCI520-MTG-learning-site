@@ -112,12 +112,34 @@
   margin: 0 0 16px;
 }
 
+.welcome__error-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid var(--color-error, #c0392b);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--color-error, #c0392b) 8%, transparent);
+}
+
 .welcome__error {
   font-family: var(--font-body);
   font-size: 0.95rem;
-  color: var(--color-error);
+  color: var(--color-error, #c0392b);
   text-align: center;
-  margin: 0 0 16px;
+  margin: 0;
+}
+
+.welcome__button--reset {
+  border-color: var(--color-error, #c0392b);
+  color: var(--color-error, #c0392b);
+}
+
+.welcome__button--reset:hover {
+  background: var(--color-error, #c0392b);
+  color: var(--color-parchment);
 }
 
 .welcome__actions {
