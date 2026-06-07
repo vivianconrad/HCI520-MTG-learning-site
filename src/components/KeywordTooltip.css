@@ -54,7 +54,7 @@
   bottom: calc(100% + 10px);
   z-index: 850;
   display: none;
-  width: min(300px, calc(100vw - 32px));
+  width: min(300px, calc(100% - 32px));
   padding: 10px 12px;
   font-family: var(--font-body);
   font-size: 0.875rem;
