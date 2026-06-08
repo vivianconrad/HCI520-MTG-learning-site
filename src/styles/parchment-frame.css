@@ -8,7 +8,12 @@
 .what-is-mtg__frame,
 .pretest__frame,
 .lesson-complete__frame,
-.calculating__frame {
+.calculating__frame,
+.results__frame,
+.card-anatomy__frame,
+.card-types__frame,
+.turn-structure__frame,
+.putting-together__frame {
   max-width: 680px;
   width: 100%;
   background: var(--color-parchment);
