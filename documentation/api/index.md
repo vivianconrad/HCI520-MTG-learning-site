@@ -43,7 +43,7 @@ There is no user login. Authorization is **possession of `(session_id, session_s
 - `session_id` — shown to participant as save code
 - `session_secret` — stored in browser only; hashed in DB via `private.hash_session_secret`
 
-Wrong secret → RPC returns `false` / no update (0 rows).
+Wrong secret: RPC returns `false` (no row updated).
 
 ## Error handling in the app
 
@@ -54,8 +54,8 @@ Wrong secret → RPC returns `false` / no update (0 rows).
 | Rate limit exception | >200 registrations/hour (project-wide) |
 | Score mismatch exception | Client score ≠ server recompute (should not happen if keys align) |
 
-## Related
+## See also
 
-- [Containers — Supabase boundary](/architecture/containers)
+- [Containers: Supabase boundary](/architecture/containers)
 - [Session gating](/architecture/session-flow)
 - [Evaluation metrics](/guide/evaluation)

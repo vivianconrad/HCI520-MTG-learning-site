@@ -38,8 +38,8 @@ flowchart TB
 
 ### Researcher / instructor
 
-- Uses **Supabase Table Editor** (or SQL with service role) for cohort export.
-- `/instructor` dashboard UI exists but **cannot read rows** when deny-select RLS is active (expected).
+- Uses the Supabase Table Editor (or SQL with service role) for cohort export.
+- `/instructor` dashboard UI exists but cannot read rows when deny-select RLS is active. That is normal.
 
 ### Developer / contributor
 

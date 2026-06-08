@@ -1,0 +1,114 @@
+/* Shared navigation and form buttons across learner screens */
+
+.btn,
+.consent__button,
+.intro__button,
+.welcome__button,
+.lesson-intro__button,
+.what-is-mtg__button,
+.pretest__button,
+.lesson-complete__button,
+.card-anatomy__button,
+.card-types__button,
+.turn-structure__button,
+.putting-together__button,
+.copy-session-id__button {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  color: var(--color-text-dark);
+  background: transparent;
+  border: 1.5px solid var(--color-gold);
+  border-radius: 0;
+  padding: var(--space-md) var(--space-xl);
+  min-height: var(--touch-target-min);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.btn--compact,
+.intro__button,
+.what-is-mtg__button {
+  padding: 10px var(--space-xl);
+  min-height: unset;
+}
+
+.btn--rounded,
+.consent__button {
+  border-radius: 4px;
+}
+
+.btn--back,
+.consent__button--decline,
+.intro__button--back,
+.welcome__button--reset,
+.lesson-intro__button--back,
+.what-is-mtg__button--back,
+.pretest__button--back,
+.lesson-complete__button--back,
+.card-anatomy__button--back,
+.card-types__button--back,
+.turn-structure__button--back,
+.putting-together__button--back,
+.results__empty-button--secondary {
+  border-color: var(--color-gold-muted);
+}
+
+.btn--back:hover,
+.intro__button--back:hover,
+.welcome__button--reset:hover,
+.lesson-intro__button--back:hover,
+.what-is-mtg__button--back:hover,
+.pretest__button--back:hover:not(:disabled),
+.lesson-complete__button--back:hover,
+.card-anatomy__button--back:hover,
+.card-types__button--back:hover,
+.turn-structure__button--back:hover,
+.putting-together__button--back:hover {
+  border-color: var(--color-gold);
+  background: transparent;
+  color: var(--color-text-dark);
+}
+
+.btn--next,
+.consent__button:not(.consent__button--decline),
+.intro__button:not(.intro__button--back),
+.lesson-intro__button--next,
+.what-is-mtg__button:not(.what-is-mtg__button--back),
+.lesson-complete__button--next,
+.card-anatomy__button--next,
+.card-types__button--next,
+.turn-structure__button--next,
+.putting-together__button--next,
+.welcome__button:not(.welcome__button--reset) {
+  border-color: var(--color-gold);
+}
+
+.btn--next:hover:not(:disabled),
+.consent__button:hover,
+.intro__button:hover,
+.lesson-intro__button--next:hover,
+.what-is-mtg__button:hover,
+.lesson-complete__button--next:hover,
+.card-anatomy__button--next:hover,
+.card-types__button--next:hover:not(:disabled),
+.turn-structure__button--next:hover,
+.putting-together__button--next:hover,
+.welcome__button:not(.welcome__button--reset):hover {
+  background: var(--color-gold);
+  color: var(--color-navy);
+}
+
+.consent__button--decline:hover {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-color: var(--color-gold-on-parchment);
+}
+
+.welcome__button--reset:hover {
+  background: var(--color-error);
+  color: var(--color-text-light);
+  border-color: var(--color-error);
+}

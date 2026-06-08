@@ -1,6 +1,6 @@
 .session-recovery-guide {
-  margin: 16px 0 0;
-  padding: 12px 14px;
+  margin: var(--space-lg) 0 0;
+  padding: var(--space-md) 14px;
   border: 1px solid rgb(139 105 20 / 22%);
   border-radius: 4px;
   background: rgb(139 105 20 / 5%);
@@ -9,7 +9,7 @@
 .session-recovery-guide__summary {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   min-height: var(--touch-target-min);
   font-family: var(--font-body);
   font-size: 0.95rem;
@@ -49,8 +49,8 @@
 }
 
 .session-recovery-guide__body {
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
   border-top: 1px solid rgb(139 105 20 / 18%);
 }
 
@@ -58,7 +58,7 @@
   margin: 0 0 14px;
   font-family: var(--font-body);
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: var(--leading-body);
   color: var(--color-text-secondary);
 }
 
@@ -85,7 +85,7 @@
   padding-left: 1.15rem;
   font-family: var(--font-body);
   font-size: 0.9rem;
-  line-height: 1.55;
+  line-height: var(--leading-body);
   color: var(--color-text-secondary);
 }
 

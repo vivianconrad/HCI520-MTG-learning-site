@@ -27,7 +27,7 @@ E2E runs in a dependent job (rebuilds app locally; wiki build is validated in th
 `.github/workflows/deploy.yml`:
 
 1. Same verification as CI
-2. `npm run build` — **overwrites** `docs/` with the app bundle
+2. `npm run build` (overwrites `docs/` with the app bundle)
 3. `npm run docs:build` + copy to `docs/wiki/`
 4. Upload `docs/` as Pages artifact
 
@@ -71,4 +71,4 @@ npm run verify:db
 
 ## Build output and git
 
-`docs/` is build output. CI rebuilds on deploy — committing `docs/` is optional. Source of truth for the wiki is always `documentation/`.
+`docs/` is build output. CI rebuilds on deploy; committing `docs/` is optional. Wiki source of truth is `documentation/`.

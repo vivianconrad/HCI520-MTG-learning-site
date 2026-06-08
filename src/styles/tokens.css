@@ -21,6 +21,15 @@
   --surface-callout-border: color-mix(in oklch, var(--color-gold) 38%, transparent);
   --surface-zone-bg: color-mix(in oklch, var(--color-parchment) 55%, white);
   --surface-zone-border: color-mix(in oklch, var(--color-gold-muted) 55%, transparent);
+  --surface-hint-bg: color-mix(in oklch, var(--color-gold) 12%, transparent);
+  --surface-hint-border: color-mix(in oklch, var(--color-gold) 35%, transparent);
+  --surface-hint-warm-bg: color-mix(in oklch, var(--color-gold-on-parchment) 8%, transparent);
+  --surface-hint-warm-border: color-mix(in oklch, var(--color-gold-on-parchment) 22%, transparent);
+  --surface-hint-strong-bg: color-mix(in oklch, var(--color-gold) 16%, transparent);
+  --surface-hint-strong-border: color-mix(in oklch, var(--color-gold) 45%, transparent);
+  --surface-on-navy-bg: color-mix(in oklch, var(--color-gold) 12%, transparent);
+  --surface-on-navy-border: color-mix(in oklch, var(--color-gold) 45%, transparent);
+  --surface-on-navy-divider: color-mix(in oklch, var(--color-gold) 35%, transparent);
 
   /* Typography */
   --font-display: 'Cinzel', 'Palatino Linotype', serif;
@@ -48,6 +57,7 @@
   --space-xl: 24px;
   --space-2xl: 32px;
   --space-3xl: 48px;
+  --space-frame-inline: 2.5rem;
   --space-4xl: 64px;
   --space-5xl: 96px;
 

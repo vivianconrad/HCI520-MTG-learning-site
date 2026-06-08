@@ -1,1 +1,0 @@
-import{t as e}from"./vendor-react-CEUxNnqb.js";var t=e();function n({text:e}){return e?(0,t.jsx)(`p`,{className:`curiosity-note`,role:`status`,children:e}):null}export{n as t};

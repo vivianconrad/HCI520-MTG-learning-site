@@ -58,7 +58,7 @@ On insert/update when array present:
 
 - Do not skip `attachAnswerKeys` before registration.
 - Client pre-computes score for UX; server is authoritative.
-- Partial patches are fine — omitted keys retain existing column values.
+- Partial patches are fine; omitted keys keep their existing column values.
 
 ## Related RPCs
 

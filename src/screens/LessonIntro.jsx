@@ -112,7 +112,7 @@ export default function LessonIntro({ session }) {
           <legend className="lesson-intro__curiosity-legend">
             What are you most curious about? (for the study)
           </legend>
-          <p className="lesson-intro__curiosity-note">
+          <p className="parchment-frame__muted-hint">
             Pick one so we know your interests. You will still complete every lesson in order.
           </p>
           <div className="lesson-intro__curiosity-options">

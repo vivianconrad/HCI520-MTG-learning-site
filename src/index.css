@@ -1,4 +1,7 @@
 @import './styles/tokens.css';
+@import './styles/layout.css';
+@import './styles/parchment-frame.css';
+@import './styles/buttons.css';
 @import './styles/a11y.css';
 @import './styles/responsive.css';
 @import './components/PageLayout.css';

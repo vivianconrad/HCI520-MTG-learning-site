@@ -23,7 +23,7 @@ update_participant(
 | --------- | ----------- |
 | `p_session_id` | Session save code |
 | `p_session_secret` | Plaintext secret (hashed and compared server-side) |
-| `p_patch` | JSON object with **only keys to change** |
+| `p_patch` | JSON object with only the keys to change |
 
 Returns `false` when id/secret/patch invalid or no row updated. Returns `true` when one row updated.
 

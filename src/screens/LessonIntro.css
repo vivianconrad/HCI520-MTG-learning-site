@@ -1,71 +1,17 @@
-.lesson-intro {
-  min-height: var(--viewport-min-height);
-  background: var(--color-navy);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-
-.lesson-intro__frame {
-  max-width: 680px;
-  width: 100%;
-  background: var(--color-parchment);
-  border: 1.5px solid var(--color-gold);
-  border-radius: 8px;
-  padding: 48px 40px;
-}
-
-.lesson-intro__breadcrumb {
-  font-family: var(--font-display);
-  font-size: 13px;
-  color: var(--color-gold-on-parchment);
-  letter-spacing: 0.08em;
-  margin: 0 0 16px;
-  text-align: center;
-}
-
-.lesson-intro__heading {
-  font-family: var(--font-display);
-  font-size: 2.5rem;
-  font-weight: 400;
-  color: var(--color-text-dark);
-  text-align: center;
-  margin: 0 0 16px;
-  line-height: 1.2;
-}
-
-.lesson-intro__rule {
-  width: 60px;
-  height: 1px;
-  background: var(--color-gold);
-  border: none;
-  margin: 0 auto 24px;
-}
-
 .lesson-intro__body {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin: 0 0 16px;
-}
-
-.lesson-intro__paragraph {
-  font-family: var(--font-body);
-  font-size: 16px;
-  color: var(--color-text-dark);
-  margin: 0;
-  line-height: 1.5;
-  text-align: left;
+  gap: var(--space-lg);
+  margin: 0 0 var(--space-lg);
 }
 
 .lesson-intro__list {
   list-style: none;
   padding: 0;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-lg);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .lesson-intro__list li {
@@ -73,7 +19,7 @@
   align-items: center;
   gap: 10px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--color-text-dark);
   line-height: 1.4;
 }
@@ -93,12 +39,12 @@
 
 .lesson-intro__lesson-time {
   color: var(--color-gold-on-parchment);
-  font-size: 13px;
+  font-size: var(--text-xs);
 }
 
 .lesson-intro__curiosity {
   border: none;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-lg);
   padding: 0;
 }
 
@@ -106,16 +52,8 @@
   font-family: var(--font-display);
   font-size: 1.125rem;
   color: var(--color-text-dark);
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-sm);
   padding: 0;
-}
-
-.lesson-intro__curiosity-note {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--color-gold-on-parchment);
-  margin: 0 0 12px;
-  line-height: 1.45;
 }
 
 .lesson-intro__curiosity-options {
@@ -128,9 +66,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: var(--space-xs);
   text-align: left;
-  padding: 12px 14px;
+  padding: var(--space-md) 14px;
   background: rgb(255 255 255 / 35%);
   border: 1.5px solid var(--color-gold-muted);
   cursor: pointer;
@@ -158,7 +96,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   color: var(--color-gold-on-parchment);
-  line-height: 1.35;
+  line-height: var(--leading-snug);
 }
 
 .lesson-intro__curiosity-ack {
@@ -175,44 +113,12 @@
 
 .lesson-intro__closing {
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-style: italic;
   color: var(--color-gold-on-parchment);
   margin: 0;
-  line-height: 1.5;
+  line-height: var(--leading-body);
   text-align: left;
-}
-
-.lesson-intro__button {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  color: var(--color-text-dark);
-  background: transparent;
-  border-radius: 0;
-  padding: 12px 24px;
-  min-height: var(--touch-target-min);
-  cursor: pointer;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast),
-    border-color var(--transition-fast);
-}
-
-.lesson-intro__button--back {
-  border: 1.5px solid var(--color-gold-muted);
-}
-
-.lesson-intro__button--back:hover {
-  border-color: var(--color-gold);
-}
-
-.lesson-intro__button--next {
-  border: 1.5px solid var(--color-gold);
-}
-
-.lesson-intro__button--next:hover {
-  background: var(--color-gold);
-  color: var(--color-navy);
 }
 
 @media (max-width: 560px) {
@@ -221,23 +127,12 @@
   }
 }
 
-.lesson-intro__actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 32px;
-}
-
-.lesson-intro__actions--end {
-  justify-content: flex-end;
-}
-
 .lesson-intro__save-warning {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  margin: 24px 0 0;
+  gap: var(--space-md);
+  margin: var(--space-xl) 0 0;
   text-align: center;
 }
 
@@ -246,5 +141,6 @@
   font-size: 0.95rem;
   color: var(--color-error);
   margin: 0;
-  line-height: 1.45;
+  line-height: var(--leading-snug);
 }
+

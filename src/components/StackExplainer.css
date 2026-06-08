@@ -1,5 +1,5 @@
 .stack-explainer {
-  margin: 24px 0 0;
+  margin: var(--space-xl) 0 0;
   padding: 20px 22px;
   border: 1px solid var(--color-gold-muted);
   border-radius: 6px;
@@ -8,24 +8,24 @@
 }
 
 .stack-explainer + .stack-explainer {
-  margin-top: 16px;
+  margin-top: var(--space-lg);
 }
 
 @media (max-width: 640px) {
   .stack-explainer {
-    margin-top: 16px;
-    padding: 16px;
+    margin-top: var(--space-lg);
+    padding: var(--space-lg);
   }
 
   .stack-explainer__paragraph,
   .stack-explainer__list {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 }
 
 .stack-explainer--brief {
   margin-top: 0;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-lg);
 }
 
 .stack-explainer__heading {
@@ -33,25 +33,25 @@
   font-size: 1.125rem;
   font-weight: 400;
   color: var(--color-text-dark);
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-md);
   line-height: 1.3;
 }
 
 .stack-explainer__subheading {
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 400;
   letter-spacing: 0.04em;
   color: var(--color-text-dark);
-  margin: 14px 0 8px;
+  margin: 14px 0 var(--space-sm);
 }
 
 .stack-explainer__paragraph,
 .stack-explainer__list {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--text-md);
   color: var(--color-text-dark);
-  line-height: 1.5;
+  line-height: var(--leading-body);
   margin: 0;
 }
 
@@ -75,5 +75,5 @@
   width: 40px;
   height: 40px;
   object-fit: contain;
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-md);
 }

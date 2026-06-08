@@ -21,6 +21,7 @@ export default defineConfig({
           items: [
             { text: 'Getting started', link: '/guide/getting-started' },
             { text: 'Development workflow', link: '/guide/development' },
+            { text: 'Design system', link: '/guide/design-system' },
             { text: 'Testing', link: '/guide/testing' },
           ],
         },

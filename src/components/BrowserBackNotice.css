@@ -2,9 +2,9 @@
   margin: 0 0 1rem;
   padding: 0.55rem 0.75rem;
   font-size: 0.85rem;
-  line-height: 1.45;
+  line-height: var(--leading-snug);
   color: var(--color-text-light);
-  background: rgba(201, 168, 76, 0.1);
+  background: var(--surface-on-navy-bg);
   border: 1px solid var(--color-gold);
   border-radius: 4px;
   text-align: center;
@@ -15,8 +15,8 @@
 .calculating__frame .browser-back-notice,
 .results__frame .browser-back-notice {
   color: var(--color-text-secondary);
-  background: rgba(139, 105, 20, 0.06);
-  border-color: rgba(139, 105, 20, 0.18);
+  background: var(--surface-hint-warm-bg);
+  border-color: var(--surface-hint-warm-border);
 }
 
 .pretest .browser-back-notice {

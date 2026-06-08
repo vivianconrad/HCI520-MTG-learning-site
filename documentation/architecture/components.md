@@ -63,7 +63,7 @@ flowchart TB
 
 ## Screens (`src/screens/`)
 
-One component per learner step (and instructor). Screens receive `session` from the parent — they do not create a second store instance.
+One component per learner step (and instructor). Screens receive `session` from the parent. They do not create a second store instance.
 
 Typical responsibilities:
 
@@ -104,6 +104,6 @@ Shared layout and interaction: `PageLayout`, parchment frames, quiz widgets, glo
 
 ## Supabase integration boundary
 
-All writes cross **`src/lib/db.js`** only. Screens should not call `supabase.rpc` directly — keeps logging, error shape, and patch keys consistent.
+All writes go through `src/lib/db.js` only. Screens should not call `supabase.rpc` directly; that keeps logging, error shape, and patch keys consistent.
 
 See [API reference](/api/) for RPC contracts.

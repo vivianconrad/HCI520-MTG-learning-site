@@ -1,6 +1,6 @@
 # Getting started
 
-Welcome to the HCI520 MTG learning site — a React study instrument for teaching core Magic: The Gathering concepts and measuring pre/post learning gain.
+Welcome to the HCI520 MTG learning site, a React study instrument for teaching core Magic: The Gathering concepts and measuring pre/post learning gain.
 
 This guide goes beyond [AGENTS.md](https://github.com/vivianconrad/HCI520-MTG-learning-site/blob/main/AGENTS.md) with onboarding context for human contributors.
 
@@ -47,7 +47,7 @@ npm run docs:dev
 | Screens (routes) | `src/screens/` | One page per learner step; lazy-loaded in `App.jsx` |
 | Components | `src/components/` | Reusable UI (frames, quizzes, nav) |
 | Session state | `src/store/` | `useSessionStore`, browser persistence |
-| Pure logic | `src/lib/` | DB, scoring, session gates — no JSX |
+| Pure logic | `src/lib/` | DB, scoring, session gates (no JSX) |
 | Static data | `src/data/` | Question bank, answer keys, image maps |
 | Database | `supabase/` | SQL setup, RLS, RPC definitions |
 
@@ -64,17 +64,17 @@ The instrument is linear with server-backed progress. See [Session gating](/arch
 
 ## Key conventions
 
-- **Routing**: `BrowserRouter` basename `/HCI520-MTG-learning-site/` — must match `vite.config.js` `base`.
-- **Supabase writes**: RPC only (`register_participant`, `update_participant`, `get_participant_progress`). Never REST `INSERT`/`PATCH` on `participants` from the client.
-- **Answer keys**: `questionAnswerKeys.js` is loaded only for save/results — not during active tests.
-- **Commits**: Do not commit `.env.local`. Built app output goes to `docs/` on `npm run build` (CI deploys that folder).
+- Routing: `BrowserRouter` basename `/HCI520-MTG-learning-site/` must match `vite.config.js` `base`.
+- Supabase writes: RPC only (`register_participant`, `update_participant`, `get_participant_progress`). Do not REST `INSERT` or `PATCH` on `participants` from the client.
+- Answer keys: `questionAnswerKeys.js` loads only for save and results, not during active tests.
+- Commits: Do not commit `.env.local`. `npm run build` writes app output to `docs/`; CI deploys that folder.
 
 ## Where to read next
 
-- [Development workflow](/guide/development) — day-to-day commands and change patterns
-- [Testing](/guide/testing) — unit, Supabase, E2E, a11y
-- [Architecture overview](/architecture/) — C4 diagrams and data flow
-- [API reference](/api/) — RPC contracts
+- [Development workflow](/guide/development): day-to-day commands and change patterns
+- [Testing](/guide/testing): unit, Supabase, E2E, a11y
+- [Architecture overview](/architecture/): C4 diagrams and data flow
+- [API reference](/api/): RPC contracts
 
 ## Design system
 
@@ -82,6 +82,6 @@ UI tokens and layout patterns: `design-system/MASTER.md`. Page-specific notes: `
 
 ## Getting help
 
-- **Save failures** (“stored in this browser only”): re-run `supabase/setup.sql`; verify `session_secret` migration order in README.
-- **DB security**: `npm run verify:db`
-- **Session stuck / wrong step**: check `src/lib/sessionGate.js` and persisted storage in DevTools → Application → Local Storage.
+- Save failures (“stored in this browser only”): re-run `supabase/setup.sql`; check `session_secret` migration order in README.
+- DB security: `npm run verify:db`
+- Session stuck or wrong step: check `src/lib/sessionGate.js` and persisted storage in DevTools (Application → Local Storage).

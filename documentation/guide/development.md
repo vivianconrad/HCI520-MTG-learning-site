@@ -12,7 +12,7 @@
 | Wiki dev server | `npm run docs:dev` |
 | Wiki production build | `npm run docs:build` |
 
-Prefer **scoped** commands when validating a single change:
+Prefer scoped commands when validating a single change:
 
 ```bash
 npx eslint src/screens/CardAnatomy.jsx
@@ -30,7 +30,7 @@ npx vitest run src/lib/scoring.test.js
 
 ## Saving participant data
 
-Use helpers in `src/lib/db.js` — they all route through `update_participant`:
+Use helpers in `src/lib/db.js`. They all route through `update_participant`:
 
 | Milestone | Function |
 | --------- | -------- |
@@ -45,8 +45,8 @@ Every save needs `sessionId` and `sessionSecret` from the session store.
 
 ## Question bank changes
 
-- **Prompts/options**: `src/data/questionBank.js` (no answer keys in this file).
-- **Keys**: `src/data/questionAnswerKeys.js` — keep in sync when adding or reordering options.
+- Prompts and options: `src/data/questionBank.js` (no answer keys in this file).
+- Keys: `src/data/questionAnswerKeys.js`; keep in sync when adding or reordering options.
 - **Sampling**: `pickQuestions()` draws 2 random items per topic (`LO0`–`LO4`) in `useSessionStore.js`.
 
 Server validation requires exactly **10** questions with `id` and `correctIndex` on registration.

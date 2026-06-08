@@ -1,23 +1,13 @@
-.pretest {
-  min-height: var(--viewport-min-height);
-  background: var(--color-navy);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-
 .pretest__recovery {
   max-width: 680px;
   width: 100%;
-  margin: 0 auto 12px;
+  margin: 0 auto var(--space-md);
 }
 
 /* SessionRecoveryGuide sits on the navy page chrome, not the parchment frame. */
 .pretest .session-recovery-guide {
-  background: rgba(201, 168, 76, 0.12);
-  border-color: rgba(201, 168, 76, 0.45);
+  background: var(--surface-on-navy-bg);
+  border-color: var(--surface-on-navy-border);
 }
 
 .pretest .session-recovery-guide__summary,
@@ -30,21 +20,14 @@
 }
 
 .pretest .session-recovery-guide__body {
-  border-top-color: rgba(201, 168, 76, 0.35);
+  border-top-color: var(--surface-on-navy-divider);
 }
 
 .pretest .session-recovery-guide__list {
   color: rgba(255, 255, 255, 0.88);
 }
 
-.pretest__frame {
-  max-width: 680px;
-  width: 100%;
-  background: var(--color-parchment);
-  border: 1.5px solid var(--color-gold);
-  border-radius: 8px;
-  padding: 48px 40px;
-}
+
 
 .pretest__title {
   font-family: var(--font-display);
@@ -52,17 +35,11 @@
   font-weight: 400;
   color: var(--color-text-dark);
   text-align: center;
-  margin: 0 0 8px;
-  line-height: 1.2;
+  margin: 0 0 var(--space-sm);
+  line-height: var(--leading-tight);
 }
 
-.pretest__breadcrumb {
-  font-family: var(--font-display);
-  font-size: 14px;
-  letter-spacing: 0.08em;
-  margin: 0 0 24px;
-  text-align: center;
-}
+
 
 .pretest__question {
   font-family: var(--font-display);
@@ -70,17 +47,17 @@
   font-weight: 400;
   color: var(--color-text-dark);
   text-align: center;
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-md);
   line-height: 1.3;
 }
 
 .pretest__question-context {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--text-md);
   color: var(--color-gold-on-parchment);
   text-align: center;
-  margin: 0 0 24px;
-  line-height: 1.45;
+  margin: 0 0 var(--space-xl);
+  line-height: var(--leading-snug);
   max-width: 36rem;
   margin-inline: auto;
 }
@@ -92,13 +69,13 @@
   justify-content: center;
   width: 160px;
   height: 224px;
-  margin: 0 auto 24px;
+  margin: 0 auto var(--space-xl);
   border: 1px solid var(--color-gold-muted);
   border-radius: 4px;
   overflow: hidden;
   background: var(--color-parchment-dark);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--color-gold-on-parchment);
 }
 
@@ -158,12 +135,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-sm);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: rgba(255, 255, 255, 0.88);
   text-align: center;
-  margin: 0 auto 16px;
+  margin: 0 auto var(--space-lg);
   max-width: 36rem;
   line-height: 1.4;
 }
@@ -197,21 +174,21 @@
 .pretest__options {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .pretest__option {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   width: 100%;
-  padding: 12px 16px;
+  padding: var(--space-md) var(--space-lg);
   min-height: var(--touch-target-min);
   background: var(--color-parchment);
   border: 1px solid var(--color-gold-muted);
   border-radius: 4px;
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: var(--text-base);
   color: var(--color-text-dark);
   text-align: left;
   cursor: pointer;
@@ -236,73 +213,48 @@
   font-size: 12px;
 }
 
-.pretest__actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 32px;
-}
 
-.pretest__button {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  color: var(--color-text-dark);
-  background: transparent;
-  border: 1.5px solid var(--color-gold);
-  border-radius: 0;
-  padding: 12px 24px;
-  min-height: var(--touch-target-min);
-  cursor: pointer;
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast);
-}
+
+
 
 .pretest__button:hover:not(:disabled) {
   background: var(--color-gold);
   color: var(--color-navy);
 }
 
-.pretest__actions--split {
-  justify-content: space-between;
-}
+
 
 .pretest__actions--empty {
   justify-content: center;
-  gap: 12px;
+  gap: var(--space-md);
   flex-wrap: wrap;
 }
 
-.pretest__button--back {
-  border: 1.5px solid var(--color-gold-muted);
-}
 
-.pretest__button--back:hover:not(:disabled) {
-  border-color: var(--color-gold);
-  background: transparent;
-  color: var(--color-text-dark);
-}
+
+
 
 .pretest__intro-note {
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-sm);
   text-align: center;
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-lg);
   line-height: 1.4;
 }
 
 .pretest__keyboard-hint {
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: var(--text-xs);
   text-align: center;
-  margin: 12px 0 0;
+  margin: var(--space-md) 0 0;
 }
 
 .pretest__touch-hint {
   display: none;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: var(--text-xs);
   text-align: center;
-  margin: 12px 0 0;
+  margin: var(--space-md) 0 0;
   color: var(--color-text-secondary);
 }
 
@@ -324,19 +276,19 @@
 
 .pretest__empty {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: var(--text-base);
   color: var(--color-text-dark);
   text-align: center;
-  margin: 0 0 24px;
-  line-height: 1.5;
+  margin: 0 0 var(--space-xl);
+  line-height: var(--leading-body);
 }
 
 .pretest__save-warning-block {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  margin: 0 auto 16px;
+  gap: var(--space-lg);
+  margin: 0 auto var(--space-lg);
   max-width: 36rem;
 }
 
@@ -346,7 +298,7 @@
   color: var(--color-error);
   text-align: center;
   margin: 0;
-  line-height: 1.45;
+  line-height: var(--leading-snug);
 }
 
 .pretest__save-warning-detail {
@@ -355,9 +307,10 @@
   color: rgba(255, 255, 255, 0.88);
   text-align: center;
   margin: 0;
-  line-height: 1.45;
+  line-height: var(--leading-snug);
 }
 
 .pretest__assessment-note {
   margin-top: 0;
 }
+

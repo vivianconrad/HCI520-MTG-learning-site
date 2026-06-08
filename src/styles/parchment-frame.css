@@ -1,0 +1,167 @@
+/* Shared parchment content frame and typographic rhythm */
+
+.parchment-frame__frame,
+.consent__frame,
+.intro__frame,
+.welcome__frame,
+.lesson-intro__frame,
+.what-is-mtg__frame,
+.pretest__frame,
+.lesson-complete__frame,
+.calculating__frame {
+  max-width: 680px;
+  width: 100%;
+  background: var(--color-parchment);
+  border: 1.5px solid var(--color-gold);
+  border-radius: 8px;
+  padding: var(--space-3xl) 40px;
+}
+
+.parchment-frame__frame--wide,
+.results__frame,
+.card-anatomy__frame,
+.card-types__frame,
+.turn-structure__frame,
+.putting-together__frame {
+  max-width: 860px;
+}
+
+.parchment-frame__breadcrumb,
+.consent__breadcrumb,
+.intro__breadcrumb,
+.welcome__breadcrumb,
+.lesson-intro__breadcrumb,
+.what-is-mtg__breadcrumb,
+.pretest__breadcrumb,
+.lesson-complete__breadcrumb,
+.calculating__breadcrumb,
+.results__breadcrumb,
+.card-anatomy__breadcrumb,
+.card-types__breadcrumb,
+.turn-structure__breadcrumb,
+.putting-together__breadcrumb {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  color: var(--color-gold-on-parchment);
+  letter-spacing: 0.08em;
+  margin: 0 0 var(--space-lg);
+  text-align: center;
+}
+
+.parchment-frame__heading,
+.consent__heading,
+.intro__heading,
+.welcome__heading,
+.lesson-intro__heading,
+.what-is-mtg__heading,
+.lesson-complete__heading,
+.calculating__heading,
+.results__heading,
+.card-anatomy__heading,
+.card-types__heading,
+.turn-structure__heading,
+.putting-together__heading {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 400;
+  color: var(--color-text-dark);
+  text-align: center;
+  margin: 0 0 var(--space-lg);
+  line-height: var(--leading-tight);
+}
+
+.parchment-frame__rule,
+.consent__rule,
+.intro__rule,
+.welcome__rule,
+.lesson-intro__rule,
+.what-is-mtg__rule,
+.pretest__rule,
+.lesson-complete__rule,
+.calculating__rule,
+.results__rule,
+.card-anatomy__rule,
+.card-types__rule,
+.turn-structure__rule,
+.putting-together__rule {
+  width: 60px;
+  height: 1px;
+  background: var(--color-gold);
+  border: none;
+  margin: 0 auto var(--space-xl);
+}
+
+.parchment-frame__paragraph,
+.consent__paragraph,
+.intro__paragraph,
+.welcome__paragraph,
+.lesson-intro__paragraph,
+.what-is-mtg__paragraph,
+.lesson-complete__paragraph,
+.results__paragraph,
+.card-anatomy__paragraph,
+.card-types__paragraph,
+.turn-structure__paragraph,
+.putting-together__paragraph {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-dark);
+  margin: 0;
+  line-height: var(--leading-body);
+  text-align: left;
+}
+
+.parchment-frame__actions,
+.consent__actions,
+.intro__actions,
+.welcome__actions,
+.lesson-intro__actions,
+.what-is-mtg__actions,
+.pretest__actions,
+.lesson-complete__actions,
+.card-anatomy__actions,
+.card-types__actions,
+.turn-structure__actions,
+.putting-together__actions,
+.results__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-2xl);
+}
+
+.parchment-frame__actions--end,
+.intro__actions--end,
+.lesson-intro__actions--end {
+  justify-content: flex-end;
+}
+
+.parchment-frame__actions--split,
+.intro__actions--split,
+.what-is-mtg__actions--split {
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.parchment-frame__muted-hint {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-gold-on-parchment);
+  margin: 0 0 var(--space-md);
+  line-height: var(--leading-snug);
+}
+
+.parchment-frame__purpose-note,
+.intro__purpose-note {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  color: var(--color-text-dark);
+  margin: 0;
+  padding: var(--space-md);
+  background: var(--surface-callout-bg);
+  border: 1px solid var(--surface-callout-border);
+  border-radius: 4px;
+  line-height: var(--leading-snug);
+  text-align: left;
+}

@@ -51,7 +51,7 @@ Match CI locally when touching routing, session flow, or Supabase:
 npm run lint && npm test && npm run build
 ```
 
-Optional full gate before merge:
+Optional full CI check before merge:
 
 ```bash
 npm run test:supabase && npm run test:e2e

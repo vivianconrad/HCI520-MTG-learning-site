@@ -8,33 +8,33 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 12px;
+  gap: var(--space-sm) var(--space-md);
   margin: 0;
 }
 
 .copy-session-id__label {
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--copy-label-color);
 }
 
 .copy-session-id__value {
   font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
-  font-size: 13px;
+  font-size: var(--text-xs);
   color: var(--copy-code-color);
   background: var(--copy-code-bg);
-  padding: 4px 8px;
+  padding: var(--space-xs) var(--space-sm);
   border-radius: 3px;
 }
 
 .copy-session-id__button {
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: var(--text-xs);
   color: var(--copy-btn-color);
   background: transparent;
   border: 1px solid var(--copy-btn-border);
   border-radius: 0;
-  padding: 4px 12px;
+  padding: var(--space-xs) var(--space-md);
   cursor: pointer;
   transition:
     background var(--transition-fast),
@@ -59,7 +59,7 @@
   font-size: 0.9rem;
   color: var(--color-gold-on-parchment);
   margin: 0;
-  line-height: 1.45;
+  line-height: var(--leading-snug);
 }
 
 .copy-session-id__error {
@@ -68,5 +68,5 @@
   font-size: 0.9rem;
   color: var(--color-error);
   margin: 0;
-  line-height: 1.45;
+  line-height: var(--leading-snug);
 }

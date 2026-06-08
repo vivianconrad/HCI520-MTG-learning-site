@@ -3,6 +3,7 @@ import LessonActions from '../components/LessonActions.jsx'
 import PageLayout from '../components/PageLayout.jsx'
 import ProgressDots from '../components/ProgressDots.jsx'
 import { PROGRESS } from '../components/progressConstants.js'
+import CuriosityNote from '../components/CuriosityNote.jsx'
 import GlossaryText from '../components/GlossaryText.jsx'
 import useScreenTime from '../hooks/useScreenTime.js'
 import { getCuriosityWhatIsMtgNote } from '../lib/learnerChoice.js'
@@ -75,11 +76,7 @@ export default function WhatIsMtg({ session }) {
         <h1 className="what-is-mtg__heading">What Is Magic?</h1>
         <hr className="what-is-mtg__rule" aria-hidden="true" />
 
-        {curiosityNote ? (
-          <p className="what-is-mtg__curiosity-note" role="status">
-            {curiosityNote}
-          </p>
-        ) : null}
+        <CuriosityNote text={curiosityNote} />
 
         <div className="what-is-mtg__body">
           <p className="what-is-mtg__pitch">

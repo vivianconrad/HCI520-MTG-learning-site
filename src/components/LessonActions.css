@@ -2,10 +2,10 @@
   margin: 0;
   padding: 0.65rem 0.85rem;
   font-size: 0.9rem;
-  line-height: 1.45;
+  line-height: var(--leading-snug);
   color: var(--color-text-secondary);
-  background: rgba(139, 105, 20, 0.08);
-  border: 1px solid rgba(139, 105, 20, 0.22);
+  background: var(--surface-hint-warm-bg);
+  border: 1px solid var(--surface-hint-warm-border);
   border-radius: 4px;
   cursor: pointer;
   width: 100%;
@@ -25,7 +25,7 @@ button.lesson-nav__gate-hint {
 
 .lesson-nav__gate-hint--attention {
   border-color: var(--color-gold);
-  background: rgb(201 168 76 / 16%);
+  background: var(--surface-hint-strong-bg);
   animation: lesson-gate-attention 0.45s ease-in-out 2;
 }
 
@@ -54,10 +54,10 @@ button.lesson-nav__gate-hint {
   margin: 0;
   padding: 0.65rem 0.85rem;
   font-size: 0.9rem;
-  line-height: 1.45;
+  line-height: var(--leading-snug);
   color: var(--color-text-dark);
-  background: rgba(201, 168, 76, 0.12);
-  border: 1px solid rgba(201, 168, 76, 0.35);
+  background: var(--surface-hint-bg);
+  border: 1px solid var(--surface-hint-border);
   border-radius: 4px;
 }
 
@@ -80,14 +80,14 @@ button.lesson-nav__gate-hint {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: var(--space-xs);
   text-align: left;
 }
 
 [class*='__button-label'] {
   font-family: var(--font-display);
   font-size: 1rem;
-  line-height: 1.2;
+  line-height: var(--leading-tight);
 }
 
 [class*='__button-hint'] {

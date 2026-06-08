@@ -40,7 +40,7 @@ Question pools: `src/data/questionBank.js`. Answer keys are not shipped during a
 
 ### Per-topic score
 
-For each `LO*`, count correct answers among the two questions in `selected_questions` (0–2 pre, 0–2 post). Recompute via `calculateScores()` in `src/lib/scoring.js` — not stored as a dedicated DB column.
+For each `LO*`, count correct answers among the two questions in `selected_questions` (0–2 pre, 0–2 post). Recompute via `calculateScores()` in `src/lib/scoring.js`; this is not stored as a dedicated DB column.
 
 ### Incomplete sessions
 
@@ -48,19 +48,19 @@ Filter to `completed_at IS NOT NULL` for finished participants.
 
 ## Export workflows
 
-**Recommended:** Supabase **Table Editor** → `participants` → export CSV (deny-select RLS blocks browser cohort reads by default).
+Use the Supabase Table Editor (`participants`) and export CSV. Deny-select RLS blocks browser cohort reads by default.
 
-**Instructor dashboard CSV** (`sessionsToCsv`) works only if anon SELECT is permitted — not the production posture.
+The instructor dashboard CSV (`sessionsToCsv`) works only if anon SELECT is allowed, which is not the production setup.
 
-**Participant JSON** on Results is for self-recovery, not cohort analysis.
+Participant JSON on Results is for self-recovery, not cohort analysis.
 
 ## Reporting caveats
 
-1. Random item sampling per topic — totals are always /10; topic items differ across participants.
-2. Same question set pre and post — paired design; not independent samples.
+1. Random item sampling per topic: totals are always /10; topic items differ across participants.
+2. Same question set pre and post (paired design, not independent samples).
 3. LO1 card-type items are taught in Lesson 2 but tagged LO1 in the bank.
 4. Trust server `pretest_score` / `posttest_score` over manual counts.
-5. No PII — `session_id` is anonymous.
+5. No PII; `session_id` is anonymous.
 6. `screens_time` is exploratory; pauses and tab switches add noise.
 
 ## Code references
@@ -72,4 +72,4 @@ Filter to `completed_at IS NOT NULL` for finished participants.
 | Question draw | `src/store/useSessionStore.js` → `pickQuestions()` |
 | Server validation | `supabase/setup.sql` |
 
-See also [API validation](/api/validation) and [Architecture — session gating](/architecture/session-flow).
+See also [API validation](/api/validation) and [session gating](/architecture/session-flow).

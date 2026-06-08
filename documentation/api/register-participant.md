@@ -41,7 +41,7 @@ Each element must include:
 }
 ```
 
-The client adds `correctIndex` server-side via `attachAnswerKeys()` in `src/lib/questionKeys.js` before RPC — keys are not shown during the test UI.
+The client adds `correctIndex` via `attachAnswerKeys()` in `src/lib/questionKeys.js` before the RPC. Keys are not shown during the test UI.
 
 ## Returns
 

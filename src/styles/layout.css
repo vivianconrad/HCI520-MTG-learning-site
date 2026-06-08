@@ -1,0 +1,26 @@
+/* Centered learner screens — navy backdrop with parchment content card */
+.screen-shell,
+.consent,
+.intro,
+.welcome,
+.lesson-intro,
+.what-is-mtg,
+.lesson-complete,
+.calculating,
+.results,
+.card-anatomy,
+.card-types,
+.turn-structure,
+.putting-together {
+  min-height: var(--viewport-min-height);
+  background: var(--color-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+}
+
+.screen-shell--stacked,
+.pretest {
+  flex-direction: column;
+}

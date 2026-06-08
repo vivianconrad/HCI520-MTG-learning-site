@@ -1,17 +1,17 @@
 # Privacy notice
 
-Participant-facing privacy copy is maintained in **`public/privacy.md`**. It is copied to the deployed site at:
+Participant-facing privacy copy lives in `public/privacy.md`. It is copied to the deployed site at:
 
-**[/HCI520-MTG-learning-site/privacy.md](https://vivianconrad.github.io/HCI520-MTG-learning-site/privacy.md)**
+[/HCI520-MTG-learning-site/privacy.md](https://vivianconrad.github.io/HCI520-MTG-learning-site/privacy.md)
 
 The consent screen links to that notice. Researchers should treat `public/privacy.md` as the canonical participant text; edit that file when retention or collection language changes.
 
 ## Summary for contributors
 
-- **No PII** in the application database (anonymous `session_id` only).
-- Data stored in **Supabase** (`participants` table) with deny-select RLS for anon.
-- **`session_secret`** is hashed at rest; never export or log plaintext secrets.
-- Retention configured in `study_privacy_config` — see `supabase/setup.sql`.
+- No PII in the application database (anonymous `session_id` only).
+- Data is stored in Supabase (`participants` table) with deny-select RLS for anon.
+- `session_secret` is hashed at rest; do not export or log plaintext secrets.
+- Retention is configured in `study_privacy_config`; see `supabase/setup.sql`.
 - Cohort export for analysis: Supabase Table Editor (service role), not the public browser.
 
 ## Researcher erasure and retention

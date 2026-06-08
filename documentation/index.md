@@ -18,11 +18,11 @@ hero:
 
 features:
   - title: Guided study flow
-    details: Fifteen gated learner steps from consent through lessons, pre/post tests, and results — with session persistence in the browser and Supabase.
-  - title: Security-first data layer
-    details: Deny-select RLS, RPC-only writes, server-side score validation, and hashed session secrets. No REST PATCH from the client.
-  - title: Research-ready exports
-    details: Evaluation metrics, cohort CSV patterns, and privacy/retention runbooks for instructors analyzing study data in Supabase.
+    details: Fifteen gated learner steps from consent through lessons, pre/post tests, and results. Session state persists in the browser and Supabase.
+  - title: Data layer
+    details: Deny-select RLS, RPC-only writes, server-side score validation, and hashed session secrets. The client does not REST PATCH participant rows.
+  - title: Study exports
+    details: Evaluation metrics, cohort CSV patterns, and privacy/retention notes for instructors who export from Supabase.
 ---
 
 ## Quick links
@@ -39,10 +39,10 @@ features:
 
 | Path | Role |
 | ---- | ---- |
-| `documentation/` | **This wiki** (VitePress source) |
+| `documentation/` | This wiki (VitePress source) |
 | `README.md` | Quick setup and deploy |
 | `AGENTS.md` | AI agent conventions |
 | `design-system/MASTER.md` | UI tokens and layout patterns |
 | `supabase/setup.sql` | Database schema, RLS, RPCs |
 
-Built wiki is published at **`/HCI520-MTG-learning-site/wiki/`** on GitHub Pages after each deploy to `main`.
+After each deploy to `main`, the built wiki is at `/HCI520-MTG-learning-site/wiki/` on GitHub Pages.

@@ -1,15 +1,15 @@
 .card-anatomy-mobile-hint {
   display: none;
   align-items: flex-start;
-  gap: 8px;
-  margin: 0 0 16px;
-  padding: 10px 10px 10px 12px;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-lg);
+  padding: 10px 10px 10px var(--space-md);
   font-family: var(--font-body);
   font-size: 0.8125rem;
   line-height: 1.4;
   color: var(--color-ink-muted);
-  background: rgba(245, 230, 200, 0.96);
-  border: 1px solid rgba(201, 168, 76, 0.55);
+  background: color-mix(in oklch, var(--color-parchment) 96%, transparent);
+  border: 1px solid var(--surface-hint-strong-border);
   border-radius: 6px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
@@ -34,13 +34,13 @@
   line-height: 1;
   color: var(--color-text-dark);
   background: transparent;
-  border: 1px solid rgba(201, 168, 76, 0.45);
+  border: 1px solid var(--surface-hint-border);
   border-radius: 4px;
   cursor: pointer;
 }
 
 .card-anatomy-mobile-hint__dismiss:hover {
-  background: rgba(201, 168, 76, 0.2);
+  background: var(--surface-hint-bg);
 }
 
 .card-anatomy-mobile-hint__dismiss:focus-visible {

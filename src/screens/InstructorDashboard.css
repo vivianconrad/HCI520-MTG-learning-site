@@ -23,7 +23,7 @@
 
 .instructor__intro {
   margin: 0 0 1rem;
-  line-height: 1.5;
+  line-height: var(--leading-body);
   opacity: 0.9;
 }
 
@@ -38,7 +38,7 @@
 .instructor__steps {
   margin: 0;
   padding-left: 1.25rem;
-  line-height: 1.55;
+  line-height: var(--leading-body);
   opacity: 0.92;
 }
 

@@ -53,7 +53,7 @@ Allows refresh recovery without re-drawn questions. `get_participant_progress` R
 | -------- | ------- |
 | `participants` | One row per anonymous session |
 | `study_privacy_config` | Retention settings (not client-readable) |
-| Triggers | `validate_participant_row` — shape, scores, progress ordering |
+| Triggers | `validate_participant_row` (shape, scores, progress ordering) |
 | Private functions | `hash_session_secret`, `purge_expired_participants` |
 
 ## Documentation wiki
@@ -87,4 +87,4 @@ flowchart LR
   PG --> T
 ```
 
-**Not used:** `supabase.from('participants').insert()`, `.update()`, `.select()` for participant cohort reads in production.
+Not used in production: `supabase.from('participants').insert()`, `.update()`, or `.select()` for cohort reads.
