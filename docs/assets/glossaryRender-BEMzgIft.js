@@ -1,0 +1,1 @@
+import{t as e}from"./vendor-react-CEUxNnqb.js";import{t}from"./GlossaryText-CgQtIYXc.js";var n=e();function r(e,r,i){return typeof e==`string`?(0,n.jsx)(`p`,{className:i,children:(0,n.jsx)(t,{text:e})},r):null}function i(e){return(0,n.jsx)(t,{text:e})}export{r as n,i as t};
