@@ -163,13 +163,14 @@
 
 .lesson-intro__curiosity-ack {
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--color-text-dark);
-  margin: 0 0 16px;
-  padding: 10px 12px;
-  background: rgb(139 105 20 / 8%);
-  border-left: 3px solid var(--color-gold);
-  line-height: 1.45;
+  margin: 0 0 var(--space-lg);
+  padding: var(--space-md) var(--space-md);
+  background: var(--surface-callout-bg);
+  border: 1px solid var(--surface-callout-border);
+  border-radius: 4px;
+  line-height: var(--leading-snug);
 }
 
 .lesson-intro__closing {

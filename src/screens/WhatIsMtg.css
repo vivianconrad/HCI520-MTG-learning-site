@@ -114,13 +114,14 @@
 
 .what-is-mtg__curiosity-note {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--text-md);
   color: var(--color-text-dark);
-  margin: 0 0 16px;
-  padding: 12px 14px;
-  background: rgb(139 105 20 / 8%);
-  border-left: 3px solid var(--color-gold);
-  line-height: 1.45;
+  margin: 0 0 var(--space-lg);
+  padding: var(--space-md) var(--space-md);
+  background: var(--surface-callout-bg);
+  border: 1px solid var(--surface-callout-border);
+  border-radius: 4px;
+  line-height: var(--leading-snug);
 }
 
 .what-is-mtg__figure {
@@ -139,7 +140,7 @@
 .what-is-mtg__figure-caption {
   font-family: var(--font-body);
   font-size: 13px;
-  color: var(--color-text-muted, #5a5348);
+  color: var(--color-text-muted);
   text-align: center;
   margin: 8px auto 0;
   max-width: 520px;
@@ -171,9 +172,10 @@
 
 .what-is-mtg__zone {
   margin: 0;
-  padding: 12px 14px;
-  border-left: 3px solid var(--color-gold-muted);
-  background: rgb(255 255 255 / 35%);
+  padding: var(--space-md) var(--space-md);
+  border: 1px solid var(--surface-zone-border);
+  border-radius: 4px;
+  background: var(--surface-zone-bg);
 }
 
 .what-is-mtg__zone-name {

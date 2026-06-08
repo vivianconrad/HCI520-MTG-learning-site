@@ -21,7 +21,7 @@ cp .env.example .env.local
 
 Edit `.env.local`:
 
-```env
+```dotenv
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
 ```

@@ -14,6 +14,10 @@ body {
   padding: 0;
   background: var(--color-navy);
   font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
 }
 
 .route-fallback {

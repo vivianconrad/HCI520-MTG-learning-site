@@ -91,7 +91,7 @@ button.lesson-nav__gate-hint {
 }
 
 [class*='__button-hint'] {
-  font-family: var(--font-body, 'Inter', sans-serif);
+  font-family: var(--font-body);
   font-size: 0.8rem;
   line-height: 1.3;
   font-weight: 400;

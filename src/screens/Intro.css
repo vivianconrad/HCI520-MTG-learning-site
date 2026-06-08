@@ -61,13 +61,14 @@
 
 .intro__purpose-note {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--text-md);
   color: var(--color-text-dark);
   margin: 0;
-  padding: 12px 14px;
-  background: rgb(139 105 20 / 8%);
-  border-left: 3px solid var(--color-gold);
-  line-height: 1.45;
+  padding: var(--space-md) var(--space-md);
+  background: var(--surface-callout-bg);
+  border: 1px solid var(--surface-callout-border);
+  border-radius: 4px;
+  line-height: var(--leading-snug);
   text-align: left;
 }
 

@@ -1,21 +1,60 @@
 :root {
-  --color-navy: #1a1a2e;
-  --color-gold: #c9a84c;
-  --color-gold-muted: #a89060;
-  --color-gold-on-parchment: #645319;
-  --color-text-secondary: #524010;
-  --color-disabled-text: #4a4540;
+  /* Color — OKLCH, navy hue family with warm gold accents */
+  --color-navy: oklch(0.22 0.035 264);
+  --color-navy-deep: oklch(0.18 0.03 264);
+  --color-gold: oklch(0.73 0.11 85);
+  --color-gold-muted: oklch(0.64 0.08 85);
+  --color-gold-on-parchment: oklch(0.42 0.09 85);
+  --color-parchment: oklch(0.92 0.04 85);
+  --color-parchment-dark: oklch(0.87 0.06 85);
+  --color-text-dark: oklch(0.22 0.035 264);
+  --color-text-light: oklch(0.98 0.01 85);
+  --color-text-secondary: oklch(0.38 0.07 85);
+  --color-text-muted: oklch(0.42 0.02 85);
+  --color-ink-muted: oklch(0.42 0.02 85);
+  --color-disabled-text: oklch(0.42 0.02 85);
+  --color-error: oklch(0.38 0.12 25);
+  --color-success: oklch(0.42 0.1 145);
+  --color-danger: oklch(0.4 0.11 25);
+
+  --surface-callout-bg: color-mix(in oklch, var(--color-gold) 12%, var(--color-parchment));
+  --surface-callout-border: color-mix(in oklch, var(--color-gold) 38%, transparent);
+  --surface-zone-bg: color-mix(in oklch, var(--color-parchment) 55%, white);
+  --surface-zone-border: color-mix(in oklch, var(--color-gold-muted) 55%, transparent);
+
+  /* Typography */
+  --font-display: 'Cinzel', 'Palatino Linotype', serif;
+  --font-body: 'Literata', 'Georgia', serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.563rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: 2.441rem;
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-body: 1.55;
+  --leading-relaxed: 1.65;
+
+  /* Spacing — 4pt scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+  --space-4xl: 64px;
+  --space-5xl: 96px;
+
+  /* Layout & motion */
   --touch-target-min: 44px;
   --viewport-min-height: 100dvh;
-  --color-parchment: #f5e6c8;
-  --color-parchment-dark: #e8d5a3;
-  --color-text-dark: #1a1a2e;
-  --color-text-light: #ffffff;
-  --color-ink-muted: #4a4540;
-  --color-error: #8b1a1a;
-  --color-success: #2d5a27;
-  --color-danger: #8b2e2e;
-  --font-display: 'Cinzel', 'Palatino Linotype', serif;
-  --font-body: 'Inter', sans-serif;
-  --transition-fast: 200ms ease;
+  --measure-prose: 65ch;
+  --transition-fast: 200ms cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }

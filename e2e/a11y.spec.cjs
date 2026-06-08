@@ -57,7 +57,7 @@ test.describe('accessibility — learner affordances', () => {
     await expectVisibleCardAnatomyMissingHighlight(page)
   })
 
-  test('progress dots mark the current lesson step', async ({ page }) => {
+  test('progress bar marks the current study phase', async ({ page }) => {
     await seedSession(page, baseSession({ pretestCompleted: true }))
     await page.goto('lesson/2')
     await expect(page.getByRole('heading', { name: /seven card types/i })).toBeVisible()
@@ -65,8 +65,8 @@ test.describe('accessibility — learner affordances', () => {
     const progressNav = page.getByRole('navigation', { name: /lesson progress/i })
     await expect(progressNav).toBeVisible()
 
-    const currentStep = progressNav.getByRole('listitem', { name: /current step/i })
-    await expect(currentStep).toHaveAttribute('aria-current', 'step')
+    const currentPhase = progressNav.getByRole('listitem', { name: /current phase/i })
+    await expect(currentPhase).toHaveAttribute('aria-current', 'step')
   })
 
   test('pre-test question uses a radiogroup with keyboard-selectable options', async ({ page }) => {
