@@ -37,7 +37,9 @@ test.describe('explore gate discoverability', () => {
   test('opens inline explanation from the parts list on mobile', async ({ page, isMobile }) => {
     test.skip(!isMobile, 'Parts list accordion is mobile-specific')
 
-    const firstPart = page.getByRole('button', { name: /^name, part 1 of 6$/i })
+    const firstPart = page
+      .getByRole('navigation', { name: /card parts list/i })
+      .getByRole('button', { name: /^name, part 1 of 6$/i })
     await firstPart.click()
     await expect(page.locator('#card-anatomy-detail-name')).toBeVisible()
     await expect(page.locator('#card-anatomy-detail-name')).toContainText(/card's name/i)

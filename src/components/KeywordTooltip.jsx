@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import './KeywordTooltip.css'
 
-const VIEWPORT_MARGIN = 16
+const VIEWPORT_MARGIN = 15
 const POPUP_GAP = 10
 
 function prefersHover() {
@@ -49,10 +49,25 @@ export default function KeywordTooltip({ term, definition, children }) {
         Math.min(top, window.innerHeight - popupHeight - VIEWPORT_MARGIN)
       )
 
+      const rendered = popup.getBoundingClientRect()
+      if (rendered.width > 0) {
+        if (rendered.right > window.innerWidth - VIEWPORT_MARGIN) {
+          left -= rendered.right - (window.innerWidth - VIEWPORT_MARGIN)
+        }
+        if (rendered.left < VIEWPORT_MARGIN) {
+          left = VIEWPORT_MARGIN
+        }
+        if (rendered.bottom > window.innerHeight - VIEWPORT_MARGIN) {
+          top -= rendered.bottom - (window.innerHeight - VIEWPORT_MARGIN)
+        }
+        if (rendered.top < VIEWPORT_MARGIN) {
+          top = VIEWPORT_MARGIN
+        }
+      }
+
       setPopupStyle({
         top: `${Math.round(top)}px`,
         left: `${Math.round(left)}px`,
-        width: `${Math.round(popupWidth)}px`,
       })
     }
 

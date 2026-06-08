@@ -1,0 +1,80 @@
+# Test info
+
+- Name: viewport smoke >> card types overlay stays within the viewport on mobile
+- Location: C:\Users\ConradV\source\repos\HCI520-MTG-learning-site\e2e\viewport-smoke.spec.cjs:27:3
+
+# Error details
+
+```
+Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/HCI520-MTG-learning-site/lesson/2
+Call log:
+  - navigating to "http://127.0.0.1:4173/HCI520-MTG-learning-site/lesson/2", waiting until "load"
+
+    at C:\Users\ConradV\source\repos\HCI520-MTG-learning-site\e2e\viewport-smoke.spec.cjs:31:16
+```
+
+# Test source
+
+```ts
+   1 | const { test, expect } = require('@playwright/test')
+   2 | const { assertNoHorizontalOverflow, seedSession } = require('./helpers/session.cjs')
+   3 |
+   4 | const LESSON_ROUTES = [
+   5 |   { path: 'lesson/1', heading: /how to read a card/i },
+   6 |   { path: 'lesson/2', heading: /seven card types/i },
+   7 |   { path: 'lesson/3', heading: /how a turn works/i },
+   8 | ]
+   9 |
+  10 | test.describe('viewport smoke', () => {
+  11 |   test('consent page loads without horizontal overflow', async ({ page }) => {
+  12 |     await page.goto('./')
+  13 |     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+  14 |     await assertNoHorizontalOverflow(page)
+  15 |   })
+  16 |
+  17 |   test('interactive lessons load and fit the viewport width', async ({ page }) => {
+  18 |     await seedSession(page)
+  19 |
+  20 |     for (const route of LESSON_ROUTES) {
+  21 |       await page.goto(route.path)
+  22 |       await expect(page.getByRole('heading', { name: route.heading })).toBeVisible()
+  23 |       await assertNoHorizontalOverflow(page)
+  24 |     }
+  25 |   })
+  26 |
+  27 |   test('card types overlay stays within the viewport on mobile', async ({ page, isMobile }) => {
+  28 |     test.skip(!isMobile, 'Overlay layout check is mobile-specific')
+  29 |
+  30 |     await seedSession(page)
+> 31 |     await page.goto('lesson/2')
+     |                ^ Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:4173/HCI520-MTG-learning-site/lesson/2
+  32 |     await page.getByRole('button', { name: /see creature cards and examples/i }).click()
+  33 |     await expect(page.getByRole('dialog')).toBeVisible()
+  34 |
+  35 |     const dialogBox = await page.getByRole('dialog').boundingBox()
+  36 |     const viewport = page.viewportSize()
+  37 |     expect(dialogBox).not.toBeNull()
+  38 |     expect(dialogBox.x).toBeGreaterThanOrEqual(-1)
+  39 |     expect(dialogBox.y).toBeGreaterThanOrEqual(-1)
+  40 |     expect(dialogBox.x + dialogBox.width).toBeLessThanOrEqual(viewport.width + 1)
+  41 |     expect(dialogBox.y + dialogBox.height).toBeLessThanOrEqual(viewport.height + 1)
+  42 |
+  43 |     await assertNoHorizontalOverflow(page)
+  44 |   })
+  45 |
+  46 |   test('keyword guide trigger meets minimum touch target on mobile', async ({ page, isMobile }) => {
+  47 |     test.skip(!isMobile, 'Touch target check is mobile-specific')
+  48 |
+  49 |     await seedSession(page)
+  50 |     await page.goto('lesson/1')
+  51 |
+  52 |     const trigger = page.getByRole('button', { name: /keyword guide/i })
+  53 |     await expect(trigger).toBeVisible()
+  54 |
+  55 |     const box = await trigger.boundingBox()
+  56 |     expect(box).not.toBeNull()
+  57 |     expect(box.height).toBeGreaterThanOrEqual(44)
+  58 |   })
+  59 | })
+  60 |
+```
