@@ -3,6 +3,10 @@ const { defineConfig, devices } = require('@playwright/test')
 const previewHost = process.env.PW_PREVIEW_HOST ?? '127.0.0.1'
 const previewPort = process.env.PW_PREVIEW_PORT ?? '4173'
 const basePath = '/HCI520-MTG-learning-site'
+const previewOnly = process.env.PW_PREVIEW_ONLY === '1'
+const webServerCommand = previewOnly
+  ? `npm run preview -- --host ${previewHost} --port ${previewPort}`
+  : `npm run build && npm run preview -- --host ${previewHost} --port ${previewPort}`
 
 module.exports = defineConfig({
   testDir: 'e2e',
@@ -15,7 +19,7 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: `npm run build && npm run preview -- --host ${previewHost} --port ${previewPort}`,
+    command: webServerCommand,
     url: `http://${previewHost}:${previewPort}${basePath}/`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

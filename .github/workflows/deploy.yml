@@ -62,8 +62,8 @@ jobs:
         run: npm run test:e2e
         env:
           CI: true
-          VITE_SUPABASE_URL: https://example.supabase.co
-          VITE_SUPABASE_ANON_KEY: e2e-dummy-anon-key
+          # Preview the production build above; do not rebuild (dummy VITE_* would overwrite docs/).
+          PW_PREVIEW_ONLY: '1'
 
       - uses: actions/upload-pages-artifact@v3
         with:
