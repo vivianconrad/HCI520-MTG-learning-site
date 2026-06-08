@@ -5,6 +5,17 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+.turn-structure main {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .turn-structure__frame {

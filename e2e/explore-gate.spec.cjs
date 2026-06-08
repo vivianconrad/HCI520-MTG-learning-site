@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test')
-const { seedSession } = require('./helpers/session.cjs')
+const { seedSession, expectVisibleCardAnatomyMissingHighlight } = require('./helpers/session.cjs')
 
 const CARD_ANATOMY_GATE = /explore all six card parts before continuing/i
 
@@ -31,9 +31,7 @@ test.describe('explore gate discoverability', () => {
   test('scrolls to a missing marker when the gate hint is activated', async ({ page }) => {
     const gateHint = page.locator('.lesson-nav__gate-hint')
     await gateHint.click()
-    await expect(
-      page.locator('.card-anatomy__marker--missing, .card-anatomy__parts-button--missing').first()
-    ).toBeVisible()
+    await expectVisibleCardAnatomyMissingHighlight(page)
   })
 
   test('opens inline explanation from the parts list on mobile', async ({ page, isMobile }) => {
@@ -45,12 +43,14 @@ test.describe('explore gate discoverability', () => {
     await expect(page.locator('#card-anatomy-detail-name')).toContainText(/card's name/i)
   })
 
-  test('shows a ready message after all markers are explored', async ({ page }) => {
-    const markers = page.locator('.card-anatomy__callout-marker')
-    await expect(markers).toHaveCount(6)
+  test('shows a ready message after all markers are explored', async ({ page, isMobile }) => {
+    const exploreTargets = isMobile
+      ? page.locator('.card-anatomy__parts-button')
+      : page.locator('.card-anatomy__callout-marker')
+    await expect(exploreTargets).toHaveCount(6)
 
     for (let index = 0; index < 6; index += 1) {
-      await markers.nth(index).click()
+      await exploreTargets.nth(index).click()
     }
 
     await expect(page.getByText('All six parts explored.')).toBeVisible()

@@ -60,7 +60,7 @@ const CALLOUTS = [
     label: 'Toughness',
     number: 6,
     text: "The second number in the bottom right corner is the creature's toughness. Toughness is how much damage a creature can take before it dies. Shadowmage Infiltrator has a toughness of 3, meaning it can survive up to 3 damage. At the end of each turn, damage on creatures is removed, so a creature that takes 2 damage out of 3 toughness survives the turn and heals back to full.",
-    position: { bottom: '8.5%', left: '101%' },
+    position: { bottom: '8.5%', left: '88%' },
     tipDir: 'above',
   },
 ]

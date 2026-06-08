@@ -27,13 +27,13 @@ export default function RequireSessionStep({
     )
   }
 
+  if (redirectIfPretestComplete && session.pretestCompleted) {
+    return <Navigate to="/pretest-complete" replace />
+  }
+
   const progressForward = getLessonProgressForwardPath(pathname, session)
   if (progressForward) {
     return <Navigate to={progressForward} replace />
-  }
-
-  if (redirectIfPretestComplete && session.pretestCompleted) {
-    return <Navigate to="/pretest-complete" replace />
   }
 
   return children

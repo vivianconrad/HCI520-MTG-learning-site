@@ -439,6 +439,14 @@
 }
 
 @media (max-width: 640px) {
+  .card-anatomy__diagram {
+    overflow-x: clip;
+  }
+
+  .card-anatomy__marker {
+    display: none;
+  }
+
   .card-anatomy__explore-lede {
     display: none;
   }

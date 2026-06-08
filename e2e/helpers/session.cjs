@@ -33,8 +33,21 @@ async function assertNoHorizontalOverflow(page) {
   expect(overflow).toBe(false)
 }
 
+async function expectVisibleCardAnatomyMissingHighlight(page) {
+  const partsMissing = page.locator('.card-anatomy__parts-button--missing')
+  const markerMissing = page.locator('.card-anatomy__marker--missing')
+
+  if ((await partsMissing.count()) > 0 && (await partsMissing.first().isVisible())) {
+    await expect(partsMissing.first()).toBeVisible()
+    return
+  }
+
+  await expect(markerMissing.first()).toBeVisible()
+}
+
 module.exports = {
   LESSON_READY_SESSION,
   seedSession,
   assertNoHorizontalOverflow,
+  expectVisibleCardAnatomyMissingHighlight,
 }

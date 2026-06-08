@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test')
 const { expectNoAxeViolations } = require('./helpers/axe.cjs')
 const { A11Y_PAGE_CHECKS, baseSession } = require('./helpers/a11ySession.cjs')
-const { seedSession } = require('./helpers/session.cjs')
+const { seedSession, expectVisibleCardAnatomyMissingHighlight } = require('./helpers/session.cjs')
 
 async function gotoCheckedPage(page, pageCheck) {
   await seedSession(page, pageCheck.session)
@@ -50,11 +50,11 @@ test.describe('accessibility — learner affordances', () => {
     await expect(page.getByRole('heading', { name: /how to read a card/i })).toBeVisible()
 
     const gateHint = page.getByRole('button', {
-      name: /explore all six numbered markers on the card before continuing/i,
+      name: /explore all six card parts before continuing/i,
     })
     await expect(gateHint).toBeVisible()
     await gateHint.click()
-    await expect(page.locator('.card-anatomy__marker--missing').first()).toBeVisible()
+    await expectVisibleCardAnatomyMissingHighlight(page)
   })
 
   test('progress dots mark the current lesson step', async ({ page }) => {

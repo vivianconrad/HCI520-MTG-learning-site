@@ -20,18 +20,17 @@
   min-width: 3.5rem;
   padding: 4px 6px;
   border-radius: 3px;
-  border: 1px solid var(--color-gold-muted);
-  opacity: 0.55;
+  border: 1px solid rgb(168 144 96 / 45%);
+  background: transparent;
   text-align: center;
 }
 
 .progress-dots__phase--complete {
-  opacity: 0.85;
+  border-color: var(--color-gold-muted);
   background: rgb(201 168 76 / 12%);
 }
 
 .progress-dots__phase--active {
-  opacity: 1;
   border-color: var(--color-gold);
   background: rgb(201 168 76 / 18%);
 }

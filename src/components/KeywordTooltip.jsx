@@ -56,12 +56,19 @@ export default function KeywordTooltip({ term, definition, children }) {
       })
     }
 
+    const popup = popupRef.current
     updatePosition()
     const frame = requestAnimationFrame(updatePosition)
+    const resizeObserver =
+      popup && typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => updatePosition())
+        : null
+    resizeObserver?.observe(popup)
     window.addEventListener('resize', updatePosition)
     window.addEventListener('scroll', updatePosition, true)
     return () => {
       cancelAnimationFrame(frame)
+      resizeObserver?.disconnect()
       window.removeEventListener('resize', updatePosition)
       window.removeEventListener('scroll', updatePosition, true)
     }
