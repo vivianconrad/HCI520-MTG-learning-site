@@ -11,8 +11,6 @@ import useScreenTime from '../hooks/useScreenTime.js'
 import { savePosttest, saveScreenTime } from '../lib/db.js'
 import { describeSaveFailure, describeSessionSetupError, SESSION_NOT_READY_MESSAGE } from '../lib/sessionErrors.js'
 import useParticipantBootstrap from '../hooks/useParticipantBootstrap.js'
-import { useConfirm } from '../context/useConfirm.js'
-import { POSTTEST_LEAVE_CONFIRM_MESSAGE, POSTTEST_LEAVE_CONFIRM_TITLE } from '../lib/lessonNav.js'
 import { calculateTestScoreAsync } from '../lib/testScore.js'
 import useRedirectIfTestComplete, {
   getRedirectStatusMessage,
@@ -20,7 +18,6 @@ import useRedirectIfTestComplete, {
 
 export default function PostTest({ session }) {
   const navigate = useNavigate()
-  const confirm = useConfirm()
   const [saveWarning, setSaveWarning] = useState(null)
   const [saving, setSaving] = useState(false)
   const {
@@ -146,22 +143,6 @@ export default function PostTest({ session }) {
             >
               {questionsLoading ? 'Loading questions…' : 'Try loading questions again'}
             </button>
-            <button
-              type="button"
-              className="pretest__button pretest__button--back"
-              onClick={async () => {
-                if (
-                  !(await confirm(POSTTEST_LEAVE_CONFIRM_MESSAGE, {
-                    title: POSTTEST_LEAVE_CONFIRM_TITLE,
-                  }))
-                ) {
-                  return
-                }
-                navigate('/welcome')
-              }}
-            >
-              Go to Welcome
-            </button>
           </div>
         </div>
       </PageLayout>
@@ -215,17 +196,6 @@ export default function PostTest({ session }) {
         saving={saving}
         lastButtonLabel="Submit post-test"
         introNote="These are the same questions as the pre-test. Answer from what you learned in the lessons."
-        leaveLabel="Exit post-test"
-        onLeave={async () => {
-          if (
-            !(await confirm(POSTTEST_LEAVE_CONFIRM_MESSAGE, {
-              title: POSTTEST_LEAVE_CONFIRM_TITLE,
-            }))
-          ) {
-            return
-          }
-          navigate('/posttest-prep')
-        }}
       />
     </PageLayout>
   )

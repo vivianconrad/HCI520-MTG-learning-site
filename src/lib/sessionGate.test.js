@@ -5,6 +5,7 @@ import {
   getRedirectInfo,
   getRedirectPath,
   getGateNotice,
+  hasPosttestInProgress,
 } from './sessionGate.js'
 
 const baseSession = {
@@ -215,5 +216,38 @@ describe('getLessonProgressForwardPath', () => {
         posttestCompleted: true,
       })
     ).toBeNull()
+  })
+
+  it('forwards to the post-test when it is already in progress', () => {
+    const afterLessons = {
+      ...baseSession,
+      pretestCompleted: true,
+      lessonsCompleted: true,
+    }
+
+    expect(
+      getLessonProgressForwardPath('/posttest-prep', {
+        ...afterLessons,
+        screenTimes: { PostTest: 1000 },
+      })
+    ).toBe('/posttest')
+
+    expect(
+      getLessonProgressForwardPath('/posttest', {
+        ...afterLessons,
+        posttestAnswers: { q1: 0 },
+      })
+    ).toBeNull()
+  })
+})
+
+describe('hasPosttestInProgress', () => {
+  it('is false before the post-test starts', () => {
+    expect(hasPosttestInProgress(baseSession)).toBe(false)
+  })
+
+  it('is true after visiting the post-test or saving an answer', () => {
+    expect(hasPosttestInProgress({ ...baseSession, screenTimes: { PostTest: 1 } })).toBe(true)
+    expect(hasPosttestInProgress({ ...baseSession, posttestAnswers: { q1: 2 } })).toBe(true)
   })
 })

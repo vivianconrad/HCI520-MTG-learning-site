@@ -178,7 +178,7 @@ export default function TurnStructure({ session }) {
         </div>
 
         <p id="turn-structure-timeline-hint" className="turn-structure__timeline-hint">
-          Swipe the timeline to see all five phases.
+          Tap each phase—or use Next phase—to explore the full turn.
         </p>
 
         <p className="turn-structure__progress" aria-live="polite">

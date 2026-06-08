@@ -61,6 +61,7 @@ export const LESSON_FLOW_ORDER = [
 const PRE_LESSON_ALWAYS_FORWARD = ['/', '/welcome', '/intro', '/pretest', '/pretest-complete']
 
 const POST_LESSON_FORWARD_TARGET = '/posttest-prep'
+const POSTTEST_ROUTE = '/posttest'
 
 const POST_LESSON_STALE_PATHS = [
   '/',
@@ -74,6 +75,12 @@ const POST_LESSON_STALE_PATHS = [
 
 function hasLessonDwell(screenTimes = {}) {
   return LESSON_RESUME_SCREENS.some(({ screen }) => (screenTimes[screen] ?? 0) > 0)
+}
+
+/** True once the participant has opened the post-test screen or saved an answer. */
+export function hasPosttestInProgress(session) {
+  const { posttestAnswers = {}, screenTimes = {} } = session
+  return Object.keys(posttestAnswers).length > 0 || (screenTimes.PostTest ?? 0) > 0
 }
 
 /** Resume the lesson path the participant visited most recently, or lesson intro if none. */
@@ -105,10 +112,15 @@ export function getLessonProgressForwardPath(currentPath, session) {
   if (posttestCompleted) return null
 
   if (lessonsCompleted) {
+    if (hasPosttestInProgress(session)) {
+      if (currentPath !== POSTTEST_ROUTE) return POSTTEST_ROUTE
+      return null
+    }
+
     if (
       POST_LESSON_STALE_PATHS.includes(currentPath) &&
       currentPath !== POST_LESSON_FORWARD_TARGET &&
-      currentPath !== '/posttest'
+      currentPath !== POSTTEST_ROUTE
     ) {
       return POST_LESSON_FORWARD_TARGET
     }

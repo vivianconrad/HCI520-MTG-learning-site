@@ -597,7 +597,6 @@ function CardTypeItem({ type, examples, hasBeenViewed, highlightMissing, onSeeCa
       className={[
         'card-types__item',
         type.wide ? 'card-types__item--wide' : '',
-        type.id === 'instant' ? 'card-types__item--any-time' : '',
         hasBeenViewed ? '' : 'card-types__item--pending',
         highlightMissing && !hasBeenViewed ? 'card-types__item--highlight-missing' : '',
       ]
