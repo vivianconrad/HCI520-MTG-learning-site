@@ -18,8 +18,9 @@ After deploy to `main`, two static sites share one origin:
 2. `npm test`
 3. Supabase sync + `npm run test:supabase`
 4. `npm run build` (app)
+5. `npm run docs:build` (wiki)
 
-E2E runs in a dependent job against the built `docs/` folder.
+E2E runs in a dependent job (rebuilds app locally; wiki build is validated in the `verify` job).
 
 ## Deploy pipeline (`main`)
 

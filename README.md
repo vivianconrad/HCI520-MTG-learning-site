@@ -119,7 +119,7 @@ Workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) runs the
 
 ## Participant data (Supabase)
 
-Research data is saved incrementally to the `participants` table. See **[docs/privacy.md](docs/privacy.md)** for purpose, stored fields, retention, Supabase as processor, participant export, and researcher erasure steps.
+Research data is saved incrementally to the `participants` table. See **[privacy notice](documentation/guide/privacy.md)** in the wiki (participant copy: [`public/privacy.md`](public/privacy.md), deployed at `/HCI520-MTG-learning-site/privacy.md`) for purpose, stored fields, retention, Supabase as processor, participant export, and researcher erasure steps.
 
 | When               | What is saved                                         |
 | ------------------ | ----------------------------------------------------- |
@@ -173,8 +173,8 @@ For existing Supabase projects that already have a `participants` table without 
 ## Privacy
 
 - Participant-facing copy on the consent screen names Supabase, lists stored fields, and links to the privacy notice.
-- **[docs/privacy.md](docs/privacy.md)** — retention, backups, processor details, erasure runbook.
-- **`public/privacy.md`** — same notice, copied to the deployed site at `/HCI520-MTG-learning-site/privacy.md`.
+- **`public/privacy.md`** — canonical participant notice, deployed at `/HCI520-MTG-learning-site/privacy.md`.
+- **[Wiki privacy guide](documentation/guide/privacy.md)** — contributor summary (retention, erasure runbook, links to `public/privacy.md`).
 - **`participant_id`** mirrors **`session_id`** (same anonymous save code); the client registers both with the same value.
 
 ## Notes

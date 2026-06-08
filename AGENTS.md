@@ -9,6 +9,7 @@ Use **npm** (`package-lock.json`):
 - `npm install` — dependencies
 - `npm run dev` — local dev server
 - `npm run build` — production build → `docs/`
+- `npm run docs:dev` / `npm run docs:build` — VitePress wiki (`documentation/` → `documentation/.vitepress/dist`, copied to `docs/wiki/` in deploy)
 
 ## File-Scoped Commands
 
@@ -22,8 +23,9 @@ Prefer scoped commands over full-suite runs when validating a change.
 | Supabase integration | `npm run test:supabase` |
 | DB security verify | `npm run verify:db` |
 | E2E / a11y | `npm run test:e2e` / `npm run test:a11y` |
+| Wiki build | `npm run docs:build` |
 
-CI runs lint, unit tests, Supabase tests, build, and Playwright E2E on every PR — see `.github/workflows/ci.yml`.
+CI runs lint, unit tests, Supabase tests, app + wiki build, and Playwright E2E on every PR — see `.github/workflows/ci.yml`.
 
 ## Project Layout
 

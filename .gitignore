@@ -25,6 +25,9 @@ dist-ssr
 
 .logs/
 
+# Playwright test artifacts
+test-results/
+
 # VitePress wiki build cache (output is copied to docs/wiki/ in CI)
 documentation/.vitepress/dist
 documentation/.vitepress/cache

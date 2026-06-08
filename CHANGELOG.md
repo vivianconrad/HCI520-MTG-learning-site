@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- VitePress documentation wiki in `documentation/` (architecture, Supabase RPC API, contributor guides), published at `/HCI520-MTG-learning-site/wiki/`.
+- npm scripts `docs:dev`, `docs:build`, and `docs:preview`; `vitepress` dev dependency.
 - Lesson navigation feedback: Card Types and Turn Structure pulse-highlight items still required before Continue when the gate is blocked (`f52478c`).
 - Glossary entry for **Legendary** and expanded Card Types copy on legendary vs. non-legendary creatures and the legend rule (`814bca9`).
 - Design tokens `--color-text-secondary`, `--color-disabled-text`, and `--touch-target-min` (44px) for accessible secondary copy and controls (`7402b78`).
@@ -19,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- CI and deploy workflows build the wiki and copy output to `docs/wiki/` on GitHub Pages.
+- README, AGENTS.md, and instructor dashboard reference wiki paths instead of `docs/evaluation.md`; README privacy links point at `documentation/guide/privacy.md` and `public/privacy.md`.
 - Lesson intro lists the “What Is Magic?” overview with time estimate and preview image.
 - Card Types, Turn Structure, and Putting It Together add clearer progress hints (optional practice scenarios, “See Cards” gate copy).
 - Lesson Complete separates the completion headline from the flavor tagline.
@@ -28,6 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rebuilt `docs/` GitHub Pages bundle after source changes (`7402b78`).
 - E2E walkthrough script defaults: pre-test target 5 / post-test target 9 correct (override with `PRETEST_TARGET` / `POSTTEST_TARGET` env vars).
 - Keyword tooltips use fixed viewport positioning with scroll/resize tracking so definitions stay on screen near page edges; hover handlers moved to the trigger button for cleaner touch behavior. Keyboard focus always opens the tooltip; mouse hover remains gated to fine-pointer devices.
+
+### Removed
+
+- `scripts/diag-supabase-connect.mjs` (one-off Supabase connectivity diagnostic).
 
 ## [1.2.0] - 2026-06-06
 
