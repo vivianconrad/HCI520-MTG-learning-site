@@ -41,11 +41,19 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
-      - name: Build
+      - name: Build app
         run: npm run build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Build documentation wiki
+        run: npm run docs:build
+
+      - name: Attach wiki to Pages artifact
+        run: |
+          mkdir -p docs/wiki
+          cp -r documentation/.vitepress/dist/* docs/wiki/
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium

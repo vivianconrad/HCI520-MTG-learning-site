@@ -34,11 +34,14 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
-      - name: Build
+      - name: Build app
         run: npm run build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: Build documentation wiki
+        run: npm run docs:build
 
   e2e:
     runs-on: ubuntu-latest

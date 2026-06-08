@@ -1,6 +1,6 @@
 # Agent Instructions
 
-HCI520 MTG learning site — React 19 + Vite + React Router, deployed to GitHub Pages at `/HCI520-MTG-learning-site/`. See `README.md` for setup and `docs/evaluation.md` for scoring/reporting.
+HCI520 MTG learning site — React 19 + Vite + React Router, deployed to GitHub Pages at `/HCI520-MTG-learning-site/`. See `README.md` for setup and `documentation/` (wiki at `/HCI520-MTG-learning-site/wiki/`) for architecture, API, and evaluation docs.
 
 ## Package Manager
 

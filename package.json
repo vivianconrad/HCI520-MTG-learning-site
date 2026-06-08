@@ -16,7 +16,10 @@
     "test:a11y": "playwright test --config=playwright.config.cjs e2e/a11y.spec.cjs",
     "audit:a11y": "node scripts/a11y-audit.mjs",
     "verify:db": "node scripts/verify-participants-db.mjs",
-    "apply:db-security": "node scripts/apply-db-security.mjs"
+    "apply:db-security": "node scripts/apply-db-security.mjs",
+    "docs:dev": "vitepress dev documentation",
+    "docs:build": "vitepress build documentation",
+    "docs:preview": "vitepress preview documentation"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
@@ -41,6 +44,7 @@
     "playwright": "^1.52.0",
     "prettier": "^3.6.2",
     "vite": "^8.0.12",
+    "vitepress": "^1.6.4",
     "vitest": "^4.1.8",
     "ws": "^8.21.0"
   }

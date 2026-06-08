@@ -147,7 +147,9 @@ export default function InstructorDashboard() {
             </li>
             <li>
               Export from Table Editor (CSV) for SPSS, R, or Excel. Column definitions and scoring
-              caveats are in <code>docs/evaluation.md</code>.
+              caveats are in the project wiki (
+              <code>documentation/guide/evaluation.md</code> — deployed at{' '}
+              <code>/HCI520-MTG-learning-site/wiki/guide/evaluation</code>).
             </li>
             <li>
               Optional: click <strong>Try loading cohort data</strong> to see whether browser reads
@@ -278,7 +280,7 @@ export default function InstructorDashboard() {
 
             <p className="instructor__note">
               Scores use each participant&apos;s randomly drawn {DEFAULT_TEST_QUESTION_COUNT}{' '}
-              questions (2 per topic). See <code>docs/evaluation.md</code> for reporting caveats.
+              questions (2 per topic). See the wiki evaluation guide for reporting caveats.
             </p>
           </>
         )}

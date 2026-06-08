@@ -25,6 +25,10 @@ dist-ssr
 
 .logs/
 
+# VitePress wiki build cache (output is copied to docs/wiki/ in CI)
+documentation/.vitepress/dist
+documentation/.vitepress/cache
+
 # Env: commit .env.example only; ignore secrets and local overrides
 .env
 .env.*

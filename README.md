@@ -66,6 +66,17 @@ Current learning path (15 progress steps; routes in parentheses):
 
 Instructor dashboard: `/instructor`
 
+## Documentation wiki
+
+Source lives in `documentation/` (VitePress). After deploy, the wiki is at **`/HCI520-MTG-learning-site/wiki/`**.
+
+| Command | Purpose |
+| ------- | ------- |
+| `npm run docs:dev` | Local wiki dev server |
+| `npm run docs:build` | Production wiki build |
+
+Topics: [contributor guide](documentation/guide/getting-started.md), [architecture](documentation/architecture/index.md), [Supabase RPC API](documentation/api/index.md), [evaluation & reporting](documentation/guide/evaluation.md).
+
 ## Project Structure
 
 - `src/screens/` – route-level screens
@@ -74,6 +85,7 @@ Instructor dashboard: `/instructor`
 - `src/data/` – question and image mapping data
 - `src/assets/` – MTG card images and static assets
 - `src/styles/` – shared styling and tokens
+- `documentation/` – VitePress wiki source (architecture, API, guides)
 
 ## CI/CD and GitHub Pages
 
@@ -86,7 +98,7 @@ Workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every PR
 1. ESLint (`npm run lint`)
 2. Unit tests (`npm test`)
 3. Supabase integration tests (`npm run test:supabase`)
-4. Production build (`npm run build`)
+4. Production build (`npm run build` + `npm run docs:build`)
 
 Fix any failing checks before merging.
 
@@ -137,7 +149,7 @@ Research data is saved incrementally to the `participants` table. See **[docs/pr
 - **Recommended:** use the Supabase **Table Editor** (→ `participants`) to view and export cohort data. The dashboard displays this guidance when RLS blocks reads.
 - Do **not** add a permissive anon SELECT policy for browser reads. Participant rows must stay private to the service role / dashboard.
 
-See `docs/evaluation.md` for reporting metrics.
+See [evaluation & reporting](documentation/guide/evaluation.md) in the wiki for reporting metrics.
 
 **Deploying session_secret migration**
 
